@@ -35,6 +35,7 @@ border-radius:16px;padding:18px 20px;margin-bottom:14px;box-shadow:0 1px 2px rgb
 .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:15px}
 .btn{font:600 14px var(--sans);text-decoration:none;padding:9px 16px;border-radius:999px}
 .btn.web{background:var(--acc);color:#fff}.btn.pdf{background:#fff;color:var(--acc);border:1px solid var(--acc)}
+.btn.vid{background:#fff;color:#5A5360;border:1px solid var(--hair)}
 .secs{margin-top:14px;border-top:1px solid var(--hair);padding-top:11px;display:grid;gap:4px}
 .secs a{font-size:13.5px;color:var(--soft);text-decoration:none;padding:3px 0}
 .secs a mark{background:#FBE7B0;color:inherit;border-radius:3px}

@@ -44,7 +44,8 @@ function paint(){
       <div class="desc">${s.subtitle||''}</div>
       <div class="meta">${meta}</div>
       <div class="actions"><a class="btn web" href="${s.url}">Read notes →</a>
-      ${s.pdf_url?`<a class="btn pdf" href="${s.pdf_url}" target="_blank" rel="noopener">PDF ↓</a>`:''}</div>
+      ${s.pdf_url?`<a class="btn pdf" href="${s.pdf_url}" target="_blank" rel="noopener">PDF ↓</a>`:''}
+      ${s.video_url?`<a class="btn vid" href="${s.video_url}" target="_blank" rel="noopener">▶ Video</a>`:''}</div>
       ${secs}</article>`;
   }).join('');
   $('#count').textContent=list.length+(list.length===1?' note':' notes');

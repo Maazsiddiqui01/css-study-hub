@@ -379,7 +379,11 @@ td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align:
 <meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
 align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
 border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
-.notebar a{color:#C6506E;text-decoration:none}</style></head>
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
 <body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/open?id=1DYtjGc9LR1V18JQR7tZAm8qmiu7RvoGY" target="_blank" rel="noopener">Download PDF ↓</a></div>
 
 <!-- ============================================================ cover === -->
@@ -844,5 +848,5 @@ border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));fo
   </div>
 </section>
 
-<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+<footer class="notefoot">Want the whole lecture? <a href="https://drive.google.com/file/d/1-jtXJePVLVdS9ZToKvY2Akkg9GnzjVz5/view" target="_blank" rel="noopener">▶ Watch the full recording</a><span class="sep">·</span><a href="https://drive.google.com/open?id=1DYtjGc9LR1V18JQR7tZAm8qmiu7RvoGY" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
 </html>
