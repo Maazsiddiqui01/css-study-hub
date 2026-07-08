@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pakistan's Energy Crisis: Imports, IPPs &amp; the Power Sector</title>
+<style>/* Lecture Notes ebook, "warm study" theme.
+   Inspired by Mehak's MarketCanvas app: soft cream ground, rounded white cards,
+   a different pastel accent per topic, serif display + friendly sans body,
+   gentle emoji + pill badges. Playful and pretty, but still a real study book.
+   Print-first (A4 PDF via headless Edge); reads well on screen too.
+
+   Each section sets its own accent inline:
+     <section id="t1" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+   Everything themeable keys off --accent / --soft. Titles stay ink for
+   readability; accents colour eyebrows, numbers, pills, rules and callouts.
+*/
+
+:root {
+  --cream: #FCF6F0;          /* page ground (warm) */
+  --card: #FFFFFF;
+  --ink: #2C2630;            /* plum-black body/headings */
+  --ink-soft: #5A5360;
+  --slate: #8B8490;          /* captions, timestamps */
+  --hairline: #EEE6E4;
+
+  /* section default accent (overridden per section) */
+  --accent: #C0567E;
+  --soft: #FBECF1;
+
+  --shadow: 0 1px 2px rgba(60,30,45,.05), 0 10px 26px rgba(80,40,55,.07);
+  --radius: 20px;
+
+  --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: Consolas, "Cascadia Code", ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background:
+    radial-gradient(1100px 700px at 15% -5%, #FBEEF3 0%, transparent 55%),
+    radial-gradient(1000px 700px at 100% 0%, #EEF3FB 0%, transparent 50%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  font: 10.8pt/1.62 var(--sans);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+@media screen {
+  body { max-width: 51rem; margin: 0 auto; padding: 2.5rem 1.15rem 4rem; font-size: 1.0rem; }
+}
+
+/* ---------------------------------------------------------------- page --- */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm 14mm;
+  @bottom-center {
+    content: counter(page);
+    font: 8.5pt var(--sans);
+    color: #8B8490;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+/* --------------------------------------------------------------- cards --- */
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8mm 9mm 9mm;
+  margin: 0 0 6mm;
+  box-shadow: var(--shadow);
+  break-inside: auto;
+}
+@media screen { .card { margin-bottom: 1.4rem; } }
+
+/* a soft accent wash across the top of each section card (fades to white),
+   echoing the app's pastel cards without hurting readability */
+.chapter {
+  background:
+    linear-gradient(180deg, var(--soft) 0, rgba(255,255,255,0) 34mm),
+    var(--card);
+  border-top: 3px solid var(--accent);
+  break-inside: auto;
+  break-before: page;   /* each topic starts fresh: slide on top, notes below */
+}
+/* on screen (web/PWA) sections just stack; no forced page breaks */
+@media screen { .chapter { break-before: auto; } }
+
+h2, h3, .eyebrow { break-after: avoid; }
+p { orphans: 2; widows: 2; }
+
+/* keep the section header intact (eyebrow + title + time pill together) and
+   glued to its opening slide */
+.chapter > header { break-inside: avoid; break-after: avoid; }
+figure.slide { break-before: avoid; }
+
+/* --------------------------------------------------------------- cover --- */
+
+.cover {
+  page: cover;
+  break-after: page;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32mm 22mm 24mm;
+  background:
+    radial-gradient(700px 460px at 12% 8%, #FBE6EE 0%, transparent 60%),
+    radial-gradient(760px 520px at 96% 4%, #E7EEFB 0%, transparent 58%),
+    radial-gradient(620px 520px at 80% 96%, #E6F4EC 0%, transparent 60%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+@media screen {
+  .cover { min-height: 80vh; border-radius: 24px; padding: 3.2rem 2.6rem; margin-bottom: 1.4rem; }
+}
+
+.cover .avatar { font-size: 30pt; line-height: 1; margin-bottom: 7mm; }
+.cover .kicker {
+  font: 600 9pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 5mm;
+}
+.cover h1 {
+  font: 600 31pt/1.14 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 15em;
+}
+.cover .subtitle {
+  margin-top: 5mm;
+  font: 400 13.5pt/1.5 var(--sans);
+  color: var(--ink-soft);
+  max-width: 30em;
+}
+.cover .warm {
+  margin-top: 4mm;
+  font: italic 400 12pt/1.5 var(--serif);
+  color: var(--accent);
+}
+
+.cover .chips { display: flex; flex-wrap: wrap; gap: 3mm; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.4mm 4mm;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(60,30,45,.04);
+  font: 400 9pt var(--sans);
+  color: var(--slate);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chip b { font: 700 10.5pt var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ headings --- */
+
+.chapter header { margin-bottom: 5mm; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  font: 700 8.5pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--accent);
+  margin-bottom: 3mm;
+}
+.eyebrow .num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h2 {
+  font: 600 20pt/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .emoji { font-size: 17pt; }
+
+.timepill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.5mm 3.5mm;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font: 600 8pt var(--mono);
+  letter-spacing: 0.02em;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h3 {
+  font: 600 12.5pt/1.34 var(--serif);
+  color: var(--ink);
+  margin: 6mm 0 2.5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+.ts { font: 400 8.5pt var(--mono); color: var(--slate); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- body --- */
+
+.section-body > :last-child { margin-bottom: 0; }
+p { margin: 0 0 3mm; }
+.lead { font-size: 11.2pt; color: var(--ink); }
+
+ul, ol { margin: 0 0 3mm 5.5mm; }
+li { margin-bottom: 1.7mm; padding-left: 1mm; }
+li::marker { color: var(--accent); }
+
+.kt { font-weight: 700; color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
+
+code { font: 9.5pt var(--mono); background: #F3EFF4; padding: .4pt 3.5pt; border-radius: 4px; }
+
+/* ------------------------------------------------------------ callouts --- */
+
+.note {
+  --c: var(--accent);
+  --f: var(--soft);
+  background: var(--f);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  border-left: 3px solid var(--c);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.note .label {
+  display: inline-flex; align-items: center; gap: 1.6mm;
+  font: 700 8pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c);
+  margin-bottom: 1.8mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.warn { --c: #B4791F; --f: #FaF1DF; }
+.note.exam { --c: #3B8B78; --f: #E6F3EF; }
+.note.def  { --c: var(--accent); --f: var(--soft); }
+
+/* ------------------------------------------------------- summary card --- */
+
+.summary { --accent: #C0567E; --soft: #FBECF1; }
+.summary ul { list-style: none; margin: 0; }
+.summary li { position: relative; padding: 0 0 0 7mm; margin-bottom: 3.5mm; }
+.summary li::before {
+  content: "";
+  position: absolute; left: 0; top: 2.6mm;
+  width: 3.2mm; height: 3.2mm; border-radius: 50%;
+  background: var(--accent);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.summary li:last-child { margin-bottom: 0; }
+.summary li b, .summary li strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------- TOC --- */
+
+nav.toc { --accent: #8B8490; --soft: #F3EFF4; }
+nav.toc ol { list-style: none; margin: 0; }
+nav.toc li {
+  display: flex; align-items: baseline; gap: 4mm;
+  padding: 2.7mm 0;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11pt var(--sans);
+}
+nav.toc li:last-child { border-bottom: 0; }
+nav.toc .dot { width: 3.4mm; height: 3.4mm; border-radius: 50%; flex-shrink: 0;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+nav.toc .title { flex: 1; color: var(--ink); }
+nav.toc .rng { flex-shrink: 0; font: 600 8.5pt var(--mono); color: var(--slate); }
+
+/* -------------------------------------------------------------- slides --- */
+
+figure.slide { margin: 0 0 5mm; break-inside: avoid; }
+figure.slide img {
+  width: 100%; display: block;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 10px rgba(40,30,45,.10);
+}
+figure.slide figcaption {
+  font: 400 8.5pt var(--sans);
+  color: var(--slate);
+  margin-top: 2mm;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4mm;
+}
+figure.slide figcaption .ts { color: var(--accent); }
+
+/* ------------------------------------------------------------ glossary --- */
+
+dl.glossary { margin: 0; }
+dl.glossary div { padding: 3mm 0; border-bottom: 1px solid var(--hairline); break-inside: avoid; }
+dl.glossary div:last-child { border-bottom: 0; padding-bottom: 0; }
+dl.glossary dt { font: 700 10.5pt var(--sans); color: var(--accent); margin-bottom: 1.2mm; }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- flashcards --- */
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 0; }
+.qa {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  background: linear-gradient(180deg, var(--soft) 0, #fff 60%);
+  break-inside: avoid;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.qa .q { font: 700 10pt var(--sans); color: var(--ink); margin-bottom: 2mm; }
+.qa .a { color: var(--ink-soft); font-size: 10pt; }
+
+/* ------------------------------------------------------------- tables --- */
+
+.tables-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0; break-inside: avoid; }
+th {
+  font: 700 9pt var(--sans); text-align: left; color: var(--accent);
+  border-bottom: 2px solid var(--soft); padding: 2mm 3mm 2mm 0;
+}
+td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+
+/* --- mobile / on-the-go reading (screen only; never affects the print PDF).
+   Placed LAST so it wins the cascade over the wider @media screen rules above.
+   Requires <meta name="viewport" content="width=device-width, initial-scale=1">. */
+@media screen and (max-width: 640px) {
+  body { padding: 1rem 0.85rem 2.5rem; font-size: 1.02rem; }
+  .card { padding: 5mm 5mm 6mm; border-radius: 14px; margin-bottom: 0.9rem; }
+  .cover { min-height: auto; padding: 2rem 1.3rem 1.6rem; border-radius: 16px; }
+  .cover .avatar { font-size: 24pt; margin-bottom: 4mm; }
+  .cover h1 { font-size: 20pt; max-width: 100%; }
+  .cover .subtitle { font-size: 11.5pt; }
+  .cover .warm { font-size: 11pt; }
+  .cover .chips { gap: 2mm; margin-top: 5mm; }
+  h2 { font-size: 16pt; }
+  h2 .emoji { font-size: 13.5pt; }
+  h3 { font-size: 11.5pt; }
+  .cards { grid-template-columns: 1fr; }
+  nav.toc li { font-size: 10.5pt; gap: 2.5mm; padding: 2.5mm 0; }
+  nav.toc .rng { font-size: 8pt; }
+  .note { padding: 3.5mm 4mm; }
+  table { font-size: 9.5pt; }
+}
+</style>
+<meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
+align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
+border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
+<body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/open?id=1-yDtPsAx3wu2UE3Cd_hB9gj6iVaRWI67" target="_blank" rel="noopener">Download PDF ↓</a></div>
+
+<!-- ============================================================ cover === -->
+<section class="cover" style="background:radial-gradient(700px 460px at 12% 8%,#E3EFF6 0,transparent 60%),radial-gradient(760px 520px at 96% 4%,#FBEFE3 0,transparent 58%),radial-gradient(620px 520px at 80% 96%,#E6F4EC 0,transparent 60%),var(--cream)">
+  <div>
+    <div class="avatar">⚡</div>
+    <div class="kicker" style="color:#2C7A9E">CSS Current Affairs · Pakistan</div>
+    <h1>Pakistan's Energy Crisis: Imports, IPPs &amp; the Power Sector</h1>
+    <p class="subtitle">Why power is both expensive and unreliable: the import dependence, the three problems it creates, the indigenous fixes, and the IPP trap at the centre of it all.</p>
+    <p class="warm" style="color:#2C6A88">Data-heavy topic, laid out cleanly. Read it in fifteen minutes, quote the figures in the exam. ⚡</p>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>2h 37m</b> lecture</span>
+    <span class="chip"><b>6</b> topics</span>
+    <span class="chip"><b>&gt;25%</b> of imports = energy</span>
+    <span class="chip"><b>3rd</b> priciest power on earth</span>
+  </div>
+</section>
+
+<!-- ============================================================== toc === -->
+<nav class="toc card">
+  <header><span class="eyebrow">Contents</span><h2><span class="emoji">🗺️</span> In this session</h2></header>
+  <ol>
+    <li><span class="dot" style="background:#2C7A9E"></span><a class="title" href="#summary">The five-minute version</a><span class="rng">summary</span></li>
+    <li><span class="dot" style="background:#3A7CC0"></span><a class="title" href="#t1">01 · How Pakistan's energy sector operates</a><span class="rng">import dependence</span></li>
+    <li><span class="dot" style="background:#C6506E"></span><a class="title" href="#t2">02 · Why it is a crisis: three problems</a><span class="rng">bill · rupee · inflation</span></li>
+    <li><span class="dot" style="background:#46955C"></span><a class="title" href="#t3">03 · The solutions: indigenous generation</a><span class="rng">nuclear · hydro · solar · Thar</span></li>
+    <li><span class="dot" style="background:#B57A2A"></span><a class="title" href="#t4">04 · IPPs &amp; capacity payments (the trap)</a><span class="rng">circular debt</span></li>
+    <li><span class="dot" style="background:#B44A8C"></span><a class="title" href="#t5">05 · Load shedding &amp; expensive power</a><span class="rng">losses · theft</span></li>
+    <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t6">06 · Reforms &amp; the way forward</a><span class="rng">T&amp;D · IMF</span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t9">Glossary · Flashcards · Exam focus</a><span class="rng"></span></li>
+  </ol>
+</nav>
+
+<!-- ============================================================= tldr === -->
+<section class="summary card" style="--accent:#2C7A9E; --soft:#E7F1F7; border-top-color:#2C7A9E">
+  <header><span class="eyebrow" style="color:#2C7A9E">Start here</span><h2><span class="emoji">⭐</span> The five-minute version</h2></header>
+  <ul>
+    <li><strong>The root problem.</strong> Pakistan is a major <em>consumer</em> of energy but not a major <em>producer</em>, so it imports most of its oil, gas and coal. Hydrocarbons are more than <strong>25%</strong> of all imports (up to 36% in some years) and over <strong>half</strong> of the trade deficit.</li>
+    <li><strong>Three problems this creates.</strong> A large, volatile <strong>import bill</strong> that swings with global prices and geopolitics (the Strait of Hormuz, Middle East wars); a weaker <strong>rupee</strong>, because fuel is bought in dollars (a $1 billion oil import cost 178 billion PKR in 2021 and over 290 billion PKR now); and <strong>inflation</strong>, because energy sets the price of transport, electricity and most goods.</li>
+    <li><strong>The fix is generating at home.</strong> Nuclear (Chashma, Karachi), hydro and dams (Dasu, Diamer-Bhasha, Mohmand and others), solar (Quaid-e-Azam Bahawalpur plus a large rooftop boom), wind, and <strong>Thar coal</strong>, one of the world's largest reserves.</li>
+    <li><strong>The structural trap: IPPs.</strong> Independent Power Producers supply about <strong>60%</strong> of generation on <strong>take-or-pay</strong> contracts, so the state pays <strong>capacity payments</strong> even for power it never uses. Pakistan added so much capacity after 2015 that installed capacity now exceeds demand, and unpaid capacity payments have piled into a large <strong>circular debt</strong>.</li>
+    <li><strong>The result.</strong> Load shedding despite surplus capacity, and the <strong>third-most-expensive electricity in the world</strong>. Reforms target transmission and distribution losses, IPP renegotiation, and IMF conditions.</li>
+    <li><strong>How to answer it.</strong> Quantify the dependence, separate the three problems, list indigenous solutions with figures, and treat the IPP and circular-debt issue as the structural core.</li>
+  </ul>
+</section>
+
+<!-- ======================================================== section 1 === -->
+<section id="t2" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+  <header>
+    <span class="eyebrow"><span class="num">1</span> Import dependence</span>
+    <h2><span class="emoji">🛢️</span> How Pakistan's energy sector operates</h2>
+    <span class="timepill">the setup</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The single sentence to remember: <strong>Pakistan is a major consumer of energy, not a major producer</strong>, so it has to import the difference.</p>
+
+    <p>Across oil, gas and coal, local production covers only a fraction of what the country burns, and the rest is bought from abroad in dollars. The scale is large: hydrocarbon imports are <strong>more than 25%</strong> of all imports (as high as 36% in some years), the annual hydrocarbon bill runs to roughly <strong>$17 to $23 billion</strong>, and energy makes up <strong>more than 50% of the trade deficit</strong>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Fuel</th><th>Pakistan's need</th><th>Local production</th><th>Imported</th></tr></thead>
+        <tbody>
+          <tr><td>Oil</td><td>500,000+ barrels/day</td><td>~80,000 barrels/day</td><td>The rest (most of it)</td></tr>
+          <tr><td>Gas</td><td>&gt;1 billion cubic feet/day</td><td>~30 to 36% of demand</td><td>~64 to 70% (LNG)</td></tr>
+          <tr><td>Coal power</td><td>~9,000 MW generated</td><td>~2,500 MW (local coal)</td><td>~6,000+ MW (imported coal)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <span class="label">📌 The core fact for any answer</span>
+      <p>Local production cannot meet demand for any of the three fuels, so Pakistan must import, in dollars, and that single dependence drives every problem in the rest of this topic.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 2 === -->
+<section id="t3" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+  <header>
+    <span class="eyebrow"><span class="num">2</span> Why it hurts</span>
+    <h2><span class="emoji">📉</span> Why it is a crisis: three problems</h2>
+    <span class="timepill">bill · rupee · inflation</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Import dependence turns into a crisis through three linked problems. Keep them separate in an answer.</p>
+
+    <div class="note def">
+      <span class="label">Problem 1 · A large, volatile import bill</span>
+      <p>More than <strong>25%</strong> of all imports are hydrocarbons, so the whole external account rises and falls with global fuel prices. Energy alone is more than half of the trade deficit, which means any price spike abroad immediately widens Pakistan's deficit.</p>
+    </div>
+
+    <div class="note def">
+      <span class="label">Problem 2 · Price shocks plus a falling rupee</span>
+      <p>Prices rise for two reasons. First, <strong>international demand and supply and geopolitics</strong>: if Iran closes the <strong>Strait of Hormuz</strong>, or a Middle East war shuts refineries, the fuel Pakistan imports (most oil from Saudi Arabia, gas from Qatar, the majority of hydrocarbons from the Middle East) jumps in price. Second, <strong>rupee devaluation</strong>: fuel is bought in dollars, and the rupee has weakened sharply. In 2021, 1$ = 178 PKR and a $1 billion oil import cost <strong>178 billion PKR</strong>; today 1$ is around 290 PKR and the same import costs <strong>more than 290 billion PKR</strong>. Same oil, far higher rupee cost.</p>
+    </div>
+
+    <div class="note def">
+      <span class="label">Problem 3 · Inflation</span>
+      <p>Energy is the key determinant of the price of almost everything else: transport, electricity generation (about 60% of power comes from hydrocarbons), gas and electricity bills, and industrial and agricultural goods. When the fuel price rises, all of these rise with it. The Pakistan Bureau of Statistics recorded an <strong>8%+</strong> rise in prices driven mainly by energy.</p>
+    </div>
+
+    <div class="note">
+      <span class="label">✍️ A line worth memorising</span>
+      <p>"Energy is the better determinant of the prices of other commodities." If you can explain <em>why</em> that is true (transport, generation, bills, goods), you have Problem 3.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 3 === -->
+<section id="t4" class="chapter card" style="--accent:#46955C; --soft:#E7F3EA;">
+  <header>
+    <span class="eyebrow"><span class="num">3</span> The way out</span>
+    <h2><span class="emoji">🌱</span> The solutions: indigenous generation</h2>
+    <span class="timepill">nuclear · hydro · solar · Thar</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The strategic answer is to <strong>generate more electricity at home</strong> so that energy imports fall. Four indigenous routes, plus Thar coal.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Route</th><th>Key projects</th><th>Capacity (approx.)</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Nuclear</strong></td><td>Chashma I–IV; Karachi K-2 &amp; K-3</td><td>Chashma ~340 MW each; Karachi ~1,100 MW each</td></tr>
+          <tr><td><strong>Hydro / dams</strong></td><td>Dasu; Diamer-Bhasha; Mohmand; Suki Kinari; Karot; Kohala</td><td>Dasu ~4,300 MW; Diamer-Bhasha ~4,800 MW; Mohmand ~800 MW; Suki Kinari ~884 MW; Karot ~720 MW; Kohala ~1,100 MW</td></tr>
+          <tr><td><strong>Solar</strong></td><td>Quaid-e-Azam Solar Park, Bahawalpur; net metering (rooftop)</td><td>~900 MW park; ~2,600 MW documented + a large undocumented rooftop boom</td></tr>
+          <tr><td><strong>Wind</strong></td><td>Wind corridors (Sindh)</td><td>~500 MW planned; ~800 MW completed</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <span class="label">☢️ Nuclear</span>
+      <p>Civil nuclear technology gives cheaper, carbon-free power. Chashma units I to IV are operational (about 340 MW each) and Karachi's K-2 and K-3 add about 1,100 MW each. The plan is to build more civil reactors.</p>
+    </div>
+
+    <div class="note">
+      <span class="label">💧 Hydro and dams</span>
+      <p>A pipeline of large dams: Dasu and Diamer-Bhasha are the giants (roughly 4,300 and 4,800 MW), with Mohmand, Suki Kinari (complete), Karot (complete) and Kohala (under construction) adding thousands more. The stated target is around <strong>10,000 MW of hydel by 2025</strong>, though several projects have slipped.</p>
+    </div>
+
+    <div class="note">
+      <span class="label">☀️ Solar</span>
+      <p>The Quaid-e-Azam Solar Park in Bahawalpur is the flagship. Beyond it, <strong>net metering</strong> (the "green meter", where a household feeds power to the grid by day and draws from WAPDA at night) has documented about 2,600 MW, but there is a far larger <strong>undocumented rooftop boom</strong> across Balochistan, interior Sindh, and southern KP and Punjab. Solarisation is the fastest-moving trend.</p>
+    </div>
+
+    <div class="note">
+      <span class="label">⛏️ Thar coal</span>
+      <p>Thar holds one of the world's <strong>4th or 5th largest coal reserves</strong>. Only Block 1 is currently producing power, with more blocks planned, so the potential is far larger than today's output. On the environmental objection, the lecturer's point: the US, China (the world's largest coal burner) and India all still burn coal, so indigenous coal is a realistic bridge for Pakistan.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 4 === -->
+<section id="t5" class="chapter card" style="--accent:#B57A2A; --soft:#F7EFDD;">
+  <header>
+    <span class="eyebrow"><span class="num">4</span> The structural core</span>
+    <h2><span class="emoji">🏭</span> IPPs &amp; capacity payments (the trap)</h2>
+    <span class="timepill">circular debt</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The deepest part of the crisis is not fuel; it is the <strong>contracts</strong>. This is the point that separates a good answer from an average one.</p>
+
+    <div class="note def">
+      <span class="label">Definition · Independent Power Producers (IPPs)</span>
+      <p>Private-sector companies that generate electricity and sell it to the state. IPPs supply about <strong>60%</strong> of Pakistan's generation; WAPDA supplies roughly 30% and nuclear about 7 to 8%.</p>
+    </div>
+
+    <p><strong>Why they were installed, in two waves.</strong> The 1994, 2005 and 2011 bunches were built because <strong>supply was short of demand</strong>. The larger 2015-onward wave was built to <strong>escape expensive furnace oil and diesel</strong> by shifting to coal and LNG, and to feed the industrialisation and urbanisation expected under <strong>CPEC</strong> (the China-Pakistan Economic Corridor).</p>
+
+    <div class="note warn">
+      <span class="label">⚠️ The trap · take-or-pay &amp; capacity payments</span>
+      <p>IPP contracts are <strong>take-or-pay</strong>: the government must pay a <strong>capacity payment</strong> on the plant's installed capacity <em>whether or not it uses the electricity</em>. Because Pakistan added roughly <strong>18,000 MW after 2015</strong>, installed capacity now <strong>exceeds demand</strong> (peak summer demand is around 17,000 to 18,000 MW, well below total capacity). So the country pays for idle plants. Many <strong>Chinese (CPEC) IPPs are paid in dollars</strong>, adding currency pressure, and the unpaid bills have built a large <strong>circular debt</strong> (into the trillions of rupees). In 2021 the government renegotiated some contracts to cut capacity payments.</p>
+    </div>
+
+    <div class="note exam">
+      <span class="label">🎯 Exam keywords</span>
+      <p><strong>Take-or-pay</strong>, <strong>capacity payment</strong>, <strong>installed capacity greater than demand</strong>, and <strong>circular debt</strong>. Name all four and you have shown you understand the structural problem, not just the fuel bill.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 5 === -->
+<section id="t6" class="chapter card" style="--accent:#B44A8C; --soft:#F9EBF4;">
+  <header>
+    <span class="eyebrow"><span class="num">5</span> The symptoms</span>
+    <h2><span class="emoji">🔌</span> Load shedding &amp; expensive power</h2>
+    <span class="timepill">losses · theft</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Two symptoms the public feels directly: the power still goes out, and it is among the most expensive on earth.</p>
+
+    <div class="note">
+      <span class="label">🕯️ Load shedding despite surplus capacity</span>
+      <p>Even with capacity above demand, load shedding persists, with a peak shortfall of up to about <strong>8,000 MW</strong>. Two causes: to <strong>save dollars</strong> the government cuts fuel imports, so less power is generated; and the <strong>distribution companies (DISCOs)</strong> lose a large share of what they do deliver. Load shedding runs higher where recovery is worse (roughly 4 to 5 hours a day in cities, up to 12 hours in some rural areas).</p>
+    </div>
+
+    <div class="note">
+      <span class="label">💸 The third-most-expensive electricity in the world</span>
+      <p>Pakistan has the <strong>3rd most expensive electricity in the world</strong> and the <strong>most expensive in Asia</strong>, roughly 40%+ above regional competitors. The drivers stack up: capacity payments, imported fuel priced in dollars, taxes, and transmission and distribution losses.</p>
+    </div>
+
+    <div class="note warn">
+      <span class="label">⚠️ Losses and theft (the DISCO problem)</span>
+      <p>The grid leaks value at every stage. <strong>Transmission line losses ~3%</strong>; <strong>distribution losses ~16%</strong>; and outright <strong>theft ~9%</strong>, heaviest in urban areas. High-loss distribution companies (TESCO, HESCO and others) consume units that are never billed, and honest consumers pay for it through higher tariffs.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 6 === -->
+<section id="t7" class="chapter card" style="--accent:#2C8C86; --soft:#E1F2F0;">
+  <header>
+    <span class="eyebrow"><span class="num">6</span> Fixing it</span>
+    <h2><span class="emoji">🛠️</span> Reforms &amp; the way forward</h2>
+    <span class="timepill">T&amp;D · IMF</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The reform agenda follows straight from the problems: generate at home, stop the leaks, and fix the contracts.</p>
+
+    <ul>
+      <li><strong>Cut transmission and distribution (T&amp;D) losses.</strong> The single highest-return fix. Even a <strong>3% loss reduction</strong> pays back a new transmission line's cost within about <strong>8 to 9 years</strong>.</li>
+      <li><strong>Build new transmission lines.</strong> For example the <strong>Matiari-to-Lahore</strong> line (around <strong>$1.3 billion</strong>); the sector needs roughly <strong>$45 billion+</strong> of investment overall, much of it expected from China.</li>
+      <li><strong>Renegotiate IPP contracts</strong> and resolve the <strong>circular debt</strong> (the 2021 capacity-payment cuts were a first step).</li>
+      <li><strong>Meet IMF conditions</strong>, which push tariff increases and broader <strong>structural reforms</strong> of the power sector.</li>
+      <li><strong>Shift to indigenous and renewable generation</strong> (Section 3): nuclear, hydro, solar, wind and Thar coal, to cut the dollar import bill at its source.</li>
+    </ul>
+
+    <div class="note exam">
+      <span class="label">🎯 Likely exam question</span>
+      <p>"Critically analyse Pakistan's energy crisis and suggest reforms." Structure: the import dependence with figures, the three problems, the IPP and circular-debt trap, then reforms (indigenous generation, cutting T&amp;D losses, renegotiating IPPs, IMF-driven structural change). Quantify wherever you can.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================= glossary === -->
+<section id="t8" class="chapter card" style="--accent:#7A7484; --soft:#F2EFF4;">
+  <header><span class="eyebrow">Reference</span><h2><span class="emoji">📖</span> Glossary</h2></header>
+  <dl class="glossary">
+    <div><dt>IPP (Independent Power Producer)</dt><dd>A private company that generates electricity and sells it to the state; IPPs supply about 60% of Pakistan's power.</dd></div>
+    <div><dt>Capacity payment</dt><dd>A fixed payment the government owes an IPP for its available (installed) capacity, regardless of how much electricity is actually taken.</dd></div>
+    <div><dt>Take-or-pay</dt><dd>The contract type that forces those capacity payments: you pay for the plant's output whether you use it or not.</dd></div>
+    <div><dt>Circular debt</dt><dd>The chain of unpaid dues across the power sector (into the trillions of rupees), driven largely by capacity payments the state cannot cover.</dd></div>
+    <div><dt>Hydrocarbons (HC)</dt><dd>Oil, gas and coal; more than 25% of Pakistan's imports and the source of most of its electricity.</dd></div>
+    <div><dt>Trade deficit</dt><dd>Imports minus exports; energy alone is more than half of Pakistan's.</dd></div>
+    <div><dt>DISCO</dt><dd>Distribution company (e.g. TESCO, HESCO); high losses and theft in DISCOs raise everyone's tariff.</dd></div>
+    <div><dt>Net metering / green meter</dt><dd>A rooftop-solar arrangement: the household feeds power to the grid by day and draws from WAPDA at night.</dd></div>
+    <div><dt>Thar coal</dt><dd>One of the world's largest coal reserves, in Sindh; only Block 1 is producing power so far.</dd></div>
+    <div><dt>Strait of Hormuz</dt><dd>The Gulf chokepoint for oil and gas shipments; closing it spikes the prices Pakistan pays.</dd></div>
+    <div><dt>WAPDA</dt><dd>Water and Power Development Authority; supplies roughly 30% of generation and buys IPP power.</dd></div>
+    <div><dt>CPEC</dt><dd>China-Pakistan Economic Corridor; drove the 2015-onward wave of (often dollar-paid) IPPs and rising demand.</dd></div>
+    <div><dt>Load shedding</dt><dd>Deliberate power cuts; persists despite surplus capacity because of import cuts and DISCO losses.</dd></div>
+  </dl>
+</section>
+
+<!-- ======================================================= flashcards === -->
+<section id="t9" class="chapter card" style="--accent:#8A57BD; --soft:#F3ECFA;">
+  <header><span class="eyebrow">Self-test</span><h2><span class="emoji">🎴</span> Flashcards</h2></header>
+  <div class="cards">
+    <div class="qa"><p class="q">In one line, what is the root of Pakistan's energy crisis?</p><p class="a">Pakistan is a major consumer but not a major producer of energy, so it imports most of its oil, gas and coal in dollars.</p></div>
+    <div class="qa"><p class="q">How big is the energy import dependence?</p><p class="a">Hydrocarbons are more than 25% of all imports (up to 36% some years) and more than 50% of the trade deficit.</p></div>
+    <div class="qa"><p class="q">What are the three problems import dependence creates?</p><p class="a">A volatile import bill, rupee devaluation (fuel bought in dollars), and inflation (energy sets other prices).</p></div>
+    <div class="qa"><p class="q">Show the rupee problem with a number.</p><p class="a">A $1 billion oil import cost 178 billion PKR in 2021 (1$=178) and more than 290 billion PKR now (1$≈290). Same oil, higher rupee cost.</p></div>
+    <div class="qa"><p class="q">What geopolitical event is the go-to example for a price shock?</p><p class="a">Iran closing the Strait of Hormuz, plus Middle East wars shutting refineries; most of Pakistan's oil/gas comes from that region.</p></div>
+    <div class="qa"><p class="q">Name the indigenous generation routes.</p><p class="a">Nuclear (Chashma, Karachi), hydro/dams (Dasu, Diamer-Bhasha and others), solar (QA Bahawalpur + rooftop), wind, and Thar coal.</p></div>
+    <div class="qa"><p class="q">What share of generation do IPPs supply?</p><p class="a">About 60% (WAPDA ~30%, nuclear ~7 to 8%).</p></div>
+    <div class="qa"><p class="q">Why did Pakistan build IPPs?</p><p class="a">1994–2011: to close a supply gap. 2015 onward: to escape expensive diesel (shift to coal/LNG) and feed CPEC industrialisation.</p></div>
+    <div class="qa"><p class="q">What is the IPP trap?</p><p class="a">Take-or-pay contracts force capacity payments on installed capacity even when unused; with capacity now above demand, the state pays for idle plants, building circular debt.</p></div>
+    <div class="qa"><p class="q">Why is there still load shedding if capacity exceeds demand?</p><p class="a">To save dollars the government cuts fuel imports (less generation), and DISCOs lose a large share to losses and theft.</p></div>
+    <div class="qa"><p class="q">Where does Pakistan rank on electricity price?</p><p class="a">3rd most expensive in the world, most expensive in Asia (~40%+ above competitors).</p></div>
+    <div class="qa"><p class="q">What is the highest-return reform?</p><p class="a">Cutting T&amp;D losses: even a 3% reduction repays a new transmission line's cost in about 8 to 9 years.</p></div>
+  </div>
+</section>
+
+<!-- ======================================================= exam focus === -->
+<section id="t10" class="chapter card" style="--accent:#2C7A9E; --soft:#E7F1F7;">
+  <header><span class="eyebrow" style="color:#2C7A9E">Before the paper</span><h2><span class="emoji">🎯</span> Exam focus</h2></header>
+  <div class="section-body">
+    <ul>
+      <li><strong>Always quantify.</strong> This is a data topic. Use the numbers: &gt;25% of imports, 500,000 barrels/day, $1bn = 178 vs 290 billion PKR, ~60% from IPPs, ~18,000 MW added after 2015, 3rd priciest power, ~16% distribution losses.</li>
+      <li><strong>Keep the three problems distinct</strong> (import bill, rupee, inflation), and explain the causal chain for each rather than listing them.</li>
+      <li><strong>Make the IPP / circular-debt point the structural core</strong> of your answer. Most candidates stop at "we import fuel"; the stronger answer explains take-or-pay capacity payments and installed capacity exceeding demand.</li>
+      <li><strong>Pair every problem with a reform</strong> (import dependence → indigenous generation; losses → T&amp;D reform; contracts → IPP renegotiation; tariffs → IMF-driven structural reform).</li>
+      <li><strong>Ground it in named projects and bodies</strong> such as Chashma, Diamer-Bhasha, Quaid-e-Azam Solar, Thar, the Matiari-Lahore line, WAPDA, CPEC and the IMF, to show command of the sector.</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="notefoot">Want the whole lecture? <a href="https://drive.google.com/file/d/1syu3ZjWjLsYMY4_uDKBJH4XiZzZOP9J5/view" target="_blank" rel="noopener">▶ Watch the full recording</a><span class="sep">·</span><a href="https://drive.google.com/open?id=1-yDtPsAx3wu2UE3Cd_hB9gj6iVaRWI67" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+</html>
