@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Comparative Government: Parliaments, the Turkish Military &amp; the Presidential System</title>
+<style>/* Lecture Notes ebook, "warm study" theme.
+   Inspired by Mehak's MarketCanvas app: soft cream ground, rounded white cards,
+   a different pastel accent per topic, serif display + friendly sans body,
+   gentle emoji + pill badges. Playful and pretty, but still a real study book.
+   Print-first (A4 PDF via headless Edge); reads well on screen too.
+
+   Each section sets its own accent inline:
+     <section id="t1" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+   Everything themeable keys off --accent / --soft. Titles stay ink for
+   readability; accents colour eyebrows, numbers, pills, rules and callouts.
+*/
+
+:root {
+  --cream: #FCF6F0;          /* page ground (warm) */
+  --card: #FFFFFF;
+  --ink: #2C2630;            /* plum-black body/headings */
+  --ink-soft: #5A5360;
+  --slate: #8B8490;          /* captions, timestamps */
+  --hairline: #EEE6E4;
+
+  /* section default accent (overridden per section) */
+  --accent: #C0567E;
+  --soft: #FBECF1;
+
+  --shadow: 0 1px 2px rgba(60,30,45,.05), 0 10px 26px rgba(80,40,55,.07);
+  --radius: 20px;
+
+  --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: Consolas, "Cascadia Code", ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background:
+    radial-gradient(1100px 700px at 15% -5%, #FBEEF3 0%, transparent 55%),
+    radial-gradient(1000px 700px at 100% 0%, #EEF3FB 0%, transparent 50%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  font: 10.8pt/1.62 var(--sans);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+@media screen {
+  body { max-width: 51rem; margin: 0 auto; padding: 2.5rem 1.15rem 4rem; font-size: 1.0rem; }
+}
+
+/* ---------------------------------------------------------------- page --- */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm 14mm;
+  @bottom-center {
+    content: counter(page);
+    font: 8.5pt var(--sans);
+    color: #8B8490;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+/* --------------------------------------------------------------- cards --- */
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8mm 9mm 9mm;
+  margin: 0 0 6mm;
+  box-shadow: var(--shadow);
+  break-inside: auto;
+}
+@media screen { .card { margin-bottom: 1.4rem; } }
+
+/* a soft accent wash across the top of each section card (fades to white),
+   echoing the app's pastel cards without hurting readability */
+.chapter {
+  background:
+    linear-gradient(180deg, var(--soft) 0, rgba(255,255,255,0) 34mm),
+    var(--card);
+  border-top: 3px solid var(--accent);
+  break-inside: auto;
+  break-before: page;   /* each topic starts fresh: slide on top, notes below */
+}
+/* on screen (web/PWA) sections just stack; no forced page breaks */
+@media screen { .chapter { break-before: auto; } }
+
+h2, h3, .eyebrow { break-after: avoid; }
+p { orphans: 2; widows: 2; }
+
+/* keep the section header intact (eyebrow + title + time pill together) and
+   glued to its opening slide */
+.chapter > header { break-inside: avoid; break-after: avoid; }
+figure.slide { break-before: avoid; }
+
+/* --------------------------------------------------------------- cover --- */
+
+.cover {
+  page: cover;
+  break-after: page;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32mm 22mm 24mm;
+  background:
+    radial-gradient(700px 460px at 12% 8%, #FBE6EE 0%, transparent 60%),
+    radial-gradient(760px 520px at 96% 4%, #E7EEFB 0%, transparent 58%),
+    radial-gradient(620px 520px at 80% 96%, #E6F4EC 0%, transparent 60%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+@media screen {
+  .cover { min-height: 80vh; border-radius: 24px; padding: 3.2rem 2.6rem; margin-bottom: 1.4rem; }
+}
+
+.cover .avatar { font-size: 30pt; line-height: 1; margin-bottom: 7mm; }
+.cover .kicker {
+  font: 600 9pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 5mm;
+}
+.cover h1 {
+  font: 600 31pt/1.14 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 15em;
+}
+.cover .subtitle {
+  margin-top: 5mm;
+  font: 400 13.5pt/1.5 var(--sans);
+  color: var(--ink-soft);
+  max-width: 30em;
+}
+.cover .warm {
+  margin-top: 4mm;
+  font: italic 400 12pt/1.5 var(--serif);
+  color: var(--accent);
+}
+
+.cover .chips { display: flex; flex-wrap: wrap; gap: 3mm; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.4mm 4mm;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(60,30,45,.04);
+  font: 400 9pt var(--sans);
+  color: var(--slate);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chip b { font: 700 10.5pt var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ headings --- */
+
+.chapter header { margin-bottom: 5mm; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  font: 700 8.5pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--accent);
+  margin-bottom: 3mm;
+}
+.eyebrow .num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h2 {
+  font: 600 20pt/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .emoji { font-size: 17pt; }
+
+.timepill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.5mm 3.5mm;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font: 600 8pt var(--mono);
+  letter-spacing: 0.02em;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h3 {
+  font: 600 12.5pt/1.34 var(--serif);
+  color: var(--ink);
+  margin: 6mm 0 2.5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+.ts { font: 400 8.5pt var(--mono); color: var(--slate); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- body --- */
+
+.section-body > :last-child { margin-bottom: 0; }
+p { margin: 0 0 3mm; }
+.lead { font-size: 11.2pt; color: var(--ink); }
+
+ul, ol { margin: 0 0 3mm 5.5mm; }
+li { margin-bottom: 1.7mm; padding-left: 1mm; }
+li::marker { color: var(--accent); }
+
+.kt { font-weight: 700; color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
+
+code { font: 9.5pt var(--mono); background: #F3EFF4; padding: .4pt 3.5pt; border-radius: 4px; }
+
+/* ------------------------------------------------------------ callouts --- */
+
+.note {
+  --c: var(--accent);
+  --f: var(--soft);
+  background: var(--f);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  border-left: 3px solid var(--c);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.note .label {
+  display: inline-flex; align-items: center; gap: 1.6mm;
+  font: 700 8pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c);
+  margin-bottom: 1.8mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.warn { --c: #B4791F; --f: #FaF1DF; }
+.note.exam { --c: #3B8B78; --f: #E6F3EF; }
+.note.def  { --c: var(--accent); --f: var(--soft); }
+
+/* ------------------------------------------------------- summary card --- */
+
+.summary { --accent: #C0567E; --soft: #FBECF1; }
+.summary ul { list-style: none; margin: 0; }
+.summary li { position: relative; padding: 0 0 0 7mm; margin-bottom: 3.5mm; }
+.summary li::before {
+  content: "";
+  position: absolute; left: 0; top: 2.6mm;
+  width: 3.2mm; height: 3.2mm; border-radius: 50%;
+  background: var(--accent);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.summary li:last-child { margin-bottom: 0; }
+.summary li b, .summary li strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------- TOC --- */
+
+nav.toc { --accent: #8B8490; --soft: #F3EFF4; }
+nav.toc ol { list-style: none; margin: 0; }
+nav.toc li {
+  display: flex; align-items: baseline; gap: 4mm;
+  padding: 2.7mm 0;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11pt var(--sans);
+}
+nav.toc li:last-child { border-bottom: 0; }
+nav.toc .dot { width: 3.4mm; height: 3.4mm; border-radius: 50%; flex-shrink: 0;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+nav.toc .title { flex: 1; color: var(--ink); }
+nav.toc .rng { flex-shrink: 0; font: 600 8.5pt var(--mono); color: var(--slate); }
+
+/* -------------------------------------------------------------- slides --- */
+
+figure.slide { margin: 0 0 5mm; break-inside: avoid; }
+figure.slide img {
+  width: 100%; display: block;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 10px rgba(40,30,45,.10);
+}
+figure.slide figcaption {
+  font: 400 8.5pt var(--sans);
+  color: var(--slate);
+  margin-top: 2mm;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4mm;
+}
+figure.slide figcaption .ts { color: var(--accent); }
+
+/* ------------------------------------------------------------ glossary --- */
+
+dl.glossary { margin: 0; }
+dl.glossary div { padding: 3mm 0; border-bottom: 1px solid var(--hairline); break-inside: avoid; }
+dl.glossary div:last-child { border-bottom: 0; padding-bottom: 0; }
+dl.glossary dt { font: 700 10.5pt var(--sans); color: var(--accent); margin-bottom: 1.2mm; }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- flashcards --- */
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 0; }
+.qa {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  background: linear-gradient(180deg, var(--soft) 0, #fff 60%);
+  break-inside: avoid;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.qa .q { font: 700 10pt var(--sans); color: var(--ink); margin-bottom: 2mm; }
+.qa .a { color: var(--ink-soft); font-size: 10pt; }
+
+/* ------------------------------------------------------------- tables --- */
+
+.tables-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0; break-inside: avoid; }
+th {
+  font: 700 9pt var(--sans); text-align: left; color: var(--accent);
+  border-bottom: 2px solid var(--soft); padding: 2mm 3mm 2mm 0;
+}
+td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+
+/* --- mobile / on-the-go reading (screen only; never affects the print PDF).
+   Placed LAST so it wins the cascade over the wider @media screen rules above.
+   Requires <meta name="viewport" content="width=device-width, initial-scale=1">. */
+@media screen and (max-width: 640px) {
+  body { padding: 1rem 0.85rem 2.5rem; font-size: 1.02rem; }
+  .card { padding: 5mm 5mm 6mm; border-radius: 14px; margin-bottom: 0.9rem; }
+  .cover { min-height: auto; padding: 2rem 1.3rem 1.6rem; border-radius: 16px; }
+  .cover .avatar { font-size: 24pt; margin-bottom: 4mm; }
+  .cover h1 { font-size: 20pt; max-width: 100%; }
+  .cover .subtitle { font-size: 11.5pt; }
+  .cover .warm { font-size: 11pt; }
+  .cover .chips { gap: 2mm; margin-top: 5mm; }
+  h2 { font-size: 16pt; }
+  h2 .emoji { font-size: 13.5pt; }
+  h3 { font-size: 11.5pt; }
+  .cards { grid-template-columns: 1fr; }
+  nav.toc li { font-size: 10.5pt; gap: 2.5mm; padding: 2.5mm 0; }
+  nav.toc .rng { font-size: 8pt; }
+  .note { padding: 3.5mm 4mm; }
+  table { font-size: 9.5pt; }
+}
+</style>
+<meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
+align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
+border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
+<body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/open?id=1cEJxyLwgxkmDW2mJ-_2xJSf2ht4vY0rc" target="_blank" rel="noopener">Download PDF ↓</a></div>
+
+<!-- ============================================================ cover === -->
+<section class="cover" style="background:radial-gradient(700px 460px at 12% 8%,#EAECFA 0,transparent 60%),radial-gradient(760px 520px at 96% 4%,#E7F1F7 0,transparent 58%),radial-gradient(620px 520px at 80% 96%,#F6EAF2 0,transparent 60%),var(--cream)">
+  <div>
+    <div class="avatar">🏛️</div>
+    <div class="kicker" style="color:#5866C4">CSS Political Science · Lecture 5</div>
+    <h1>Comparative Government: Parliaments, the Turkish Military &amp; the Presidential System</h1>
+    <p class="subtitle">Five parliamentary systems set side by side (UK, Pakistan, India, Malaysia, Germany), then the rise and fall of the Turkish military, and the presidential system Turkey and France run.</p>
+    <p class="warm" style="color:#4A56A8">A numbers-heavy lecture. Several figures have changed since it was recorded, so every one here is updated to 2026 with the old value flagged. 🏛️</p>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>2h 06m</b> lecture</span>
+    <span class="chip"><b>5</b> countries compared</span>
+    <span class="chip"><b>7</b> topics</span>
+    <span class="chip"><b>2016</b> past paper</span>
+  </div>
+</section>
+
+<!-- ============================================================== toc === -->
+<nav class="toc card">
+  <header><span class="eyebrow">Contents</span><h2><span class="emoji">🗺️</span> In this session</h2></header>
+  <ol>
+    <li><span class="dot" style="background:#5866C4"></span><a class="title" href="#summary">The five-minute version</a><span class="rng">summary</span></li>
+    <li><span class="dot" style="background:#5866C4"></span><a class="title" href="#t1">01 · The comparative frame</a><span class="rng">UK as the yardstick</span></li>
+    <li><span class="dot" style="background:#3A7CC0"></span><a class="title" href="#t2">02 · Heads of state compared</a><span class="rng">the paper tigers</span></li>
+    <li><span class="dot" style="background:#C6506E"></span><a class="title" href="#t3">03 · Upper houses compared</a><span class="rng">Lords to Bundesrat</span></li>
+    <li><span class="dot" style="background:#46955C"></span><a class="title" href="#t4">04 · Lower houses compared</a><span class="rng">where the power sits</span></li>
+    <li><span class="dot" style="background:#B57A2A"></span><a class="title" href="#t5">05 · Unitary vs federal</a><span class="rng">delegated vs constitutional</span></li>
+    <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t6">06 · The military in Turkish politics</a><span class="rng">guardian to civilian</span></li>
+    <li><span class="dot" style="background:#B44A8C"></span><a class="title" href="#t7">07 · Turkey's presidential system &amp; France</a><span class="rng">GNA · two-round</span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t9">Glossary · Flashcards · Exam focus</a><span class="rng"></span></li>
+  </ol>
+</nav>
+
+<!-- ============================================================= tldr === -->
+<section class="summary card" style="--accent:#5866C4; --soft:#ECEEFA; border-top-color:#5866C4">
+  <header><span class="eyebrow" style="color:#5866C4">Start here</span><h2><span class="emoji">⭐</span> The five-minute version</h2></header>
+  <ul>
+    <li><strong>The whole method is comparison against the UK.</strong> The lecturer lines up the UK, Pakistan, India, Malaysia and Germany and runs each institution across all of them: head of state, upper house, lower house, then unitary against federal <span class="ts">00:01:41</span>.</li>
+    <li><strong>In a parliamentary system the head of state is a figurehead.</strong> The UK and Malaysian monarchs, and the presidents of Pakistan, India and Germany, are all what the lecturer calls a <strong>paper tiger, a rubber stamp</strong> <span class="ts">00:05:40</span>. Real power sits with the prime minister and the elected lower house.</li>
+    <li><strong>Upper houses split into powerful and weak.</strong> Pakistan's Senate and India's Rajya Sabha are strong: an ordinary or constitutional bill needs them, the one exception being the budget. The UK House of Lords is a <strong>showpiece</strong> with a quorum of three. Germany's Bundesrat sits in between.</li>
+    <li><strong>Power lives in the directly elected lower house</strong>, because it cannot be stopped by the upper house: the UK House of Commons, Pakistan's National Assembly, Malaysia's Dewan Rakyat.</li>
+    <li><strong>Unitary is not the same as federal.</strong> In the unitary UK, local government has only <strong>delegated</strong> authority that the centre can pull back at will. In federal Pakistan, the provinces' authority comes from the <strong>constitution</strong>, not from a grant by the centre <span class="ts">00:45:21</span>.</li>
+    <li><strong>Turkey shows a military moving out of politics.</strong> The army built the Ottoman Empire and modern Turkey (Ataturk was a general), so it was written into the state as its guardian. A wave of reforms then pushed it back: the National Security Council is now chaired by the civilian president, military courts no longer try civilians, and generals no longer head civilian bodies <span class="ts">01:04:14</span>.</li>
+    <li><strong>Turkey's 2017 referendum switched it to a presidential system.</strong> The prime minister's office was abolished, the assembly grew from 550 to 600, and the president is now directly elected on a <strong>two-round system</strong>: over 50% in round one wins, otherwise the top two go to a runoff <span class="ts">01:29:24</span>. France elects its president the same way <span class="ts">01:26:51</span>.</li>
+    <li><strong>A note on the numbers.</strong> This lecture was recorded a few years ago and several of its figures have since changed. Each one below is given at its current (2026) value, with the lecture's original figure flagged in a correction box so you are never caught out either way.</li>
+  </ul>
+</section>
+
+<!-- ======================================================== section 1 === -->
+<section id="t2" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
+  <header>
+    <span class="eyebrow"><span class="num">1</span> The method</span>
+    <h2><span class="emoji">📐</span> The comparative frame</h2>
+    <span class="timepill">00:01 – 00:03</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecture is built on one move: take the <strong>UK</strong> as the yardstick and compare every other system to it <span class="ts">00:01:41</span>. The countries on the board are the UK, Pakistan, India, Malaysia and Germany, and each institution is run across all five in turn.</p>
+
+    <p>The reason the UK is the yardstick is that these are all <strong>parliamentary</strong> systems descended from it, so the same parts appear in each: a ceremonial head of state, a strong or weak upper house, a powerful directly elected lower house, and a prime minister who actually governs. Once you can place any one country's institution on the UK template, you can answer a question on any of them. The lecturer's promise is exactly that: learn the power and functions of the UK prime minister, and you can apply the same frame to Pakistan's <span class="ts">00:50:36</span>.</p>
+
+    <div class="note exam">
+      <p><strong>How comparative-government questions are set.</strong> They rarely ask for one country in isolation. They ask you to compare, so build the habit this lecture builds: pick the institution (head of state, upper house, lower house), then give all the countries on it in a row. The tables in the next three sections are laid out to be reproduced exactly that way.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 2 === -->
+<section id="t3" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+  <header>
+    <span class="eyebrow"><span class="num">2</span> The figureheads</span>
+    <h2><span class="emoji">👑</span> Heads of state compared</h2>
+    <span class="timepill">00:03 – 00:15</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The single idea to carry through this section: in a parliamentary system the head of state has power <em>in theory but not in practice</em>. The lecturer's phrase for it is a <strong>paper tiger, a rubber stamp</strong> <span class="ts">00:05:40</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Country</th><th>Head of state</th><th>How chosen</th><th>Term</th><th>Real power?</th></tr></thead>
+        <tbody>
+          <tr><td><strong>UK</strong></td><td>Monarch (King)</td><td>Hereditary</td><td>For life</td><td>None in practice. A paper tiger.</td></tr>
+          <tr><td><strong>Pakistan</strong></td><td>President</td><td>Indirectly elected by an electoral college</td><td>5 years</td><td>Largely ceremonial</td></tr>
+          <tr><td><strong>India</strong></td><td>President</td><td>Indirectly elected by an electoral college</td><td>5 years</td><td>Largely ceremonial</td></tr>
+          <tr><td><strong>Malaysia</strong></td><td>King (Yang di-Pertuan Agong)</td><td>Chosen from among the 9 royal state rulers</td><td>5 years</td><td>Largely ceremonial</td></tr>
+          <tr><td><strong>Germany</strong></td><td>President</td><td>Indirectly elected by both houses of parliament</td><td>5 years</td><td>Largely ceremonial</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the UK head of state is now the King.</strong> The lecture says "Queen" throughout, which was right when it was recorded. <strong>Queen Elizabeth II died on 8 September 2022</strong>, and the head of state is now <strong>King Charles III</strong>. The substance is unchanged (hereditary, for life, no real power), but write King in 2026.</p>
+    </div>
+
+    <h3>Pakistan's electoral college</h3>
+    <p>Pakistan's president is <strong>indirectly</strong> elected <span class="ts">00:05:40</span>, for a five-year term, by an electoral college made up of the <strong>members of the National Assembly, the members of the Senate, and the members of the four provincial assemblies</strong> <span class="ts">00:06:23</span>. Indirect election is the mark of a figurehead: the people do not choose the president, the assemblies do.</p>
+
+    <h3>India, Malaysia, Germany</h3>
+    <ul>
+      <li><strong>India:</strong> the president is indirectly elected for five years by the members of both houses of the central legislature plus the members of the state assemblies <span class="ts">00:09:05</span>.</li>
+      <li><strong>Malaysia:</strong> before independence Malaysia was made up of <strong>nine sovereign states</strong>, each with its own ruler <span class="ts">00:09:42</span>. Its king is chosen from among those nine rulers for a five-year term, so the crown rotates among them.</li>
+      <li><strong>Germany:</strong> the president is elected for five years by the members of both houses <span class="ts">00:14:59</span>, and like the others is a figurehead. (Editorial precision: the actual electing body is the <em>Federal Convention</em>, the Bundestag plus an equal number of state delegates, rather than the Bundesrat sitting as such.)</li>
+    </ul>
+
+    <div class="note warn">
+      <p><strong>Correction: India has 28 states, not 29.</strong> The lecture says the Indian president is elected by "the 29 state assembly members." In <strong>2019</strong>, Jammu and Kashmir was reorganised into two union territories (Jammu &amp; Kashmir and Ladakh), reducing the count from 29 to <strong>28 states</strong>. Write 28.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 3 === -->
+<section id="t4" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+  <header>
+    <span class="eyebrow"><span class="num">3</span> The second chamber</span>
+    <h2><span class="emoji">🏛️</span> Upper houses compared</h2>
+    <span class="timepill">00:15 – 00:33</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Upper houses divide sharply into <strong>powerful</strong> and <strong>weak</strong>, and the test is simple: can an ordinary bill become law without the upper house's consent? Where it cannot, the house is powerful.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Country</th><th>Upper house</th><th>Selection</th><th>Term</th><th>Power</th></tr></thead>
+        <tbody>
+          <tr><td><strong>UK</strong></td><td>House of Lords</td><td>Appointed by the monarch; the house of nobles</td><td>Life (for life peers)</td><td>Weak. A showpiece. Quorum of 3.</td></tr>
+          <tr><td><strong>Pakistan</strong></td><td>Senate</td><td>Indirectly elected by the provincial assemblies</td><td>6 years, half retiring every 3</td><td>Very powerful. No bill without it except the budget.</td></tr>
+          <tr><td><strong>India</strong></td><td>Rajya Sabha</td><td>Indirectly elected by state legislatures, on population</td><td>6 years&dagger;</td><td>Strong, but not equal to the lower house (see correction).</td></tr>
+          <tr><td><strong>Malaysia</strong></td><td>Dewan Negara</td><td>Part elected by state assemblies, part appointed by the king</td><td>3 years&dagger;</td><td>Weak</td></tr>
+          <tr><td><strong>Germany</strong></td><td>Bundesrat</td><td>Delegates of the state governments</td><td>No fixed term (see correction)</td><td>Middle: ordinary law can pass without it, constitutional law cannot</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:.82rem; color:var(--slate); margin-top:.4rem;">&dagger; Term added as current reference; the lecture states the selection and power of the Rajya Sabha and Dewan Negara but not their terms.</p>
+
+    <h3>The UK House of Lords: a showpiece</h3>
+    <p>The Lords are appointed by the monarch and form the house of nobles <span class="ts">00:16:45</span>. Once this was a powerful house that checked the crown, but in the UK's conservative, status-quo settlement it has become <strong>just a showpiece</strong> <span class="ts">00:18:01</span>. The lecturer's proof is the <span class="kt">quorum</span>, the minimum members needed for the house to do business. For Pakistan's Senate, and for any house, the usual quorum is a quarter of the members, but for the House of Lords, with over a thousand members historically, the quorum is just <strong>three</strong> <span class="ts">00:19:09</span>. A house whose business can proceed with three members present is a house that is not expected to decide anything.</p>
+
+    <div class="note warn">
+      <p><strong>Correction on the Lords' size.</strong> The lecture says the House of Lords has "more than a thousand members." It did historically, but the House of Lords Act 1999 removed most hereditary peers, and its membership is now around <strong>800</strong>. The quorum of <strong>three</strong> for general business is still correct (a division on legislation needs 30).</p>
+    </div>
+
+    <h3>Pakistan's Senate: powerful, and equal representation</h3>
+    <p>Unlike the Lords, Pakistan's Senate is <strong>very powerful</strong> <span class="ts">00:23:36</span>. No law, ordinary or constitutional, is passed until the Senate passes it, with <strong>one exception, the budget</strong> (a money bill) <span class="ts">00:23:36</span>. Senators serve six-year terms, <strong>half retire every three years</strong>, and they are indirectly elected by the provincial assemblies, with each province returning the same number of senators whether it is large or small <span class="ts">00:22:10</span>. That equal-per-province representation is the point of a senate: it protects the small provinces against being outvoted by the large ones.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: the Senate now has 96 members, not 104.</strong> The lecture gives 104 and 23 senators per province. After the <strong>25th Amendment (2018)</strong> merged FATA into Khyber Pakhtunkhwa, FATA's 8 Senate seats were abolished, phased out to bring the total from 104 down to <strong>96</strong> by 2024. Each of the four provinces still returns <strong>23 senators</strong> (4 × 23 = 92), plus 4 for the Islamabad Capital Territory.</p>
+    </div>
+
+    <h3>India, Malaysia, Germany</h3>
+    <ul>
+      <li><strong>India's Rajya Sabha</strong> is indirectly elected by the state legislatures on a <strong>population</strong> basis, larger states sending more, and the lecturer gives it the same power he gave Pakistan's Senate <span class="ts">00:26:12</span>.</li>
+      <li><strong>Malaysia's Dewan Negara</strong> has <strong>70 members</strong> <span class="ts">00:27:02</span>: with 13 states each sending 2, that is 26 elected by the state assemblies, and the remaining members are <strong>appointed by the king</strong> at his discretion <span class="ts">00:28:04</span>. Selected, not elected <span class="ts">00:30:08</span>.</li>
+      <li><strong>Germany's Bundesrat</strong> is the middle case <span class="ts">00:31:03</span>: an <strong>ordinary</strong> law can pass without it, but a <strong>constitutional</strong> law cannot <span class="ts">00:32:28</span>.</li>
+    </ul>
+
+    <div class="note warn">
+      <p><strong>Two corrections here.</strong> First, the lecture treats the Rajya Sabha as equal in power to Pakistan's Senate, saying no bill passes without it except the budget. That <strong>overstates</strong> it: in a deadlock India can call a <strong>joint sitting</strong> of both houses, where the far larger Lok Sabha usually prevails, and on a money bill the Rajya Sabha can only <strong>delay 14 days</strong>. The Rajya Sabha is strong but not co-equal. Second, the Bundesrat's members are <strong>delegates of the state (Land) governments</strong>, not members "elected for a four-year term"; they change whenever a state government changes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 4 === -->
+<section id="t5" class="chapter card" style="--accent:#46955C; --soft:#E9F4ED;">
+  <header>
+    <span class="eyebrow"><span class="num">4</span> Where power sits</span>
+    <h2><span class="emoji">🗳️</span> Lower houses compared</h2>
+    <span class="timepill">00:33 – 00:39</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The real power in every one of these systems sits in the <strong>directly elected lower house</strong>. The lecturer's test for why is crisp: the UK House of Commons is powerful <strong>because the House of Lords cannot stop it</strong> <span class="ts">00:38:15</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Country</th><th>Lower house</th><th>Seats</th><th>Term</th></tr></thead>
+        <tbody>
+          <tr><td><strong>UK</strong></td><td>House of Commons</td><td>650 (directly elected)&dagger;</td><td>Up to 5 years&dagger;</td></tr>
+          <tr><td><strong>Pakistan</strong></td><td>National Assembly</td><td>336 total: 266 general + 60 women + 10 minorities</td><td>5 years</td></tr>
+          <tr><td><strong>Malaysia</strong></td><td>Dewan Rakyat</td><td>222 (directly elected)</td><td>5 years</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:.82rem; color:var(--slate); margin-top:.4rem;">&dagger; UK Commons figures added as current reference; the lecture gives the Commons its <em>principle</em> (it cannot be stopped by the Lords) rather than a seat count. The Pakistan and Malaysia figures are the lecturer's, with Pakistan's updated per the correction below.</p>
+
+    <h3>Pakistan's National Assembly</h3>
+    <p>The National Assembly is directly elected for five years. General seats are contested at the election, and the <strong>reserved seats</strong>, 60 for women and 10 for minorities, are then allocated to parties <strong>in proportion to the general seats each won</strong> <span class="ts">00:35:04</span>. This is the house that matters: the prime minister sits here, the cabinet is drawn from here, and the budget is passed here <span class="ts">00:36:35</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: the National Assembly now has 336 seats, not 342.</strong> The lecture gives 272 general seats (342 total with the 60 women and 10 minority seats). After the <strong>25th Amendment (2018)</strong> merged FATA into Khyber Pakhtunkhwa, FATA's 12 seats were halved and then folded in, cutting the general seats from 272 to <strong>266</strong> and the total from 342 to <strong>336</strong> (266 + 60 + 10). The reserved-seat rules are unchanged.</p>
+    </div>
+
+    <h3>Why the Commons cannot be stopped</h3>
+    <p>The lecturer states the principle, that the Lords cannot stop the Commons, without naming the instrument. Worth adding for a stronger answer: the instrument is the <strong>Parliament Acts of 1911 and 1949</strong>, which stripped the Lords of the power to veto legislation and left them only the power to <strong>delay</strong> it. This is exactly why the directly elected house is supreme: the appointed house was legally subordinated to it.</p>
+  </div>
+</section>
+
+<!-- ======================================================== section 5 === -->
+<section id="t6" class="chapter card" style="--accent:#B57A2A; --soft:#FAF0E2;">
+  <header>
+    <span class="eyebrow"><span class="num">5</span> One state or many</span>
+    <h2><span class="emoji">🗺️</span> Unitary vs federal</h2>
+    <span class="timepill">00:41 – 00:51</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">This is the sharpest single distinction in the lecture, and it turns on <strong>where a region's authority comes from</strong> <span class="ts">00:41:38</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th></th><th>Unitary (UK)</th><th>Federal (Pakistan)</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Source of local authority</strong></td><td><strong>Delegated</strong> by the central government</td><td>Given by the <strong>constitution</strong></td></tr>
+          <tr><td><strong>Can the centre withdraw it?</strong></td><td>Yes, at will, "within seconds", because it is the centre's own to give <span class="ts">00:45:21</span></td><td>No. The centre did not grant it, so the centre cannot take it back</td></tr>
+          <tr><td><strong>What protects the region</strong></td><td>Nothing but the centre's convenience (efficiency)</td><td>The constitution itself</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>In the unitary UK, local government has authority only because the central government <strong>delegated</strong> it, and what the centre delegates the centre can pull back whenever it chooses, because it was the centre's in the first place <span class="ts">00:45:21</span>. In federal Pakistan the provinces' authority was given by the <strong>constitution</strong>, not handed down by the centre, so the centre cannot simply withdraw it <span class="ts">00:45:21</span>.</p>
+
+    <div class="note">
+      <p><strong>The deeper point: the value of a constitution.</strong> The lecturer keeps returning to it. An <span class="kt">ordinance</span> is not permanent and carries no real weight; a <strong>constitution</strong> does, because breaking it carries a political cost <span class="ts">00:48:12</span>. The UK is the interesting case: it has no single written constitution, so in effect its constitution is the <strong>House of Commons</strong>, and that parliamentary supremacy is why a unitary centre can reshape local government at will <span class="ts">00:46:47</span>.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Editorial balance for a top answer.</strong> The unitary/federal contrast is sound as a principle, but do not draw it too hard. The UK has since <strong>devolved</strong> real powers to Scotland, Wales and Northern Ireland, and although Westminster remains legally supreme, withdrawing those powers would now be a serious constitutional step, not a matter of seconds. On the other side, Pakistan's <strong>18th Amendment (2010)</strong> is what most strongly entrenched provincial autonomy in the constitution, which is the modern anchor for the lecturer's point.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 6 === -->
+<section id="t7" class="chapter card" style="--accent:#2C8C86; --soft:#E4F2F1;">
+  <header>
+    <span class="eyebrow"><span class="num">6</span> The army and the state</span>
+    <h2><span class="emoji">🎖️</span> The military in Turkish politics</h2>
+    <span class="timepill">00:51 – 01:17</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">This is a set past-paper topic: the role of the military in Turkish politics <span class="ts">00:51:27</span>. The lecturer's method is to open with the historical background, and the background explains everything that follows.</p>
+
+    <h3>Why the military was powerful: it built the state twice</h3>
+    <p>Before 1924 Turkey was the <strong>Ottoman Empire</strong> <span class="ts">00:53:28</span>. An empire is built by expansion, and expansion is done by the army, so <strong>the army made the Ottoman Empire</strong> <span class="ts">00:54:18</span>. When that empire was destroyed in the First World War, modern Turkey was rescued by a <strong>military general</strong>, <strong>Mustafa Kemal Ataturk</strong>, its founder and saviour <span class="ts">00:55:47</span>. So the military made modern Turkey too, and an institution that founds a state writes itself deep into that state's constitution.</p>
+
+    <div class="note warn">
+      <p><strong>Correction on dates and the "guardian" clause.</strong> Turkey's key dates: the sultanate was abolished in <strong>1922</strong>, the <strong>Republic was declared in 1923</strong>, and the <strong>caliphate was abolished in 1924</strong>, so "before 1924" is a reasonable shorthand. But the lecture then says the military's role as <strong>guardian</strong> of the state comes from a constitution written "in the 1930s (32, 33, 34)". That is not right. Turkey's constitutions are <strong>1921, 1924, 1961 and 1982</strong>; there is no 1930s constitution. The military's guardian role comes from the <strong>1961 Internal Service Law (Article 35)</strong> and is reinforced by the 1961 and 1982 constitutions and the National Security Council. Attribute the guardianship to 1961 onward, not the 1930s.</p>
+    </div>
+
+    <h3>How powerful the institution was</h3>
+    <p>The signs of that power, as the lecturer lists them:</p>
+    <ul>
+      <li>The military was the constitutional <strong>guardian of the state</strong> <span class="ts">00:56:33</span>.</li>
+      <li>The <span class="kt">National Security Council</span>, responsible for every important internal and external policy of Turkey, was <strong>headed by the army chief</strong> <span class="ts">00:58:25</span>.</li>
+      <li><strong>Military courts tried civilians</strong>, which the lecturer flags as the clearest sign that a democracy is not real <span class="ts">00:59:47</span>.</li>
+      <li>Retired military generals <strong>headed civilian institutions</strong> (a steel mill, PIA and the like) <span class="ts">01:01:00</span>.</li>
+      <li>There was <strong>no civilian audit of the military budget</strong>, unlike in Western democracies <span class="ts">01:01:42</span>.</li>
+    </ul>
+
+    <h3>The reforms that pushed the army back</h3>
+    <p>Then the state rolled the military out of politics, and this is the part an answer must reach, because the topic is really about that transition <span class="ts">01:04:14</span>:</p>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Reform</th><th>What changed</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Guardianship removed</strong></td><td>The guardian role and martial-law provisions were taken out of the framework, and the military is no longer the guardian of the state <span class="ts">01:04:14</span></td></tr>
+          <tr><td><strong>National Security Council</strong></td><td>Still exists and still handles key policy, but is now <strong>chaired by the civilian President, not the army chief</strong> <span class="ts">01:05:02</span></td></tr>
+          <tr><td><strong>Military courts</strong></td><td>The trial of civilians in military courts was ended <span class="ts">01:05:02</span></td></tr>
+          <tr><td><strong>Civilian institutions</strong></td><td>From 2007 onward, no military general could head a civilian institution <span class="ts">01:05:02</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction on the reform dates.</strong> The lecture puts the removal of the guardian clause at "1987", which is not right. The military's political power was rolled back mainly by the <strong>EU-harmonisation reforms of 2001 to 2004</strong> (which gave the National Security Council a civilian majority and advisory status), and the guardianship wording of <strong>Article 35 of the Internal Service Law was amended in 2013</strong>. Use "the EU reform decade, roughly 2001 to 2013" rather than 1987.</p>
+    </div>
+
+    <h3>Why the military accepted the retreat</h3>
+    <p>Three reasons in the lecture <span class="ts">01:14:04</span>:</p>
+    <ul>
+      <li><strong>The EU membership bid.</strong> Civilian control of the military is an EU condition, and Turkey wanted in <span class="ts">01:09:13</span>. (Turkey is a candidate, and has been since 1999, but is still <strong>not a member</strong> <span class="ts">01:09:57</span>.)</li>
+      <li><strong>A changed threat perception.</strong> Turkey no longer felt an imminent external threat from Europe, which reduced the case for a politically dominant army <span class="ts">01:10:21</span>.</li>
+      <li><strong>Democratic consolidation.</strong> Turkey stabilised and grew in standing, which the lecturer credits to Erdogan's early period <span class="ts">01:14:04</span>.</li>
+    </ul>
+
+    <div class="note">
+      <p><strong>The honest coda.</strong> The lecturer does not leave Erdogan as a hero. He notes that a leader once praised for consolidating democracy shifted into <strong>reverse gear toward authoritarianism</strong>, with opponents jailed <span class="ts">02:01:52</span>. So the arc has two faces: the military left politics, but civilian strongman rule is its own danger. That balance is exactly what a strong essay on Turkish civil-military relations should carry.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 7 === -->
+<section id="t8" class="chapter card" style="--accent:#B44A8C; --soft:#F9EBF4;">
+  <header>
+    <span class="eyebrow"><span class="num">7</span> The presidential turn</span>
+    <h2><span class="emoji">🗳️</span> Turkey's presidential system &amp; France</h2>
+    <span class="timepill">01:21 – 02:06</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The second half of the Turkey story is constitutional: a <strong>2017 referendum</strong> converted Turkey from a parliamentary to a <strong>presidential</strong> system, and the lecturer uses it to teach the two-round election that France also uses <span class="ts">01:24:19</span>.</p>
+
+    <h3>Before and after the referendum</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Feature</th><th>Before (parliamentary)</th><th>After 2017 (presidential)</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Grand National Assembly</strong></td><td>550 members <span class="ts">01:22:17</span></td><td><strong>600 members</strong> <span class="ts">01:25:08</span></td></tr>
+          <tr><td><strong>Term</strong></td><td>4 years</td><td><strong>5 years</strong> <span class="ts">01:25:08</span></td></tr>
+          <tr><td><strong>Prime Minister</strong></td><td>Head of government, cabinet drawn from the GNA <span class="ts">01:22:37</span></td><td><strong>Abolished</strong> <span class="ts">01:25:56</span></td></tr>
+          <tr><td><strong>President</strong></td><td>Elected indirectly by the GNA, 5 years, no real authority, acted on the PM's advice <span class="ts">01:23:29</span></td><td>Directly elected, head of state and government</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the referendum was April 2017, and it was 18 amendments.</strong> The lecture says "September 2017" and "72 articles changed". The Turkish constitutional referendum was held on <strong>16 April 2017</strong>, on a package of <strong>18 constitutional amendments</strong>. The 550-to-600, four-to-five-year and prime-minister-abolished changes are all correct; the date and the "72 articles" figure are not.</p>
+    </div>
+
+    <h3>The two-round system (Turkey and France)</h3>
+    <p>The president is now <strong>directly</strong> elected by the people, on a <span class="kt">two-round system</span> <span class="ts">01:26:51</span>. The rule <span class="ts">01:29:24</span>:</p>
+    <ol>
+      <li>Every party may field a candidate. Suppose five candidates run.</li>
+      <li><strong>Round one:</strong> if any candidate wins <strong>more than 50%</strong> of the vote, there is no second round; that candidate is president.</li>
+      <li>If no one clears 50%, a <strong>second round</strong> is held between the <strong>top two</strong> candidates from round one, and whoever wins that runoff becomes president.</li>
+    </ol>
+    <p>The lecturer's real example: <strong>Erdogan took about 53% in the first round</strong>, so no second round was needed <span class="ts">01:31:51</span>. And <strong>the French president is elected by exactly this system</strong> <span class="ts">01:26:51</span>, which is why it matters. The 2016 constitutional-law paper asked how the French president is elected <span class="ts">01:31:51</span>, and this two-round answer is the answer.</p>
+
+    <div class="note exam">
+      <p><strong>Why "more than 50%", not "51%".</strong> The lecture says 51% in places; the actual rule is an <strong>absolute majority</strong>, meaning more than half (50% + 1). A candidate on exactly 50% has not cleared the bar; a candidate on 50.1% has. Write "more than 50%" or "absolute majority".</p>
+    </div>
+
+    <h3>How strong the new president is</h3>
+    <p>The lecturer calls it <strong>"more than presidential"</strong>, stronger even than the US president <span class="ts">01:33:44</span>. The checks and powers he draws out:</p>
+    <ul>
+      <li><strong>No vote of no confidence.</strong> The assembly cannot remove the president by a no-confidence vote <span class="ts">01:34:33</span>.</li>
+      <li><strong>Impeachment only.</strong> For gross misconduct or corruption the GNA can move to impeach, requiring a <strong>two-thirds majority</strong>, and impeachment is a separate, harder process <span class="ts">01:34:33</span>.</li>
+      <li><strong>The real check: simultaneous elections.</strong> If the president dissolves the assembly, presidential and parliamentary elections are held <strong>together</strong>, so dissolving the assembly forces the president to face re-election too <span class="ts">01:36:33</span>. That mutual risk is what restrains him.</li>
+      <li><strong>Legislation.</strong> The president can refuse to sign a law; the GNA can then override him by passing it again with a <strong>majority of its total members</strong>, and the lecturer stresses this is <strong>not a US-style veto</strong> <span class="ts">01:39:19</span>. His worked example used a 400-member house needing 201 <span class="ts">01:39:48</span>; for today's 600-member assembly that majority is 301.</li>
+    </ul>
+
+    <h3>France: the same family, with a prime minister</h3>
+    <p>France runs the same two-round presidential election, but is not a pure presidential system, because it <strong>also has a prime minister</strong> sitting alongside the president <span class="ts">01:45:30</span>. The French president can dissolve the National Assembly, but there is a check: <strong>not twice in one year</strong> <span class="ts">01:46:00</span>. And bills can be referred for a <span class="kt">judicial review</span> of their constitutionality to the <strong>Constitutional Council</strong>, which the president refers <span class="ts">01:42:43</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: unitary states do have high courts.</strong> The lecture says Turkey and France are unitary and that "a unitary state has no supreme court", only a constitutional council. Take care with this. It is true that France uses a <strong>Conseil constitutionnel</strong> for constitutional review (and separately a Conseil d'État and Cour de cassation as its top courts), but the general claim that a unitary state has no supreme court is <strong>not a rule</strong>: unitary states can and do have supreme or constitutional courts. Turkey itself has a <strong>Constitutional Court</strong> (Anayasa Mahkemesi), not merely a council. Present it as France's particular arrangement, not a law of unitary states.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================= glossary === -->
+<section id="t9" class="chapter card" style="--accent:#7A7484; --soft:#F2EFF4;">
+  <header><span class="eyebrow">Reference</span><h2><span class="emoji">📖</span> Glossary</h2></header>
+  <dl class="glossary">
+    <div><dt>Head of state vs head of government</dt><dd>The head of state is the ceremonial figurehead (a monarch or president in these systems); the head of government is the prime minister, who actually governs.</dd></div>
+    <div><dt>Paper tiger / rubber stamp</dt><dd>The lecturer's phrase for a head of state with power in theory but not in practice.</dd></div>
+    <div><dt>Indirect election</dt><dd>Election by an assembly or electoral college rather than by the people directly; the mark of a figurehead office.</dd></div>
+    <div><dt>Electoral college (Pakistan president)</dt><dd>The National Assembly, the Senate and the four provincial assemblies, who together elect the president for 5 years.</dd></div>
+    <div><dt>Quorum</dt><dd>The minimum number of members present for a house to conduct business. Usually a quarter; three for the UK House of Lords, which shows how little it now decides.</dd></div>
+    <div><dt>House of Lords</dt><dd>The UK upper house: appointed peers, no power to veto legislation, a showpiece.</dd></div>
+    <div><dt>Senate (Pakistan)</dt><dd>The powerful upper house: equal representation per province, 6-year terms with half retiring every 3 years, and consent needed for every bill except the budget. 96 members today.</dd></div>
+    <div><dt>Rajya Sabha</dt><dd>India's upper house, elected by state legislatures on population; strong but not co-equal with the Lok Sabha.</dd></div>
+    <div><dt>Dewan Negara / Dewan Rakyat</dt><dd>Malaysia's upper house (part elected, part royally appointed) and lower house (222 directly elected members).</dd></div>
+    <div><dt>Bundesrat</dt><dd>Germany's upper house, made of delegates of the state governments; ordinary law can pass without it, constitutional law cannot.</dd></div>
+    <div><dt>Parliament Acts 1911 &amp; 1949</dt><dd>The UK laws that removed the Lords' veto and left them only delay, making the elected Commons supreme.</dd></div>
+    <div><dt>Unitary state</dt><dd>One where regional authority is delegated by the centre and can be withdrawn by it (the UK).</dd></div>
+    <div><dt>Federal state</dt><dd>One where regional authority is granted by the constitution and cannot be withdrawn by the centre (Pakistan).</dd></div>
+    <div><dt>Ordinance</dt><dd>A temporary executive order, not permanent and without the standing of constitutional law.</dd></div>
+    <div><dt>Guardian role (Turkish military)</dt><dd>The military's constitutional self-definition as protector of the republic, from the 1961 Internal Service Law, used to justify its dominance until the EU-era reforms.</dd></div>
+    <div><dt>National Security Council (Turkey)</dt><dd>The body handling key internal and external policy; once chaired by the army chief, now by the civilian President.</dd></div>
+    <div><dt>Grand National Assembly (GNA)</dt><dd>Turkey's parliament: 550 members before the 2017 referendum, 600 after.</dd></div>
+    <div><dt>Two-round system</dt><dd>A presidential election where a candidate needs more than 50% in round one to win outright, otherwise the top two contest a runoff. Used by Turkey and France.</dd></div>
+    <div><dt>Constitutional Council (France)</dt><dd>The body that reviews a bill's constitutionality on the president's referral. France's arrangement, not a rule for all unitary states.</dd></div>
+    <div><dt>Judicial review</dt><dd>A court or council checking a law against the constitution and striking it down if it violates fundamental rights.</dd></div>
+  </dl>
+</section>
+
+<!-- ======================================================= flashcards === -->
+<section id="t10" class="chapter card" style="--accent:#8A57BD; --soft:#F3ECFA;">
+  <header><span class="eyebrow">Self-test</span><h2><span class="emoji">🎴</span> Flashcards</h2></header>
+  <div class="cards">
+    <div class="qa"><p class="q">What is the comparative method of this lecture?</p><p class="a">Take the UK as the yardstick and run each institution (head of state, upper house, lower house, unitary vs federal) across the UK, Pakistan, India, Malaysia and Germany.</p></div>
+    <div class="qa"><p class="q">What is a head of state in a parliamentary system?</p><p class="a">A figurehead: power in theory but not in practice. The lecturer's phrase is "paper tiger, rubber stamp". Real power is with the PM and the elected lower house.</p></div>
+    <div class="qa"><p class="q">Who is the UK head of state now?</p><p class="a">King Charles III. Queen Elizabeth II died on 8 September 2022. Hereditary, for life, no real power. (The lecture says "Queen".)</p></div>
+    <div class="qa"><p class="q">Who elects Pakistan's president, and for how long?</p><p class="a">An electoral college of the National Assembly, the Senate and the four provincial assemblies, for a 5-year term. Indirectly elected.</p></div>
+    <div class="qa"><p class="q">How many states does India have?</p><p class="a">28, since Jammu &amp; Kashmir became two union territories in 2019. (The lecture says 29.)</p></div>
+    <div class="qa"><p class="q">How is Malaysia's king chosen?</p><p class="a">From among the 9 royal state rulers, for a 5-year term. The crown rotates among them.</p></div>
+    <div class="qa"><p class="q">What makes an upper house powerful?</p><p class="a">Whether an ordinary bill can become law without it. If it cannot, the house is powerful (Pakistan's Senate); if it can, the house is weak (UK Lords).</p></div>
+    <div class="qa"><p class="q">Why is the House of Lords called a showpiece?</p><p class="a">It has no power to veto legislation and its quorum for general business is just three, out of a house of around 800.</p></div>
+    <div class="qa"><p class="q">How powerful is Pakistan's Senate, and how many members?</p><p class="a">Very powerful: no bill, ordinary or constitutional, passes without it except the budget. 96 members today (was 104 before the FATA merger under the 25th Amendment).</p></div>
+    <div class="qa"><p class="q">Senate term and rotation?</p><p class="a">6-year terms, with half the senators retiring every 3 years. Indirectly elected by the provincial assemblies, equal number per province.</p></div>
+    <div class="qa"><p class="q">Is India's Rajya Sabha equal to Pakistan's Senate?</p><p class="a">No. It is strong but not co-equal: a deadlock can go to a joint sitting where the larger Lok Sabha prevails, and it can only delay a money bill 14 days.</p></div>
+    <div class="qa"><p class="q">Describe Malaysia's Dewan Negara.</p><p class="a">70 members: 26 elected by the 13 state assemblies (2 each), the rest appointed by the king at his discretion.</p></div>
+    <div class="qa"><p class="q">Where does the Bundesrat sit on power?</p><p class="a">In the middle: an ordinary law can pass without it, but a constitutional law cannot. Its members are delegates of the state governments.</p></div>
+    <div class="qa"><p class="q">Why is the House of Commons powerful?</p><p class="a">Because the Lords cannot stop it. The Parliament Acts of 1911 and 1949 removed the Lords' veto, leaving only delay.</p></div>
+    <div class="qa"><p class="q">Pakistan's National Assembly composition?</p><p class="a">336 seats: 266 general, 60 reserved for women, 10 for minorities. Reserved seats are allocated in proportion to general seats won. (The lecture's 272 general / 342 total predates the FATA merger.)</p></div>
+    <div class="qa"><p class="q">Unitary vs federal, in one line?</p><p class="a">Unitary: regional authority is delegated by the centre and can be withdrawn (UK). Federal: regional authority is given by the constitution and cannot (Pakistan).</p></div>
+    <div class="qa"><p class="q">In the UK, what is the constitution in effect?</p><p class="a">The House of Commons. With no single written constitution, parliamentary supremacy lets a unitary centre reshape local government at will.</p></div>
+    <div class="qa"><p class="q">Why was the Turkish military so powerful?</p><p class="a">It built the Ottoman Empire and modern Turkey (Ataturk was a general), so it was written into the state as its guardian.</p></div>
+    <div class="qa"><p class="q">Where does the military's "guardian" role actually come from?</p><p class="a">The 1961 Internal Service Law (Article 35) and the 1961/1982 constitutions, not a 1930s constitution. (The lecture says 1930s.)</p></div>
+    <div class="qa"><p class="q">Name the signs of the Turkish military's old dominance.</p><p class="a">Constitutional guardian, National Security Council chaired by the army chief, military courts trying civilians, generals heading civilian bodies, and no civilian audit of the defence budget.</p></div>
+    <div class="qa"><p class="q">How was the military rolled back?</p><p class="a">The guardian role went, the NSC is now chaired by the civilian President, military courts stopped trying civilians, and from 2007 no general could head a civilian institution. (Mainly the EU reforms of 2001 to 2013, not 1987.)</p></div>
+    <div class="qa"><p class="q">Three reasons the military accepted the retreat?</p><p class="a">The EU membership bid (civilian control is an EU condition), a reduced external threat perception, and democratic consolidation under early Erdogan.</p></div>
+    <div class="qa"><p class="q">What did Turkey's 2017 referendum change?</p><p class="a">It switched Turkey to a presidential system: GNA 550 to 600, term 4 to 5 years, prime minister abolished, president directly elected. Held 16 April 2017 (not September), 18 amendments.</p></div>
+    <div class="qa"><p class="q">Explain the two-round presidential system.</p><p class="a">If a candidate wins more than 50% in round one, they win outright; otherwise the top two contest a runoff. Used by Turkey and France. Erdogan took about 53% in round one.</p></div>
+    <div class="qa"><p class="q">Why "more than 50%", not "51%"?</p><p class="a">The rule is an absolute majority, more than half (50% + 1). The 51% figure is a loose approximation.</p></div>
+    <div class="qa"><p class="q">Why is Turkey's president "more than presidential"?</p><p class="a">No vote of no confidence against him; removal only by a two-thirds impeachment. He is stronger than even the US president in that respect.</p></div>
+    <div class="qa"><p class="q">What is the real check on Turkey's president?</p><p class="a">Simultaneous elections: if he dissolves the assembly, presidential and parliamentary elections are held together, so he must face re-election too.</p></div>
+    <div class="qa"><p class="q">How does the GNA override a president who won't sign a law?</p><p class="a">By passing it again with a majority of its total members. The lecturer's worked example was 201 of a 400-seat house; for today's 600 seats that is 301. It is not a US-style veto.</p></div>
+    <div class="qa"><p class="q">How does France differ from a pure presidential system?</p><p class="a">It also has a prime minister alongside the president (a semi-presidential system). The president can dissolve the National Assembly, but not twice in one year.</p></div>
+    <div class="qa"><p class="q">Do unitary states have no supreme court?</p><p class="a">No, that is not a rule. France uses a Constitutional Council for review, but Turkey has a Constitutional Court, and unitary states can have supreme courts. Present it as France's particular arrangement.</p></div>
+  </div>
+</section>
+
+<!-- ======================================================= exam focus === -->
+<section id="t11" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
+  <header><span class="eyebrow" style="color:#5866C4">Before the paper</span><h2><span class="emoji">🎯</span> Exam focus</h2></header>
+  <div class="section-body">
+    <ul>
+      <li><strong>Use the current figures, not the lecture's.</strong> This lecture predates 2018, so update every number: India 28 states, Pakistan Senate 96, National Assembly 336 (266 general), UK head of state King Charles III. Writing the old figures is the easiest way to lose a mark on this topic.</li>
+      <li><strong>Answer by institution across countries, not country by country.</strong> Head of state, then upper house, then lower house, then unitary vs federal, giving all five countries on each. That is what a comparative-government question rewards, and it is how the three tables here are built.</li>
+      <li><strong>Lead every institution with its power test.</strong> Head of state: figurehead or real. Upper house: can an ordinary bill pass without it. Lower house: it cannot be stopped by the upper house. Region: is its authority delegated or constitutional.</li>
+      <li><strong>For unitary vs federal, name the source of authority.</strong> Delegated by the centre (unitary, UK) versus given by the constitution (federal, Pakistan). Add the 18th Amendment for Pakistan and devolution for the UK to show it is not absolute.</li>
+      <li><strong>Turkish civil-military relations is a two-part answer.</strong> First why the army was dominant (it founded the state, hence guardian), then how it was rolled back (NSC civilianised, military courts ended, generals barred from civilian posts, driven by the EU bid). Finish with the honest coda: the army left, but Erdogan's authoritarian turn is the new concern.</li>
+      <li><strong>The two-round system is the reusable payoff.</strong> The 2016 paper asked how the French president is elected; the answer is this system, and Turkey now uses it too. Say "more than 50%", not 51%.</li>
+      <li><strong>Keep Turkey's presidency and France apart.</strong> Turkey is a pure presidential system with no prime minister; France is semi-presidential, keeping a prime minister beside the president.</li>
+      <li><strong>Do not over-claim on courts.</strong> "Unitary states have no supreme court" is wrong as a rule. France's Constitutional Council is France's arrangement; Turkey has a Constitutional Court.</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="notefoot">Want the whole lecture? <a href="https://drive.google.com/file/d/1JISyPNytq-WTsIsNjWYXPb4nZzHlli-R/view" target="_blank" rel="noopener">▶ Watch the full recording</a><span class="sep">·</span><a href="https://drive.google.com/open?id=1cEJxyLwgxkmDW2mJ-_2xJSf2ht4vY0rc" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+</html>
