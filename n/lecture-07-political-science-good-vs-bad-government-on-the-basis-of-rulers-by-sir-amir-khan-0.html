@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aristotle, Machiavelli &amp; Bentham: Good and Bad Government</title>
+<style>/* Lecture Notes ebook, "warm study" theme.
+   Inspired by Mehak's MarketCanvas app: soft cream ground, rounded white cards,
+   a different pastel accent per topic, serif display + friendly sans body,
+   gentle emoji + pill badges. Playful and pretty, but still a real study book.
+   Print-first (A4 PDF via headless Edge); reads well on screen too.
+
+   Each section sets its own accent inline:
+     <section id="t1" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+   Everything themeable keys off --accent / --soft. Titles stay ink for
+   readability; accents colour eyebrows, numbers, pills, rules and callouts.
+*/
+
+:root {
+  --cream: #FCF6F0;          /* page ground (warm) */
+  --card: #FFFFFF;
+  --ink: #2C2630;            /* plum-black body/headings */
+  --ink-soft: #5A5360;
+  --slate: #8B8490;          /* captions, timestamps */
+  --hairline: #EEE6E4;
+
+  /* section default accent (overridden per section) */
+  --accent: #C0567E;
+  --soft: #FBECF1;
+
+  --shadow: 0 1px 2px rgba(60,30,45,.05), 0 10px 26px rgba(80,40,55,.07);
+  --radius: 20px;
+
+  --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: Consolas, "Cascadia Code", ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background:
+    radial-gradient(1100px 700px at 15% -5%, #FBEEF3 0%, transparent 55%),
+    radial-gradient(1000px 700px at 100% 0%, #EEF3FB 0%, transparent 50%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  font: 10.8pt/1.62 var(--sans);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+@media screen {
+  body { max-width: 51rem; margin: 0 auto; padding: 2.5rem 1.15rem 4rem; font-size: 1.0rem; }
+}
+
+/* ---------------------------------------------------------------- page --- */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm 14mm;
+  @bottom-center {
+    content: counter(page);
+    font: 8.5pt var(--sans);
+    color: #8B8490;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+/* --------------------------------------------------------------- cards --- */
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8mm 9mm 9mm;
+  margin: 0 0 6mm;
+  box-shadow: var(--shadow);
+  break-inside: auto;
+}
+@media screen { .card { margin-bottom: 1.4rem; } }
+
+/* a soft accent wash across the top of each section card (fades to white),
+   echoing the app's pastel cards without hurting readability */
+.chapter {
+  background:
+    linear-gradient(180deg, var(--soft) 0, rgba(255,255,255,0) 34mm),
+    var(--card);
+  border-top: 3px solid var(--accent);
+  break-inside: auto;
+  break-before: page;   /* each topic starts fresh: slide on top, notes below */
+}
+/* on screen (web/PWA) sections just stack; no forced page breaks */
+@media screen { .chapter { break-before: auto; } }
+
+h2, h3, .eyebrow { break-after: avoid; }
+p { orphans: 2; widows: 2; }
+
+/* keep the section header intact (eyebrow + title + time pill together) and
+   glued to its opening slide */
+.chapter > header { break-inside: avoid; break-after: avoid; }
+figure.slide { break-before: avoid; }
+
+/* --------------------------------------------------------------- cover --- */
+
+.cover {
+  page: cover;
+  break-after: page;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32mm 22mm 24mm;
+  background:
+    radial-gradient(700px 460px at 12% 8%, #FBE6EE 0%, transparent 60%),
+    radial-gradient(760px 520px at 96% 4%, #E7EEFB 0%, transparent 58%),
+    radial-gradient(620px 520px at 80% 96%, #E6F4EC 0%, transparent 60%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+@media screen {
+  .cover { min-height: 80vh; border-radius: 24px; padding: 3.2rem 2.6rem; margin-bottom: 1.4rem; }
+}
+
+.cover .avatar { font-size: 30pt; line-height: 1; margin-bottom: 7mm; }
+.cover .kicker {
+  font: 600 9pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 5mm;
+}
+.cover h1 {
+  font: 600 31pt/1.14 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 15em;
+}
+.cover .subtitle {
+  margin-top: 5mm;
+  font: 400 13.5pt/1.5 var(--sans);
+  color: var(--ink-soft);
+  max-width: 30em;
+}
+.cover .warm {
+  margin-top: 4mm;
+  font: italic 400 12pt/1.5 var(--serif);
+  color: var(--accent);
+}
+
+.cover .chips { display: flex; flex-wrap: wrap; gap: 3mm; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.4mm 4mm;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(60,30,45,.04);
+  font: 400 9pt var(--sans);
+  color: var(--slate);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chip b { font: 700 10.5pt var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ headings --- */
+
+.chapter header { margin-bottom: 5mm; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  font: 700 8.5pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--accent);
+  margin-bottom: 3mm;
+}
+.eyebrow .num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h2 {
+  font: 600 20pt/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .emoji { font-size: 17pt; }
+
+.timepill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.5mm 3.5mm;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font: 600 8pt var(--mono);
+  letter-spacing: 0.02em;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h3 {
+  font: 600 12.5pt/1.34 var(--serif);
+  color: var(--ink);
+  margin: 6mm 0 2.5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+.ts { font: 400 8.5pt var(--mono); color: var(--slate); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- body --- */
+
+.section-body > :last-child { margin-bottom: 0; }
+p { margin: 0 0 3mm; }
+.lead { font-size: 11.2pt; color: var(--ink); }
+
+ul, ol { margin: 0 0 3mm 5.5mm; }
+li { margin-bottom: 1.7mm; padding-left: 1mm; }
+li::marker { color: var(--accent); }
+
+.kt { font-weight: 700; color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
+
+code { font: 9.5pt var(--mono); background: #F3EFF4; padding: .4pt 3.5pt; border-radius: 4px; }
+
+/* ------------------------------------------------------------ callouts --- */
+
+.note {
+  --c: var(--accent);
+  --f: var(--soft);
+  background: var(--f);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  border-left: 3px solid var(--c);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.note .label {
+  display: inline-flex; align-items: center; gap: 1.6mm;
+  font: 700 8pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c);
+  margin-bottom: 1.8mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.warn { --c: #B4791F; --f: #FaF1DF; }
+.note.exam { --c: #3B8B78; --f: #E6F3EF; }
+.note.def  { --c: var(--accent); --f: var(--soft); }
+
+/* ------------------------------------------------------- summary card --- */
+
+.summary { --accent: #C0567E; --soft: #FBECF1; }
+.summary ul { list-style: none; margin: 0; }
+.summary li { position: relative; padding: 0 0 0 7mm; margin-bottom: 3.5mm; }
+.summary li::before {
+  content: "";
+  position: absolute; left: 0; top: 2.6mm;
+  width: 3.2mm; height: 3.2mm; border-radius: 50%;
+  background: var(--accent);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.summary li:last-child { margin-bottom: 0; }
+.summary li b, .summary li strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------- TOC --- */
+
+nav.toc { --accent: #8B8490; --soft: #F3EFF4; }
+nav.toc ol { list-style: none; margin: 0; }
+nav.toc li {
+  display: flex; align-items: baseline; gap: 4mm;
+  padding: 2.7mm 0;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11pt var(--sans);
+}
+nav.toc li:last-child { border-bottom: 0; }
+nav.toc .dot { width: 3.4mm; height: 3.4mm; border-radius: 50%; flex-shrink: 0;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+nav.toc .title { flex: 1; color: var(--ink); }
+nav.toc .rng { flex-shrink: 0; font: 600 8.5pt var(--mono); color: var(--slate); }
+
+/* -------------------------------------------------------------- slides --- */
+
+figure.slide { margin: 0 0 5mm; break-inside: avoid; }
+figure.slide img {
+  width: 100%; display: block;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 10px rgba(40,30,45,.10);
+}
+figure.slide figcaption {
+  font: 400 8.5pt var(--sans);
+  color: var(--slate);
+  margin-top: 2mm;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4mm;
+}
+figure.slide figcaption .ts { color: var(--accent); }
+
+/* ------------------------------------------------------------ glossary --- */
+
+dl.glossary { margin: 0; }
+dl.glossary div { padding: 3mm 0; border-bottom: 1px solid var(--hairline); break-inside: avoid; }
+dl.glossary div:last-child { border-bottom: 0; padding-bottom: 0; }
+dl.glossary dt { font: 700 10.5pt var(--sans); color: var(--accent); margin-bottom: 1.2mm; }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- flashcards --- */
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 0; }
+.qa {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  background: linear-gradient(180deg, var(--soft) 0, #fff 60%);
+  break-inside: avoid;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.qa .q { font: 700 10pt var(--sans); color: var(--ink); margin-bottom: 2mm; }
+.qa .a { color: var(--ink-soft); font-size: 10pt; }
+
+/* ------------------------------------------------------------- tables --- */
+
+.tables-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0; break-inside: avoid; }
+th {
+  font: 700 9pt var(--sans); text-align: left; color: var(--accent);
+  border-bottom: 2px solid var(--soft); padding: 2mm 3mm 2mm 0;
+}
+td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+
+/* --- mobile / on-the-go reading (screen only; never affects the print PDF).
+   Placed LAST so it wins the cascade over the wider @media screen rules above.
+   Requires <meta name="viewport" content="width=device-width, initial-scale=1">. */
+@media screen and (max-width: 640px) {
+  body { padding: 1rem 0.85rem 2.5rem; font-size: 1.02rem; }
+  .card { padding: 5mm 5mm 6mm; border-radius: 14px; margin-bottom: 0.9rem; }
+  .cover { min-height: auto; padding: 2rem 1.3rem 1.6rem; border-radius: 16px; }
+  .cover .avatar { font-size: 24pt; margin-bottom: 4mm; }
+  .cover h1 { font-size: 20pt; max-width: 100%; }
+  .cover .subtitle { font-size: 11.5pt; }
+  .cover .warm { font-size: 11pt; }
+  .cover .chips { gap: 2mm; margin-top: 5mm; }
+  h2 { font-size: 16pt; }
+  h2 .emoji { font-size: 13.5pt; }
+  h3 { font-size: 11.5pt; }
+  .cards { grid-template-columns: 1fr; }
+  nav.toc li { font-size: 10.5pt; gap: 2.5mm; padding: 2.5mm 0; }
+  nav.toc .rng { font-size: 8pt; }
+  .note { padding: 3.5mm 4mm; }
+  table { font-size: 9.5pt; }
+}
+</style>
+<meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
+align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
+border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
+<body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/open?id=1YdYUGqIteL18h3ufPB0x6v4xXco8ZJu7" target="_blank" rel="noopener">Download PDF ↓</a></div>
+
+<!-- ============================================================ cover === -->
+<section class="cover" style="background:radial-gradient(700px 460px at 12% 8%,#EAECFA 0,transparent 60%),radial-gradient(760px 520px at 96% 4%,#FBEFE3 0,transparent 58%),radial-gradient(620px 520px at 80% 96%,#E6F4EC 0,transparent 60%),var(--cream)">
+  <div>
+    <div class="avatar">🏛️</div>
+    <div class="kicker" style="color:#5866C4">CSS Political Science · Lecture 7</div>
+    <h1>Aristotle, Machiavelli &amp; Bentham: Good and Bad Government</h1>
+    <p class="subtitle">Aristotle's ideal state and his classification of governments by the number of rulers, then the leap to Machiavelli's power politics and the utilitarian test for a good law.</p>
+    <p class="warm" style="color:#4A56A8">One diagram carries this whole lecture: three numbers of rulers, each with a good form and a bad one. 🏛️</p>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>2h 17m</b> lecture</span>
+    <span class="chip"><b>7</b> topics</span>
+    <span class="chip"><b>6</b> forms of government</span>
+    <span class="chip"><b>2016</b> past paper</span>
+  </div>
+</section>
+
+<!-- ============================================================== toc === -->
+<nav class="toc card">
+  <header><span class="eyebrow">Contents</span><h2><span class="emoji">🗺️</span> In this session</h2></header>
+  <ol>
+    <li><span class="dot" style="background:#5866C4"></span><a class="title" href="#summary">The five-minute version</a><span class="rng">summary</span></li>
+    <li><span class="dot" style="background:#5866C4"></span><a class="title" href="#t1">01 · Aristotle's ideal state</a><span class="rng">the characteristics</span></li>
+    <li><span class="dot" style="background:#B57A2A"></span><a class="title" href="#t2">02 · Aristotle vs Plato</a><span class="rng">great but not grateful</span></li>
+    <li><span class="dot" style="background:#C6506E"></span><a class="title" href="#t3">03 · The classification of government</a><span class="rng">the diagram</span></li>
+    <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t4">04 · The cycle of governments</a><span class="rng">how each form dies</span></li>
+    <li><span class="dot" style="background:#46955C"></span><a class="title" href="#t5">05 · Quality, quantity &amp; the middle class</a><span class="rng">why polity works</span></li>
+    <li><span class="dot" style="background:#3A7CC0"></span><a class="title" href="#t6">06 · Machiavelli &amp; power politics</a><span class="rng">the state as an end</span></li>
+    <li><span class="dot" style="background:#B44A8C"></span><a class="title" href="#t7">07 · Bentham's utilitarianism vs Kant</a><span class="rng">consequences vs principles</span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t9">Glossary · Flashcards · Exam focus</a><span class="rng"></span></li>
+  </ol>
+</nav>
+
+<!-- ============================================================= tldr === -->
+<section class="summary card" style="--accent:#5866C4; --soft:#ECEEFA; border-top-color:#5866C4">
+  <header><span class="eyebrow" style="color:#5866C4">Start here</span><h2><span class="emoji">⭐</span> The five-minute version</h2></header>
+  <ul>
+    <li><strong>Aristotle is the father of political science</strong> <span class="ts">00:01:44</span>, because he studied the state systematically, by observation and experiment. It is a social science, not a natural science, but it is a science.</li>
+    <li><strong>His ideal state is built on moderation.</strong> Population neither too large (law cannot be implemented) nor too small (it cannot defend itself). Territory the same. A sea route for trade, but not sitting on the coast where it can be attacked. Society split into <strong>citizens and slaves</strong>, six tasks divided between them, state-controlled public education, and rule under a constitution where nobody is above the law.</li>
+    <li><strong>Aristotle against Plato.</strong> Same topics, opposite temperament. Plato's state is a <strong>utopia</strong>; Aristotle's is <strong>realistic and practicable</strong> <span class="ts">00:26:26</span>. Plato puts rulers above the law and strips them of property; Aristotle insists on rule of law and says abolishing property is simply not in human nature. Hence the exam line: <em>a great but not a grateful student of Plato</em>.</li>
+    <li><strong>Criticise him on exactly two counts</strong> <span class="ts">00:24:16</span>: <strong>gender discrimination</strong> (education for male citizens only) and <strong>racial discrimination</strong> (his defence of slavery). Everything else in his state is workable.</li>
+    <li><strong>The classification is his most important contribution</strong> <span class="ts">00:27:16</span>, and it runs on two variables: the <strong>number of rulers</strong> and whether the form is <strong>good or bad</strong>. One: monarchy or tyranny. Few: aristocracy or oligarchy. Many: polity or democracy. The good forms serve the interest of society; the bad ones serve the ruler's self-interest.</li>
+    <li><strong>Polity is the best form</strong> <span class="ts">00:37:17</span>. It works because every society holds two forces, <span class="kt">quality</span> (the educated elite, who have the ruling ideas) and <span class="kt">quantity</span> (the lower class, who have the numbers). Rule by either alone is bad government. Balance them by <strong>empowering the middle class</strong> <span class="ts">00:52:58</span>, which is what polity is.</li>
+    <li><strong>Then the lecture jumps two thousand years.</strong> <strong>Machiavelli</strong> ends the medieval idea that the state is a means to salvation and declares the <strong>state an end in itself</strong> <span class="ts">01:31:30</span>: build a national army, be feared rather than loved, expand or expire, strike first, and treat only interests as permanent. He is the <strong>father of modern political science</strong> and the founder of the secular state.</li>
+    <li><strong>Finally the test for a good law.</strong> <strong>Bentham</strong>: pleasure and pain are our two sovereigns, and any law is good if it produces the greatest happiness for the greatest number, judged by <em>consequences</em> and never intentions. <strong>Kant</strong> is the exact opposite: some principles are absolute whatever the consequences.</li>
+  </ul>
+</section>
+
+<!-- ======================================================== section 1 === -->
+<section id="t2" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
+  <header>
+    <span class="eyebrow"><span class="num">1</span> The ideal state</span>
+    <h2><span class="emoji">🏙️</span> Aristotle's ideal state</h2>
+    <span class="timepill">00:01 – 00:24</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Aristotle developed the subject as a <strong>science</strong>: the study is systematic, it is observation, it is experimentation. It is social science rather than natural science, but it is science, and that is why he is called the <strong>father of political science</strong> <span class="ts">00:01:44</span>.</p>
+
+    <p>Two contributions matter for the paper: his <strong>ideal state</strong>, and his <strong>classification of government</strong> <span class="ts">00:02:19</span>. Take the ideal state first, characteristic by characteristic. The thread running through all of them is moderation: every quantity has to sit between two failures.</p>
+
+    <h3>Population</h3>
+    <p>Without population a state is just a piece of land, so no population means no state <span class="ts">00:03:13</span>. The question is whether it should be large or small, and Aristotle's answer is neither:</p>
+    <ul>
+      <li><strong>Too large</strong>, and you face problems in the <strong>implementation of law</strong>. The law will not be implemented in the true sense <span class="ts">00:04:06</span>.</li>
+      <li><strong>Too small</strong>, and the state <strong>cannot defend itself</strong> <span class="ts">00:04:06</span>.</li>
+    </ul>
+
+    <div class="note">
+      <p><strong>The lecturer's live example.</strong> The big issue of Pakistan is population: there is roughly <strong>one policeman for over 200 people</strong>, and law implementation is a very large problem here because of the size of the population <span class="ts">00:04:56</span>. That is Aristotle's first failure mode, running in real time.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Two numbers, and one of them is flagged for MCQs.</strong> Aristotle's figure for the ideal state is <strong>15,000 to 100,000</strong> <span class="ts">00:05:33</span>. Plato's figure is very specific: <strong>5,040</strong>, and the lecturer notes that <em>Plato's population often comes in MCQs</em> <span class="ts">00:06:36</span>. Remember both are describing small Greek city states, not Pakistan or India.</p>
+    </div>
+
+    <h3>Territory</h3>
+    <p>The same rule and the same reason: territory should be neither too large nor too small <span class="ts">00:07:07</span>. The ruler should be able to see the whole state <span class="ts">00:08:05</span>. As the lecturer puts it, Aristotle was not living in Pakistan, India, Russia or China. He was living in a city state, and <em>we pursue what we see</em> <span class="ts">00:08:30</span>.</p>
+
+    <h3>Location</h3>
+    <p>An ideal state <strong>must not be landlocked</strong>, like Afghanistan, which has no sea route. It must have a sea route, because that helps the state with <strong>exports and imports</strong> <span class="ts">00:08:30</span>. But it should <strong>not sit very close to the sea</strong>, because then it can be attacked from the sea, in the way the Vikings arrived before anyone could prepare <span class="ts">00:09:19</span>.</p>
+
+    <h3>Division of society</h3>
+    <p>Plato divided society into <strong>three</strong> classes. Aristotle divides it into <strong>two</strong>: <strong>citizens</strong> and <strong>slaves</strong> <span class="ts">00:10:49</span>. And here he hands you your criticism, because he is <strong>supporting slavery</strong> <span class="ts">00:11:40</span>.</p>
+
+    <h3>The six tasks</h3>
+    <p>There are six important tasks in a state, in two groups of three <span class="ts">00:12:35</span>:</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Group of tasks</th><th>Who performs them</th><th>Which citizens</th></tr></thead>
+        <tbody>
+          <tr><td>Agriculture, art, craft</td><td><strong>Slaves</strong></td><td>n/a</td></tr>
+          <tr><td rowspan="3">Defence<br>Governing<br>Religion</td><td rowspan="3"><strong>Citizens</strong></td><td>The <strong>young</strong> defend the state</td></tr>
+          <tr><td>The <strong>middle-aged</strong> govern the state</td></tr>
+          <tr><td>The <strong>old</strong> protect the religion of the state</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>So the split is clean: agriculture, art and craft are the work of slaves; defence, governing and religion are the work of citizens, allocated by age <span class="ts">00:14:01</span>.</p>
+
+    <h3>Education</h3>
+    <p>Like Plato, Aristotle holds that education is a very important aspect of any state, that <strong>education can create a state</strong>, and that it <strong>must be controlled by the state</strong> and must not be private <span class="ts">00:15:32</span>. Education must be public.</p>
+    <p>Then the second criticism arrives: <strong>only male citizens have a right to education</strong> <span class="ts">00:15:32</span>. Aristotle holds a traditional view of women <span class="ts">00:16:19</span>.</p>
+
+    <div class="note warn">
+      <p><strong>The two criticisms, and they are the whole of your criticism</strong> <span class="ts">00:24:16</span>. <strong>Racial discrimination:</strong> for Aristotle the Greeks are the superior race and non-Greeks are slaves, and Plato says nothing of the kind <span class="ts">00:17:45</span>. <strong>Gender discrimination:</strong> he is anti women's rights, because the right to education is for male citizens only <span class="ts">00:18:20</span>. Beyond those two, his state is practicable and realistic rather than idealistic like Plato's.</p>
+    </div>
+
+    <h3>Constitution and property</h3>
+    <p>These two are where Aristotle turns on his teacher hardest.</p>
+    <ul>
+      <li><strong>Constitution.</strong> In Plato's ideal state the rulers are <strong>above the law</strong>. In fact they <em>are</em> the law: whatever they say is law, so there is no need of a constitution and no need to clip their wings <span class="ts">00:19:05</span>. Aristotle says laws and a constitution <strong>must be formulated</strong>, and <strong>nobody is above the law or above the constitution</strong>. So Aristotle is talking about <strong>equality before law and rule of law</strong>, where Plato was talking about <strong>absolute rule</strong> <span class="ts">00:19:39</span>.</li>
+      <li><strong>Property.</strong> Plato said the rulers and the soldiers have <strong>no right to private property</strong>. Aristotle's reply is flatly practical: <em>you cannot do it, no man agrees to that, it is not in their nature</em> <span class="ts">00:20:23</span>. Why propose something that is not practicable? You may divide property so far that there is neither rich nor poor, but you cannot abolish it <span class="ts">00:21:33</span>.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ======================================================== section 2 === -->
+<section id="t3" class="chapter card" style="--accent:#B57A2A; --soft:#FAF0E2;">
+  <header>
+    <span class="eyebrow"><span class="num">2</span> Teacher and student</span>
+    <h2><span class="emoji">⚖️</span> Aristotle vs Plato</h2>
+    <span class="timepill">00:18 – 00:27</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecturer predicts the question in these exact words: <em>"They will ask you a question that Aristotle was a great but not a grateful student of Plato"</em> <span class="ts">00:24:16</span>. It means one thing, so do not be clever about it: <strong>compare both ideal states</strong> <span class="ts">00:25:03</span>.</p>
+
+    <p>The structure of the answer is given to you. The similarities are real, because they cover the same ground: both divide society, both discuss education, both discuss population. The differences are where the marks live <span class="ts">00:25:59</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Rail</th><th>Plato</th><th>Aristotle</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Character of the state</strong></td><td>Utopia, idealistic</td><td>Realistic, practicable, ground reality</td></tr>
+          <tr><td><strong>Division of society</strong></td><td>Three classes</td><td>Two classes: citizens and slaves</td></tr>
+          <tr><td><strong>Population figure</strong></td><td>5,040</td><td>15,000 to 100,000</td></tr>
+          <tr><td><strong>Law and constitution</strong></td><td>Rulers are above the law; they <em>are</em> the law. No constitution needed. Absolute rule.</td><td>Laws and a constitution must be formulated. Nobody is above the law. Equality before law, rule of law.</td></tr>
+          <tr><td><strong>Property</strong></td><td>Rulers and soldiers have no private property</td><td>You cannot abolish it; it is not in human nature. Divide it, but do not take it.</td></tr>
+          <tr><td><strong>Slavery</strong></td><td>Does not build the state on slaves</td><td>Supports slavery; Greeks superior, others slaves</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note exam">
+      <p><strong>How to land the "great but not grateful" question.</strong> Great, because he takes the whole framework of his teacher and does the same work. Not grateful, because on every load-bearing point (law, property, the nature of the state itself) he contradicts him. The lecturer's own summary is the cleanest closing line you can use: <strong>Plato's state is utopia, Aristotle's is realistic and practicable</strong> <span class="ts">00:26:26</span>. His verdict on Aristotle's method is that it <strong>talks about ground reality</strong> <span class="ts">00:22:09</span>.</p>
+    </div>
+
+    <div class="note">
+      <p><strong>The lecturer's aside on how long a bad idea lasts</strong> <span class="ts">00:22:54</span>. He argues Aristotle's authority itself held back women's rights in the West for centuries: because Aristotle said women's nature was so, people followed it. He pairs this with the story of <strong>Galileo</strong> and the moons of Jupiter, where the scholar he invited would not even look through the telescope, because Aristotle had said Jupiter had no moons <span class="ts">00:23:33</span>. The point is about the cost of authority, and it is a good line for an essay on tradition and reform.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 3 === -->
+<section id="t4" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+  <header>
+    <span class="eyebrow"><span class="num">3</span> The main contribution</span>
+    <h2><span class="emoji">📊</span> The classification of government</h2>
+    <span class="timepill">00:27 – 01:00</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">This is <strong>the most important contribution of Aristotle to political science</strong> <span class="ts">00:27:16</span>, and it came up in the <strong>2016</strong> paper <span class="ts">00:58:27</span>. He classifies government on <strong>two</strong> bases: the <strong>number of rulers</strong>, and <strong>good form against bad form</strong>. The lecturer tells the class to draw it as a diagram <span class="ts">00:28:09</span>, so draw it.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Number of rulers</th><th>Good form</th><th>Bad form</th></tr></thead>
+        <tbody>
+          <tr><td><strong>One</strong></td><td>Monarchy</td><td>Tyranny</td></tr>
+          <tr><td><strong>Few</strong> (5, 50, 100, 200)</td><td>Aristocracy</td><td>Oligarchy</td></tr>
+          <tr><td><strong>Many</strong></td><td><strong>Polity</strong></td><td>Democracy</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>What makes a form good or bad</h3>
+    <p>The test is not the number. The number only names the row; what decides the column is <strong>whose interest is served</strong> and <strong>whether there is law</strong>:</p>
+    <ul>
+      <li><strong>Monarchy.</strong> One person rules <strong>through established laws</strong>, and he is <strong>not promoting his self-interest</strong> but the <strong>interest of his society</strong> <span class="ts">00:34:08</span>.</li>
+      <li><strong>Tyranny.</strong> One person rules and is <strong>not following any law</strong>. His words are laws, and he uses the <strong>tactic of fear</strong> while ruling <span class="ts">00:34:48</span>.</li>
+    </ul>
+    <p>The same logic runs down the table: aristocracy is the few ruling for society's interest and not corrupt, oligarchy is the few who corrupt themselves and promote their self-interest <span class="ts">00:44:20</span>; polity is the good form of rule by many, and democracy its bad form.</p>
+
+    <div class="note exam">
+      <p><strong>Two MCQs the lecturer says outright will be asked</strong> <span class="ts">00:37:17</span>. Best form of government according to Aristotle: <strong>polity</strong>. Worst form of government according to Aristotle: <strong>democracy</strong>.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction, and this one matters more than any other line in the lecture.</strong> "Best is polity" is fine. <strong>"Worst is democracy" is not what Aristotle says, and he says the opposite in one sentence of his own text.</strong> <em>Politics</em> IV.2: the perversion of the highest form is necessarily the worst, so <strong>"tyranny, which is the worst of governments"</strong>, is furthest from a well-constituted form; oligarchy is little better; and <strong>"democracy is the most tolerable of the three."</strong></p>
+      <p>So among the three bad forms Aristotle ranks them <strong>tyranny (worst) → oligarchy → democracy (least bad)</strong>. Democracy is the most <em>tolerable</em> deviation, not the worst form of government.</p>
+      <p><strong>What to write.</strong> For "best", answer <strong>polity</strong>, with the distinction that it is the best <em>practicable</em> constitution (IV.11) while the absolutely best would be kingship or aristocracy of the truly virtuous (Book VII). For "worst", answer <strong>tyranny</strong>. The phrasing that scores either way: <em>"Among the perverted forms Aristotle ranks tyranny the worst and democracy the most tolerable (IV.2), though democracy remains a perverted form, because it rules in the interest of the poor rather than the common good."</em> That concedes the lecturer's real point (democracy is a <em>bad</em> form) without asserting the false claim that it is the <em>worst</em>.</p>
+    </div>
+
+    <h3>Why democracy is the bad form here</h3>
+    <p>Do not be shocked by that answer, because <strong>Aristotle's democracy is not the democracy you are watching today</strong>. It is Greek democracy <span class="ts">00:37:51</span>. Democracy means rule of the people, and in Greek civilisation the people really did rule directly, appointing a man judge for a day.</p>
+
+    <p>The missing ingredient is education. For democracy the most important thing is <strong>education</strong> <span class="ts">00:38:33</span>, and <strong>without education, democracy is mobocracy</strong>, the rule of the <em>mob</em> <span class="ts">00:39:18</span>. The lecturer's picture of it is <strong>mob lynching and mob justice</strong>: nobody checks whether he did it or not, the crowd simply decides and acts <span class="ts">00:39:50</span>. Greek society was at the top of civilisation, but that education was not widespread enough, and this is why the lecturer places the form at the bottom (see the correction above for what Aristotle's own text actually ranks worst).</p>
+
+    <div class="note">
+      <p><strong>The modern translation.</strong> What today's newspapers call the <strong>Scandinavian democracies</strong>, Norway, Denmark and Switzerland, the lecturer says would be called <strong>polity</strong>, because democracy there is a <em>refined form</em> <span class="ts">00:41:09</span>. The ingredient that refines it is the one Aristotle demanded: <strong>education</strong> <span class="ts">00:40:31</span>. So Aristotle is not attacking modern democracy; he is attacking an uneducated one.</p>
+    </div>
+
+    <div class="note">
+      <p><strong>And the uncomfortable local application</strong> <span class="ts">00:59:02</span>. The lecturer turns the same test on Pakistan and answers it himself: where there is awareness and public opinion and everyone knows their role, you get quality, and that is the best form. Where votes go for a road, a pressure pump or a favour, and the electorate enjoys the election without knowing what it is choosing, you are somewhere else on the table <span class="ts">01:00:05</span>. He is applying Aristotle's education condition to the present.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 4 === -->
+<section id="t5" class="chapter card" style="--accent:#2C8C86; --soft:#E4F2F1;">
+  <header>
+    <span class="eyebrow"><span class="num">4</span> How each form dies</span>
+    <h2><span class="emoji">🔄</span> The cycle of governments</h2>
+    <span class="timepill">00:41 – 00:47</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The classification is a snapshot. The cycle is what happens to it over time, and the lecturer says this question needs you to <strong>draw a cycle</strong> <span class="ts">00:41:09</span>. Every good form decays into its bad twin, and every bad form is overthrown into the next good one.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>What happens</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>One person rules through established laws, for society</td><td><strong>Monarchy</strong> <span class="ts">00:41:59</span></td></tr>
+          <tr><td>2</td><td>He abandons law and rules by fear</td><td><strong>Tyranny</strong>, which is <strong>unstable</strong> and will not last long <span class="ts">00:43:27</span></td></tr>
+          <tr><td>3</td><td>A few rise against the tyrant and overthrow him, then rule for society's interest rather than their own, and are not corrupt</td><td><strong>Aristocracy</strong>, a <strong>stable</strong> form that lasts a long time <span class="ts">00:43:37</span></td></tr>
+          <tr><td>4</td><td>With the passage of time they corrupt themselves and promote self-interest over society's</td><td><strong>Oligarchy</strong> <span class="ts">00:44:20</span></td></tr>
+          <tr><td>5</td><td>The oligarchs are overthrown, and a form is established where <strong>each and every class has its own rule</strong></td><td><strong>Polity</strong> <span class="ts">00:45:12</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <p><strong>Read the pattern, not just the sequence.</strong> The engine is always the same: a good form is a form that rules <em>for society</em>, and it turns bad the moment its rulers start promoting <em>self-interest</em>. Corruption is what converts each good form into its bad twin, and overthrow is what converts each bad form into the next good one. That single sentence lets you reconstruct the whole cycle in the exam even if you forget the order.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: this cycle is not Aristotle's. It is Polybius'.</strong> The sequence above is <span class="kt">anacyclosis</span>, from <strong>Polybius</strong>, <em>Histories</em> Book VI (2nd century BC): monarchy, then tyranny, then aristocracy, then oligarchy, then democracy, then <strong>ochlocracy</strong> (mob rule), and back to monarchy. The lecture is running Polybius' cycle with Aristotle's six names attached, calling Polybius' good-rule-by-many "polity" and his ochlocracy "democracy". Polybius' own remedy for the cycle is Rome's <strong>mixed constitution</strong>.</p>
+      <p><strong>Aristotle has no cycle at all</strong>, and this is the part that can really cost you. <em>Politics</em> Book V studies constitutional change and faction <em>causally</em>, not as a fixed sequence, and he states that constitutions <strong>"more often change into the opposite form than into the one near them"</strong>, which directly denies a set order. At V.12 he devotes a passage to <strong>attacking Plato's</strong> degeneration scheme, noting that a tyranny may turn into another tyranny, or into an oligarchy, or into a democracy. His politics is anti-deterministic: prudence, education, moderation and balance can preserve a constitution.</p>
+      <p><strong>So:</strong> if a question asks <em>whose</em> is the cycle of governments, the answer is <strong>Polybius</strong>. Plato's own sequence (<em>Republic</em> VIII) is different again: aristocracy, <strong>timocracy</strong>, oligarchy, democracy, <strong>tyranny</strong>, ending at tyranny. Learn the cycle for the lecture, but never write it under Aristotle's name, because it attributes to him a thesis he wrote a chapter demolishing.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 5 === -->
+<section id="t6" class="chapter card" style="--accent:#46955C; --soft:#E9F4ED;">
+  <header>
+    <span class="eyebrow"><span class="num">5</span> Why polity works</span>
+    <h2><span class="emoji">⚖️</span> Quality, quantity &amp; the middle class</h2>
+    <span class="timepill">00:47 – 01:00</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">This is how Aristotle builds polity, and it is the deepest idea in the lecture. According to Aristotle there are <strong>two major forces in each and every society</strong>: <span class="kt">quality</span> and <span class="kt">quantity</span> <span class="ts">00:47:28</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Force</th><th>Who they are</th><th>What they have</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Quality</strong></td><td>The <strong>elite</strong> or upper class</td><td>Education, and <strong>ideas</strong>. They hold the ruling ideas in any society <span class="ts">00:48:28</span>.</td></tr>
+          <tr><td><strong>Quantity</strong></td><td>The <strong>lower class</strong></td><td>One thing only: <strong>numbers</strong>. They are great in numbers <span class="ts">00:49:01</span>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <p><strong>The rule.</strong> If a government is ruled by <strong>either</strong> quality <strong>or</strong> quantity, it will be a <strong>bad government</strong> <span class="ts">00:49:35</span>. Neither force is safe on its own.</p>
+    </div>
+
+    <p>Left alone, quantity is led by <strong>demagogues</strong> <span class="ts">00:50:25</span>, who work on resentment (they have wealth, we want them to share it with us) and lead the many into revolution <span class="ts">00:51:25</span>.</p>
+
+    <h3>The answer: empower the middle class</h3>
+    <p>So you have to <strong>balance these two powers</strong> <span class="ts">00:52:33</span>. And the way you balance them is to <strong>empower the middle class in society</strong> <span class="ts">00:52:58</span>. Let quality rule, by all means, but let the middle class be strong enough to hold it in check. That balance is polity, and it is why polity is the best form.</p>
+
+    <div class="note exam">
+      <p><strong>Use the age of the idea.</strong> The lecturer makes a point of it: Aristotle is prescribing a strong middle class as the stabiliser of the state <strong>two and a half thousand years ago</strong> <span class="ts">00:52:58</span>. In an essay on democratic stability, inequality or polarisation, tying a modern argument back to Aristotle's quality-quantity balance is exactly the kind of link that lifts an answer.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 6 === -->
+<section id="t7" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+  <header>
+    <span class="eyebrow"><span class="num">6</span> The state as an end</span>
+    <h2><span class="emoji">🦊</span> Machiavelli &amp; power politics</h2>
+    <span class="timepill">01:04 – 01:52</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Between Aristotle and Machiavelli sits a gap the lecture crosses quickly. Greece was taken by the Romans, Rome became the city people called the <strong>City of God</strong>, and for more than a thousand years the philosophers of the West did one job: <strong>rationalise Christianity</strong>. That era is the <strong>Middle Ages</strong>, also called the medieval or dark ages, and its philosophers are <strong>St Augustine</strong> and <strong>Thomas Aquinas</strong> <span class="ts">01:07:42</span>.</p>
+
+    <p>The medieval frame is what Machiavelli attacks. In it, a person is born into <strong>original sin</strong>, and the one purpose of life is <strong>redemption and salvation</strong>, with the <strong>church</strong> and the state guiding you there <span class="ts">01:11:24</span>. Hold that thought, because Machiavelli's whole move is aimed at it.</p>
+
+    <h3>The man and the moment</h3>
+    <p>Machiavelli was from <strong>Florence</strong>. In his era <strong>Italy was divided into five city states</strong>, and they were at <strong>civil war with each other</strong> <span class="ts">01:25:56</span>, with <strong>external interference</strong> from France, Spain and others feeding the conflict <span class="ts">01:26:39</span>. The lecturer calls it <strong>an era of bastards and adventurers</strong> <span class="ts">01:29:17</span>. Machiavelli raised his pen and wrote <strong><em>The Prince</em></strong>, a book full of advice for his government, and that book became the theory we call <span class="kt">power politics</span> <span class="ts">01:30:10</span>.</p>
+
+    <div class="note">
+      <p><strong>Two lines from this section worth memorising.</strong> <em>"Every great idea starts out with blasphemy"</em> <span class="ts">01:20:51</span>, which is how the lecturer frames the reception of <em>The Prince</em>. And Aristotle's own line about his teacher, quoted here: <strong>"Plato is dear, but truth is dearer"</strong> <span class="ts">01:23:52</span>.</p>
+    </div>
+
+    <h3>The one move that makes him modern</h3>
+    <p>For more than a thousand years the state was used as a <strong>means to an end</strong>, and that end was <strong>salvation and redemption</strong>. That is Machiavelli's first target <span class="ts">01:30:33</span>. His answer:</p>
+
+    <div class="note">
+      <p><strong>The state is not a means to an end. The state is an end in itself.</strong> <span class="ts">01:31:30</span> It is your only end, your only purpose, your only objective. Protect your state, make it powerful, unify it. Forget about redemption, forget about salvation. That is not your end. Your end is the state <span class="ts">01:31:56</span>.</p>
+    </div>
+
+    <p>Everything else follows from that inversion. If the state is the end, then it <strong>justifies the means</strong>. Lying is bad, but your purpose is not whether you lie: your purpose is the state <span class="ts">01:33:14</span>. Deceiving is bad, but if you deceive for the sake of the state, <strong>be a fox</strong> <span class="ts">01:33:49</span>. The Bible says thou shalt not kill, but if you kill for the sake of the state, <em>kill millions, and it is justified</em>, so long as it is only for the state <span class="ts">01:34:29</span>. This is what the lecturer means by Machiavelli's <span class="kt">immorality</span>: not immorality as such, but <strong>immorality which is justified</strong> <span class="ts">01:25:11</span>. His three labels for Machiavelli are <strong>power politics, realism and immorality</strong> <span class="ts">01:24:31</span>.</p>
+
+    <h3>The advice itself</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Maxim</th><th>What it says</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Seek power</strong></td><td>If you want respect, achieve one thing: <strong>power</strong>. The world respects the powerful <span class="ts">01:37:13</span>.</td></tr>
+          <tr><td><strong>A national army</strong></td><td>Not <strong>mercenary forces</strong>, who fight for money. You need a <strong>strong national army</strong>, because a national army is always <strong>patriotic</strong>, and you must <strong>equip it with modern weapons</strong> <span class="ts">01:38:16</span>.</td></tr>
+          <tr><td><strong>Be feared, not loved</strong></td><td>Doing so, you are respected internationally and your people fear you. Should you be loved? No, you should be <strong>feared</strong>, because <strong>love brings ruin</strong> <span class="ts">01:39:30</span>.</td></tr>
+          <tr><td><strong>Be ruthless</strong></td><td>Be powerful, be ruthless <span class="ts">01:40:25</span>.</td></tr>
+          <tr><td><strong>Never believe in peace</strong></td><td><strong>Peace is a delusion.</strong> In time of peace you must prepare for war <span class="ts">01:40:25</span>.</td></tr>
+          <tr><td><strong>Expand or expire</strong></td><td>You must extend the state. <strong>The state should either expand or expire</strong>, and for expansion you must be prepared for war at every moment <span class="ts">01:41:15</span>.</td></tr>
+          <tr><td><strong>Strike first</strong></td><td>War is <strong>inevitable</strong>. Do not wait for them and do not wait to defend: <strong>attack</strong>. The best way of defence is offence, so use the <strong>pre-emptive strike</strong> and surprise your enemy <span class="ts">01:42:42</span>.</td></tr>
+          <tr><td><strong>Never be neutral</strong></td><td>If two neighbours declare war on each other, do not be a hypocrite and call yourself neutral. <strong>Neutrality is hypocrisy</strong> <span class="ts">01:42:42</span>.</td></tr>
+          <tr><td><strong>Only interests are permanent</strong></td><td>Only your <strong>interests</strong> are permanent, and the interest that counts is the <strong>national interest</strong>. America makes friends for its interests <span class="ts">01:45:06</span>.</td></tr>
+          <tr><td><strong>Use the church</strong></td><td>Use even the church for the sake of your state, and separate it from politics <span class="ts">01:45:42</span>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Why he is the father of modern political science.</strong> Because separating church from state, and making the state its own end, is what founds the <strong>secular state</strong> <span class="ts">01:46:45</span>. Keep the two titles apart in an MCQ: <strong>Aristotle is the father of political science; Machiavelli is the father of modern political science</strong> <span class="ts">01:24:31</span>.</p>
+    </div>
+
+    <div class="note">
+      <p><strong>The lecturer's worked example of the end justifying the means</strong> <span class="ts">01:35:13</span>: the <strong>American Civil War</strong>, in which around <strong>half a million</strong> Americans died after Abraham Lincoln declared war on the southern states. Was it immoral? He was doing it for his purpose, the state, and the end justifies the means <span class="ts">01:36:29</span>. He also notes the secular state is the norm well beyond the West: <strong>Turkey is about 98% Muslim yet the state is secular</strong>, and India, Malaysia and Indonesia are secular too <span class="ts">01:47:06</span>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 7 === -->
+<section id="t8" class="chapter card" style="--accent:#B44A8C; --soft:#F9EBF4;">
+  <header>
+    <span class="eyebrow"><span class="num">7</span> Consequences vs principles</span>
+    <h2><span class="emoji">⚗️</span> Bentham's utilitarianism vs Kant</h2>
+    <span class="timepill">01:57 – 02:17</span>
+  </header>
+  <div class="section-body">
+    <p class="lead"><strong>Jeremy Bentham</strong> is an English philosopher, and the important thing is <span class="kt">utilitarianism</span> <span class="ts">01:57:49</span>. It answers a question the whole lecture has been circling: what actually makes a law or an action <em>good</em>?</p>
+
+    <h3>The two sovereigns</h3>
+    <div class="note">
+      <p><strong>Nature has put the individual under two sovereigns in this world</strong> <span class="ts">01:59:13</span>: one is <strong>pleasure</strong> and the other is <strong>pain</strong>. They rule over us. Whatever you do, your only purpose is to <strong>maximise pleasure and minimise pain</strong>. You are always running from the one and running toward the other <span class="ts">01:59:56</span>.</p>
+    </div>
+
+    <h3>The test</h3>
+    <p>From that, Bentham's standard: any law, any rule, any action is <strong>moral, legal, good and just</strong> if it produces <strong>the greatest happiness for the greatest number of people</strong> <span class="ts">02:00:47</span>.</p>
+
+    <p>And the hard edge of it: <strong>do not look at the intention of an action, look at the consequences</strong> <span class="ts">02:01:37</span>. Suppose the action is very bad, a killing, a theft. It is not bad so long as it produces the greatest happiness for the greatest number. There are <strong>no absolute principles</strong>, no absolute good and no absolute bad. The only thing that makes an action good or bad is its <strong>consequences</strong> <span class="ts">02:02:12</span>.</p>
+
+    <h3>The utilitarian calculus</h3>
+    <p>Bentham gives you a calculator to check your actions against <span class="ts">02:11:10</span>. The lecturer walks four of its checks:</p>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Check</th><th>The question it asks</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Intensity</strong></td><td>How great is the happiness? If it is greater, do it; if not, go for another action <span class="ts">02:11:53</span>.</td></tr>
+          <tr><td><strong>Certainty</strong></td><td>Are you <em>sure</em> that pleasure will actually come? If not, do something you are certain about <span class="ts">02:12:41</span>.</td></tr>
+          <tr><td><strong>Propinquity</strong></td><td>Closeness, that is, how near the pleasure is <span class="ts">02:12:41</span>.</td></tr>
+          <tr><td><strong>Extent</strong></td><td>How many people does it affect? This is the check that stops it being about you: the greatest happiness is for the greatest <em>number</em>, not for yourself <span class="ts">02:15:10</span>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note exam">
+      <p><strong>A vocabulary warning from a past paper</strong> <span class="ts">02:13:27</span>. <strong>Propinquity</strong> has appeared in the paper as a synonym question, where the expected sense was <em>kinship</em>. In Bentham it means <strong>closeness or nearness</strong>. Know both senses.</p>
+    </div>
+
+    <h3>Kant, the exact opposite</h3>
+    <p><strong>Immanuel Kant</strong> is a German philosopher, and he is in the syllabus. His school runs directly against Bentham's: there <strong>are</strong> some <strong>absolute principles</strong>, and you must stay inside them every single time <span class="ts">02:03:29</span>. If killing is bad, it is bad, <strong>no matter what the consequence is</strong>. You are not supposed to kill, because thou shalt not kill. You are not supposed to steal, because stealing is bad. You are not supposed to lie, because lying is bad <span class="ts">02:04:49</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th></th><th>Bentham (utilitarian)</th><th>Kant</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Are there absolute principles?</strong></td><td>No. No absolute good, no absolute bad.</td><td>Yes, and you never leave them.</td></tr>
+          <tr><td><strong>What do you judge?</strong></td><td>Consequences only.</td><td>The principle, whatever the consequences.</td></tr>
+          <tr><td><strong>Test of a good action</strong></td><td>Greatest happiness for the greatest number.</td><td>Does it obey the absolute principle?</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <p><strong>The lecturer's three examples, and they are the fastest way to remember the split.</strong></p>
+      <ul>
+        <li><strong>Sholay</strong> <span class="ts">02:06:58</span>. Kill two of them yourself and I spare the rest; refuse and I kill all. Kant holds Amitabh Bachchan's feet and begs him not to, because killing is bad even if eighteen thousand are saved. Bentham says kill them, hurry up: greatest happiness for the greatest number <span class="ts">02:08:12</span>.</li>
+        <li><strong>Batman</strong> <span class="ts">02:09:03</span>. Batman <em>is</em> Kant. He has the chance to kill the Joker and will not take it, even knowing the Joker will break out and kill again. Bentham would kill him.</li>
+        <li><strong>Robin Hood</strong> <span class="ts">02:10:25</span>. He steals, and on Bentham's test he is justified, because of the greatest happiness for the greatest number.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================= glossary === -->
+<section id="t9" class="chapter card" style="--accent:#7A7484; --soft:#F2EFF4;">
+  <header><span class="eyebrow">Reference</span><h2><span class="emoji">📖</span> Glossary</h2></header>
+  <dl class="glossary">
+    <div><dt>Ideal state</dt><dd>The state as it ought to be. Plato's is a utopia; Aristotle's is built to be practicable.</dd></div>
+    <div><dt>Landlocked state</dt><dd>A state with no sea route, such as Afghanistan. Aristotle's ideal state must not be one, because a sea route carries exports and imports.</dd></div>
+    <div><dt>Monarchy</dt><dd>Rule by one person <em>through established laws</em>, promoting the interest of society rather than his own. The good form of rule by one.</dd></div>
+    <div><dt>Tyranny</dt><dd>Rule by one person following no law: his words are law, and he rules by the tactic of fear. The bad form of rule by one.</dd></div>
+    <div><dt>Aristocracy</dt><dd>Rule by a few who serve society's interest and are not corrupt. The good form of rule by few, and a stable one.</dd></div>
+    <div><dt>Oligarchy</dt><dd>Rule by a few who have corrupted themselves and promote their self-interest. The bad form of rule by few.</dd></div>
+    <div><dt>Polity</dt><dd>The good form of rule by many, in which every class has its own share of rule. Aristotle's <strong>best</strong> form of government.</dd></div>
+    <div><dt>Democracy (Aristotle's sense)</dt><dd>The bad form of rule by many. Greek direct democracy, not the modern kind.</dd></div>
+    <div><dt>Mobocracy</dt><dd>What democracy becomes without education: rule of the mob, with mob lynching and mob justice in place of law.</dd></div>
+    <div><dt>Quality</dt><dd>The elite or upper class: education and ideas, and so the ruling ideas of a society.</dd></div>
+    <div><dt>Quantity</dt><dd>The lower class, whose single asset is numbers.</dd></div>
+    <div><dt>Demagogue</dt><dd>The leader who mobilises quantity on resentment of quality's wealth, and drives it toward revolution.</dd></div>
+    <div><dt>Power politics</dt><dd>The theory Machiavelli's <em>The Prince</em> became: politics conducted for state power alone.</dd></div>
+    <div><dt>Immorality (Machiavelli's)</dt><dd>Not immorality as such, but immorality which is <em>justified</em>, because it serves the state.</dd></div>
+    <div><dt>Mercenary forces</dt><dd>Soldiers who fight for money. Machiavelli rejects them for a national army, which is always patriotic.</dd></div>
+    <div><dt>Pre-emptive strike</dt><dd>Attacking first because war is inevitable, on the principle that the best defence is offence.</dd></div>
+    <div><dt>Secular state</dt><dd>A state separated from the church, with no declared religion. Machiavelli is its founder, hence father of modern political science.</dd></div>
+    <div><dt>Utilitarianism</dt><dd>Bentham's doctrine: an action or law is good if it produces the greatest happiness for the greatest number, judged only by consequences.</dd></div>
+    <div><dt>The two sovereigns</dt><dd>Pleasure and pain, under which nature has placed the individual, and which explain all action.</dd></div>
+    <div><dt>Utilitarian calculus</dt><dd>Bentham's calculator for testing an action, including intensity, certainty, propinquity and extent.</dd></div>
+    <div><dt>Propinquity</dt><dd>Closeness or nearness of the pleasure. Note it has appeared in a past paper as a synonym question with the sense <em>kinship</em>.</dd></div>
+  </dl>
+</section>
+
+<!-- ======================================================= flashcards === -->
+<section id="t10" class="chapter card" style="--accent:#8A57BD; --soft:#F3ECFA;">
+  <header><span class="eyebrow">Self-test</span><h2><span class="emoji">🎴</span> Flashcards</h2></header>
+  <div class="cards">
+    <div class="qa"><p class="q">Why is Aristotle called the father of political science?</p><p class="a">He developed the subject as a science: systematic study, observation and experimentation. Social science rather than natural science, but science.</p></div>
+    <div class="qa"><p class="q">Aristotle on population size, and why?</p><p class="a">Neither too large nor too small. Too large and law cannot be implemented; too small and the state cannot defend itself.</p></div>
+    <div class="qa"><p class="q">The two population figures (Plato's is the one flagged for MCQs)?</p><p class="a">Aristotle: 15,000 to 100,000. Plato: 5,040.</p></div>
+    <div class="qa"><p class="q">Aristotle on the location of the ideal state?</p><p class="a">Not landlocked, because a sea route carries exports and imports; but not very close to the sea either, or it can be attacked from the sea.</p></div>
+    <div class="qa"><p class="q">How do Plato and Aristotle divide society?</p><p class="a">Plato into three classes; Aristotle into two, citizens and slaves.</p></div>
+    <div class="qa"><p class="q">Aristotle's six tasks, and who does them?</p><p class="a">Slaves: agriculture, art, craft. Citizens: defence, governing, religion. Among citizens the young defend, the middle-aged govern, the old protect religion.</p></div>
+    <div class="qa"><p class="q">Aristotle on education?</p><p class="a">Very important, can create a state, must be public and state-controlled rather than private. But only male citizens have the right to it.</p></div>
+    <div class="qa"><p class="q">On what two grounds do you criticise Aristotle?</p><p class="a">Racial discrimination (he supports slavery; Greeks superior, others slaves) and gender discrimination. Beyond those, his state is practicable.</p></div>
+    <div class="qa"><p class="q">Plato vs Aristotle on law?</p><p class="a">Plato's rulers are above the law and are the law, so no constitution is needed: absolute rule. Aristotle demands a constitution, and nobody is above the law: equality before law, rule of law.</p></div>
+    <div class="qa"><p class="q">Plato vs Aristotle on property?</p><p class="a">Plato denies rulers and soldiers private property. Aristotle says that is impracticable and against human nature: you may divide property so there is neither rich nor poor, but you cannot abolish it.</p></div>
+    <div class="qa"><p class="q">What does "Aristotle was a great but not a grateful student of Plato" ask you to do?</p><p class="a">Compare both ideal states: similarities in the topics they cover, differences on law, property and the nature of the state. Plato is utopia, Aristotle is realistic and practicable.</p></div>
+    <div class="qa"><p class="q">On what two bases does Aristotle classify governments?</p><p class="a">The number of rulers, and whether the form is good or bad.</p></div>
+    <div class="qa"><p class="q">Give the full six-box classification.</p><p class="a">One: monarchy (good) / tyranny (bad). Few: aristocracy (good) / oligarchy (bad). Many: polity (good) / democracy (bad).</p></div>
+    <div class="qa"><p class="q">What actually separates a good form from a bad one?</p><p class="a">Not the number but whose interest is served, and whether there is law. Good forms rule through established laws for society's interest; bad forms serve self-interest.</p></div>
+    <div class="qa"><p class="q">Define monarchy and tyranny in Aristotle's terms.</p><p class="a">Monarchy: one person ruling through established laws, promoting society's interest. Tyranny: one person following no law, whose words are law, ruling by fear.</p></div>
+    <div class="qa"><p class="q">Best and worst forms according to Aristotle?</p><p class="a">Best: polity. Worst: democracy.</p></div>
+    <div class="qa"><p class="q">Why is democracy the bad form for Aristotle?</p><p class="a">It is Greek direct democracy, not the modern kind, and it lacks education. Without education democracy is mobocracy: mob lynching and mob justice.</p></div>
+    <div class="qa"><p class="q">What would Aristotle call Norway, Denmark and Switzerland?</p><p class="a">Polity. Their democracy is a refined form, because it has the education Aristotle demanded.</p></div>
+    <div class="qa"><p class="q">Run the cycle of governments.</p><p class="a">Monarchy decays into tyranny (unstable); the few overthrow the tyrant into aristocracy (stable); aristocracy corrupts into oligarchy; the oligarchs are overthrown into polity, where each class has its own rule.</p></div>
+    <div class="qa"><p class="q">What is the engine of the cycle?</p><p class="a">Self-interest. A good form rules for society; corruption turns it into its bad twin; overthrow turns each bad form into the next good one.</p></div>
+    <div class="qa"><p class="q">What are quality and quantity?</p><p class="a">Quality is the elite: education and ideas, the ruling ideas of a society. Quantity is the lower class: numbers, and only numbers.</p></div>
+    <div class="qa"><p class="q">What happens if either force rules alone, and what is the fix?</p><p class="a">Rule by quality alone or quantity alone is bad government; quantity alone follows demagogues into revolution. The fix is to balance them by empowering the middle class, which is polity.</p></div>
+    <div class="qa"><p class="q">What was Machiavelli attacking?</p><p class="a">A thousand years in which the state was a means to an end, that end being salvation and redemption, with the church as guide.</p></div>
+    <div class="qa"><p class="q">State Machiavelli's central claim.</p><p class="a">The state is not a means to an end. The state is an end in itself: your only purpose. Protect it, make it powerful, unify it.</p></div>
+    <div class="qa"><p class="q">Machiavelli on armies?</p><p class="a">Not mercenaries, who fight for money. A strong national army, because it is always patriotic, equipped with modern weapons.</p></div>
+    <div class="qa"><p class="q">Feared or loved?</p><p class="a">Feared. Love brings ruin. Be powerful and be ruthless, and the world respects you.</p></div>
+    <div class="qa"><p class="q">Machiavelli on peace, expansion and war?</p><p class="a">Peace is a delusion; prepare for war in peacetime. The state must expand or expire. War is inevitable, so strike first: the best defence is offence.</p></div>
+    <div class="qa"><p class="q">Machiavelli on neutrality and alliances?</p><p class="a">Neutrality is hypocrisy: do not call yourself neutral when two neighbours go to war. Only your interests are permanent, and the interest that counts is the national interest.</p></div>
+    <div class="qa"><p class="q">Why is Machiavelli the father of modern political science?</p><p class="a">He separates church from state and makes the state its own end, founding the secular state. Aristotle is the father of political science; Machiavelli of modern political science.</p></div>
+    <div class="qa"><p class="q">What are Bentham's two sovereigns?</p><p class="a">Pleasure and pain. Nature has placed the individual under them, and every action seeks to maximise pleasure and minimise pain.</p></div>
+    <div class="qa"><p class="q">State the utilitarian test.</p><p class="a">Any law, rule or action is good, moral, legal and just if it produces the greatest happiness for the greatest number. Judge consequences, never intentions.</p></div>
+    <div class="qa"><p class="q">Name the checks of the utilitarian calculus covered in class.</p><p class="a">Intensity (how great), certainty (is the pleasure sure), propinquity (how close), extent (how many people it affects).</p></div>
+    <div class="qa"><p class="q">How does Kant oppose Bentham?</p><p class="a">Kant holds there are absolute principles binding whatever the consequences: killing, stealing and lying are bad full stop. Bentham holds there are no absolutes, only consequences.</p></div>
+    <div class="qa"><p class="q">Use Batman to explain the split.</p><p class="a">Batman is Kant: he can kill the Joker and refuses, even knowing he will escape and kill again. Bentham would kill him, for the greatest happiness of the greatest number.</p></div>
+  </div>
+</section>
+
+<!-- ======================================================= exam focus === -->
+<section id="t11" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
+  <header><span class="eyebrow" style="color:#5866C4">Before the paper</span><h2><span class="emoji">🎯</span> Exam focus</h2></header>
+  <div class="section-body">
+    <ul>
+      <li><strong>Draw the classification, do not just describe it.</strong> The lecturer tells the class to draw the diagram <span class="ts">00:28:09</span>: number of rulers down one side, good and bad forms across. Six boxes, and then explain that what fills them is whose interest is served, not the headcount.</li>
+      <li><strong>The classification is his most important contribution, and it was asked in 2016</strong> <span class="ts">00:58:27</span>. Two named MCQs come off it: best form is polity, worst form is democracy <span class="ts">00:37:17</span>.</li>
+      <li><strong>Handle "worst form" carefully.</strong> The lecturer's answer is democracy, and you should explain why he says it: Greek direct democracy without education is mobocracy, and Norway or Denmark would count as polity instead. But Aristotle's own text (IV.2) ranks <strong>tyranny</strong> the worst and democracy the <em>most tolerable</em> of the perverted forms, so the mark-safe line names tyranny as worst while conceding democracy is still a bad form (see the correction in section 3).</li>
+      <li><strong>Answer "great but not grateful" as a comparison, on rails</strong> <span class="ts">00:25:03</span>: character of the state, division of society, law and constitution, property. Same topics, opposite conclusions. Close with utopia against practicable.</li>
+      <li><strong>Carry exactly two criticisms of Aristotle</strong>, gender and racial discrimination <span class="ts">00:24:16</span>, and concede the rest is realistic. A criticism that is bounded reads as judgement; a criticism of everything reads as noise.</li>
+      <li><strong>Quality, quantity and the middle class is your depth card.</strong> It explains <em>why</em> polity is best rather than just asserting it, and it transfers straight into essays on inequality, populism and democratic stability.</li>
+      <li><strong>Keep the two fathers apart.</strong> Aristotle: father of political science. Machiavelli: father of modern political science <span class="ts">01:24:31</span>, and founder of the secular state <span class="ts">01:46:45</span>.</li>
+      <li><strong>For Machiavelli, lead with the inversion, not the shock.</strong> Weak answers list "be feared, be ruthless". Strong answers explain that he moved the state from a <em>means</em> to salvation into an <em>end in itself</em>, and that every maxim follows from that one move.</li>
+      <li><strong>Bentham and Kant are a made pair.</strong> Consequences against principles. Use one worked dilemma (Sholay, Batman or Robin Hood) and you have shown the whole disagreement in three lines.</li>
+      <li><strong>Watch the word propinquity</strong> <span class="ts">02:13:27</span>. It has been set as a synonym question, where the expected sense was kinship, while in Bentham it means closeness.</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="notefoot">Want the whole lecture? <a href="https://drive.google.com/file/d/1LtR5B0jSRegdFpEb8LzE-m_UdRLF32fX/view" target="_blank" rel="noopener">▶ Watch the full recording</a><span class="sep">·</span><a href="https://drive.google.com/open?id=1YdYUGqIteL18h3ufPB0x6v4xXco8ZJu7" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+</html>
