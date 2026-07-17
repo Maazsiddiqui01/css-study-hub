@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Social Contract: Hobbes, Locke, Rousseau &amp; Montesquieu</title>
+<style>/* Lecture Notes ebook, "warm study" theme.
+   Inspired by Mehak's MarketCanvas app: soft cream ground, rounded white cards,
+   a different pastel accent per topic, serif display + friendly sans body,
+   gentle emoji + pill badges. Playful and pretty, but still a real study book.
+   Print-first (A4 PDF via headless Edge); reads well on screen too.
+
+   Each section sets its own accent inline:
+     <section id="t1" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+   Everything themeable keys off --accent / --soft. Titles stay ink for
+   readability; accents colour eyebrows, numbers, pills, rules and callouts.
+*/
+
+:root {
+  --cream: #FCF6F0;          /* page ground (warm) */
+  --card: #FFFFFF;
+  --ink: #2C2630;            /* plum-black body/headings */
+  --ink-soft: #5A5360;
+  --slate: #8B8490;          /* captions, timestamps */
+  --hairline: #EEE6E4;
+
+  /* section default accent (overridden per section) */
+  --accent: #C0567E;
+  --soft: #FBECF1;
+
+  --shadow: 0 1px 2px rgba(60,30,45,.05), 0 10px 26px rgba(80,40,55,.07);
+  --radius: 20px;
+
+  --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: Consolas, "Cascadia Code", ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background:
+    radial-gradient(1100px 700px at 15% -5%, #FBEEF3 0%, transparent 55%),
+    radial-gradient(1000px 700px at 100% 0%, #EEF3FB 0%, transparent 50%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  font: 10.8pt/1.62 var(--sans);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+@media screen {
+  body { max-width: 51rem; margin: 0 auto; padding: 2.5rem 1.15rem 4rem; font-size: 1.0rem; }
+}
+
+/* ---------------------------------------------------------------- page --- */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm 14mm;
+  @bottom-center {
+    content: counter(page);
+    font: 8.5pt var(--sans);
+    color: #8B8490;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+/* --------------------------------------------------------------- cards --- */
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8mm 9mm 9mm;
+  margin: 0 0 6mm;
+  box-shadow: var(--shadow);
+  break-inside: auto;
+}
+@media screen { .card { margin-bottom: 1.4rem; } }
+
+/* a soft accent wash across the top of each section card (fades to white),
+   echoing the app's pastel cards without hurting readability */
+.chapter {
+  background:
+    linear-gradient(180deg, var(--soft) 0, rgba(255,255,255,0) 34mm),
+    var(--card);
+  border-top: 3px solid var(--accent);
+  break-inside: auto;
+  break-before: page;   /* each topic starts fresh: slide on top, notes below */
+}
+/* on screen (web/PWA) sections just stack; no forced page breaks */
+@media screen { .chapter { break-before: auto; } }
+
+h2, h3, .eyebrow { break-after: avoid; }
+p { orphans: 2; widows: 2; }
+
+/* keep the section header intact (eyebrow + title + time pill together) and
+   glued to its opening slide */
+.chapter > header { break-inside: avoid; break-after: avoid; }
+figure.slide { break-before: avoid; }
+
+/* --------------------------------------------------------------- cover --- */
+
+.cover {
+  page: cover;
+  break-after: page;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32mm 22mm 24mm;
+  background:
+    radial-gradient(700px 460px at 12% 8%, #FBE6EE 0%, transparent 60%),
+    radial-gradient(760px 520px at 96% 4%, #E7EEFB 0%, transparent 58%),
+    radial-gradient(620px 520px at 80% 96%, #E6F4EC 0%, transparent 60%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+@media screen {
+  .cover { min-height: 80vh; border-radius: 24px; padding: 3.2rem 2.6rem; margin-bottom: 1.4rem; }
+}
+
+.cover .avatar { font-size: 30pt; line-height: 1; margin-bottom: 7mm; }
+.cover .kicker {
+  font: 600 9pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 5mm;
+}
+.cover h1 {
+  font: 600 31pt/1.14 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 15em;
+}
+.cover .subtitle {
+  margin-top: 5mm;
+  font: 400 13.5pt/1.5 var(--sans);
+  color: var(--ink-soft);
+  max-width: 30em;
+}
+.cover .warm {
+  margin-top: 4mm;
+  font: italic 400 12pt/1.5 var(--serif);
+  color: var(--accent);
+}
+
+.cover .chips { display: flex; flex-wrap: wrap; gap: 3mm; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.4mm 4mm;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(60,30,45,.04);
+  font: 400 9pt var(--sans);
+  color: var(--slate);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chip b { font: 700 10.5pt var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ headings --- */
+
+.chapter header { margin-bottom: 5mm; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  font: 700 8.5pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--accent);
+  margin-bottom: 3mm;
+}
+.eyebrow .num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h2 {
+  font: 600 20pt/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .emoji { font-size: 17pt; }
+
+.timepill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.5mm 3.5mm;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font: 600 8pt var(--mono);
+  letter-spacing: 0.02em;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h3 {
+  font: 600 12.5pt/1.34 var(--serif);
+  color: var(--ink);
+  margin: 6mm 0 2.5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+.ts { font: 400 8.5pt var(--mono); color: var(--slate); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- body --- */
+
+.section-body > :last-child { margin-bottom: 0; }
+p { margin: 0 0 3mm; }
+.lead { font-size: 11.2pt; color: var(--ink); }
+
+ul, ol { margin: 0 0 3mm 5.5mm; }
+li { margin-bottom: 1.7mm; padding-left: 1mm; }
+li::marker { color: var(--accent); }
+
+.kt { font-weight: 700; color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
+
+code { font: 9.5pt var(--mono); background: #F3EFF4; padding: .4pt 3.5pt; border-radius: 4px; }
+
+/* ------------------------------------------------------------ callouts --- */
+
+.note {
+  --c: var(--accent);
+  --f: var(--soft);
+  background: var(--f);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  border-left: 3px solid var(--c);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.note .label {
+  display: inline-flex; align-items: center; gap: 1.6mm;
+  font: 700 8pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c);
+  margin-bottom: 1.8mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.warn { --c: #B4791F; --f: #FaF1DF; }
+.note.exam { --c: #3B8B78; --f: #E6F3EF; }
+.note.def  { --c: var(--accent); --f: var(--soft); }
+
+/* ------------------------------------------------------- summary card --- */
+
+.summary { --accent: #C0567E; --soft: #FBECF1; }
+.summary ul { list-style: none; margin: 0; }
+.summary li { position: relative; padding: 0 0 0 7mm; margin-bottom: 3.5mm; }
+.summary li::before {
+  content: "";
+  position: absolute; left: 0; top: 2.6mm;
+  width: 3.2mm; height: 3.2mm; border-radius: 50%;
+  background: var(--accent);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.summary li:last-child { margin-bottom: 0; }
+.summary li b, .summary li strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------- TOC --- */
+
+nav.toc { --accent: #8B8490; --soft: #F3EFF4; }
+nav.toc ol { list-style: none; margin: 0; }
+nav.toc li {
+  display: flex; align-items: baseline; gap: 4mm;
+  padding: 2.7mm 0;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11pt var(--sans);
+}
+nav.toc li:last-child { border-bottom: 0; }
+nav.toc .dot { width: 3.4mm; height: 3.4mm; border-radius: 50%; flex-shrink: 0;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+nav.toc .title { flex: 1; color: var(--ink); }
+nav.toc .rng { flex-shrink: 0; font: 600 8.5pt var(--mono); color: var(--slate); }
+
+/* -------------------------------------------------------------- slides --- */
+
+figure.slide { margin: 0 0 5mm; break-inside: avoid; }
+figure.slide img {
+  width: 100%; display: block;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 10px rgba(40,30,45,.10);
+}
+figure.slide figcaption {
+  font: 400 8.5pt var(--sans);
+  color: var(--slate);
+  margin-top: 2mm;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4mm;
+}
+figure.slide figcaption .ts { color: var(--accent); }
+
+/* ------------------------------------------------------------ glossary --- */
+
+dl.glossary { margin: 0; }
+dl.glossary div { padding: 3mm 0; border-bottom: 1px solid var(--hairline); break-inside: avoid; }
+dl.glossary div:last-child { border-bottom: 0; padding-bottom: 0; }
+dl.glossary dt { font: 700 10.5pt var(--sans); color: var(--accent); margin-bottom: 1.2mm; }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- flashcards --- */
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 0; }
+.qa {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  background: linear-gradient(180deg, var(--soft) 0, #fff 60%);
+  break-inside: avoid;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.qa .q { font: 700 10pt var(--sans); color: var(--ink); margin-bottom: 2mm; }
+.qa .a { color: var(--ink-soft); font-size: 10pt; }
+
+/* ------------------------------------------------------------- tables --- */
+
+.tables-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0; break-inside: avoid; }
+th {
+  font: 700 9pt var(--sans); text-align: left; color: var(--accent);
+  border-bottom: 2px solid var(--soft); padding: 2mm 3mm 2mm 0;
+}
+td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+
+/* --- mobile / on-the-go reading (screen only; never affects the print PDF).
+   Placed LAST so it wins the cascade over the wider @media screen rules above.
+   Requires <meta name="viewport" content="width=device-width, initial-scale=1">. */
+@media screen and (max-width: 640px) {
+  body { padding: 1rem 0.85rem 2.5rem; font-size: 1.02rem; }
+  .card { padding: 5mm 5mm 6mm; border-radius: 14px; margin-bottom: 0.9rem; }
+  .cover { min-height: auto; padding: 2rem 1.3rem 1.6rem; border-radius: 16px; }
+  .cover .avatar { font-size: 24pt; margin-bottom: 4mm; }
+  .cover h1 { font-size: 20pt; max-width: 100%; }
+  .cover .subtitle { font-size: 11.5pt; }
+  .cover .warm { font-size: 11pt; }
+  .cover .chips { gap: 2mm; margin-top: 5mm; }
+  h2 { font-size: 16pt; }
+  h2 .emoji { font-size: 13.5pt; }
+  h3 { font-size: 11.5pt; }
+  .cards { grid-template-columns: 1fr; }
+  nav.toc li { font-size: 10.5pt; gap: 2.5mm; padding: 2.5mm 0; }
+  nav.toc .rng { font-size: 8pt; }
+  .note { padding: 3.5mm 4mm; }
+  table { font-size: 9.5pt; }
+}
+</style>
+<meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
+align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
+border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
+<body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/open?id=1NUtSVyi5ZI5UgA23XvPZFBT1BAgs27xd" target="_blank" rel="noopener">Download PDF ↓</a></div>
+
+<!-- ============================================================ cover === -->
+<section class="cover" style="background:radial-gradient(700px 460px at 12% 8%,#EAECFA 0,transparent 60%),radial-gradient(760px 520px at 96% 4%,#FBEFE3 0,transparent 58%),radial-gradient(620px 520px at 80% 96%,#F6EAF2 0,transparent 60%),var(--cream)">
+  <div>
+    <div class="avatar">🏛️</div>
+    <div class="kicker" style="color:#5866C4">CSS Political Science · Lecture 8</div>
+    <h1>The Social Contract: Hobbes, Locke, Rousseau &amp; Montesquieu</h1>
+    <p class="subtitle">Four philosophers, one question: where does the state's authority actually come from, and what may it do to you once it has it?</p>
+    <p class="warm" style="color:#4A56A8">Section 4 puts Hobbes and Locke on one grid, the way the comparison questions want them. Everything else explains why it reads that way. 🏛️</p>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>2h 03m</b> lecture</span>
+    <span class="chip"><b>4</b> philosophers</span>
+    <span class="chip"><b>7</b> topics</span>
+    <span class="chip"><b>1588</b> to <b>1803</b></span>
+  </div>
+</section>
+
+<!-- ============================================================== toc === -->
+<nav class="toc card">
+  <header><span class="eyebrow">Contents</span><h2><span class="emoji">🗺️</span> In this session</h2></header>
+  <ol>
+    <li><span class="dot" style="background:#5866C4"></span><a class="title" href="#summary">The five-minute version</a><span class="rng">summary</span></li>
+    <li><span class="dot" style="background:#5866C4"></span><a class="title" href="#t1">01 · What a social contract is</a><span class="rng">vs divine right</span></li>
+    <li><span class="dot" style="background:#C6506E"></span><a class="title" href="#t2">02 · Thomas Hobbes</a><span class="rng">man the monster</span></li>
+    <li><span class="dot" style="background:#46955C"></span><a class="title" href="#t3">03 · John Locke</a><span class="rng">man the cooperator</span></li>
+    <li><span class="dot" style="background:#B57A2A"></span><a class="title" href="#t4">04 · Hobbes vs Locke, side by side</a><span class="rng">the exam answer</span></li>
+    <li><span class="dot" style="background:#B44A8C"></span><a class="title" href="#t5">05 · Rousseau &amp; the General Will</a><span class="rng">born free, in chains</span></li>
+    <li><span class="dot" style="background:#3A7CC0"></span><a class="title" href="#t6">06 · Montesquieu: liberty under law</a><span class="rng">separation of powers</span></li>
+    <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t7">07 · Montesquieu's three governments</a><span class="rng">republic · monarchy · despotism</span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t9">Glossary · Flashcards · Exam focus</a><span class="rng"></span></li>
+  </ol>
+</nav>
+
+<!-- ============================================================= tldr === -->
+<section class="summary card" style="--accent:#5866C4; --soft:#ECEEFA; border-top-color:#5866C4">
+  <header><span class="eyebrow" style="color:#5866C4">Start here</span><h2><span class="emoji">⭐</span> The five-minute version</h2></header>
+  <ul>
+    <li><strong>The problem all four are solving.</strong> Before these thinkers, a king ruled by <span class="kt">divine right</span>: God made him king, so he answered to God and not to you. There was no agreement between ruler and ruled, therefore no duties running downward and no grounds for complaint.</li>
+    <li><strong>The move they all make.</strong> Replace God with an <em>agreement</em>. Imagine humans before the state (the <span class="kt">state of nature</span>), work out why they would ever consent to be ruled, and the terms of that consent then define what the state may and may not do. In a modern state the written form of that agreement is the constitution.</li>
+    <li><strong>Hobbes.</strong> Man is a monster; the state of nature is a war of all against all. So surrender everything to one sovereign, permanently. The contract is <strong>unilateral</strong> (the sovereign is not a party to it) and <strong>irrevocable</strong>. The sovereign owes you only security of life and property, and may use any means. Destination: <strong>absolutism</strong>.</li>
+    <li><strong>Locke.</strong> Man is good, sympathetic and cooperative; the state of nature is peaceful equality under natural law. Natural law only lacks three things: a body to <em>define</em> it, one to <em>enforce</em> it, and one to <em>judge</em> under it. So the contract is narrow and <strong>bilateral</strong>: the government is itself a party to it and is your representative, it must protect life, property and above all <span class="kt">liberty</span>, and it may be removed if it fails. Destination: <strong>representative democracy</strong>.</li>
+    <li><strong>Rousseau.</strong> Rejects both. Do not surrender to a sovereign (Hobbes) or to representatives (Locke): surrender to the <em>community itself</em>. The community becomes a <span class="kt">public person</span> or <span class="kt">body politic</span>, which is the <strong>state</strong> when passive and the <strong>sovereign</strong> when active, and its members are <strong>citizens</strong> when they make law and <strong>subjects</strong> when they obey it. Law follows the <span class="kt">general will</span>, and since the general will is your own will, obeying it is obeying yourself, which is freedom.</li>
+    <li><strong>Montesquieu.</strong> Changes the question from who rules to how power is arranged. Liberty is not doing as you please, which is a licence to crime; real liberty is exercised under law. Only a <strong>moderate government</strong> makes good law, and a government is moderate when power checks power. Hence <span class="kt">separation of powers</span> across legislature, executive and judiciary.</li>
+    <li><strong>How to answer it (suggested approach).</strong> Almost every question here is a comparison. Run Hobbes and Locke down the same four rails, which is exactly how the lecturer summarises them: human nature, state of nature, why a contract was needed, and the nature of the contract. Add Rousseau on the same rails when a question calls for him. Then finish with the modern regime each one lands you in.</li>
+  </ul>
+</section>
+
+<!-- ======================================================== section 1 === -->
+<section id="t2" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
+  <header>
+    <span class="eyebrow"><span class="num">1</span> The idea itself</span>
+    <h2><span class="emoji">📜</span> What a social contract is</h2>
+    <span class="timepill">00:02 – 00:06</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Start from your own position. You expect the state to do things for you, above all to keep you secure. The state expects things from you: <strong>taxes</strong> and <strong>obedience</strong>. That mutual expectation is a contract, even though you never signed it and neither did your forefathers <span class="ts">00:02:33</span>.</p>
+
+    <p>That same agreement goes by two names. In a country it is called the <strong>constitution</strong>. Here, in this subject, it is called the <span class="kt">social contract</span> <span class="ts">00:03:03</span>.</p>
+
+    <div class="note">
+      <p><strong>What came before.</strong> Before Thomas Hobbes there was no contract between the individual and the state. There was a king, and the king was all in all. His claim was the <span class="kt">divine right of kings</span>: "ruling is my divine right, God has made me king, not you." The consequence was the important part: <em>"I should not be responsible to you, because you didn't make me. God did, and I will answer Him in the hereafter"</em> <span class="ts">00:03:47</span>. No accountability ran downward to the people.</p>
+    </div>
+
+    <p>This is what Hobbes attacks. His message to the king is blunt: <strong>Thomas Hobbes will challenge this divine right</strong>, and if you want to rule over us, then forget about divine right <span class="ts">00:03:47</span>. Authority has to come from the people's agreement instead.</p>
+
+    <h3>Why they all invent a "state of nature"</h3>
+    <p>Each of these writers tells you a story about how the state came into being, and each admits the story is an assumption that <em>might be true or false</em> <span class="ts">00:04:35</span>. They reach into an imagined past: first it was like this, then like that <span class="ts">00:05:51</span>. Do not read it as history, because it is not offered as history.</p>
+
+    <div class="note exam">
+      <p><strong>Why the assumption is doing real work.</strong> The state of nature is an argument device, not a claim about the past. Your picture of people <em>without</em> a state determines how much power they must hand over to get one. Assume the worst about human nature and you will justify a sovereign with unlimited power. Assume the best and you will only justify a narrow, revocable grant. That single move is why Hobbes ends in absolutism and Locke ends in democracy, and saying so explicitly is what separates a strong answer from a list of names.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 2 === -->
+<section id="t3" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+  <header>
+    <span class="eyebrow"><span class="num">2</span> Man the monster</span>
+    <h2><span class="emoji">👹</span> Thomas Hobbes</h2>
+    <span class="timepill">00:06 – 00:28</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Hobbes was born in <strong>1588</strong> in England, the year of the <span class="kt">Spanish Armada</span>, the great war between England and Spain. Spain had been the superpower of the world; England defeated it and rose in its place <span class="ts">00:06:32</span>.</p>
+
+    <p>His life then ran straight through England's most turbulent period <span class="ts">00:08:37</span>. In <strong>1642</strong> civil war broke out, a struggle for power between parliament and the king, between the people and the king. A king was beheaded in it. Hobbes lived through the reigns of James I, Charles I and Charles II <span class="ts">00:07:56</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction (lecturer's slip).</strong> The king beheaded in the English Civil War was <strong>Charles I</strong>, executed on 30 January <strong>1649</strong>. The lecture says Charles II. Charles II was the executed king's son, and he was <em>restored</em> to the throne in 1660, dying in his bed in 1685. Write Charles I in the exam.</p>
+    </div>
+
+    <div class="note">
+      <p><strong>Why the biography is worth the marks (editorial reading).</strong> The lecturer gives the life and then moves to the theory without joining them, so join them yourself: a man who watched his country tear itself apart in civil war, and watched a king lose his head to it, ranks <strong>order above everything</strong>. Read that way, every hard edge in Hobbes (total surrender, no right of revolt, any means permitted) is a man building a system in which 1642 cannot happen again. This is interpretation rather than something said in class, so present it as your own analysis.</p>
+    </div>
+
+    <h3>Human nature</h3>
+    <p>Hobbes opens with human nature, before he ever gets to the contract <span class="ts">00:09:48</span>. His picture is dark. He is deeply <strong>pessimistic</strong>: for him, <em>man is a monster</em> <span class="ts">00:10:17</span>.</p>
+
+    <h3>State of nature</h3>
+    <p>Given that nature, life before the state is a <strong>war of all against all</strong>. There is no concept of just and unjust, right and wrong, good and bad. <strong>Might is right</strong> <span class="ts">00:29:51</span>. Man in this condition has no concept of society at all <span class="ts">00:31:06</span>.</p>
+
+    <div class="note">
+      <p><strong>Beyond the lecture (editorial context).</strong> Hobbes' book is <em>Leviathan</em> (1651), and the sovereign is the Leviathan of its title, a biblical sea monster. The lecturer makes the same point through the <em>Clash of the Titans</em> line "release the Kraken" <span class="ts">00:15:57</span>: to control a world of small monsters you need one very large monster. Hobbes' own summary of life in the state of nature, worth quoting, is that it is "solitary, poor, nasty, brutish, and short."</p>
+    </div>
+
+    <h3>The contract, and what makes it Hobbesian</h3>
+    <p>To escape that war, people say to the sovereign: <em>we have surrendered our power, our freedom and our rights to you, and we will not revolt. In return you carry one responsibility, to secure our life and our property. Whatever means you choose is your right</em> <span class="ts">00:11:19</span>.</p>
+
+    <p>Two features do all the damage, and both are exam keywords:</p>
+    <ul>
+      <li><strong>Unilateral.</strong> The sovereign is <em>not a party</em> to the contract <span class="ts">00:36:50</span>. The agreement is among the people, to obey him. He promises nothing, so he can breach nothing.</li>
+      <li><strong>Irrevocable.</strong> You cannot revoke it. So long as you live under it, it holds <span class="ts">00:13:41</span>.</li>
+    </ul>
+
+    <p>The end is security of life and property, and for Hobbes that end <strong>justifies the means</strong> <span class="ts">00:12:10</span>. On revolution his answer is refusal: do not run to revolution over a <strong>little, small failure</strong>, because revolution simply returns you to the state of nature, which is the one thing worse than a bad sovereign <span class="ts">00:14:34</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Precision on "irrevocable" (editorial, and it protects marks).</strong> Write irrevocable <em>by the subjects' will</em>: they cannot lawfully depose the sovereign or swap the form of government, which is the lecture's point. Do not write that it binds unconditionally. Hobbes himself limits it in <em>Leviathan</em> ch. 21: the obligation lasts "as long, and no longer, than the power lasteth by which he is able to protect them." The right of self-preservation is inalienable, so no one covenants away the right to resist force aimed at his own life. An examiner who knows Hobbes looks for exactly this qualification.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>The tension worth noting in an answer.</strong> Hobbes attacks the divine right of kings, then hands the king everything the divine right ever gave him <span class="ts">00:15:17</span>. He changes the <em>source</em> of authority from God to consent while leaving its <em>extent</em> unlimited. He is a revolutionary about the foundation and a reactionary about the result.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Where Hobbes lands.</strong> <strong>Absolute rule</strong> and <strong>dictatorship</strong> <span class="ts">00:45:33</span>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 3 === -->
+<section id="t4" class="chapter card" style="--accent:#46955C; --soft:#E9F4ED;">
+  <header>
+    <span class="eyebrow"><span class="num">3</span> Man the cooperator</span>
+    <h2><span class="emoji">🕊️</span> John Locke</h2>
+    <span class="timepill">00:28 – 00:46</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Locke takes Hobbes' structure and inverts the premise. By nature, man is <strong>good</strong>. He is <strong>simple, sympathetic and cooperative</strong> <span class="ts">00:28:51</span>. Locke is <strong>optimistic</strong> about human nature and paints a bright picture of man <span class="ts">00:29:05</span>.</p>
+
+    <h3>State of nature</h3>
+    <p>Where Hobbes had war, Locke has peace. There was <strong>no war of all against all</strong>. There was <strong>equality</strong>, and there was <span class="kt">natural law</span>, and under natural law everybody was equal. Nature provided resources and people distributed them equally among themselves <span class="ts">00:31:53</span>.</p>
+
+    <p>Locke also denies Hobbes' claim that man had no concept of society. He argues from a <strong>biblical source</strong>: the first man is Adam, who knew from the first day what was day and night, good and bad. So man was <strong>social from the very first day</strong> <span class="ts">00:30:27</span>.</p>
+
+    <h3>Then why contract at all?</h3>
+    <p>This is the obvious objection, and the lecturer puts it directly: if everything was fine, why did man need a contract? <span class="ts">00:32:36</span> Locke's answer is that natural law had <strong>three drawbacks</strong> <span class="ts">00:33:41</span>. The contract exists only to remove those three, and nothing more <span class="ts">00:34:53</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Drawback in the state of nature</th><th>What was missing</th><th>Institution created</th></tr></thead>
+        <tbody>
+          <tr><td>Natural law was undefined</td><td>No body to <strong>define</strong> what natural law is</td><td>Legislature</td></tr>
+          <tr><td>Natural law was unenforced</td><td>No body to <strong>implement</strong> or execute it in a true sense</td><td>Executive</td></tr>
+          <tr><td>Natural law was uninterpreted</td><td>No body to <strong>interpret</strong> it</td><td>Judiciary</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <p><strong>Beyond the lecture (editorial context).</strong> Locke's own wording in the <em>Second Treatise</em> (1689) is worth having, because examiners like it: the state of nature lacks (i) "an established, settled, known law", (ii) "a known and indifferent judge", and (iii) "power to back and support the sentence". The lecture's legislature / executive / judiciary mapping is the standard teaching gloss on exactly those three.</p>
+    </div>
+
+    <h3>The contract is two-fold</h3>
+    <p>Locke's contract has <strong>two aspects</strong> <span class="ts">00:35:26</span>:</p>
+    <ol>
+      <li><strong>First, a society.</strong> People gather and agree that they are one people. "We are all Pakistani, and everyone says we are all Pakistani." That agreement itself is the first contract <span class="ts">00:36:00</span>.</li>
+      <li><strong>Second, a government.</strong> That society then creates an authority, and here is the decisive break from Hobbes.</li>
+    </ol>
+
+    <div class="note">
+      <p><strong>The key difference.</strong> Hobbes' contract was unilateral and the sovereign stood outside it. In Locke, <em>your government is a party to the contract</em>. It sits among you. It is <strong>your representative</strong> <span class="ts">00:37:31</span>. The contract is therefore <strong>bilateral</strong>: both sides have duties, so either side can breach.</p>
+    </div>
+
+    <h3>What the government owes you</h3>
+    <p>Authority has a duty to protect your <strong>life</strong>, your <strong>property</strong>, and most importantly your <strong>liberty</strong> <span class="ts">00:38:37</span>. Liberty is the headline right in Locke, and the state's chief job is to secure it, including the liberty to express your thinking <span class="ts">00:39:37</span>.</p>
+
+    <h3>And if it fails</h3>
+    <p>If the government fails in that security, you may <strong>overthrow it</strong>. But note the qualification carefully, because it is the whole modern point: <strong>peacefully</strong> <span class="ts">00:40:59</span>.</p>
+
+    <p>A peaceful overthrow has a name. It is an <strong>election</strong>. If we do not like him, the term ends, we change him with our votes. That, too, is a revolution, because revolution means <em>change</em>, and you do not need anybody's head for it <span class="ts">00:41:28</span>. Where Hobbes forbids revolt entirely, Locke domesticates it into a routine, scheduled event.</p>
+
+    <div class="note exam">
+      <p><strong>Where Locke lands.</strong> <strong>Representative democracy</strong> <span class="ts">00:43:08</span>.</p>
+    </div>
+
+    <h3>The Glorious Revolution</h3>
+    <p>Locke's own politics track his theory. He contributed to the <span class="kt">Glorious Revolution</span>, in which the king of England <strong>voluntarily surrendered his power before parliament</strong> <span class="ts">00:22:49</span>. It was <strong>bloodless</strong> <span class="ts">00:23:49</span>, and once the king's power passed to parliament the system had converted from <strong>monarchy to democracy</strong>.</p>
+
+    <div class="note">
+      <p><strong>Dates, and the trap inside them (editorial).</strong> The Glorious Revolution is <strong>1688</strong> and Locke's <em>Two Treatises of Government</em> was published in <strong>1689</strong>. Do not conclude from that order that Locke wrote the book to justify the revolution, which is the standard discriminator question. Peter Laslett's dating established that the <em>Second Treatise</em> was substantially written around <strong>1679 to 1683</strong>, during the Exclusion Crisis. It was composed before the revolution and published after it.</p>
+      <p>On <strong>bloodless</strong>: fair for England, where the transfer cost very few lives, and that is the lecturer's point. Add the qualifier if you have room, because James II's overthrow set off real wars in Scotland (Killiecrankie, 1689) and Ireland (the Boyne, 1690). Safest phrasing is "largely bloodless in England."</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 4 === -->
+<section id="t5" class="chapter card" style="--accent:#B57A2A; --soft:#FAF0E2;">
+  <header>
+    <span class="eyebrow"><span class="num">4</span> The exam answer</span>
+    <h2><span class="emoji">⚖️</span> Hobbes vs Locke, side by side</h2>
+    <span class="timepill">00:44 – 00:46</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Having taught Hobbes and then Locke in turn, the lecturer closes by running them side by side, and that pass is explicitly the answer structure: take the rails one at a time and give both men on each rail, so that "in one paragraph, we discussed both of them" <span class="ts">00:44:16</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Rail</th><th>Thomas Hobbes</th><th>John Locke</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Human nature</strong></td><td>Pessimistic. Man is a monster.</td><td>Optimistic. Man is good, simple, sympathetic, cooperative.</td></tr>
+          <tr><td><strong>State of nature</strong></td><td>War of all against all. No just or unjust. Might is right. No society.</td><td>Peace and equality under natural law. Man social from day one.</td></tr>
+          <tr><td><strong>Need of contract</strong></td><td>No security of life, no security of property.</td><td>Only to remove the three drawbacks of natural law (no legislature, no executive, no judiciary).</td></tr>
+          <tr><td><strong>Nature of contract</strong></td><td><strong>Unilateral</strong> and <strong>irrevocable</strong>. Sovereign is not a party.</td><td><strong>Bilateral</strong> and revocable. Government is a party and is your representative.</td></tr>
+          <tr><td><strong>What is surrendered</strong></td><td>Everything: power, freedom, rights.</td><td>Only what is needed to fix the three drawbacks.</td></tr>
+          <tr><td><strong>State's duty</strong></td><td>Secure life and property, by any means.</td><td>Protect life, property and above all liberty.</td></tr>
+          <tr><td><strong>Right of revolt</strong></td><td>None. Revolt returns you to the state of nature.</td><td>Yes, but peacefully, through elections.</td></tr>
+          <tr><td><strong>Modern destination</strong></td><td>Dictatorship, absolute rule.</td><td>Representative democracy.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note exam">
+      <p><strong>How to deploy this.</strong> Do not write Hobbes for two pages and then Locke for two pages. Take one rail at a time and give both men on it, which is precisely how the lecturer summarises at <span class="ts">00:44:45</span>. It shows comparison rather than recall, and it lets you finish each rail with the consequence: the same four moves take one man to dictatorship and the other to democracy, and the difference traces back to a single assumption about human nature.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 5 === -->
+<section id="t6" class="chapter card" style="--accent:#B44A8C; --soft:#F9EBF4;">
+  <header>
+    <span class="eyebrow"><span class="num">5</span> Born free, in chains</span>
+    <h2><span class="emoji">🔗</span> Rousseau &amp; the General Will</h2>
+    <span class="timepill">00:48 – 01:20</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Jean-Jacques Rousseau (1712 to 1778) was <strong>Swiss by birth</strong>, born in <strong>Geneva</strong>, but he lived his life in Paris, so he is counted a <strong>French philosopher</strong>. His famous theory is the <span class="kt">general will</span> <span class="ts">00:48:18</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction (a slip worth knowing).</strong> "Swiss by birth" is an anachronism, and a Rousseau examiner will notice. Geneva in 1712 was not in Switzerland: it was an independent Calvinist city state, the <strong>Republic of Geneva</strong>, and it only joined the Swiss Confederation as a canton in <strong>1815</strong>, thirty-seven years after Rousseau died. He signed himself <em>Citoyen de Genève</em>, citizen of Geneva, on his title pages, including <em>The Social Contract</em>. Safest phrasing: <strong>Genevan-born, French-language philosopher of the French Enlightenment</strong>. The lecturer's substantive point stands: born outside France, made his life and reputation in Paris.</p>
+    </div>
+
+    <h3>The story: freedom lost to property</h3>
+    <p>Rousseau's man in the caves was better off than today's materialistic man, for one reason: he had <strong>absolute freedom</strong>. Then he came out of the caves and understood a brand new concept, <strong>property</strong>. Once property arrived, so did "thine and mine" <span class="ts">00:51:01</span>.</p>
+
+    <p>Disputes over property meant people needed an <strong>authority</strong> to control them. And when they created that authority, it took their freedom <span class="ts">00:52:18</span>. Hence the line the whole theory hangs on:</p>
+
+    <div class="note">
+      <p><strong>"Man is born free, but everywhere he is in chains."</strong> <span class="ts">00:53:25</span> The chains are not natural. They are the authority we ourselves built to police the property we ourselves invented.</p>
+      <p><em>Editorial:</em> this is the opening line of <em>The Social Contract</em> (1762), so it is safe to quote and attribute.</p>
+    </div>
+
+    <h3>Two ways back to absolute freedom</h3>
+    <p>Rousseau sees only two routes <span class="ts">00:53:58</span>. The first is to go back to the caves, which he immediately concedes is impossible now. So the only route left is to <strong>contract again</strong>, and this time design the contract so that it <em>returns</em> absolute freedom instead of taking it.</p>
+
+    <h3>What he rejects</h3>
+    <ul>
+      <li><strong>Against Hobbes.</strong> In Hobbes' contract the community surrendered all its liberty and freedom to a sovereign. Rousseau <strong>categorically rejects</strong> this <span class="ts">00:54:46</span>.</li>
+      <li><strong>Against Locke.</strong> Locke had us surrender partial rights and partial liberty to our <em>representatives</em>, who then make law for us. Rousseau disagrees here too <span class="ts">00:55:27</span>, because for him the power to make law cannot be handed to anyone else and still be yours <span class="ts">01:17:28</span>.</li>
+    </ul>
+
+    <h3>The move: surrender to the community itself</h3>
+    <p>Not to a sovereign. Not to an assembly of persons. The community surrenders its power <strong>to the community itself</strong> <span class="ts">00:57:49</span>. The giver and the receiver are the same body, so nothing is actually lost.</p>
+
+    <p>That community, having surrendered power to itself, becomes what Rousseau calls a <span class="kt">public person</span>, and by another name a <span class="kt">body politic</span> <span class="ts">00:58:48</span>.</p>
+
+    <div class="note">
+      <p><strong>The double identity (learn this precisely, it is a favourite).</strong></p>
+      <ul>
+        <li>The body politic in its <strong>passive</strong> form is the <strong>state</strong>. In its <strong>active</strong> form it is the <strong>sovereign</strong>. The same community is both at once <span class="ts">00:59:53</span>.</li>
+        <li>Its members likewise carry dual character. They are <strong>citizens</strong> when they <em>make</em> the law, and <strong>subjects</strong> when they <em>obey</em> the same law they imposed on themselves <span class="ts">01:02:02</span>.</li>
+      </ul>
+    </div>
+
+    <h3>Particular will against general will</h3>
+    <p>The lecture draws this as a <strong>two-way</strong> contrast, and treats "will of all" as another name for the particular will <span class="ts">01:02:39</span>.</p>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Will</th><th>What it is</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Particular will</strong><br>(the lecture also calls this the <em>will of all</em>)</td><td>What one individual wants. In a class of a hundred, one person says one thing and another says another <span class="ts">01:02:39</span>.</td></tr>
+          <tr><td><strong>General will</strong></td><td>That upon which the <strong>whole community agrees</strong> <span class="ts">01:04:02</span>. It is my will, and your will, and everyone's will at once <span class="ts">01:05:14</span>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Where the textbook splits what the lecture joins (editorial, and worth marks).</strong> Rousseau's own scheme has <strong>three</strong> wills, not two, and the middle one is the point of the theory. <span class="kt">Particular will</span> is what one person wants. <span class="kt">Will of all</span> is those private wants merely <em>added up</em>, a majority of selfish preferences. <span class="kt">General will</span> is what aims at the common good. A vote can deliver the will of all and still miss the general will, which is precisely how Rousseau explains a majority getting it wrong. This lecture uses "will of all" as a synonym for the particular will, so learn the lecture's two-way contrast for the class and the three-way distinction for the paper.</p>
+    </div>
+
+    <h3>Why this equals freedom</h3>
+    <p>The argument is short and worth reproducing exactly, because it is the point of the whole theory <span class="ts">01:06:12</span>:</p>
+    <ol>
+      <li>The general will is my will.</li>
+      <li>If I obey the general will, I am obeying my own will.</li>
+      <li>If I obey myself, I am free.</li>
+    </ol>
+    <p>So law made on the basis of the general will, and not on a particular will nor on the will of God, means you are <strong>making the law for yourself</strong>, and therefore you remain <strong>absolutely free</strong> even while obeying <span class="ts">01:06:56</span>.</p>
+
+    <h3>The practical objection, and his answers</h3>
+    <p>The lecturer raises the objection Rousseau's contemporaries raised: this is very idealistic and very abstract, so tell us in practical terms how the body politic actually operates <span class="ts">01:07:45</span>. Rousseau gives two answers, and both create problems.</p>
+
+    <div class="note warn">
+      <p><strong>Answer 1: majority vote.</strong> The body politic runs on a <strong>majority vote</strong> <span class="ts">01:09:04</span>. The trouble arrives immediately: the moment you say majority, you have created a <strong>minority</strong> <span class="ts">01:10:30</span>. And what of those whose view differs from the general will? Rousseau's answer is the notorious one: they must be <strong>forced to be free</strong> <span class="ts">01:12:13</span>. Freedom for him is the will of the majority, so compelling you to follow it is, on his logic, compelling you to be free. Editorial note worth carrying into an answer: this is the line later critics seize on to connect Rousseau to totalitarianism, though the lecturer himself does not raise that criticism and rates Rousseau highly <span class="ts">01:18:12</span>.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Answer 2: the legislature must be composed of the whole community.</strong> <span class="ts">01:13:44</span> Not representatives, the whole community, because "the power to make law is the power to make law", and if you give it away to someone else it is no longer yours <span class="ts">01:17:28</span>. The objection is obvious and the lecturer presses it: this is not a Greek city state, this is Pakistan with millions of people, so where is the hall? <span class="ts">01:14:41</span> Rousseau's model only works in a small state, a Greek city state <span class="ts">01:16:18</span>.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>The fair verdict.</strong> The lecturer's own reading is that Rousseau is impractical yet right in principle: people will contradict him the moment you question them on operation, but understand how golden the underlying idea is <span class="ts">01:16:48</span>. Use that balance. Rousseau gives the strongest account of self-rule and freedom that exists, and the weakest account of how to run a country of millions. Direct democracy is his triumph and his limit.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 6 === -->
+<section id="t7" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+  <header>
+    <span class="eyebrow"><span class="num">6</span> Power checks power</span>
+    <h2><span class="emoji">⚙️</span> Montesquieu: liberty under law</h2>
+    <span class="timepill">01:25 – 01:45</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Montesquieu, another French philosopher, appeared as a question in <strong>2020</strong> <span class="ts">01:25:20</span>. His purpose is single and clear: to <strong>secure the liberty of the individual</strong> <span class="ts">01:26:41</span>.</p>
+
+    <div class="note">
+      <p><strong>The permanent problem of political science.</strong> Political science, in simple terms, is <em>the relationship of the individual with the state</em> <span class="ts">01:27:06</span>. The never-ending question is which of the two to prioritise. Some philosophers say the state is important and the individual must be sacrificed for it. Others say the individual is the purpose, and the state exists to serve him, not the other way around. The two are <strong>inversely proportional</strong>: increase the authority of the state and the liberty of the individual automatically decreases, and vice versa <span class="ts">01:28:43</span>. Montesquieu is trying to draw the balance line between them.</p>
+    </div>
+
+    <h3>Liberty is not licence</h3>
+    <p>Take the word liberty literally, as <strong>unrestrained and unchecked</strong>, and giving a man that does him no good at all. It is simply a <strong>licence to crime</strong> <span class="ts">01:29:45</span>.</p>
+    <p>Real liberty, for Montesquieu, is the liberty <strong>we exercise under the law</strong>. Without law, liberty is a licence to crime. There must be laws, and there must not be <span class="kt">anarchy</span>, which means lawlessness <span class="ts">01:31:00</span>.</p>
+
+    <h3>Only a moderate government makes good laws</h3>
+    <p>Laws must be of good form, and only a <strong>moderate government</strong> can make good laws. A government is moderate when you <strong>check power with power</strong>: separate the powers, and set each to check the other <span class="ts">01:31:50</span>.</p>
+
+    <p>The state has three institutions: <strong>legislature, executive and judiciary</strong> <span class="ts">01:32:41</span>. If the legislature can both make a law and implement it, where is your liberty? Give all that power to a single institution and your liberty is at risk <span class="ts">01:33:28</span>. So: <span class="kt">separation of powers</span>, and <span class="kt">checks and balances</span> <span class="ts">01:42:16</span>.</p>
+
+    <h3>How his legislature is built</h3>
+    <p>Montesquieu agrees with Rousseau that the legislature ought to be the whole community, then answers himself: in this era, direct parliament is not possible. So you must use the means of <strong>representation</strong> <span class="ts">01:34:17</span>.</p>
+
+    <div class="note">
+      <p><strong>The line to remember.</strong> "Everybody doesn't know how to rule, but he knows <em>who</em> to rule." <span class="ts">01:34:17</span> That is the case for elections in one sentence: competence to govern is rare, competence to choose a governor is common.</p>
+    </div>
+
+    <p>Society contains two types of people, rich and poor, and both must be brought into the legislature. Montesquieu's device is a <strong>separate electorate</strong>: the rich vote for the rich, and the common people vote for their own <span class="ts">01:35:10</span>. Some are royal or of quality by birth and belong in an upper class; the lower class elects the lower class. With both inside, parliament <strong>balances itself</strong>, and a balanced parliament makes good law <span class="ts">01:36:05</span>.</p>
+
+    <h3>Executive and judiciary</h3>
+    <p>The executive of his day was the <strong>king</strong>, who with his ministers implements the laws passed by the balanced legislature <span class="ts">01:37:47</span>. Crucially, the king's ministers can be <strong>called into parliament for questions and are bound to answer</strong> <span class="ts">01:38:47</span>. That is ministerial accountability in embryo.</p>
+
+    <p>The judiciary was the weak one. Before the American Supreme Court, judiciary was not an important power, because it was always controlled by the executive, the king <span class="ts">01:38:47</span>. That changed with <strong>John Marshall</strong>, Chief Justice of the USA, who reviewed a law in <strong>Marbury v. Madison</strong> in <strong>1803</strong> <span class="ts">01:39:33</span>. After that, judiciary won respect all over the world <span class="ts">01:40:33</span>.</p>
+
+    <div class="note exam">
+      <p><strong>The irony that makes the best paragraph in the answer.</strong> Montesquieu visited England and wrote that England's institutions functioned by separation of powers <span class="ts">01:42:16</span>. Ask the question the lecturer asks: is there separation of powers in England? <strong>No.</strong> There is <strong>supremacy of parliament</strong>. No authority or institution can stop the UK parliament from passing any law <span class="ts">01:42:53</span>. So Montesquieu described a Britain that did not exist, and the political system his mistake actually built was the <strong>United States</strong>, which works quite the opposite way to the UK <span class="ts">01:43:41</span>. A misreading of one country became the constitution of another.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 7 === -->
+<section id="t8" class="chapter card" style="--accent:#2C8C86; --soft:#E4F2F1;">
+  <header>
+    <span class="eyebrow"><span class="num">7</span> Classification</span>
+    <h2><span class="emoji">👑</span> Montesquieu's three forms of government</h2>
+    <span class="timepill">01:49 – 02:03</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Montesquieu classifies government into <strong>three</strong> kinds, and for each one he names the <strong>governing principle</strong>, the thing that actually makes it run <span class="ts">01:49:25</span>. Get the pairing right and this section answers itself.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Form</th><th>Definition</th><th>Who really holds power</th><th>Governing principle</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Republic</strong></td>
+            <td>A government where <strong>rulers are elected</strong> <span class="ts">01:49:42</span>. Few ruling makes it an <strong>aristocratic republic</strong>; many ruling makes it a <strong>democratic republic</strong> <span class="ts">01:50:33</span>.</td>
+            <td>The elected, drawn from the people</td>
+            <td><strong>Equality</strong> and rule of law: everybody is equal before the law <span class="ts">01:51:14</span></td>
+          </tr>
+          <tr>
+            <td><strong>Monarchy</strong></td>
+            <td>A government of <strong>one person, through established laws</strong> <span class="ts">01:51:58</span>.</td>
+            <td>The <strong>nobles</strong>, who establish the laws and check the king <span class="ts">01:52:44</span></td>
+            <td><strong>Honour</strong>: the ruler needs respect, the ruled need good government, so each serves the other <span class="ts">01:55:04</span></td>
+          </tr>
+          <tr>
+            <td><strong>Despotism</strong></td>
+            <td>A government of one person, <strong>not through established laws</strong> <span class="ts">01:55:50</span>. The ruler's word is law. He is not under the law, he is above it; in fact he <em>is</em> the law.</td>
+            <td>The despot alone</td>
+            <td><strong>Fear</strong>: people follow because they are afraid <span class="ts">01:56:34</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Precision note (editorial). Do not write "equality" or "rule of law" as the principle.</strong> The lecture gives the republic's governing principle as equality and rule of law. In <em>The Spirit of the Laws</em> (1748) Montesquieu's own term is <strong>virtue</strong>, and "rule of law" is not part of his scheme at all. Equality is not a synonym for the principle; it is one step down the chain from it. Montesquieu's own sequence runs: the principle is virtue, virtue in a republic is love of the republic, and love of the republic in a democracy is <em>love of equality</em> and of frugality. So equality is what that virtue consists in.</p>
+      <p>Two refinements that earn marks. First, "virtue" here means <strong>political</strong> virtue, love of country, equality and frugality, and not moral or Christian virtue; Montesquieu says so himself. Second, strictly the republic subdivides, so <strong>democracy runs on virtue</strong> and <strong>aristocracy runs on moderation</strong>, and "republic = virtue" collapses that distinction. Safest answer: republic (democratic) = virtue, aristocratic republic = moderation, monarchy = honour, despotism = fear.</p>
+    </div>
+
+    <h3>Monarchy is a balance, and it can collapse</h3>
+    <p>Think of it as a balance, which is the lecturer's own word for it <span class="ts">01:58:52</span>. A monarchy has three elements: king, nobles and common people. Power resides with the <strong>nobles</strong> <span class="ts">01:58:01</span>, and that is what holds the balance. Tip it and the form changes:</p>
+    <ul>
+      <li><strong>Nobles hold the balance</strong> → monarchy, ruling through established laws.</li>
+      <li><strong>The king rises above them</strong> → the monarchy converts into <strong>despotism</strong>.</li>
+      <li><strong>The people rise</strong> → <strong>democracy</strong> <span class="ts">01:58:52</span>.</li>
+    </ul>
+
+    <div class="note">
+      <p><strong>The worked contemporary example.</strong> Saudi Arabia was a monarchy, but as the king rises above the nobles it is <strong>converting now into despotism</strong>: "I am the law, I am the state" <span class="ts">01:59:41</span>. The lecturer pairs this with <strong>Louis XIV</strong>, who declared <em>"I am the state"</em> <span class="ts">01:56:34</span>.</p>
+      <p><em>Editorial caution, and it earns marks rather than losing them:</em> <em>"L'état, c'est moi"</em> is <strong>attributed</strong> to Louis XIV rather than documented. It appears in no record of the sitting it is credited to, and surfaces in print only in 1818, more than 160 years later. His attested deathbed line runs almost the opposite way: "I depart, but the State shall always remain." Use it as the standard epigram of absolutism and label it apocryphal.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>The trap in this section.</strong> Do not equate monarchy with despotism. Montesquieu's distinction is precise and it is exactly what a question tests: <strong>both are the rule of one person</strong>, and the entire difference is whether he rules <strong>through established laws</strong>. Rule of one <em>under</em> law is monarchy; rule of one <em>above</em> law is despotism. Equally, do not confuse republic with democracy: for Montesquieu, republic means rulers are elected, and democracy is only the <em>variety</em> of republic in which many rule.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================= glossary === -->
+<section id="t9" class="chapter card" style="--accent:#7A7484; --soft:#F2EFF4;">
+  <header><span class="eyebrow">Reference</span><h2><span class="emoji">📖</span> Glossary</h2></header>
+  <dl class="glossary">
+    <div><dt>Social contract</dt><dd>The agreement between the individual and the state that creates political authority; in a modern country its written form is the constitution.</dd></div>
+    <div><dt>Divine right of kings</dt><dd>The pre-contract claim that God makes the king, so the king answers to God alone and owes the people nothing.</dd></div>
+    <div><dt>State of nature</dt><dd>The imagined condition of humans before the state; an assumption used to work out how much power the state may have.</dd></div>
+    <div><dt>Natural law</dt><dd>In Locke, the law governing the state of nature, under which all were equal; it lacked only a body to define, execute and interpret it.</dd></div>
+    <div><dt>Unilateral contract</dt><dd>Hobbes' contract: an agreement among the people only. The sovereign is not a party, promises nothing and cannot breach.</dd></div>
+    <div><dt>Irrevocable</dt><dd>Hobbes' term of the contract: it cannot be revoked or taken back for as long as you live under it.</dd></div>
+    <div><dt>Bilateral contract</dt><dd>Locke's contract: the government is itself a party to it, so it carries duties and can be removed for breach.</dd></div>
+    <div><dt>Leviathan <span class="kt">(editorial)</span></dt><dd>Hobbes' book (1651) and his name for the sovereign, a great monster built to hold all the smaller monsters in check. Outside context: in class the same idea arrives through the "release the Kraken" analogy.</dd></div>
+    <div><dt>Glorious Revolution</dt><dd>The transfer in which England's king voluntarily surrendered his power to parliament, converting monarchy toward democracy; bloodless, and Locke contributed to it. Editorial: the year is 1688.</dd></div>
+    <div><dt>Public person / body politic</dt><dd>Rousseau's name for the community once it has surrendered its power to itself.</dd></div>
+    <div><dt>State vs sovereign (Rousseau)</dt><dd>The same body politic: the state when passive, the sovereign when active.</dd></div>
+    <div><dt>Citizen vs subject (Rousseau)</dt><dd>The same person: a citizen when making the law, a subject when obeying it.</dd></div>
+    <div><dt>Particular will</dt><dd>What a single individual wants. This lecture uses "will of all" as another name for it.</dd></div>
+    <div><dt>Will of all <span class="kt">(editorial)</span></dt><dd>In Rousseau's own scheme, a third term distinct from the other two: the particular wills merely added up, a majority of private preferences, which can differ from the common good. Not the sense used in this lecture.</dd></div>
+    <div><dt>General will</dt><dd>That on which the whole community agrees. Because it is your own will, obeying it is obeying yourself, which Rousseau calls freedom.</dd></div>
+    <div><dt>Forced to be free</dt><dd>Rousseau's answer to the dissenting minority: freedom is the will of the majority, so compelling them to follow it is compelling them to be free.</dd></div>
+    <div><dt>Liberty (Montesquieu)</dt><dd>Not unrestrained and unchecked freedom, which is a licence to crime, but freedom exercised under law.</dd></div>
+    <div><dt>Moderate government</dt><dd>Montesquieu's condition for good laws: a government in which power checks power.</dd></div>
+    <div><dt>Separation of powers</dt><dd>Dividing legislature, executive and judiciary so no single institution both makes and enforces the law.</dd></div>
+    <div><dt>Anarchy</dt><dd>Lawlessness; the condition Montesquieu says liberty collapses into without law.</dd></div>
+    <div><dt>Separate electorate</dt><dd>Montesquieu's device for a balanced legislature: rich elect the rich and commoners elect their own, so both classes sit in parliament.</dd></div>
+    <div><dt>Republic (Montesquieu)</dt><dd>A government where rulers are elected: aristocratic if few rule, democratic if many.</dd></div>
+    <div><dt>Despotism</dt><dd>Rule of one person without established laws, where the ruler is above the law and is the law; its principle is fear.</dd></div>
+    <div><dt>Marbury v. Madison (1803)</dt><dd>The case in which Chief Justice John Marshall reviewed a law, establishing judicial review and winning the judiciary its standing.</dd></div>
+  </dl>
+</section>
+
+<!-- ======================================================= flashcards === -->
+<section id="t10" class="chapter card" style="--accent:#8A57BD; --soft:#F3ECFA;">
+  <header><span class="eyebrow">Self-test</span><h2><span class="emoji">🎴</span> Flashcards</h2></header>
+  <div class="cards">
+    <div class="qa"><p class="q">What did the social contract replace, and why did that matter?</p><p class="a">The divine right of kings. Under divine right the king was made by God, so he owed the people nothing and no accountability ran downward.</p></div>
+    <div class="qa"><p class="q">Why does every contract theorist invent a state of nature?</p><p class="a">It is an argument device. Your picture of people without a state fixes how much power they must surrender to get one, so the assumption decides the conclusion.</p></div>
+    <div class="qa"><p class="q">Hobbes on human nature and the state of nature?</p><p class="a">Pessimistic: man is a monster. The state of nature is a war of all against all, with no just or unjust, and might is right.</p></div>
+    <div class="qa"><p class="q">Name the two features of Hobbes' contract.</p><p class="a">Unilateral (the sovereign is not a party to it) and irrevocable (you cannot take it back).</p></div>
+    <div class="qa"><p class="q">Why does Hobbes forbid revolution?</p><p class="a">Revolution returns you to the state of nature, which is worse than any bad sovereign. Even real failures do not justify revolt.</p></div>
+    <div class="qa"><p class="q">What is the tension in Hobbes worth naming in an answer?</p><p class="a">He destroys the divine right of kings, then grants the sovereign everything divine right ever gave him. He changes the source of authority but not its extent.</p></div>
+    <div class="qa"><p class="q">Locke on human nature?</p><p class="a">Optimistic: man is good, simple, sympathetic and cooperative, and social from the very first day.</p></div>
+    <div class="qa"><p class="q">If Locke's state of nature was peaceful, why contract at all?</p><p class="a">Natural law had three drawbacks: nothing to define it (legislature), nothing to implement it (executive), nothing to interpret it (judiciary). The contract does only that.</p></div>
+    <div class="qa"><p class="q">What makes Locke's contract bilateral?</p><p class="a">The government is itself a party to it and is your representative, so it carries duties and can breach them, unlike Hobbes' sovereign.</p></div>
+    <div class="qa"><p class="q">What does Locke's state exist to protect, and what happens if it fails?</p><p class="a">Life, property and above all liberty. If it fails you may overthrow it, but peacefully, and a peaceful overthrow is an election.</p></div>
+    <div class="qa"><p class="q">Where do Hobbes and Locke each land?</p><p class="a">Hobbes on dictatorship and absolute rule; Locke on representative democracy.</p></div>
+    <div class="qa"><p class="q">Which revolution is Locke tied to, and what changed?</p><p class="a">The Glorious Revolution (1688). It was bloodless, the king voluntarily surrendered power to parliament, converting monarchy toward democracy.</p></div>
+    <div class="qa"><p class="q">Quote Rousseau's opening line and explain the chains.</p><p class="a">"Man is born free, but everywhere he is in chains." The chains are the authority we built ourselves to police the property we invented.</p></div>
+    <div class="qa"><p class="q">How does Rousseau's contract differ from Hobbes' and Locke's?</p><p class="a">Power is surrendered neither to a sovereign nor to representatives, but to the community itself, so giver and receiver are the same body and nothing is lost.</p></div>
+    <div class="qa"><p class="q">Explain the two dual identities in Rousseau.</p><p class="a">The body politic is the state when passive and the sovereign when active. Its members are citizens when making law and subjects when obeying it.</p></div>
+    <div class="qa"><p class="q">Distinguish particular will from general will, as this lecture draws it.</p><p class="a">Particular will is one person's want, and the lecture calls that the will of all too. General will is what the whole community agrees on.</p></div>
+    <div class="qa"><p class="q">How does Rousseau's own scheme split those three? (editorial)</p><p class="a">Particular will is one person's want; will of all is those wants merely added up; general will aims at the common good. A vote can produce the will of all and still miss the general will.</p></div>
+    <div class="qa"><p class="q">Why does obeying the general will count as freedom?</p><p class="a">The general will is my will, so obeying it is obeying myself, and obeying myself is being free.</p></div>
+    <div class="qa"><p class="q">Give the two practical answers Rousseau offers, and the problem with each.</p><p class="a">Majority vote, which creates a minority who must be "forced to be free"; and a legislature of the whole community, which only works in a small Greek city state.</p></div>
+    <div class="qa"><p class="q">What is liberty for Montesquieu?</p><p class="a">Not unrestrained and unchecked freedom, which is a licence to crime, but liberty exercised under law.</p></div>
+    <div class="qa"><p class="q">What is a moderate government and why does it matter?</p><p class="a">One where power checks power through separated institutions. Only a moderate government can make good laws.</p></div>
+    <div class="qa"><p class="q">State the irony about Montesquieu and England.</p><p class="a">He described England as having separation of powers, but the UK has supremacy of parliament instead. His misreading shaped the United States, which works oppositely to the UK.</p></div>
+    <div class="qa"><p class="q">Distinguish monarchy from despotism in one line.</p><p class="a">Both are rule of one person: monarchy rules through established laws, despotism rules without them, so the despot is above the law and is the law.</p></div>
+    <div class="qa"><p class="q">Pair each of Montesquieu's forms with its governing principle.</p><p class="a">Republic: virtue, meaning political virtue, which is love of the republic and so love of equality and frugality (the lecture says equality and rule of law; write virtue). Monarchy: honour. Despotism: fear. Strictly, virtue belongs to the democratic republic and moderation to the aristocratic one.</p></div>
+    <div class="qa"><p class="q">How can a monarchy collapse?</p><p class="a">It is a balance: power rests with the nobles. If the king rises above them it becomes despotism; if the people rise it becomes democracy. Saudi Arabia is the worked example of the first.</p></div>
+    <div class="qa"><p class="q">What is Marbury v. Madison (1803) doing in a Montesquieu lecture?</p><p class="a">Judiciary was weak because the king controlled it. John Marshall's review of a law established judicial review and gave the third branch real standing.</p></div>
+  </div>
+</section>
+
+<!-- ======================================================= exam focus === -->
+<section id="t11" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
+  <header><span class="eyebrow" style="color:#5866C4">Before the paper</span><h2><span class="emoji">🎯</span> Exam focus</h2></header>
+  <div class="section-body">
+    <ul>
+      <li><strong>Answer on rails, not in blocks.</strong> The comparison in section 4 is the highest-value thing in this lecture. Take human nature, then state of nature, then need of contract, then nature of contract, and give each philosopher on each rail. The lecturer models this at <span class="ts">00:44:45</span> and it reads as analysis rather than recall.</li>
+      <li><strong>Always close the loop to a modern regime.</strong> The lecturer names two of these outright: Hobbes to dictatorship and absolute rule, Locke to representative democracy. The other two follow from what he teaches rather than from a label he gives: Rousseau to direct democracy (a legislature of the whole community, workable only in a small state), and Montesquieu to constitutional separation of powers. Theory questions reward the "so what".</li>
+      <li><strong>Trace everything back to the assumption about human nature.</strong> The strongest single sentence you can write here is that Hobbes and Locke run the same argument and diverge only because one thinks man is a monster and the other thinks man is cooperative.</li>
+      <li><strong>Know the precise keywords cold.</strong> Unilateral and irrevocable (Hobbes); bilateral and revocable (Locke); public person, body politic, general will, forced to be free (Rousseau); moderate government, separation of powers, checks and balances (Montesquieu). These are the words that earn marks.</li>
+      <li><strong>Use the dates and cases as anchors.</strong> 1588 Armada and Hobbes' birth, 1642 civil war, 1649 Charles I executed, 1688 Glorious Revolution, 1803 Marbury v. Madison.</li>
+      <li><strong>Keep the two traps straight.</strong> Monarchy is not despotism (established laws is the whole difference), and republic is not democracy (democracy is the variety of republic where many rule).</li>
+      <li><strong>Criticism earns marks, so carry one per thinker.</strong> Hobbes rebuilds absolutism on new foundations; Locke's peaceful state of nature makes the contract look unnecessary; Rousseau's general will licenses coercion and only scales to a city state; Montesquieu misread the very country he cited.</li>
+      <li><strong>Montesquieu was asked in 2020</strong> <span class="ts">01:25:20</span>. The lecturer's caution applies: a repeat is never guaranteed and anything can happen, so prepare all four.</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="notefoot">Want the whole lecture? <a href="https://drive.google.com/file/d/1xFgKaM6xFZ76O0Yb5aRUR663YVceXCJN/view" target="_blank" rel="noopener">▶ Watch the full recording</a><span class="sep">·</span><a href="https://drive.google.com/open?id=1NUtSVyi5ZI5UgA23XvPZFBT1BAgs27xd" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+</html>
