@@ -10,8 +10,9 @@
    gentle emoji + pill badges. Playful and pretty, but still a real study book.
    Print-first (A4 PDF via headless Edge); reads well on screen too.
 
-   Each section sets its own accent inline:
-     <section id="t1" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
    Everything themeable keys off --accent / --soft. Titles stay ink for
    readability; accents colour eyebrows, numbers, pills, rules and callouts.
 */
@@ -414,12 +415,12 @@ color:#8B8490;font:15px system-ui}
     <li><span class="dot" style="background:#B57A2A"></span><a class="title" href="#t4">04 · IPPs &amp; capacity payments (the trap)</a><span class="rng">circular debt</span></li>
     <li><span class="dot" style="background:#B44A8C"></span><a class="title" href="#t5">05 · Load shedding &amp; expensive power</a><span class="rng">losses · theft</span></li>
     <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t6">06 · Reforms &amp; the way forward</a><span class="rng">T&amp;D · IMF</span></li>
-    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t9">Glossary · Flashcards · Exam focus</a><span class="rng"></span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t7">Glossary · Flashcards · Exam focus</a><span class="rng"></span></li>
   </ol>
 </nav>
 
 <!-- ============================================================= tldr === -->
-<section class="summary card" style="--accent:#2C7A9E; --soft:#E7F1F7; border-top-color:#2C7A9E">
+<section id="summary" class="summary card" style="--accent:#2C7A9E; --soft:#E7F1F7; border-top-color:#2C7A9E">
   <header><span class="eyebrow" style="color:#2C7A9E">Start here</span><h2><span class="emoji">⭐</span> The five-minute version</h2></header>
   <ul>
     <li><strong>The root problem.</strong> Pakistan is a major <em>consumer</em> of energy but not a major <em>producer</em>, so it imports most of its oil, gas and coal. Hydrocarbons are more than <strong>25%</strong> of all imports (up to 36% in some years) and over <strong>half</strong> of the trade deficit.</li>
@@ -432,7 +433,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 1 === -->
-<section id="t2" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+<section id="t1" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
   <header>
     <span class="eyebrow"><span class="num">1</span> Import dependence</span>
     <h2><span class="emoji">🛢️</span> How Pakistan's energy sector operates</h2>
@@ -462,7 +463,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 2 === -->
-<section id="t3" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+<section id="t2" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
   <header>
     <span class="eyebrow"><span class="num">2</span> Why it hurts</span>
     <h2><span class="emoji">📉</span> Why it is a crisis: three problems</h2>
@@ -494,7 +495,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 3 === -->
-<section id="t4" class="chapter card" style="--accent:#46955C; --soft:#E7F3EA;">
+<section id="t3" class="chapter card" style="--accent:#46955C; --soft:#E7F3EA;">
   <header>
     <span class="eyebrow"><span class="num">3</span> The way out</span>
     <h2><span class="emoji">🌱</span> The solutions: indigenous generation</h2>
@@ -538,7 +539,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 4 === -->
-<section id="t5" class="chapter card" style="--accent:#B57A2A; --soft:#F7EFDD;">
+<section id="t4" class="chapter card" style="--accent:#B57A2A; --soft:#F7EFDD;">
   <header>
     <span class="eyebrow"><span class="num">4</span> The structural core</span>
     <h2><span class="emoji">🏭</span> IPPs &amp; capacity payments (the trap)</h2>
@@ -567,7 +568,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 5 === -->
-<section id="t6" class="chapter card" style="--accent:#B44A8C; --soft:#F9EBF4;">
+<section id="t5" class="chapter card" style="--accent:#B44A8C; --soft:#F9EBF4;">
   <header>
     <span class="eyebrow"><span class="num">5</span> The symptoms</span>
     <h2><span class="emoji">🔌</span> Load shedding &amp; expensive power</h2>
@@ -594,7 +595,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 6 === -->
-<section id="t7" class="chapter card" style="--accent:#2C8C86; --soft:#E1F2F0;">
+<section id="t6" class="chapter card" style="--accent:#2C8C86; --soft:#E1F2F0;">
   <header>
     <span class="eyebrow"><span class="num">6</span> Fixing it</span>
     <h2><span class="emoji">🛠️</span> Reforms &amp; the way forward</h2>
@@ -619,7 +620,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ========================================================= glossary === -->
-<section id="t8" class="chapter card" style="--accent:#7A7484; --soft:#F2EFF4;">
+<section id="t7" class="chapter card" style="--accent:#7A7484; --soft:#F2EFF4;">
   <header><span class="eyebrow">Reference</span><h2><span class="emoji">📖</span> Glossary</h2></header>
   <dl class="glossary">
     <div><dt>IPP (Independent Power Producer)</dt><dd>A private company that generates electricity and sells it to the state; IPPs supply about 60% of Pakistan's power.</dd></div>
@@ -639,7 +640,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================= flashcards === -->
-<section id="t9" class="chapter card" style="--accent:#8A57BD; --soft:#F3ECFA;">
+<section id="t8" class="chapter card" style="--accent:#8A57BD; --soft:#F3ECFA;">
   <header><span class="eyebrow">Self-test</span><h2><span class="emoji">🎴</span> Flashcards</h2></header>
   <div class="cards">
     <div class="qa"><p class="q">In one line, what is the root of Pakistan's energy crisis?</p><p class="a">Pakistan is a major consumer but not a major producer of energy, so it imports most of its oil, gas and coal in dollars.</p></div>
@@ -658,7 +659,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================= exam focus === -->
-<section id="t10" class="chapter card" style="--accent:#2C7A9E; --soft:#E7F1F7;">
+<section id="t9" class="chapter card" style="--accent:#2C7A9E; --soft:#E7F1F7;">
   <header><span class="eyebrow" style="color:#2C7A9E">Before the paper</span><h2><span class="emoji">🎯</span> Exam focus</h2></header>
   <div class="section-body">
     <ul>

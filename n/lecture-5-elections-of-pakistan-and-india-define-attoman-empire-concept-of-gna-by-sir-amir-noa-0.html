@@ -10,8 +10,9 @@
    gentle emoji + pill badges. Playful and pretty, but still a real study book.
    Print-first (A4 PDF via headless Edge); reads well on screen too.
 
-   Each section sets its own accent inline:
-     <section id="t1" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
    Everything themeable keys off --accent / --soft. Titles stay ink for
    readability; accents colour eyebrows, numbers, pills, rules and callouts.
 */
@@ -415,12 +416,12 @@ color:#8B8490;font:15px system-ui}
     <li><span class="dot" style="background:#B57A2A"></span><a class="title" href="#t5">05 · Unitary vs federal</a><span class="rng">delegated vs constitutional</span></li>
     <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t6">06 · The military in Turkish politics</a><span class="rng">guardian to civilian</span></li>
     <li><span class="dot" style="background:#B44A8C"></span><a class="title" href="#t7">07 · Turkey's presidential system &amp; France</a><span class="rng">GNA · two-round</span></li>
-    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t9">Glossary · Flashcards · Exam focus</a><span class="rng"></span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t8">Glossary · Flashcards · Exam focus</a><span class="rng"></span></li>
   </ol>
 </nav>
 
 <!-- ============================================================= tldr === -->
-<section class="summary card" style="--accent:#5866C4; --soft:#ECEEFA; border-top-color:#5866C4">
+<section id="summary" class="summary card" style="--accent:#5866C4; --soft:#ECEEFA; border-top-color:#5866C4">
   <header><span class="eyebrow" style="color:#5866C4">Start here</span><h2><span class="emoji">⭐</span> The five-minute version</h2></header>
   <ul>
     <li><strong>The whole method is comparison against the UK.</strong> The lecturer lines up the UK, Pakistan, India, Malaysia and Germany and runs each institution across all of them: head of state, upper house, lower house, then unitary against federal <span class="ts">00:01:41</span>.</li>
@@ -435,7 +436,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 1 === -->
-<section id="t2" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
+<section id="t1" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
   <header>
     <span class="eyebrow"><span class="num">1</span> The method</span>
     <h2><span class="emoji">📐</span> The comparative frame</h2>
@@ -453,7 +454,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 2 === -->
-<section id="t3" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+<section id="t2" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
   <header>
     <span class="eyebrow"><span class="num">2</span> The figureheads</span>
     <h2><span class="emoji">👑</span> Heads of state compared</h2>
@@ -496,7 +497,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 3 === -->
-<section id="t4" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+<section id="t3" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
   <header>
     <span class="eyebrow"><span class="num">3</span> The second chamber</span>
     <h2><span class="emoji">🏛️</span> Upper houses compared</h2>
@@ -547,7 +548,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 4 === -->
-<section id="t5" class="chapter card" style="--accent:#46955C; --soft:#E9F4ED;">
+<section id="t4" class="chapter card" style="--accent:#46955C; --soft:#E9F4ED;">
   <header>
     <span class="eyebrow"><span class="num">4</span> Where power sits</span>
     <h2><span class="emoji">🗳️</span> Lower houses compared</h2>
@@ -581,7 +582,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 5 === -->
-<section id="t6" class="chapter card" style="--accent:#B57A2A; --soft:#FAF0E2;">
+<section id="t5" class="chapter card" style="--accent:#B57A2A; --soft:#FAF0E2;">
   <header>
     <span class="eyebrow"><span class="num">5</span> One state or many</span>
     <h2><span class="emoji">🗺️</span> Unitary vs federal</h2>
@@ -614,7 +615,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 6 === -->
-<section id="t7" class="chapter card" style="--accent:#2C8C86; --soft:#E4F2F1;">
+<section id="t6" class="chapter card" style="--accent:#2C8C86; --soft:#E4F2F1;">
   <header>
     <span class="eyebrow"><span class="num">6</span> The army and the state</span>
     <h2><span class="emoji">🎖️</span> The military in Turkish politics</h2>
@@ -673,7 +674,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 7 === -->
-<section id="t8" class="chapter card" style="--accent:#B44A8C; --soft:#F9EBF4;">
+<section id="t7" class="chapter card" style="--accent:#B44A8C; --soft:#F9EBF4;">
   <header>
     <span class="eyebrow"><span class="num">7</span> The presidential turn</span>
     <h2><span class="emoji">🗳️</span> Turkey's presidential system &amp; France</h2>
@@ -731,7 +732,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ========================================================= glossary === -->
-<section id="t9" class="chapter card" style="--accent:#7A7484; --soft:#F2EFF4;">
+<section id="t8" class="chapter card" style="--accent:#7A7484; --soft:#F2EFF4;">
   <header><span class="eyebrow">Reference</span><h2><span class="emoji">📖</span> Glossary</h2></header>
   <dl class="glossary">
     <div><dt>Head of state vs head of government</dt><dd>The head of state is the ceremonial figurehead (a monarch or president in these systems); the head of government is the prime minister, who actually governs.</dd></div>
@@ -758,7 +759,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================= flashcards === -->
-<section id="t10" class="chapter card" style="--accent:#8A57BD; --soft:#F3ECFA;">
+<section id="t9" class="chapter card" style="--accent:#8A57BD; --soft:#F3ECFA;">
   <header><span class="eyebrow">Self-test</span><h2><span class="emoji">🎴</span> Flashcards</h2></header>
   <div class="cards">
     <div class="qa"><p class="q">What is the comparative method of this lecture?</p><p class="a">Take the UK as the yardstick and run each institution (head of state, upper house, lower house, unitary vs federal) across the UK, Pakistan, India, Malaysia and Germany.</p></div>
@@ -795,7 +796,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================= exam focus === -->
-<section id="t11" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
+<section id="t10" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
   <header><span class="eyebrow" style="color:#5866C4">Before the paper</span><h2><span class="emoji">🎯</span> Exam focus</h2></header>
   <div class="section-body">
     <ul>

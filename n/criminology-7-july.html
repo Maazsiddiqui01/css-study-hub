@@ -10,8 +10,9 @@
    gentle emoji + pill badges. Playful and pretty, but still a real study book.
    Print-first (A4 PDF via headless Edge); reads well on screen too.
 
-   Each section sets its own accent inline:
-     <section id="t1" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
    Everything themeable keys off --accent / --soft. Titles stay ink for
    readability; accents colour eyebrows, numbers, pills, rules and callouts.
 */
@@ -434,7 +435,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 1 === -->
-<section id="t2" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFB;">
+<section id="t1" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFB;">
   <header>
     <span class="eyebrow"><span class="num">1</span> Contemporary criminology</span>
     <h2><span class="emoji">🧭</span> Why "contemporary" criminology?</h2>
@@ -463,7 +464,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 2 === -->
-<section id="t3" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+<section id="t2" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
   <header>
     <span class="eyebrow"><span class="num">2</span> The security-threat chain</span>
     <h2><span class="emoji">🧠</span> Radicalization → Violent Extremism → Terrorism</h2>
@@ -525,7 +526,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 3 === -->
-<section id="t4" class="chapter card" style="--accent:#B57A2A; --soft:#F7EFDD;">
+<section id="t3" class="chapter card" style="--accent:#B57A2A; --soft:#F7EFDD;">
   <header>
     <span class="eyebrow"><span class="num">3</span> Crime in a suit</span>
     <h2><span class="emoji">💼</span> White-collar crime</h2>
@@ -570,7 +571,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 4 === -->
-<section id="t5" class="chapter card" style="--accent:#2C8C86; --soft:#E1F2F0;">
+<section id="t4" class="chapter card" style="--accent:#2C8C86; --soft:#E1F2F0;">
   <header>
     <span class="eyebrow"><span class="num">4</span> Crime as a system</span>
     <h2><span class="emoji">🕸️</span> Organized crime</h2>
@@ -613,7 +614,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 5 === -->
-<section id="t6" class="chapter card" style="--accent:#46955C; --soft:#E7F3EA;">
+<section id="t5" class="chapter card" style="--accent:#46955C; --soft:#E7F3EA;">
   <header>
     <span class="eyebrow"><span class="num">5</span> Cleaning dirty money</span>
     <h2><span class="emoji">💸</span> Money laundering</h2>
@@ -653,7 +654,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 6 === -->
-<section id="t7" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+<section id="t6" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
   <header>
     <span class="eyebrow"><span class="num">6</span> Crime in cyberspace</span>
     <h2><span class="emoji">💻</span> Cybercrime &amp; cyber-warfare</h2>
@@ -696,7 +697,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 7 === -->
-<section id="t8" class="chapter card" style="--accent:#B44A8C; --soft:#F9EBF4;">
+<section id="t7" class="chapter card" style="--accent:#B44A8C; --soft:#F9EBF4;">
   <header>
     <span class="eyebrow"><span class="num">7</span> Gender &amp; crime</span>
     <h2><span class="emoji">⚖️</span> Gender &amp; crime: urban vs rural Pakistan</h2>
@@ -747,7 +748,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 8 === -->
-<section id="t9" class="chapter card" style="--accent:#C0762C; --soft:#F9EFDF;">
+<section id="t8" class="chapter card" style="--accent:#C0762C; --soft:#F9EFDF;">
   <header>
     <span class="eyebrow"><span class="num">8</span> Straight from the paper</span>
     <h2><span class="emoji">📝</span> Past-paper questions (Section IV)</h2>
@@ -786,7 +787,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ========================================================= glossary === -->
-<section id="t10" class="chapter card" style="--accent:#7A7484; --soft:#F2EFF4;">
+<section id="t9" class="chapter card" style="--accent:#7A7484; --soft:#F2EFF4;">
   <header><span class="eyebrow">Reference</span><h2><span class="emoji">📖</span> Glossary</h2></header>
   <dl class="glossary">
     <div><dt>Radicalization</dt><dd>The <em>process</em> of adopting extreme beliefs that reject mainstream values; dangerous because radicals may use violence to justify them.</dd></div>
@@ -812,7 +813,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================= flashcards === -->
-<section id="t11" class="chapter card" style="--accent:#8A57BD; --soft:#F3ECFA;">
+<section id="t10" class="chapter card" style="--accent:#8A57BD; --soft:#F3ECFA;">
   <header><span class="eyebrow">Self-test</span><h2><span class="emoji">🎴</span> Flashcards</h2></header>
   <div class="cards">
     <div class="qa"><p class="q">Distinguish radicalization, violent extremism and terrorism.</p><p class="a">Radicalization = the <em>process</em> of adopting extreme beliefs; violent extremism = the <em>mindset</em> accepting violence; terrorism = the violent <em>act</em>. A chain, each leading to the next.</p></div>
@@ -833,7 +834,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================= exam focus === -->
-<section id="t12" class="chapter card" style="--accent:#C0567E; --soft:#FBECF1;">
+<section id="t11" class="chapter card" style="--accent:#C0567E; --soft:#FBECF1;">
   <header><span class="eyebrow">Before the paper</span><h2><span class="emoji">🎯</span> Exam focus</h2></header>
   <div class="section-body">
     <ul>

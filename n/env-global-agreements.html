@@ -10,8 +10,9 @@
    gentle emoji + pill badges. Playful and pretty, but still a real study book.
    Print-first (A4 PDF via headless Edge); reads well on screen too.
 
-   Each section sets its own accent inline:
-     <section id="t1" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
    Everything themeable keys off --accent / --soft. Titles stay ink for
    readability; accents colour eyebrows, numbers, pills, rules and callouts.
 */
@@ -414,12 +415,12 @@ color:#8B8490;font:15px system-ui}
     <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t4">04 · The ozone regime</a><span class="rng">Montreal · Kigali</span></li>
     <li><span class="dot" style="background:#C6506E"></span><a class="title" href="#t5">05 · The Kyoto Protocol</a><span class="rng">binding targets that failed</span></li>
     <li><span class="dot" style="background:#B57A2A"></span><a class="title" href="#t6">06 · The Paris Agreement</a><span class="rng">the change of approach</span></li>
-    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t9">Glossary · Flashcards · Exam focus</a><span class="rng"></span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t7">Glossary · Flashcards · Exam focus</a><span class="rng"></span></li>
   </ol>
 </nav>
 
 <!-- ============================================================= tldr === -->
-<section class="summary card" style="--accent:#2E9E6A; --soft:#E4F3EB; border-top-color:#2E9E6A">
+<section id="summary" class="summary card" style="--accent:#2E9E6A; --soft:#E4F3EB; border-top-color:#2E9E6A">
   <header><span class="eyebrow" style="color:#2E9E6A">Start here</span><h2><span class="emoji">⭐</span> The five-minute version</h2></header>
   <ul>
     <li><strong>Get the vocabulary right first.</strong> <span class="kt">Treaty</span> is the umbrella term; a <span class="kt">convention</span> is a formal multilateral treaty setting the framework, and a <span class="kt">protocol</span> is a further treaty adding substantive obligations under it. The classic pair: <strong>UNFCCC is the framework convention, the Kyoto Protocol is its protocol</strong>.</li>
@@ -433,7 +434,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 1 === -->
-<section id="t2" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
+<section id="t1" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
   <header>
     <span class="eyebrow"><span class="num">1</span> The vocabulary</span>
     <h2><span class="emoji">📜</span> Treaty, protocol, convention &amp; MEAs</h2>
@@ -507,7 +508,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 2 === -->
-<section id="t3" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+<section id="t2" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
   <header>
     <span class="eyebrow"><span class="num">2</span> The beginning</span>
     <h2><span class="emoji">🇸🇪</span> Stockholm 1972</h2>
@@ -544,7 +545,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 3 === -->
-<section id="t4" class="chapter card" style="--accent:#46955C; --soft:#E9F4ED;">
+<section id="t3" class="chapter card" style="--accent:#46955C; --soft:#E9F4ED;">
   <header>
     <span class="eyebrow"><span class="num">3</span> The hinge</span>
     <h2><span class="emoji">🌎</span> Rio 1992: the Earth Summit</h2>
@@ -584,7 +585,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 4 === -->
-<section id="t5" class="chapter card" style="--accent:#2C8C86; --soft:#E4F2F1;">
+<section id="t4" class="chapter card" style="--accent:#2C8C86; --soft:#E4F2F1;">
   <header>
     <span class="eyebrow"><span class="num">4</span> The success story</span>
     <h2><span class="emoji">🕳️</span> The ozone regime: Montreal &amp; Kigali</h2>
@@ -639,7 +640,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 5 === -->
-<section id="t6" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+<section id="t5" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
   <header>
     <span class="eyebrow"><span class="num">5</span> Binding targets</span>
     <h2><span class="emoji">🏭</span> The Kyoto Protocol</h2>
@@ -696,7 +697,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 6 === -->
-<section id="t7" class="chapter card" style="--accent:#B57A2A; --soft:#FAF0E2;">
+<section id="t6" class="chapter card" style="--accent:#B57A2A; --soft:#FAF0E2;">
   <header>
     <span class="eyebrow"><span class="num">6</span> The redesign</span>
     <h2><span class="emoji">🇫🇷</span> The Paris Agreement</h2>
@@ -745,7 +746,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ========================================================= glossary === -->
-<section id="t8" class="chapter card" style="--accent:#7A7484; --soft:#F2EFF4;">
+<section id="t7" class="chapter card" style="--accent:#7A7484; --soft:#F2EFF4;">
   <header><span class="eyebrow">Reference</span><h2><span class="emoji">📖</span> Glossary</h2></header>
   <dl class="glossary">
     <div><dt>Treaty</dt><dd>A binding international agreement between parties or nations.</dd></div>
@@ -772,7 +773,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================= flashcards === -->
-<section id="t9" class="chapter card" style="--accent:#8A57BD; --soft:#F3ECFA;">
+<section id="t8" class="chapter card" style="--accent:#8A57BD; --soft:#F3ECFA;">
   <header><span class="eyebrow">Self-test</span><h2><span class="emoji">🎴</span> Flashcards</h2></header>
   <div class="cards">
     <div class="qa"><p class="q">Distinguish treaty, protocol and convention.</p><p class="a">A convention is the broad framework agreement; a treaty is the binding agreement between parties; a protocol attaches to an existing treaty to add detail and obligations. UNFCCC is the convention, Kyoto its protocol.</p></div>
@@ -799,7 +800,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================= exam focus === -->
-<section id="t10" class="chapter card" style="--accent:#2E9E6A; --soft:#E4F3EB;">
+<section id="t9" class="chapter card" style="--accent:#2E9E6A; --soft:#E4F3EB;">
   <header><span class="eyebrow" style="color:#2E9E6A">Before the paper</span><h2><span class="emoji">🎯</span> Exam focus</h2></header>
   <div class="section-body">
     <ul>

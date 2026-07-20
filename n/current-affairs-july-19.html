@@ -10,8 +10,9 @@
    gentle emoji + pill badges. Playful and pretty, but still a real study book.
    Print-first (A4 PDF via headless Edge); reads well on screen too.
 
-   Each section sets its own accent inline:
-     <section id="t1" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
    Everything themeable keys off --accent / --soft. Titles stay ink for
    readability; accents colour eyebrows, numbers, pills, rules and callouts.
 */
@@ -421,7 +422,7 @@ color:#8B8490;font:15px system-ui}
 </nav>
 
 <!-- ============================================================= tldr === -->
-<section class="summary card" style="--accent:#2C7A9E; --soft:#E7F1F7; border-top-color:#2C7A9E">
+<section id="summary" class="summary card" style="--accent:#2C7A9E; --soft:#E7F1F7; border-top-color:#2C7A9E">
   <header><span class="eyebrow" style="color:#2C7A9E">Start here</span><h2><span class="emoji">⭐</span> The five-minute version</h2></header>
   <ul>
     <li><strong>The danger has changed shape.</strong> The headline of the class: the risk today lies not in the sheer <em>number</em> of weapons but in <strong>rapid modernization, weak arms control and rising mistrust</strong>. Global warheads are around <strong>12,241</strong>, and all <strong>nine</strong> nuclear states are modernising.</li>
@@ -436,7 +437,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 1 === -->
-<section id="t2" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+<section id="t1" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
   <header>
     <span class="eyebrow"><span class="num">1</span> The global picture</span>
     <h2><span class="emoji">🚀</span> Global modernization &amp; the new arms race</h2>
@@ -498,7 +499,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 2 === -->
-<section id="t3" class="chapter card" style="--accent:#46955C; --soft:#E9F4ED;">
+<section id="t2" class="chapter card" style="--accent:#46955C; --soft:#E9F4ED;">
   <header>
     <span class="eyebrow"><span class="num">2</span> The test case</span>
     <h2><span class="emoji">⚛️</span> Iran &amp; IAEA safeguards</h2>
@@ -548,7 +549,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 3 === -->
-<section id="t4" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
+<section id="t3" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
   <header>
     <span class="eyebrow"><span class="num">3</span> The technology</span>
     <h2><span class="emoji">🛰️</span> Missile defence, MIRVs &amp; hypersonics</h2>
@@ -582,7 +583,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 4 === -->
-<section id="t5" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+<section id="t4" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
   <header>
     <span class="eyebrow"><span class="num">4</span> The umbrella</span>
     <h2><span class="emoji">🛡️</span> Extended deterrence &amp; NATO nuclear sharing</h2>
@@ -621,7 +622,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 5 === -->
-<section id="t6" class="chapter card" style="--accent:#B57A2A; --soft:#FAF0E2;">
+<section id="t5" class="chapter card" style="--accent:#B57A2A; --soft:#FAF0E2;">
   <header>
     <span class="eyebrow"><span class="num">5</span> The undeclared arsenal</span>
     <h2><span class="emoji">🕶️</span> Israel's nuclear ambiguity</h2>
@@ -654,7 +655,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 6 === -->
-<section id="t7" class="chapter card" style="--accent:#B44A8C; --soft:#F9EBF4;">
+<section id="t6" class="chapter card" style="--accent:#B44A8C; --soft:#F9EBF4;">
   <header>
     <span class="eyebrow"><span class="num">6</span> The core topic</span>
     <h2><span class="emoji">⚔️</span> Limited war under nuclear conditions in South Asia</h2>
@@ -696,7 +697,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 7 === -->
-<section id="t8" class="chapter card" style="--accent:#2C8C86; --soft:#E4F2F1;">
+<section id="t7" class="chapter card" style="--accent:#2C8C86; --soft:#E4F2F1;">
   <header>
     <span class="eyebrow"><span class="num">7</span> Pakistan's stake</span>
     <h2><span class="emoji">🛢️</span> Nuclear diplomacy in the Gulf</h2>
@@ -734,7 +735,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 8 === -->
-<section id="t9" class="chapter card" style="--accent:#C0762C; --soft:#FAF0E2;">
+<section id="t8" class="chapter card" style="--accent:#C0762C; --soft:#FAF0E2;">
   <header>
     <span class="eyebrow"><span class="num">8</span> The structural shift</span>
     <h2><span class="emoji">🐉</span> China &amp; the emerging three-power order</h2>
@@ -767,7 +768,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ========================================================= glossary === -->
-<section id="t10" class="chapter card" style="--accent:#7A7484; --soft:#F2EFF4;">
+<section id="t9" class="chapter card" style="--accent:#7A7484; --soft:#F2EFF4;">
   <header><span class="eyebrow">Reference</span><h2><span class="emoji">📖</span> Glossary</h2></header>
   <dl class="glossary">
     <div><dt>Nuclear modernization</dt><dd>Upgrading arsenals rather than merely enlarging them: missiles, submarines, bombers, warheads, command and control, early warning and cyber resilience.</dd></div>
@@ -794,7 +795,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================= flashcards === -->
-<section id="t11" class="chapter card" style="--accent:#8A57BD; --soft:#F3ECFA;">
+<section id="t10" class="chapter card" style="--accent:#8A57BD; --soft:#F3ECFA;">
   <header><span class="eyebrow">Self-test</span><h2><span class="emoji">🎴</span> Flashcards</h2></header>
   <div class="cards">
     <div class="qa"><p class="q">Define nuclear modernization.</p><p class="a">Upgrading arsenals rather than just increasing numbers: missiles, submarines, bombers, warheads, command and control, early warning, cyber resilience and space surveillance, aimed at credibility, survivability, speed and precision.</p></div>
@@ -831,7 +832,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================= exam focus === -->
-<section id="t12" class="chapter card" style="--accent:#2C7A9E; --soft:#E7F1F7;">
+<section id="t11" class="chapter card" style="--accent:#2C7A9E; --soft:#E7F1F7;">
   <header><span class="eyebrow" style="color:#2C7A9E">Before the paper</span><h2><span class="emoji">🎯</span> Exam focus</h2></header>
   <div class="section-body">
     <ul>

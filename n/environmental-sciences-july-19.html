@@ -10,8 +10,9 @@
    gentle emoji + pill badges. Playful and pretty, but still a real study book.
    Print-first (A4 PDF via headless Edge); reads well on screen too.
 
-   Each section sets its own accent inline:
-     <section id="t1" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
    Everything themeable keys off --accent / --soft. Titles stay ink for
    readability; accents colour eyebrows, numbers, pills, rules and callouts.
 */
@@ -421,7 +422,7 @@ color:#8B8490;font:15px system-ui}
 </nav>
 
 <!-- ============================================================= tldr === -->
-<section class="summary card" style="--accent:#2E9E6A; --soft:#E4F3EB; border-top-color:#2E9E6A">
+<section id="summary" class="summary card" style="--accent:#2E9E6A; --soft:#E4F3EB; border-top-color:#2E9E6A">
   <header><span class="eyebrow" style="color:#2E9E6A">Start here</span><h2><span class="emoji">⭐</span> The five-minute version</h2></header>
   <ul>
     <li><strong>The class opens by finishing global-warming mitigation</strong> (points 6 to 10): promote <strong>sustainable industrialisation</strong> by installing pollution-control technology, implement <strong>international commitments</strong> (UNFCCC 1992, Kyoto 1997, Paris 2015), improve <strong>disaster management</strong>, build <strong>environmental governance</strong>, and strengthen <strong>international cooperation</strong> with developed countries leading.</li>
@@ -436,7 +437,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 1 === -->
-<section id="t2" class="chapter card" style="--accent:#B57A2A; --soft:#FAF0E2;">
+<section id="t1" class="chapter card" style="--accent:#B57A2A; --soft:#FAF0E2;">
   <header>
     <span class="eyebrow"><span class="num">1</span> Carried over</span>
     <h2><span class="emoji">🏭</span> Finishing global-warming mitigation</h2>
@@ -465,7 +466,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 2 === -->
-<section id="t3" class="chapter card" style="--accent:#46955C; --soft:#E9F4ED;">
+<section id="t2" class="chapter card" style="--accent:#46955C; --soft:#E9F4ED;">
   <header>
     <span class="eyebrow"><span class="num">2</span> Definitions</span>
     <h2><span class="emoji">🧬</span> What biodiversity is</h2>
@@ -511,7 +512,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 3 === -->
-<section id="t4" class="chapter card" style="--accent:#2C8C86; --soft:#E4F2F1;">
+<section id="t3" class="chapter card" style="--accent:#2C8C86; --soft:#E4F2F1;">
   <header>
     <span class="eyebrow"><span class="num">3</span> The value</span>
     <h2><span class="emoji">💚</span> Why biodiversity matters</h2>
@@ -552,7 +553,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 4 === -->
-<section id="t5" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+<section id="t4" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
   <header>
     <span class="eyebrow"><span class="num">4</span> The problem</span>
     <h2><span class="emoji">📉</span> Biodiversity loss</h2>
@@ -624,7 +625,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 5 === -->
-<section id="t6" class="chapter card" style="--accent:#2E9E6A; --soft:#E4F3EB;">
+<section id="t5" class="chapter card" style="--accent:#2E9E6A; --soft:#E4F3EB;">
   <header>
     <span class="eyebrow"><span class="num">5</span> The response</span>
     <h2><span class="emoji">🛡️</span> Conserving biodiversity</h2>
@@ -661,7 +662,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 6 === -->
-<section id="t7" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+<section id="t6" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
   <header>
     <span class="eyebrow"><span class="num">6</span> The second topic</span>
     <h2><span class="emoji">💧</span> Water pollution: types &amp; sources</h2>
@@ -692,7 +693,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 7 === -->
-<section id="t8" class="chapter card" style="--accent:#B44A8C; --soft:#F9EBF4;">
+<section id="t7" class="chapter card" style="--accent:#B44A8C; --soft:#F9EBF4;">
   <header>
     <span class="eyebrow"><span class="num">7</span> The chain</span>
     <h2><span class="emoji">🦠</span> Eutrophication</h2>
@@ -750,7 +751,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 8 === -->
-<section id="t9" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
+<section id="t8" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
   <header>
     <span class="eyebrow"><span class="num">8</span> Damage and response</span>
     <h2><span class="emoji">🚰</span> Water pollution: effects &amp; controls</h2>
@@ -811,7 +812,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ========================================================= glossary === -->
-<section id="t10" class="chapter card" style="--accent:#7A7484; --soft:#F2EFF4;">
+<section id="t9" class="chapter card" style="--accent:#7A7484; --soft:#F2EFF4;">
   <header><span class="eyebrow">Reference</span><h2><span class="emoji">📖</span> Glossary</h2></header>
   <dl class="glossary">
     <div><dt>Biodiversity</dt><dd>The variety of life on Earth. Formally (CBD Article 2), variability among living organisms including diversity <em>within species, between species and of ecosystems</em>.</dd></div>
@@ -835,7 +836,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================= flashcards === -->
-<section id="t11" class="chapter card" style="--accent:#8A57BD; --soft:#F3ECFA;">
+<section id="t10" class="chapter card" style="--accent:#8A57BD; --soft:#F3ECFA;">
   <header><span class="eyebrow">Self-test</span><h2><span class="emoji">🎴</span> Flashcards</h2></header>
   <div class="cards">
     <div class="qa"><p class="q">Give mitigation points 6 to 10 for global warming.</p><p class="a">6 sustainable industrialisation with pollution-control technology; 7 implementing commitments (UNFCCC 1992, Kyoto 1997, Paris 2015); 8 improving disaster management; 9 environmental governance; 10 international cooperation led by developed countries.</p></div>
@@ -865,7 +866,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================= exam focus === -->
-<section id="t12" class="chapter card" style="--accent:#2E9E6A; --soft:#E4F3EB;">
+<section id="t11" class="chapter card" style="--accent:#2E9E6A; --soft:#E4F3EB;">
   <header><span class="eyebrow" style="color:#2E9E6A">Before the paper</span><h2><span class="emoji">🎯</span> Exam focus</h2></header>
   <div class="section-body">
     <ul>

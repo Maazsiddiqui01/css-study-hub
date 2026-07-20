@@ -10,8 +10,9 @@
    gentle emoji + pill badges. Playful and pretty, but still a real study book.
    Print-first (A4 PDF via headless Edge); reads well on screen too.
 
-   Each section sets its own accent inline:
-     <section id="t1" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
    Everything themeable keys off --accent / --soft. Titles stay ink for
    readability; accents colour eyebrows, numbers, pills, rules and callouts.
 */
@@ -415,12 +416,12 @@ color:#8B8490;font:15px system-ui}
     <li><span class="dot" style="background:#46955C"></span><a class="title" href="#t5">05 · Quality, quantity &amp; the middle class</a><span class="rng">why polity works</span></li>
     <li><span class="dot" style="background:#3A7CC0"></span><a class="title" href="#t6">06 · Machiavelli &amp; power politics</a><span class="rng">the state as an end</span></li>
     <li><span class="dot" style="background:#B44A8C"></span><a class="title" href="#t7">07 · Bentham's utilitarianism vs Kant</a><span class="rng">consequences vs principles</span></li>
-    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t9">Glossary · Flashcards · Exam focus</a><span class="rng"></span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t8">Glossary · Flashcards · Exam focus</a><span class="rng"></span></li>
   </ol>
 </nav>
 
 <!-- ============================================================= tldr === -->
-<section class="summary card" style="--accent:#5866C4; --soft:#ECEEFA; border-top-color:#5866C4">
+<section id="summary" class="summary card" style="--accent:#5866C4; --soft:#ECEEFA; border-top-color:#5866C4">
   <header><span class="eyebrow" style="color:#5866C4">Start here</span><h2><span class="emoji">⭐</span> The five-minute version</h2></header>
   <ul>
     <li><strong>Aristotle is the father of political science</strong> <span class="ts">00:01:44</span>, because he studied the state systematically, by observation and experiment. It is a social science, not a natural science, but it is a science.</li>
@@ -435,7 +436,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 1 === -->
-<section id="t2" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
+<section id="t1" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
   <header>
     <span class="eyebrow"><span class="num">1</span> The ideal state</span>
     <h2><span class="emoji">🏙️</span> Aristotle's ideal state</h2>
@@ -504,7 +505,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 2 === -->
-<section id="t3" class="chapter card" style="--accent:#B57A2A; --soft:#FAF0E2;">
+<section id="t2" class="chapter card" style="--accent:#B57A2A; --soft:#FAF0E2;">
   <header>
     <span class="eyebrow"><span class="num">2</span> Teacher and student</span>
     <h2><span class="emoji">⚖️</span> Aristotle vs Plato</h2>
@@ -540,7 +541,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 3 === -->
-<section id="t4" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+<section id="t3" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
   <header>
     <span class="eyebrow"><span class="num">3</span> The main contribution</span>
     <h2><span class="emoji">📊</span> The classification of government</h2>
@@ -594,7 +595,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 4 === -->
-<section id="t5" class="chapter card" style="--accent:#2C8C86; --soft:#E4F2F1;">
+<section id="t4" class="chapter card" style="--accent:#2C8C86; --soft:#E4F2F1;">
   <header>
     <span class="eyebrow"><span class="num">4</span> How each form dies</span>
     <h2><span class="emoji">🔄</span> The cycle of governments</h2>
@@ -629,7 +630,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 5 === -->
-<section id="t6" class="chapter card" style="--accent:#46955C; --soft:#E9F4ED;">
+<section id="t5" class="chapter card" style="--accent:#46955C; --soft:#E9F4ED;">
   <header>
     <span class="eyebrow"><span class="num">5</span> Why polity works</span>
     <h2><span class="emoji">⚖️</span> Quality, quantity &amp; the middle class</h2>
@@ -664,7 +665,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 6 === -->
-<section id="t7" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+<section id="t6" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
   <header>
     <span class="eyebrow"><span class="num">6</span> The state as an end</span>
     <h2><span class="emoji">🦊</span> Machiavelli &amp; power politics</h2>
@@ -721,7 +722,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================== section 7 === -->
-<section id="t8" class="chapter card" style="--accent:#B44A8C; --soft:#F9EBF4;">
+<section id="t7" class="chapter card" style="--accent:#B44A8C; --soft:#F9EBF4;">
   <header>
     <span class="eyebrow"><span class="num">7</span> Consequences vs principles</span>
     <h2><span class="emoji">⚗️</span> Bentham's utilitarianism vs Kant</h2>
@@ -784,7 +785,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ========================================================= glossary === -->
-<section id="t9" class="chapter card" style="--accent:#7A7484; --soft:#F2EFF4;">
+<section id="t8" class="chapter card" style="--accent:#7A7484; --soft:#F2EFF4;">
   <header><span class="eyebrow">Reference</span><h2><span class="emoji">📖</span> Glossary</h2></header>
   <dl class="glossary">
     <div><dt>Ideal state</dt><dd>The state as it ought to be. Plato's is a utopia; Aristotle's is built to be practicable.</dd></div>
@@ -812,7 +813,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================= flashcards === -->
-<section id="t10" class="chapter card" style="--accent:#8A57BD; --soft:#F3ECFA;">
+<section id="t9" class="chapter card" style="--accent:#8A57BD; --soft:#F3ECFA;">
   <header><span class="eyebrow">Self-test</span><h2><span class="emoji">🎴</span> Flashcards</h2></header>
   <div class="cards">
     <div class="qa"><p class="q">Why is Aristotle called the father of political science?</p><p class="a">He developed the subject as a science: systematic study, observation and experimentation. Social science rather than natural science, but science.</p></div>
@@ -853,7 +854,7 @@ color:#8B8490;font:15px system-ui}
 </section>
 
 <!-- ======================================================= exam focus === -->
-<section id="t11" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
+<section id="t10" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
   <header><span class="eyebrow" style="color:#5866C4">Before the paper</span><h2><span class="emoji">🎯</span> Exam focus</h2></header>
   <div class="section-body">
     <ul>
