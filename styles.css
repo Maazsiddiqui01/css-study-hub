@@ -44,7 +44,10 @@ border-radius:16px;padding:18px 20px;margin-bottom:14px;box-shadow:0 1px 2px rgb
 border-top:1px solid var(--hair)}
 
 /* KPI strip: turns the hub into a progress tracker. Read-state lives in
-   localStorage, so it is per-device and needs no backend. */
+   localStorage, so it is per-device and needs no backend. The .progress
+   wrapper keeps the strip aligned to the same 60rem column as the header,
+   controls and results (without it the KPIs bled edge-to-edge on desktop). */
+.progress{max-width:60rem;margin:0 auto;padding:.2rem 1.1rem 0}
 .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:2px 0 14px}
 .kpi{background:#fff;border:1px solid var(--hair);border-radius:14px;padding:11px 13px;
 box-shadow:0 1px 2px rgba(60,30,45,.05)}

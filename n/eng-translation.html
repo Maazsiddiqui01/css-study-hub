@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Translation: Turning Urdu into Natural English</title>
+<style>/* Lecture Notes ebook, "warm study" theme.
+   Inspired by Mehak's MarketCanvas app: soft cream ground, rounded white cards,
+   a different pastel accent per topic, serif display + friendly sans body,
+   gentle emoji + pill badges. Playful and pretty, but still a real study book.
+   Print-first (A4 PDF via headless Edge); reads well on screen too.
+
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
+   Everything themeable keys off --accent / --soft. Titles stay ink for
+   readability; accents colour eyebrows, numbers, pills, rules and callouts.
+*/
+
+:root {
+  --cream: #FCF6F0;          /* page ground (warm) */
+  --card: #FFFFFF;
+  --ink: #2C2630;            /* plum-black body/headings */
+  --ink-soft: #5A5360;
+  --slate: #8B8490;          /* captions, timestamps */
+  --hairline: #EEE6E4;
+
+  /* section default accent (overridden per section) */
+  --accent: #C0567E;
+  --soft: #FBECF1;
+
+  --shadow: 0 1px 2px rgba(60,30,45,.05), 0 10px 26px rgba(80,40,55,.07);
+  --radius: 20px;
+
+  --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: Consolas, "Cascadia Code", ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background:
+    radial-gradient(1100px 700px at 15% -5%, #FBEEF3 0%, transparent 55%),
+    radial-gradient(1000px 700px at 100% 0%, #EEF3FB 0%, transparent 50%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  font: 10.8pt/1.62 var(--sans);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+@media screen {
+  body { max-width: 51rem; margin: 0 auto; padding: 2.5rem 1.15rem 4rem; font-size: 1.0rem; }
+}
+
+/* ---------------------------------------------------------------- page --- */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm 14mm;
+  @bottom-center {
+    content: counter(page);
+    font: 8.5pt var(--sans);
+    color: #8B8490;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+/* --------------------------------------------------------------- cards --- */
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8mm 9mm 9mm;
+  margin: 0 0 6mm;
+  box-shadow: var(--shadow);
+  break-inside: auto;
+}
+@media screen { .card { margin-bottom: 1.4rem; } }
+
+/* a soft accent wash across the top of each section card (fades to white),
+   echoing the app's pastel cards without hurting readability */
+.chapter {
+  background:
+    linear-gradient(180deg, var(--soft) 0, rgba(255,255,255,0) 34mm),
+    var(--card);
+  border-top: 3px solid var(--accent);
+  break-inside: auto;
+  break-before: page;   /* each topic starts fresh: slide on top, notes below */
+}
+/* on screen (web/PWA) sections just stack; no forced page breaks */
+@media screen { .chapter { break-before: auto; } }
+
+h2, h3, .eyebrow { break-after: avoid; }
+p { orphans: 2; widows: 2; }
+
+/* keep the section header intact (eyebrow + title + time pill together) and
+   glued to its opening slide */
+.chapter > header { break-inside: avoid; break-after: avoid; }
+figure.slide { break-before: avoid; }
+
+/* --------------------------------------------------------------- cover --- */
+
+.cover {
+  page: cover;
+  break-after: page;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32mm 22mm 24mm;
+  background:
+    radial-gradient(700px 460px at 12% 8%, #FBE6EE 0%, transparent 60%),
+    radial-gradient(760px 520px at 96% 4%, #E7EEFB 0%, transparent 58%),
+    radial-gradient(620px 520px at 80% 96%, #E6F4EC 0%, transparent 60%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+@media screen {
+  .cover { min-height: 80vh; border-radius: 24px; padding: 3.2rem 2.6rem; margin-bottom: 1.4rem; }
+}
+
+.cover .avatar { font-size: 30pt; line-height: 1; margin-bottom: 7mm; }
+.cover .kicker {
+  font: 600 9pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 5mm;
+}
+.cover h1 {
+  font: 600 31pt/1.14 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 15em;
+}
+.cover .subtitle {
+  margin-top: 5mm;
+  font: 400 13.5pt/1.5 var(--sans);
+  color: var(--ink-soft);
+  max-width: 30em;
+}
+.cover .warm {
+  margin-top: 4mm;
+  font: italic 400 12pt/1.5 var(--serif);
+  color: var(--accent);
+}
+
+.cover .chips { display: flex; flex-wrap: wrap; gap: 3mm; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.4mm 4mm;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(60,30,45,.04);
+  font: 400 9pt var(--sans);
+  color: var(--slate);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chip b { font: 700 10.5pt var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ headings --- */
+
+.chapter header { margin-bottom: 5mm; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  font: 700 8.5pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--accent);
+  margin-bottom: 3mm;
+}
+.eyebrow .num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h2 {
+  font: 600 20pt/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .emoji { font-size: 17pt; }
+
+.timepill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.5mm 3.5mm;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font: 600 8pt var(--mono);
+  letter-spacing: 0.02em;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h3 {
+  font: 600 12.5pt/1.34 var(--serif);
+  color: var(--ink);
+  margin: 6mm 0 2.5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+.ts { font: 400 8.5pt var(--mono); color: var(--slate); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- body --- */
+
+.section-body > :last-child { margin-bottom: 0; }
+p { margin: 0 0 3mm; }
+.lead { font-size: 11.2pt; color: var(--ink); }
+
+ul, ol { margin: 0 0 3mm 5.5mm; }
+li { margin-bottom: 1.7mm; padding-left: 1mm; }
+li::marker { color: var(--accent); }
+
+.kt { font-weight: 700; color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
+
+code { font: 9.5pt var(--mono); background: #F3EFF4; padding: .4pt 3.5pt; border-radius: 4px; }
+
+/* ------------------------------------------------------------ callouts --- */
+
+.note {
+  --c: var(--accent);
+  --f: var(--soft);
+  background: var(--f);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  border-left: 3px solid var(--c);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.note .label {
+  display: inline-flex; align-items: center; gap: 1.6mm;
+  font: 700 8pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c);
+  margin-bottom: 1.8mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.warn { --c: #B4791F; --f: #FaF1DF; }
+.note.exam { --c: #3B8B78; --f: #E6F3EF; }
+.note.def  { --c: var(--accent); --f: var(--soft); }
+
+/* ------------------------------------------------------- summary card --- */
+
+.summary { --accent: #C0567E; --soft: #FBECF1; }
+.summary ul { list-style: none; margin: 0; }
+.summary li { position: relative; padding: 0 0 0 7mm; margin-bottom: 3.5mm; }
+.summary li::before {
+  content: "";
+  position: absolute; left: 0; top: 2.6mm;
+  width: 3.2mm; height: 3.2mm; border-radius: 50%;
+  background: var(--accent);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.summary li:last-child { margin-bottom: 0; }
+.summary li b, .summary li strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------- TOC --- */
+
+nav.toc { --accent: #8B8490; --soft: #F3EFF4; }
+nav.toc ol { list-style: none; margin: 0; }
+nav.toc li {
+  display: flex; align-items: baseline; gap: 4mm;
+  padding: 2.7mm 0;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11pt var(--sans);
+}
+nav.toc li:last-child { border-bottom: 0; }
+nav.toc .dot { width: 3.4mm; height: 3.4mm; border-radius: 50%; flex-shrink: 0;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+nav.toc .title { flex: 1; color: var(--ink); }
+nav.toc .rng { flex-shrink: 0; font: 600 8.5pt var(--mono); color: var(--slate); }
+
+/* -------------------------------------------------------------- slides --- */
+
+figure.slide { margin: 0 0 5mm; break-inside: avoid; }
+figure.slide img {
+  width: 100%; display: block;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 10px rgba(40,30,45,.10);
+}
+figure.slide figcaption {
+  font: 400 8.5pt var(--sans);
+  color: var(--slate);
+  margin-top: 2mm;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4mm;
+}
+figure.slide figcaption .ts { color: var(--accent); }
+
+/* ------------------------------------------------------------ glossary --- */
+
+dl.glossary { margin: 0; }
+dl.glossary div { padding: 3mm 0; border-bottom: 1px solid var(--hairline); break-inside: avoid; }
+dl.glossary div:last-child { border-bottom: 0; padding-bottom: 0; }
+dl.glossary dt { font: 700 10.5pt var(--sans); color: var(--accent); margin-bottom: 1.2mm; }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- flashcards --- */
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 0; }
+.qa {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  background: linear-gradient(180deg, var(--soft) 0, #fff 60%);
+  break-inside: avoid;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.qa .q { font: 700 10pt var(--sans); color: var(--ink); margin-bottom: 2mm; }
+.qa .a { color: var(--ink-soft); font-size: 10pt; }
+
+/* ------------------------------------------------------------- tables --- */
+
+.tables-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0; break-inside: avoid; }
+th {
+  font: 700 9pt var(--sans); text-align: left; color: var(--accent);
+  border-bottom: 2px solid var(--soft); padding: 2mm 3mm 2mm 0;
+}
+td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+
+/* --- mobile / on-the-go reading (screen only; never affects the print PDF).
+   Placed LAST so it wins the cascade over the wider @media screen rules above.
+   Requires <meta name="viewport" content="width=device-width, initial-scale=1">. */
+@media screen and (max-width: 640px) {
+  body { padding: 1rem 0.85rem 2.5rem; font-size: 1.02rem; }
+  .card { padding: 5mm 5mm 6mm; border-radius: 14px; margin-bottom: 0.9rem; }
+  .cover { min-height: auto; padding: 2rem 1.3rem 1.6rem; border-radius: 16px; }
+  .cover .avatar { font-size: 24pt; margin-bottom: 4mm; }
+  .cover h1 { font-size: 20pt; max-width: 100%; }
+  .cover .subtitle { font-size: 11.5pt; }
+  .cover .warm { font-size: 11pt; }
+  .cover .chips { gap: 2mm; margin-top: 5mm; }
+  h2 { font-size: 16pt; }
+  h2 .emoji { font-size: 13.5pt; }
+  h3 { font-size: 11.5pt; }
+  .cards { grid-template-columns: 1fr; }
+  nav.toc li { font-size: 10.5pt; gap: 2.5mm; padding: 2.5mm 0; }
+  nav.toc .rng { font-size: 8pt; }
+  .note { padding: 3.5mm 4mm; }
+  table { font-size: 9.5pt; }
+}
+</style>
+<meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
+align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
+border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
+<body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/open?id=1XOGxbbjXrPibd-H8QdsV4ZJj3Q6-W_B0" target="_blank" rel="noopener">Download PDF ↓</a></div>
+
+<!-- ============================================================ cover === -->
+<section class="cover" style="background:radial-gradient(700px 460px at 12% 8%,#EFEAF7 0,transparent 60%),radial-gradient(760px 520px at 96% 4%,#EAF1FB 0,transparent 58%),radial-gradient(620px 520px at 80% 96%,#FAF0E2 0,transparent 60%),var(--cream)">
+  <div>
+    <div class="avatar">🔤</div>
+    <div class="kicker" style="color:#7E5AA6">CSS English Précis &amp; Composition · with Sir Danish</div>
+    <h1>Translation: Turning Urdu into Natural English</h1>
+    <p class="subtitle">Ten marks that reward sense over literalism. Read the whole passage first, translate by meaning not by word, clause by clause, tense by tense, into clean natural English.</p>
+    <p class="warm" style="color:#6E4A96">Translation is really a reading test in disguise. Understand the Urdu completely, then write English that a native speaker would actually say. 🔤</p>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>10</b> marks</span>
+    <span class="chip"><b>Sense</b> not word</span>
+    <span class="chip"><b>Clause</b> by clause</span>
+    <span class="chip"><b>Simple</b> vocabulary</span>
+  </div>
+</section>
+
+<!-- ============================================================== toc === -->
+<nav class="toc card">
+  <header><span class="eyebrow">Contents</span><h2><span class="emoji">🗺️</span> In this note</h2></header>
+  <ol>
+    <li><span class="dot" style="background:#7E5AA6"></span><a class="title" href="#summary">The five-minute version</a><span class="rng">summary</span></li>
+    <li><span class="dot" style="background:#5866C4"></span><a class="title" href="#t1">01 · What translation tests</a><span class="rng">the skill</span></li>
+    <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t2">02 · Read before you write</a><span class="rng">the first move</span></li>
+    <li><span class="dot" style="background:#B57A2A"></span><a class="title" href="#t3">03 · Sense, not word for word</a><span class="rng">the core principle</span></li>
+    <li><span class="dot" style="background:#46955C"></span><a class="title" href="#t4">04 · The working rules</a><span class="rng">clause · tense · syntax</span></li>
+    <li><span class="dot" style="background:#C6506E"></span><a class="title" href="#t5">05 · Worked example: a passage on Sir Syed</a><span class="rng">clause by clause</span></li>
+    <li><span class="dot" style="background:#3A7CC0"></span><a class="title" href="#t6">06 · Idioms and figurative expressions</a><span class="rng">the trap</span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t7">Glossary · Flashcards · Exam focus</a><span class="rng"></span></li>
+  </ol>
+</nav>
+
+<!-- ============================================================= tldr === -->
+<section id="summary" class="summary card" style="--accent:#7E5AA6; --soft:#EFEAF7; border-top-color:#7E5AA6">
+  <header><span class="eyebrow" style="color:#7E5AA6">Start here</span><h2><span class="emoji">⭐</span> The five-minute version</h2></header>
+  <ul>
+    <li><strong>What it is.</strong> A <strong>10-mark</strong> question that gives you Urdu (ten short sentences, or sometimes a short paragraph) to render into English. It tests whether you can carry a <strong>thought</strong> across, including idioms and figurative expressions, not whether you know dictionary equivalents.</li>
+    <li><strong>Read first, translate later.</strong> Read the whole Urdu passage two, three, four times before translating a single sentence, to grasp its tone and message. "English translation is not just about translating, it's about reading."</li>
+    <li><strong>Translate by sense, not by word.</strong> Literal, word-for-word translation produces nonsense (a phrase meaning "I became happy" translated literally becomes "my heart became garden garden"). Carry the <strong>meaning</strong>, not the words.</li>
+    <li><strong>Rearrange into natural English.</strong> Urdu puts the verb last (subject, object, verb); English does not (subject, verb, object). Reorder the words to fit natural English syntax.</li>
+    <li><strong>Go clause by clause, tense by tense.</strong> Break a long sentence into its clauses and translate each. Identify each sentence's tense (past, present, future) and keep it.</li>
+    <li><strong>Do not freeze on hard words.</strong> Small words cause more trouble than big ones. Guess the right word from context and move on rather than getting stuck.</li>
+    <li><strong>Handle idioms by meaning.</strong> You do not need the exact English equivalent of an Urdu proverb; give its overall sense in plain English.</li>
+    <li><strong>Keep the vocabulary simple.</strong> Do not reach for complex or archaic English. Clear, correct, natural English scores; showy English that distorts the meaning does not.</li>
+  </ul>
+</section>
+
+<!-- ======================================================== section 1 === -->
+<section id="t1" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
+  <header>
+    <span class="eyebrow"><span class="num">1</span> The skill</span>
+    <h2><span class="emoji">🎯</span> What translation actually tests</h2>
+    <span class="timepill">Practice</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The translation question hands you Urdu and asks for English, and the temptation is to swap words one for one. That is exactly what it is <em>not</em> testing.</p>
+
+    <p>Sir Danish is precise about the skill under examination: it tests your <strong>ability to express a thought written in Urdu in the English language</strong>, and specifically whether you can <strong>handle idioms and figurative expressions</strong> <span class="ts">Practice · 06:14</span>. A thought, not a string of words. The unit that has to survive the crossing is the meaning of the sentence, and everything in the method below serves that.</p>
+
+    <div class="note">
+      <p><strong>The format.</strong> The FPSC scheme sets it as <strong>ten short Urdu sentences</strong> to translate into English, chosen to involve structural composition, significant terms, and figurative or idiomatic expressions. Some actual papers instead give a <strong>single short Urdu paragraph</strong> for the same 10 marks. Prepare for both; the method does not change.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Translation is a reading test wearing a writing test's clothes.</strong> His single most repeated line here: "English translation is not just about translating, it's about reading. So try to improve your reading" <span class="ts">Practice · 43:10</span>. If you have genuinely understood the Urdu, the English is a matter of tidy expression. If you have not, no amount of good English will rescue a sentence you did not grasp.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 2 === -->
+<section id="t2" class="chapter card" style="--accent:#2C8C86; --soft:#E4F1F0;">
+  <header>
+    <span class="eyebrow"><span class="num">2</span> The first move</span>
+    <h2><span class="emoji">👀</span> Read the whole thing before you write</h2>
+    <span class="timepill">Practice</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The most common mistake is starting to translate sentence one before understanding the passage. The method starts, like précis, with reading.</p>
+
+    <p>Read the entire Urdu passage several times, <strong>two, three, four times</strong>, to grasp the tone and the message, <strong>before translating a single sentence</strong> <span class="ts">Practice · 09:09</span>. Only once the whole thing sits clearly in your head do you begin turning it into English. The passage is a single connected argument; translating sentence one in isolation risks a choice of word that the later sentences then contradict.</p>
+
+    <div class="note">
+      <p><strong>Read and understand is "the most important thing in translation."</strong> His words. The problem in a bad translation is almost never that "the English is not coming out"; it is that the Urdu was never fully understood <span class="ts">Practice · 08:38</span>. Fix the reading and the English follows.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 3 === -->
+<section id="t3" class="chapter card" style="--accent:#B57A2A; --soft:#FBF1DE;">
+  <header>
+    <span class="eyebrow"><span class="num">3</span> The core principle</span>
+    <h2><span class="emoji">🔁</span> Translate by sense, not word for word</h2>
+    <span class="timepill">Practice</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">This is the principle everything else hangs on. You are translating <strong>meaning</strong>, not swapping words, and literal translation is the fastest way to produce nonsense.</p>
+
+    <p>His worked warning: an Urdu expression for becoming happy, translated word for word, comes out as <strong>"my heart became garden garden"</strong> <span class="ts">Practice · 08:04</span>. Literally accurate, completely wrong. What you had to carry across was the <em>feeling</em>, "I became happy", not the individual words. Understand what the phrase is doing, then say that in English.</p>
+
+    <div class="note warn">
+      <p><strong>Literal translation breaks the grammar too, well beyond idioms.</strong> Urdu and English order their words differently, so a word-for-word carry breaks the structure. Take the sentence "he eats food": in Urdu the pieces arrive as subject, object, verb (<em>he food eats</em>); in English they must be subject, verb, object (<em>he eats food</em>) <span class="ts">Practice · 11:57</span>. So you <strong>rearrange the words to fit natural English syntax</strong> rather than preserving the Urdu order.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>The test of a good translation.</strong> Read your English sentence back as if it were written by a native speaker. If it sounds like something no English speaker would ever say, you have translated the words and lost the sense. Go back to what the Urdu <em>meant</em> and say that instead.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 4 === -->
+<section id="t4" class="chapter card" style="--accent:#46955C; --soft:#E9F4EC;">
+  <header>
+    <span class="eyebrow"><span class="num">4</span> The rules</span>
+    <h2><span class="emoji">🧰</span> The working rules</h2>
+    <span class="timepill">Practice</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Under the "sense not word" principle sit a handful of concrete working rules. Together they are a checklist you can run on any sentence.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Rule</th><th>What it means</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Read the whole passage first</strong></td><td>Two to four times, for tone and message, before translating anything <span class="ts">Practice · 09:09</span>.</td></tr>
+          <tr><td><strong>Do not freeze on hard words</strong></td><td>Do not get stuck on an unfamiliar word. Guess its meaning from context and keep moving <span class="ts">Practice · 10:30</span>.</td></tr>
+          <tr><td><strong>Small words are the real trouble</strong></td><td>"Small words create more trouble than large big words while doing translation" <span class="ts">Practice · 11:18</span>. Watch the particles and prepositions, not the long nouns.</td></tr>
+          <tr><td><strong>Translate clause by clause</strong></td><td>A long sentence is several clauses. Identify them, take each separately, translate each, then join <span class="ts">Practice · 19:53</span>.</td></tr>
+          <tr><td><strong>Translate tense by tense</strong></td><td>Identify whether each sentence is past, present or future in the Urdu, and keep that tense in the English <span class="ts">Practice · 13:27</span>.</td></tr>
+          <tr><td><strong>Rearrange to natural syntax</strong></td><td>Urdu subject-object-verb becomes English subject-verb-object <span class="ts">Practice · 11:57</span>.</td></tr>
+          <tr><td><strong>Keep vocabulary simple</strong></td><td>No overly complex or archaic English. Communicate the meaning cleanly <span class="ts">Practice · 14:20</span>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <p><strong>Why "small words" matter more than you would think.</strong> A long noun usually has one obvious English equivalent. It is the little connective words, the particles that show relation, cause, time, direction, that carry the grammar of the sentence, and getting one wrong quietly changes the meaning. This is the same lesson the prepositions carry in the grammar section: the small words do the heavy lifting.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 5 === -->
+<section id="t5" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+  <header>
+    <span class="eyebrow"><span class="num">5</span> Worked example</span>
+    <h2><span class="emoji">📜</span> Clause by clause: a passage on Sir Syed Ahmed Khan</h2>
+    <span class="timepill">Practice</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The class translates a dense Urdu passage about <strong>Sir Syed Ahmed Khan and his son Syed Mahmood</strong>, and it is a perfect demonstration of the clause-by-clause method on a sentence that would be impossible to translate whole.</p>
+
+    <p>The Urdu opens with a long, layered sentence. Rather than attack it whole, Sir Danish breaks it at its clauses and takes them one at a time <span class="ts">Practice · 19:53</span>:</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Urdu clause (sense)</th><th>English rendering</th></tr></thead>
+        <tbody>
+          <tr><td>the phrase for colonialist / imperialist English values</td><td>"in front of the imperialist English values" (colonialism = imperialism)</td></tr>
+          <tr><td>the sycophantic and obedient attitude</td><td>"contrary to the sycophantic and obedient attitude"</td></tr>
+          <tr><td>that the British rulers had promoted and the people of India had adopted</td><td>"that the British rulers had propagated and the people of India had adopted during that time"</td></tr>
+          <tr><td>Sir Syed and his bright-minded son endeavoured...</td><td>"Sir Syed Ahmed Khan and his most dignified and bright-minded son, Syed Mahmood, endeavoured to adopt an attitude as if they were equal to, and on the same status as, the English"</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Assembled, the clauses become one clean English sentence: <em>Contrary to the sycophantic and obedient attitude towards the imperialist English values that the British rulers had propagated and the people of India had adopted during that time, Sir Syed Ahmed Khan and his most dignified and bright-minded son, Syed Mahmood, endeavoured to adopt an attitude as if they were equal to and on the same status as the English</em> <span class="ts">Practice · 40:19</span>. A sentence that looked untranslatable becomes routine once it is cut into clauses.</p>
+
+    <div class="note">
+      <p><strong>The history behind the passage checks out.</strong> The passage refers to a real episode. At the <strong>Agra Durbar of 1867</strong>, a medal was to be conferred on Sir Syed Ahmed Khan, but he <strong>stayed away</strong> because Indians had been given seating inferior to the English. The medal was later delivered to him at <strong>Aligarh</strong>, where he went on to found the Muhammadan Anglo-Oriental College (a school in 1875, a college in 1877), which became <strong>Aligarh Muslim University in 1920</strong>. His son <strong>Syed Mahmood</strong> studied in England and became one of the first Indian judges of a High Court. You are translating the Urdu, not asserting the history, but knowing the story helps you choose the right words.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>What to copy from this.</strong> Never try to hold a long sentence whole. Find its clauses, translate each into clean English, then reassemble, checking that the joined sentence reads naturally. The dense Sir Syed sentence and a simple one submit to exactly the same move.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 6 === -->
+<section id="t6" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+  <header>
+    <span class="eyebrow"><span class="num">6</span> The trap</span>
+    <h2><span class="emoji">🪤</span> Idioms and figurative expressions</h2>
+    <span class="timepill">Practice</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The passage is deliberately seeded with idioms and figurative phrases, because that is where literal translators fall down. The rule for them is the same as the whole method, only sharper.</p>
+
+    <div class="note">
+      <p><strong>Translate the proverb by its meaning, not its equivalent.</strong> You do <strong>not</strong> need to know the exact English proverb that matches an Urdu one. Understand what the Urdu proverb or idiom <em>means</em>, and give that overall meaning in plain English <span class="ts">Practice · 12:55</span>. Hunting for a perfect English idiom often wastes time and misfires; a clear statement of the sense always lands.</p>
+    </div>
+
+    <p>The "my heart became garden garden" example is the whole lesson in miniature <span class="ts">Practice · 08:04</span>. The Urdu is a vivid figure for delight. The literal English is meaningless. The right translation, "I became happy" or "I was delighted", throws away the picture and keeps the point. In translation, meaning beats imagery every time.</p>
+
+    <div class="note exam">
+      <p><strong>The mindset for the ten sentences.</strong> Expect at least a few idiomatic or figurative lines among the ten, since the paper is built to include them. When you hit one, do not panic and do not go literal. Ask what the sentence <em>means</em>, then write the simplest true English version of that meaning. A plain, correct rendering of an idiom scores; a literal one that reads as nonsense does not.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================= glossary === -->
+<section id="t7" class="chapter card" style="--accent:#8B8490; --soft:#F0EEF2;">
+  <header>
+    <span class="eyebrow"><span class="num">G</span> Reference</span>
+    <h2><span class="emoji">📖</span> Glossary</h2>
+  </header>
+  <div class="section-body">
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Translation (in this paper)</strong></td><td>A 10-mark question rendering ten short Urdu sentences (or a short paragraph) into English, testing the carrying of a thought, including idioms.</td></tr>
+          <tr><td><strong>Sense-for-sense</strong></td><td>Translating the meaning of a phrase rather than its individual words. The core principle.</td></tr>
+          <tr><td><strong>Word-for-word (literal)</strong></td><td>The failing approach: swapping each Urdu word for an English one, which breaks grammar and mangles idioms ("my heart became garden garden").</td></tr>
+          <tr><td><strong>Clause-by-clause</strong></td><td>Breaking a long sentence into its clauses, translating each, then reassembling.</td></tr>
+          <tr><td><strong>SOV vs SVO</strong></td><td>Urdu orders words subject-object-verb; English orders them subject-verb-object. You reorder when translating.</td></tr>
+          <tr><td><strong>Tense-by-tense</strong></td><td>Identifying the tense of each Urdu sentence (past, present, future) and preserving it in English.</td></tr>
+          <tr><td><strong>Figurative expression</strong></td><td>An idiom or image whose literal words differ from its meaning; translate the meaning, drop the image.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================= flashcards === -->
+<section id="t8" class="chapter card" style="--accent:#7E5AA6; --soft:#EFEAF7;">
+  <header>
+    <span class="eyebrow"><span class="num">F</span> Recall</span>
+    <h2><span class="emoji">🎴</span> Flashcards</h2>
+  </header>
+  <div class="section-body">
+    <div class="cards">
+      <div class="qa"><p class="q">What does the translation question test, and for how many marks?</p><p class="a">The ability to express an Urdu thought in English, including idioms and figurative expressions. 10 marks, usually ten short Urdu sentences.</p></div>
+      <div class="qa"><p class="q">What is the first thing you do, before translating anything?</p><p class="a">Read the whole Urdu passage two to four times to grasp its tone and message. Translation is really a reading test.</p></div>
+      <div class="qa"><p class="q">State the core principle.</p><p class="a">Translate by sense, not word for word. Carry the meaning, not the individual words.</p></div>
+      <div class="qa"><p class="q">What does word-for-word translation do to "I became happy"?</p><p class="a">It produces the literal nonsense "my heart became garden garden". Keep the feeling, drop the words.</p></div>
+      <div class="qa"><p class="q">How do Urdu and English word orders differ?</p><p class="a">Urdu is subject-object-verb; English is subject-verb-object. Rearrange to natural English syntax.</p></div>
+      <div class="qa"><p class="q">How do you handle a long, layered sentence?</p><p class="a">Break it into clauses, translate each clause separately, then reassemble and check it reads naturally.</p></div>
+      <div class="qa"><p class="q">Which words cause the most trouble, and what do you do with hard ones?</p><p class="a">Small connective words cause more trouble than big nouns. Do not freeze on an unfamiliar word; guess from context and move on.</p></div>
+      <div class="qa"><p class="q">How do you translate an idiom or proverb?</p><p class="a">By its meaning, not its exact English equivalent. Give the overall sense in plain English.</p></div>
+      <div class="qa"><p class="q">What kind of vocabulary should you use?</p><p class="a">Simple and clear. Avoid overly complex or archaic English that distorts the meaning.</p></div>
+      <div class="qa"><p class="q">What real episode did the worked passage describe?</p><p class="a">Sir Syed Ahmed Khan staying away from the 1867 Agra Durbar over inferior seating for Indians; the medal was later delivered to him at Aligarh. His son was Syed Mahmood.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== exam focus === -->
+<section id="t9" class="chapter card" style="--accent:#7E5AA6; --soft:#EFEAF7;">
+  <header>
+    <span class="eyebrow"><span class="num">X</span> Strategy</span>
+    <h2><span class="emoji">🎯</span> Exam focus</h2>
+  </header>
+  <div class="section-body">
+
+    <h3>The order of operations for the ten sentences</h3>
+    <ol>
+      <li><strong>Read all of it first.</strong> Even ten separate sentences share a register; read them through before writing.</li>
+      <li><strong>For each sentence, get the meaning.</strong> What is this sentence actually saying? Say it to yourself in plain terms.</li>
+      <li><strong>Identify the tense</strong> and keep it.</li>
+      <li><strong>If it is long, split it into clauses</strong> and take them one by one.</li>
+      <li><strong>Write natural English</strong> in subject-verb-object order, simple vocabulary.</li>
+      <li><strong>Read it back</strong> as a native speaker would. If it sounds wrong, return to the meaning.</li>
+    </ol>
+
+    <h3>The mistakes that cost the marks</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Mistake</th><th>Fix</th></tr></thead>
+        <tbody>
+          <tr><td>Translating word for word</td><td>Translate the sense; read the English back for naturalness</td></tr>
+          <tr><td>Translating an idiom literally</td><td>Give its meaning in plain English, drop the image</td></tr>
+          <tr><td>Keeping Urdu word order</td><td>Reorder to subject-verb-object</td></tr>
+          <tr><td>Losing or changing the tense</td><td>Fix each sentence's tense before writing</td></tr>
+          <tr><td>Freezing on one hard word</td><td>Guess from context, move on, come back if time allows</td></tr>
+          <tr><td>Reaching for showy, archaic English</td><td>Keep it simple, clear and correct</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note exam">
+      <p><strong>The one line to remember.</strong> Translation rewards understanding, not vocabulary. If you have truly read and grasped the Urdu, the English is just tidy expression of a meaning you already hold. So spend your effort on the reading, translate the sense clause by clause, and write the plainest natural English that says the same thing. Ten clean, faithful sentences take the ten marks.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="notefoot">Source recordings: <a href="https://drive.google.com/open?id=1ElSC8TV2KHBnWDtHb2wNCn-ngoYPHpgN" target="_blank" rel="noopener">▶ Translation &amp; Practice class</a><span class="sep">·</span><a href="https://drive.google.com/open?id=1XOGxbbjXrPibd-H8QdsV4ZJj3Q6-W_B0" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+</html>

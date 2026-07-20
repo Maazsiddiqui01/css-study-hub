@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Comprehension: Answering a Passage in Your Own Words</title>
+<style>/* Lecture Notes ebook, "warm study" theme.
+   Inspired by Mehak's MarketCanvas app: soft cream ground, rounded white cards,
+   a different pastel accent per topic, serif display + friendly sans body,
+   gentle emoji + pill badges. Playful and pretty, but still a real study book.
+   Print-first (A4 PDF via headless Edge); reads well on screen too.
+
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
+   Everything themeable keys off --accent / --soft. Titles stay ink for
+   readability; accents colour eyebrows, numbers, pills, rules and callouts.
+*/
+
+:root {
+  --cream: #FCF6F0;          /* page ground (warm) */
+  --card: #FFFFFF;
+  --ink: #2C2630;            /* plum-black body/headings */
+  --ink-soft: #5A5360;
+  --slate: #8B8490;          /* captions, timestamps */
+  --hairline: #EEE6E4;
+
+  /* section default accent (overridden per section) */
+  --accent: #C0567E;
+  --soft: #FBECF1;
+
+  --shadow: 0 1px 2px rgba(60,30,45,.05), 0 10px 26px rgba(80,40,55,.07);
+  --radius: 20px;
+
+  --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: Consolas, "Cascadia Code", ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background:
+    radial-gradient(1100px 700px at 15% -5%, #FBEEF3 0%, transparent 55%),
+    radial-gradient(1000px 700px at 100% 0%, #EEF3FB 0%, transparent 50%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  font: 10.8pt/1.62 var(--sans);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+@media screen {
+  body { max-width: 51rem; margin: 0 auto; padding: 2.5rem 1.15rem 4rem; font-size: 1.0rem; }
+}
+
+/* ---------------------------------------------------------------- page --- */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm 14mm;
+  @bottom-center {
+    content: counter(page);
+    font: 8.5pt var(--sans);
+    color: #8B8490;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+/* --------------------------------------------------------------- cards --- */
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8mm 9mm 9mm;
+  margin: 0 0 6mm;
+  box-shadow: var(--shadow);
+  break-inside: auto;
+}
+@media screen { .card { margin-bottom: 1.4rem; } }
+
+/* a soft accent wash across the top of each section card (fades to white),
+   echoing the app's pastel cards without hurting readability */
+.chapter {
+  background:
+    linear-gradient(180deg, var(--soft) 0, rgba(255,255,255,0) 34mm),
+    var(--card);
+  border-top: 3px solid var(--accent);
+  break-inside: auto;
+  break-before: page;   /* each topic starts fresh: slide on top, notes below */
+}
+/* on screen (web/PWA) sections just stack; no forced page breaks */
+@media screen { .chapter { break-before: auto; } }
+
+h2, h3, .eyebrow { break-after: avoid; }
+p { orphans: 2; widows: 2; }
+
+/* keep the section header intact (eyebrow + title + time pill together) and
+   glued to its opening slide */
+.chapter > header { break-inside: avoid; break-after: avoid; }
+figure.slide { break-before: avoid; }
+
+/* --------------------------------------------------------------- cover --- */
+
+.cover {
+  page: cover;
+  break-after: page;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32mm 22mm 24mm;
+  background:
+    radial-gradient(700px 460px at 12% 8%, #FBE6EE 0%, transparent 60%),
+    radial-gradient(760px 520px at 96% 4%, #E7EEFB 0%, transparent 58%),
+    radial-gradient(620px 520px at 80% 96%, #E6F4EC 0%, transparent 60%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+@media screen {
+  .cover { min-height: 80vh; border-radius: 24px; padding: 3.2rem 2.6rem; margin-bottom: 1.4rem; }
+}
+
+.cover .avatar { font-size: 30pt; line-height: 1; margin-bottom: 7mm; }
+.cover .kicker {
+  font: 600 9pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 5mm;
+}
+.cover h1 {
+  font: 600 31pt/1.14 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 15em;
+}
+.cover .subtitle {
+  margin-top: 5mm;
+  font: 400 13.5pt/1.5 var(--sans);
+  color: var(--ink-soft);
+  max-width: 30em;
+}
+.cover .warm {
+  margin-top: 4mm;
+  font: italic 400 12pt/1.5 var(--serif);
+  color: var(--accent);
+}
+
+.cover .chips { display: flex; flex-wrap: wrap; gap: 3mm; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.4mm 4mm;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(60,30,45,.04);
+  font: 400 9pt var(--sans);
+  color: var(--slate);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chip b { font: 700 10.5pt var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ headings --- */
+
+.chapter header { margin-bottom: 5mm; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  font: 700 8.5pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--accent);
+  margin-bottom: 3mm;
+}
+.eyebrow .num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h2 {
+  font: 600 20pt/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .emoji { font-size: 17pt; }
+
+.timepill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.5mm 3.5mm;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font: 600 8pt var(--mono);
+  letter-spacing: 0.02em;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h3 {
+  font: 600 12.5pt/1.34 var(--serif);
+  color: var(--ink);
+  margin: 6mm 0 2.5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+.ts { font: 400 8.5pt var(--mono); color: var(--slate); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- body --- */
+
+.section-body > :last-child { margin-bottom: 0; }
+p { margin: 0 0 3mm; }
+.lead { font-size: 11.2pt; color: var(--ink); }
+
+ul, ol { margin: 0 0 3mm 5.5mm; }
+li { margin-bottom: 1.7mm; padding-left: 1mm; }
+li::marker { color: var(--accent); }
+
+.kt { font-weight: 700; color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
+
+code { font: 9.5pt var(--mono); background: #F3EFF4; padding: .4pt 3.5pt; border-radius: 4px; }
+
+/* ------------------------------------------------------------ callouts --- */
+
+.note {
+  --c: var(--accent);
+  --f: var(--soft);
+  background: var(--f);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  border-left: 3px solid var(--c);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.note .label {
+  display: inline-flex; align-items: center; gap: 1.6mm;
+  font: 700 8pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c);
+  margin-bottom: 1.8mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.warn { --c: #B4791F; --f: #FaF1DF; }
+.note.exam { --c: #3B8B78; --f: #E6F3EF; }
+.note.def  { --c: var(--accent); --f: var(--soft); }
+
+/* ------------------------------------------------------- summary card --- */
+
+.summary { --accent: #C0567E; --soft: #FBECF1; }
+.summary ul { list-style: none; margin: 0; }
+.summary li { position: relative; padding: 0 0 0 7mm; margin-bottom: 3.5mm; }
+.summary li::before {
+  content: "";
+  position: absolute; left: 0; top: 2.6mm;
+  width: 3.2mm; height: 3.2mm; border-radius: 50%;
+  background: var(--accent);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.summary li:last-child { margin-bottom: 0; }
+.summary li b, .summary li strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------- TOC --- */
+
+nav.toc { --accent: #8B8490; --soft: #F3EFF4; }
+nav.toc ol { list-style: none; margin: 0; }
+nav.toc li {
+  display: flex; align-items: baseline; gap: 4mm;
+  padding: 2.7mm 0;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11pt var(--sans);
+}
+nav.toc li:last-child { border-bottom: 0; }
+nav.toc .dot { width: 3.4mm; height: 3.4mm; border-radius: 50%; flex-shrink: 0;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+nav.toc .title { flex: 1; color: var(--ink); }
+nav.toc .rng { flex-shrink: 0; font: 600 8.5pt var(--mono); color: var(--slate); }
+
+/* -------------------------------------------------------------- slides --- */
+
+figure.slide { margin: 0 0 5mm; break-inside: avoid; }
+figure.slide img {
+  width: 100%; display: block;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 10px rgba(40,30,45,.10);
+}
+figure.slide figcaption {
+  font: 400 8.5pt var(--sans);
+  color: var(--slate);
+  margin-top: 2mm;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4mm;
+}
+figure.slide figcaption .ts { color: var(--accent); }
+
+/* ------------------------------------------------------------ glossary --- */
+
+dl.glossary { margin: 0; }
+dl.glossary div { padding: 3mm 0; border-bottom: 1px solid var(--hairline); break-inside: avoid; }
+dl.glossary div:last-child { border-bottom: 0; padding-bottom: 0; }
+dl.glossary dt { font: 700 10.5pt var(--sans); color: var(--accent); margin-bottom: 1.2mm; }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- flashcards --- */
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 0; }
+.qa {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  background: linear-gradient(180deg, var(--soft) 0, #fff 60%);
+  break-inside: avoid;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.qa .q { font: 700 10pt var(--sans); color: var(--ink); margin-bottom: 2mm; }
+.qa .a { color: var(--ink-soft); font-size: 10pt; }
+
+/* ------------------------------------------------------------- tables --- */
+
+.tables-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0; break-inside: avoid; }
+th {
+  font: 700 9pt var(--sans); text-align: left; color: var(--accent);
+  border-bottom: 2px solid var(--soft); padding: 2mm 3mm 2mm 0;
+}
+td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+
+/* --- mobile / on-the-go reading (screen only; never affects the print PDF).
+   Placed LAST so it wins the cascade over the wider @media screen rules above.
+   Requires <meta name="viewport" content="width=device-width, initial-scale=1">. */
+@media screen and (max-width: 640px) {
+  body { padding: 1rem 0.85rem 2.5rem; font-size: 1.02rem; }
+  .card { padding: 5mm 5mm 6mm; border-radius: 14px; margin-bottom: 0.9rem; }
+  .cover { min-height: auto; padding: 2rem 1.3rem 1.6rem; border-radius: 16px; }
+  .cover .avatar { font-size: 24pt; margin-bottom: 4mm; }
+  .cover h1 { font-size: 20pt; max-width: 100%; }
+  .cover .subtitle { font-size: 11.5pt; }
+  .cover .warm { font-size: 11pt; }
+  .cover .chips { gap: 2mm; margin-top: 5mm; }
+  h2 { font-size: 16pt; }
+  h2 .emoji { font-size: 13.5pt; }
+  h3 { font-size: 11.5pt; }
+  .cards { grid-template-columns: 1fr; }
+  nav.toc li { font-size: 10.5pt; gap: 2.5mm; padding: 2.5mm 0; }
+  nav.toc .rng { font-size: 8pt; }
+  .note { padding: 3.5mm 4mm; }
+  table { font-size: 9.5pt; }
+}
+</style>
+<meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
+align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
+border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
+<body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/open?id=18qO2RhDz1PymcMsBHSz9QEGZnWWbeHRT" target="_blank" rel="noopener">Download PDF ↓</a></div>
+
+<!-- ============================================================ cover === -->
+<section class="cover" style="background:radial-gradient(700px 460px at 12% 8%,#EFEAF7 0,transparent 60%),radial-gradient(760px 520px at 96% 4%,#EAF1FB 0,transparent 58%),radial-gradient(620px 520px at 80% 96%,#FAF0E2 0,transparent 60%),var(--cream)">
+  <div>
+    <div class="avatar">📖</div>
+    <div class="kicker" style="color:#7E5AA6">CSS English Précis &amp; Composition · with Sir Danish</div>
+    <h1>Comprehension: Answering a Passage in Your Own Words</h1>
+    <p class="subtitle">Reading a passage closely and answering the questions on it, clearly, simply, and in your own English. Worked end to end on one essay about art and beauty.</p>
+    <p class="warm" style="color:#6E4A96">Understand first, then say it plainly. The examiner is testing whether you grasped the passage, not whether you can copy its sentences back. 📖</p>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>Own words</b></span>
+    <span class="chip"><b>Clear · simple · direct</b></span>
+    <span class="chip"><b>5</b> question types</span>
+    <span class="chip"><b>~35 min</b> in the exam</span>
+  </div>
+</section>
+
+<!-- ============================================================== toc === -->
+<nav class="toc card">
+  <header><span class="eyebrow">Contents</span><h2><span class="emoji">🗺️</span> In this note</h2></header>
+  <ol>
+    <li><span class="dot" style="background:#7E5AA6"></span><a class="title" href="#summary">The five-minute version</a><span class="rng">summary</span></li>
+    <li><span class="dot" style="background:#5866C4"></span><a class="title" href="#t1">01 · What comprehension really tests</a><span class="rng">the golden rule</span></li>
+    <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t2">02 · The passage in front of us</a><span class="rng">art and beauty</span></li>
+    <li><span class="dot" style="background:#B57A2A"></span><a class="title" href="#t3">03 · The answering process</a><span class="rng">understand → refine → draft</span></li>
+    <li><span class="dot" style="background:#46955C"></span><a class="title" href="#t4">04 · Worked questions on the passage</a><span class="rng">four answers built</span></li>
+    <li><span class="dot" style="background:#C6506E"></span><a class="title" href="#t5">05 · The opinion question</a><span class="rng">when you may step out</span></li>
+    <li><span class="dot" style="background:#3A7CC0"></span><a class="title" href="#t6">06 · Presentation and length</a><span class="rng">exam-point answers</span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t7">Glossary · Flashcards · Exam focus</a><span class="rng"></span></li>
+  </ol>
+</nav>
+
+<!-- ============================================================= tldr === -->
+<section id="summary" class="summary card" style="--accent:#7E5AA6; --soft:#EFEAF7; border-top-color:#7E5AA6">
+  <header><span class="eyebrow" style="color:#7E5AA6">Start here</span><h2><span class="emoji">⭐</span> The five-minute version</h2></header>
+  <ul>
+    <li><strong>What it is.</strong> Comprehension gives you a passage and <strong>five questions</strong> on it, four marks each, <strong>20 marks</strong> in all. You read it closely and answer each question <strong>in your own words</strong>. In Sir Danish's exam plan it gets about the <strong>first 35 minutes</strong> of the paper.</li>
+    <li><strong>The golden rule.</strong> Answer in your <strong>own words</strong>, and keep them <strong>clear, simple and direct</strong>. The examiner is checking that you understood the passage and can express it yourself, not that you can lift its sentences.</li>
+    <li><strong>The process is a refinement.</strong> Understand the point the passage is making, put it in a plain first attempt, then <strong>refine</strong> it: cut anything unrelated, remove redundant synonyms, and make sure a reader who has not seen the passage would follow you.</li>
+    <li><strong>Most questions stay inside the text.</strong> "What does the writer mean by...", "What is the difference between X and Y", "What is implied": for all of these you report the passage's own meaning, reworded. You do not add your opinion.</li>
+    <li><strong>One kind of question lets you out.</strong> When you are asked directly, "Do you agree?", "Justify your view", you may step out of the text and give your own opinion, drawn from your own observation. Even then, stay close to the bounds the passage set.</li>
+    <li><strong>Keep answers roughly uniform in length</strong> and, for the exam, keep them <strong>short and to the point</strong>: a comprehension answer is worth only a few marks, so cut extra, unrelated lines rather than padding.</li>
+    <li><strong>A tip that is CSS-specific:</strong> do not import outside references or quotations (a book title, a famous example) into an opinion answer. What works in the GRE can read as vague or off-point here. Keep it clear and self-contained.</li>
+  </ul>
+</section>
+
+<!-- ======================================================== section 1 === -->
+<section id="t1" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
+  <header>
+    <span class="eyebrow"><span class="num">1</span> The rule</span>
+    <h2><span class="emoji">🔑</span> What comprehension really tests</h2>
+    <span class="timepill">Composition</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Comprehension looks easy and is quietly demanding. The passage is on the page, so the facts are given to you. What is being marked is whether you can <strong>show you understood</strong> by saying the point back in your own English, clearly.</p>
+
+    <p>Sir Danish keeps pulling every answer toward the same target: a phrase that is <strong>direct, simple and to the point</strong>, so that it is obvious you have understood the idea and absorbed it into your own words <span class="ts">Composition · 04:11</span>. The refining he does with students is almost always in that direction: shorter, plainer, clearer.</p>
+
+    <div class="note">
+      <p><strong>The reader test.</strong> The best single check he offers: write so that <strong>the reader understands what you are writing</strong> <span class="ts">Composition · 29:04</span>. You may know exactly what you mean, but the answer only earns marks if it lands with someone who has your script and not your head. If a sentence would confuse a fresh reader, it is not finished.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Think first, then simplify.</strong> A practical piece of advice he gives more than once: it is fine to <strong>think the idea first in Urdu</strong>, or whatever language you think in, and then work at making it easy for the reader to understand in English <span class="ts">Composition · 29:34</span>. The thinking and the expressing are two jobs. Get the idea straight, then dress it in the plainest English you can.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 2 === -->
+<section id="t2" class="chapter card" style="--accent:#2C8C86; --soft:#E4F1F0;">
+  <header>
+    <span class="eyebrow"><span class="num">2</span> The text</span>
+    <h2><span class="emoji">🎨</span> The passage in front of us</h2>
+    <span class="timepill">Composition</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The whole class works one passage, an essay arguing that <strong>beauty is not a luxury but an essential part of life</strong>, and that the ability to feel it belongs to everyone, a capacity common to all people rather than the preserve of professional artists.</p>
+
+    <p>The passage's argument, in outline. Art has "ebbed away out of our ordinary life," practised no longer by ordinary workmen but only by a few painters and sculptors, because we no longer recognise <strong>the aesthetic activity of the spirit so common to all men</strong>. The writer's central claim is the sentence the questions keep returning to: <strong>"beauty is not an ornament to life or to the things made by man; it is an essential part of both."</strong> And his parallel: <strong>"as actions empty of moral activity are distasteful to us, so should objects be that are empty of aesthetic activity."</strong></p>
+
+    <div class="note">
+      <p><strong>Editorial: know your source.</strong> This passage is from the English essayist <strong>Arthur Clutton-Brock</strong> (1868 to 1924), an art critic for <em>The Times</em>, and comes from his short book <em>The Ultimate Belief</em> (1916). You do not need the attribution to answer the questions, but recognising the register helps: it is a reflective, argumentative essay, so its questions are about <em>meaning</em> and <em>implication</em>, not about facts and figures. Read for the argument, not for data.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Why the source barely matters for the method.</strong> The passage changes every year. What does not change is the kind of thing an argumentative passage asks: what a sentence means, what is implied, what the difference is between two ideas the writer contrasts, and whether you agree. The four worked answers below are templates for those question types, whatever the next passage is about.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 3 === -->
+<section id="t3" class="chapter card" style="--accent:#B57A2A; --soft:#FBF1DE;">
+  <header>
+    <span class="eyebrow"><span class="num">3</span> The process</span>
+    <h2><span class="emoji">🔄</span> The answering process: understand, refine, draft</h2>
+    <span class="timepill">Composition</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Every answer in the class is built the same way, in stages, and watching a rough attempt turn into a clean one is the real lesson.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Stage</th><th>What you do</th></tr></thead>
+        <tbody>
+          <tr><td><strong>1. Understand</strong></td><td>Work out the actual point the question is asking about. If it quotes a sentence, decide what that sentence means before writing anything.</td></tr>
+          <tr><td><strong>2. First attempt</strong></td><td>Put the meaning down in your own words, even if it is rough. He praises students for the attempt itself: "that practice actually would be more rewarding than the actual answer" <span class="ts">Composition · 11:35</span>.</td></tr>
+          <tr><td><strong>3. Refine</strong></td><td>Simplify. Cut anything unrelated. Remove a second word that just repeats the first. Make it clearer for the reader.</td></tr>
+          <tr><td><strong>4. Final answer</strong></td><td>The clean, direct version that a fresh reader would understand at once.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Two refining habits he corrects constantly.</strong> First, <strong>do not stack synonyms</strong>: "when you said fundamental, you do not need another synonym in the same sentence to express the same thing" <span class="ts">Composition · 39:03</span>. One precise word is stronger than two loose ones. Second, <strong>stop when the point is made</strong>: he repeatedly tells students a trailing extra sentence is "going to be extra. If you stop the work after that, that would be sufficient" <span class="ts">Composition · 18:32</span>. A comprehension answer does not need a flourish at the end.</p>
+    </div>
+
+    <div class="note">
+      <p><strong>Process over product, for now.</strong> His encouragement to a student who struggled: the point of practice is to <strong>learn and understand the process</strong>, because "once you follow the process, you are more likely to answer in a right direction" <span class="ts">Composition · 12:02</span>. A rough answer produced by the right method is worth more, at this stage, than a lucky clean one.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 4 === -->
+<section id="t4" class="chapter card" style="--accent:#46955C; --soft:#E9F4EC;">
+  <header>
+    <span class="eyebrow"><span class="num">4</span> Worked answers</span>
+    <h2><span class="emoji">✅</span> Four questions, built in front of you</h2>
+    <span class="timepill">Composition</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Four of the passage's questions, each showing the same move: find the meaning, then say it plainly. The wording below follows the model answers arrived at in class.</p>
+
+    <h3>Q1 · What is implied in the text?</h3>
+    <p>The refined answer lands on the passage's central message: the writer laments the <strong>decline of aesthetic values in daily life</strong>, and blames society for failing to recognise beauty as an essential human and spiritual activity, rather than the exclusive domain of professional artists <span class="ts">Composition · 07:11</span>. Note how it names the writer's feeling (lament), his target (society), and his claim (beauty is essential and universal), all in one sentence.</p>
+
+    <h3>Q2 · What is the difference between an ordinary man and an artist?</h3>
+    <p>The ideal shape here, he explains, is one line on the fundamental difference, then one line on each side <span class="ts">Composition · 20:47</span>. The model answer: the fundamental difference lies in their <strong>perception of beauty</strong>. An artist is conscious of the beauty around him in the universe and transmits it through everything he makes; an ordinary man perceives beauty only as an external object and makes little effort to appreciate the aesthetics in the things around him <span class="ts">Composition · 21:14</span>.</p>
+
+    <h3>Q3 · How can we make our lives beautiful and charming?</h3>
+    <p>Drawn straight from the passage's own prescription: we can make our lives beautiful by <strong>integrating beauty into our work, surroundings and daily activities</strong>, by cultivating an appreciation of aesthetic values, and by developing the habit of recognising beauty in nature for spiritual rejuvenation <span class="ts">Composition · 31:05</span>. The passage's line behind this: when a man makes anything he should make it beautiful for its own sake, and beauty should be treated as essential, not as a luxury.</p>
+
+    <h3>Q4 · What does the writer mean by "beauty is not an ornament to life"?</h3>
+    <p>This is the classic "what does the writer mean" question, and the answer is an <strong>interpretation</strong>, not a repetition. Most people wrongly regard beauty as a luxury decoration, something external or optional. The writer means the opposite: beauty should <strong>not</strong> be treated as a decorative luxury added to appease our material wants. It is an essential element of human life that elevates our moral and spiritual existence <span class="ts">Composition · 42:46</span>.</p>
+
+    <div class="note exam">
+      <p><strong>The pattern across all four.</strong> Each answer (a) names what the passage says, (b) in the student's own words, (c) in one or two clean sentences, (d) with no quotation and no personal opinion. That is the comprehension answer in its default form. Only the fifth question type, below, breaks the "no opinion" rule.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 5 === -->
+<section id="t5" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+  <header>
+    <span class="eyebrow"><span class="num">5</span> The exception</span>
+    <h2><span class="emoji">💬</span> The opinion question: when you may step out</h2>
+    <span class="timepill">Composition</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The last question on the passage was different: <strong>"Do art and beauty affect our practical life and morals? Justify whether you agree or disagree."</strong> This is the one place comprehension lets you leave the text.</p>
+
+    <div class="note">
+      <p><strong>The rule.</strong> In this <strong>rare circumstance</strong>, when the question directly asks for your view, you are <strong>allowed to step out from the text and bring your own opinion</strong> into the answer <span class="ts">Composition · 46:17</span>. When the examiner addresses you directly, you can give your view, and you may rely on your own <strong>personal observation</strong> to support it <span class="ts">Composition · 51:38</span>.</p>
+    </div>
+
+    <p>The model answer both agrees and grounds itself in the passage's own logic: <em>I strongly agree that art and beauty affect our life and morality. Beauty shapes our aesthetic sense and contributes to our moral and spiritual growth; the absence of beauty in daily life leads to spiritual dissatisfaction and social decline</em> <span class="ts">Composition · 59:49</span>. It takes a clear side and justifies it, which is exactly what "justify whether you agree" asks.</p>
+
+    <div class="note warn">
+      <p><strong>The CSS-specific warning: do not import outside references.</strong> A student wanted to support an opinion with an external example (a medical student inspired by a Kafka story), on the logic that GRE advice rewards outside references. Sir Danish pushes back firmly: <strong>CSS and the GRE are different</strong>, and here an unexplained outside reference introduces <strong>vagueness and ambiguity</strong> rather than strength <span class="ts">Composition · 55:49</span>. A reader cannot tell whether "a medical student chose the field because of a book" supports your point or undercuts it. So <strong>avoid quoting external references</strong>; if you use a general idea of your own, phrase it plainly without a name-drop <span class="ts">Composition · 54:35</span>.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>But with a strongly one-sided passage, do not take the opposite stance.</strong> This is where the note has to be careful, because Sir Danish gives a permission and then immediately qualifies it. Yes, "you can take the liberty to disagree" <span class="ts">Composition · 01:04:35</span>, but his very next line is "it is <strong>not advisable to disagree at this stage</strong>" <span class="ts">Composition · 01:04:55</span>, and about this overwhelmingly one-sided art-and-beauty passage specifically, he says it is <strong>not advisable to take an altogether opposite stance</strong> <span class="ts">Composition · 01:16:24</span>. So the safe reading of his advice: you are technically permitted to disagree, but when the passage argues hard in one direction, <strong>play safe and stay within the bounds it set</strong> <span class="ts">Composition · 57:46</span>.</p>
+      <p>The reason is refreshingly honest about the exam: the goal of this question is to earn its three or four marks, not to win an argument <span class="ts">Composition · 01:04:00</span>. Marks come from a <strong>clear, justified stance</strong>, cleanly expressed, and for a lopsided passage the low-risk clear stance is usually the one that agrees with it and justifies why.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 6 === -->
+<section id="t6" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+  <header>
+    <span class="eyebrow"><span class="num">6</span> On the page</span>
+    <h2><span class="emoji">📐</span> Presentation and length</h2>
+    <span class="timepill">Composition</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Two habits of presentation come up, and both are about respecting the small mark value of each answer.</p>
+
+    <div class="note">
+      <p><strong>Keep answer lengths roughly uniform.</strong> Carried over from an earlier class: the answers to the different comprehension questions should be of <strong>roughly the same length</strong> <span class="ts">Composition · 43:18</span>. A wildly long answer next to a one-line one looks unbalanced and usually means the long one has padding.</p>
+    </div>
+
+    <div class="note">
+      <p><strong>Answer from the exam's point of view: short.</strong> When you feel an answer is running long, remember what it is worth. A comprehension answer carries only a few marks, so the exam-smart move is a <strong>short, tight answer that cuts the extra, unrelated points</strong> rather than a sprawling one <span class="ts">Composition · 44:40</span>. Say the point, justify it if asked, and stop.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>The time budget.</strong> In the whole-paper plan, comprehension gets roughly the <strong>first 35 minutes</strong> of the three-hour paper. Five short, clean answers in that window is the target, which is another reason to keep each one tight. Do not let comprehension eat into the time the précis will need.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================= glossary === -->
+<section id="t7" class="chapter card" style="--accent:#8B8490; --soft:#F0EEF2;">
+  <header>
+    <span class="eyebrow"><span class="num">G</span> Reference</span>
+    <h2><span class="emoji">📖</span> Glossary</h2>
+  </header>
+  <div class="section-body">
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Comprehension</strong></td><td>The paper section that gives a passage and questions on it, to be answered in your own words. Around 20 marks; roughly the first 35 minutes of the paper.</td></tr>
+          <tr><td><strong>In your own words</strong></td><td>The core requirement: reword the passage's meaning, do not copy its sentences. This is what is being marked.</td></tr>
+          <tr><td><strong>The reader test</strong></td><td>Write so a person who has not read the passage would still follow your answer. If a fresh reader would be confused, the answer is not finished.</td></tr>
+          <tr><td><strong>Interpretation question</strong></td><td>"What does the writer mean by...": answer the meaning behind a sentence, not the sentence itself.</td></tr>
+          <tr><td><strong>Contrast question</strong></td><td>"What is the difference between X and Y": one line on the fundamental difference, then one line on each side.</td></tr>
+          <tr><td><strong>Opinion question</strong></td><td>"Do you agree? Justify.": the rare question where you may give your own view from personal observation, ideally staying within the passage's bounds.</td></tr>
+          <tr><td><strong>Redundant synonym</strong></td><td>A second word that just repeats the first in the same sentence. Cut it; one precise word is stronger.</td></tr>
+          <tr><td><strong>Aesthetic activity</strong></td><td>In the worked passage, the human capacity to perceive and value beauty, which the writer says is common to all people rather than the preserve of artists.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================= flashcards === -->
+<section id="t8" class="chapter card" style="--accent:#7E5AA6; --soft:#EFEAF7;">
+  <header>
+    <span class="eyebrow"><span class="num">F</span> Recall</span>
+    <h2><span class="emoji">🎴</span> Flashcards</h2>
+  </header>
+  <div class="section-body">
+    <div class="cards">
+      <div class="qa"><p class="q">What is comprehension actually testing?</p><p class="a">Whether you understood the passage and can say the point back in your own clear, simple English. Not whether you can copy its sentences.</p></div>
+      <div class="qa"><p class="q">State the golden rule.</p><p class="a">Answer in your own words, kept clear, simple and direct.</p></div>
+      <div class="qa"><p class="q">What is the reader test?</p><p class="a">Write so a person who has not read the passage would still follow your answer. If a fresh reader would be confused, it is not finished.</p></div>
+      <div class="qa"><p class="q">What are the four stages of building an answer?</p><p class="a">Understand the point, make a rough first attempt, refine it (cut the unrelated, drop redundant synonyms), then write the clean final answer.</p></div>
+      <div class="qa"><p class="q">Two refining habits Sir Danish corrects constantly?</p><p class="a">Do not stack synonyms (one precise word beats two loose ones); and stop when the point is made, a trailing extra sentence is just padding.</p></div>
+      <div class="qa"><p class="q">How do you answer "What is the difference between an ordinary man and an artist?"</p><p class="a">One line on the fundamental difference (their perception of beauty), then one line on each: the artist transmits beauty into what he makes; the ordinary man sees it as external and makes little effort to appreciate it.</p></div>
+      <div class="qa"><p class="q">What does "beauty is not an ornament to life" mean?</p><p class="a">Beauty is not a decorative luxury added on; it is an essential part of life that elevates our moral and spiritual existence.</p></div>
+      <div class="qa"><p class="q">Which question type lets you give your own opinion?</p><p class="a">The direct "Do you agree? Justify" question. Only then may you step out of the text and use your personal observation, ideally staying within the passage's bounds.</p></div>
+      <div class="qa"><p class="q">Why avoid outside references in a CSS opinion answer?</p><p class="a">An unexplained external example (a book title, a named case) adds vagueness and ambiguity here. CSS is not the GRE; keep the answer clear and self-contained.</p></div>
+      <div class="qa"><p class="q">How long should comprehension answers be?</p><p class="a">Roughly uniform in length, and short: each is worth only a few marks, so cut extra unrelated points rather than padding.</p></div>
+      <div class="qa"><p class="q">Who wrote the worked passage, and why does the register matter?</p><p class="a">Arthur Clutton-Brock, an art critic. It is an argumentative essay, so the questions are about meaning and implication, not facts and figures.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== exam focus === -->
+<section id="t9" class="chapter card" style="--accent:#7E5AA6; --soft:#EFEAF7;">
+  <header>
+    <span class="eyebrow"><span class="num">X</span> Strategy</span>
+    <h2><span class="emoji">🎯</span> Exam focus</h2>
+  </header>
+  <div class="section-body">
+
+    <h3>Match the answer to the question type</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Question asks...</th><th>You do...</th><th>Opinion allowed?</th></tr></thead>
+        <tbody>
+          <tr><td>"What is implied / What does the writer mean"</td><td>Interpret the meaning in your own words</td><td>No</td></tr>
+          <tr><td>"What is the difference between X and Y"</td><td>One line on the difference, one on each side</td><td>No</td></tr>
+          <tr><td>"How / What according to the passage"</td><td>Report the passage's own answer, reworded</td><td>No</td></tr>
+          <tr><td>"Do you agree? Justify your view"</td><td>Take a clear side and justify it</td><td>Yes, from your own observation</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>The habits that earn the marks</h3>
+    <ul>
+      <li><strong>Own words, always.</strong> If a whole phrase is lifted from the passage, reword it.</li>
+      <li><strong>Clear, simple, direct.</strong> Short sentences a fresh reader follows at once.</li>
+      <li><strong>No redundant synonyms, no trailing extra line.</strong> Say the point and stop.</li>
+      <li><strong>Roughly uniform, short answers.</strong> Each is worth only a few marks.</li>
+      <li><strong>Opinion only when invited</strong>, and even then stay near the passage's bounds and skip outside references.</li>
+      <li><strong>Watch the clock:</strong> about 35 minutes for the whole section, so you protect the précis time.</li>
+    </ul>
+
+    <div class="note exam">
+      <p><strong>The one line to remember.</strong> A comprehension answer is a small act of translation: from the writer's words into yours, from his meaning into a sentence a stranger could follow. Do that cleanly and briefly, question after question, and the section is straightforward marks. The only trap is the opinion question, where the freedom to leave the text tempts people into vague, unsupported, or over-long answers. Take a side, justify it in a line or two, and move on.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="notefoot">Source recordings: <a href="https://drive.google.com/open?id=1IbRgfrr0-YnnZkVsGdnjuUCZg4aWJFQ5" target="_blank" rel="noopener">▶ Comprehension class</a><span class="sep">·</span><a href="https://drive.google.com/open?id=18qO2RhDz1PymcMsBHSz9QEGZnWWbeHRT" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+</html>

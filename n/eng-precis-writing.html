@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Précis Writing: The Five-Reading Method</title>
+<style>/* Lecture Notes ebook, "warm study" theme.
+   Inspired by Mehak's MarketCanvas app: soft cream ground, rounded white cards,
+   a different pastel accent per topic, serif display + friendly sans body,
+   gentle emoji + pill badges. Playful and pretty, but still a real study book.
+   Print-first (A4 PDF via headless Edge); reads well on screen too.
+
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
+   Everything themeable keys off --accent / --soft. Titles stay ink for
+   readability; accents colour eyebrows, numbers, pills, rules and callouts.
+*/
+
+:root {
+  --cream: #FCF6F0;          /* page ground (warm) */
+  --card: #FFFFFF;
+  --ink: #2C2630;            /* plum-black body/headings */
+  --ink-soft: #5A5360;
+  --slate: #8B8490;          /* captions, timestamps */
+  --hairline: #EEE6E4;
+
+  /* section default accent (overridden per section) */
+  --accent: #C0567E;
+  --soft: #FBECF1;
+
+  --shadow: 0 1px 2px rgba(60,30,45,.05), 0 10px 26px rgba(80,40,55,.07);
+  --radius: 20px;
+
+  --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: Consolas, "Cascadia Code", ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background:
+    radial-gradient(1100px 700px at 15% -5%, #FBEEF3 0%, transparent 55%),
+    radial-gradient(1000px 700px at 100% 0%, #EEF3FB 0%, transparent 50%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  font: 10.8pt/1.62 var(--sans);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+@media screen {
+  body { max-width: 51rem; margin: 0 auto; padding: 2.5rem 1.15rem 4rem; font-size: 1.0rem; }
+}
+
+/* ---------------------------------------------------------------- page --- */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm 14mm;
+  @bottom-center {
+    content: counter(page);
+    font: 8.5pt var(--sans);
+    color: #8B8490;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+/* --------------------------------------------------------------- cards --- */
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8mm 9mm 9mm;
+  margin: 0 0 6mm;
+  box-shadow: var(--shadow);
+  break-inside: auto;
+}
+@media screen { .card { margin-bottom: 1.4rem; } }
+
+/* a soft accent wash across the top of each section card (fades to white),
+   echoing the app's pastel cards without hurting readability */
+.chapter {
+  background:
+    linear-gradient(180deg, var(--soft) 0, rgba(255,255,255,0) 34mm),
+    var(--card);
+  border-top: 3px solid var(--accent);
+  break-inside: auto;
+  break-before: page;   /* each topic starts fresh: slide on top, notes below */
+}
+/* on screen (web/PWA) sections just stack; no forced page breaks */
+@media screen { .chapter { break-before: auto; } }
+
+h2, h3, .eyebrow { break-after: avoid; }
+p { orphans: 2; widows: 2; }
+
+/* keep the section header intact (eyebrow + title + time pill together) and
+   glued to its opening slide */
+.chapter > header { break-inside: avoid; break-after: avoid; }
+figure.slide { break-before: avoid; }
+
+/* --------------------------------------------------------------- cover --- */
+
+.cover {
+  page: cover;
+  break-after: page;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32mm 22mm 24mm;
+  background:
+    radial-gradient(700px 460px at 12% 8%, #FBE6EE 0%, transparent 60%),
+    radial-gradient(760px 520px at 96% 4%, #E7EEFB 0%, transparent 58%),
+    radial-gradient(620px 520px at 80% 96%, #E6F4EC 0%, transparent 60%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+@media screen {
+  .cover { min-height: 80vh; border-radius: 24px; padding: 3.2rem 2.6rem; margin-bottom: 1.4rem; }
+}
+
+.cover .avatar { font-size: 30pt; line-height: 1; margin-bottom: 7mm; }
+.cover .kicker {
+  font: 600 9pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 5mm;
+}
+.cover h1 {
+  font: 600 31pt/1.14 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 15em;
+}
+.cover .subtitle {
+  margin-top: 5mm;
+  font: 400 13.5pt/1.5 var(--sans);
+  color: var(--ink-soft);
+  max-width: 30em;
+}
+.cover .warm {
+  margin-top: 4mm;
+  font: italic 400 12pt/1.5 var(--serif);
+  color: var(--accent);
+}
+
+.cover .chips { display: flex; flex-wrap: wrap; gap: 3mm; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.4mm 4mm;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(60,30,45,.04);
+  font: 400 9pt var(--sans);
+  color: var(--slate);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chip b { font: 700 10.5pt var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ headings --- */
+
+.chapter header { margin-bottom: 5mm; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  font: 700 8.5pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--accent);
+  margin-bottom: 3mm;
+}
+.eyebrow .num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h2 {
+  font: 600 20pt/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .emoji { font-size: 17pt; }
+
+.timepill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.5mm 3.5mm;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font: 600 8pt var(--mono);
+  letter-spacing: 0.02em;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h3 {
+  font: 600 12.5pt/1.34 var(--serif);
+  color: var(--ink);
+  margin: 6mm 0 2.5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+.ts { font: 400 8.5pt var(--mono); color: var(--slate); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- body --- */
+
+.section-body > :last-child { margin-bottom: 0; }
+p { margin: 0 0 3mm; }
+.lead { font-size: 11.2pt; color: var(--ink); }
+
+ul, ol { margin: 0 0 3mm 5.5mm; }
+li { margin-bottom: 1.7mm; padding-left: 1mm; }
+li::marker { color: var(--accent); }
+
+.kt { font-weight: 700; color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
+
+code { font: 9.5pt var(--mono); background: #F3EFF4; padding: .4pt 3.5pt; border-radius: 4px; }
+
+/* ------------------------------------------------------------ callouts --- */
+
+.note {
+  --c: var(--accent);
+  --f: var(--soft);
+  background: var(--f);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  border-left: 3px solid var(--c);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.note .label {
+  display: inline-flex; align-items: center; gap: 1.6mm;
+  font: 700 8pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c);
+  margin-bottom: 1.8mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.warn { --c: #B4791F; --f: #FaF1DF; }
+.note.exam { --c: #3B8B78; --f: #E6F3EF; }
+.note.def  { --c: var(--accent); --f: var(--soft); }
+
+/* ------------------------------------------------------- summary card --- */
+
+.summary { --accent: #C0567E; --soft: #FBECF1; }
+.summary ul { list-style: none; margin: 0; }
+.summary li { position: relative; padding: 0 0 0 7mm; margin-bottom: 3.5mm; }
+.summary li::before {
+  content: "";
+  position: absolute; left: 0; top: 2.6mm;
+  width: 3.2mm; height: 3.2mm; border-radius: 50%;
+  background: var(--accent);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.summary li:last-child { margin-bottom: 0; }
+.summary li b, .summary li strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------- TOC --- */
+
+nav.toc { --accent: #8B8490; --soft: #F3EFF4; }
+nav.toc ol { list-style: none; margin: 0; }
+nav.toc li {
+  display: flex; align-items: baseline; gap: 4mm;
+  padding: 2.7mm 0;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11pt var(--sans);
+}
+nav.toc li:last-child { border-bottom: 0; }
+nav.toc .dot { width: 3.4mm; height: 3.4mm; border-radius: 50%; flex-shrink: 0;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+nav.toc .title { flex: 1; color: var(--ink); }
+nav.toc .rng { flex-shrink: 0; font: 600 8.5pt var(--mono); color: var(--slate); }
+
+/* -------------------------------------------------------------- slides --- */
+
+figure.slide { margin: 0 0 5mm; break-inside: avoid; }
+figure.slide img {
+  width: 100%; display: block;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 10px rgba(40,30,45,.10);
+}
+figure.slide figcaption {
+  font: 400 8.5pt var(--sans);
+  color: var(--slate);
+  margin-top: 2mm;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4mm;
+}
+figure.slide figcaption .ts { color: var(--accent); }
+
+/* ------------------------------------------------------------ glossary --- */
+
+dl.glossary { margin: 0; }
+dl.glossary div { padding: 3mm 0; border-bottom: 1px solid var(--hairline); break-inside: avoid; }
+dl.glossary div:last-child { border-bottom: 0; padding-bottom: 0; }
+dl.glossary dt { font: 700 10.5pt var(--sans); color: var(--accent); margin-bottom: 1.2mm; }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- flashcards --- */
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 0; }
+.qa {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  background: linear-gradient(180deg, var(--soft) 0, #fff 60%);
+  break-inside: avoid;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.qa .q { font: 700 10pt var(--sans); color: var(--ink); margin-bottom: 2mm; }
+.qa .a { color: var(--ink-soft); font-size: 10pt; }
+
+/* ------------------------------------------------------------- tables --- */
+
+.tables-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0; break-inside: avoid; }
+th {
+  font: 700 9pt var(--sans); text-align: left; color: var(--accent);
+  border-bottom: 2px solid var(--soft); padding: 2mm 3mm 2mm 0;
+}
+td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+
+/* --- mobile / on-the-go reading (screen only; never affects the print PDF).
+   Placed LAST so it wins the cascade over the wider @media screen rules above.
+   Requires <meta name="viewport" content="width=device-width, initial-scale=1">. */
+@media screen and (max-width: 640px) {
+  body { padding: 1rem 0.85rem 2.5rem; font-size: 1.02rem; }
+  .card { padding: 5mm 5mm 6mm; border-radius: 14px; margin-bottom: 0.9rem; }
+  .cover { min-height: auto; padding: 2rem 1.3rem 1.6rem; border-radius: 16px; }
+  .cover .avatar { font-size: 24pt; margin-bottom: 4mm; }
+  .cover h1 { font-size: 20pt; max-width: 100%; }
+  .cover .subtitle { font-size: 11.5pt; }
+  .cover .warm { font-size: 11pt; }
+  .cover .chips { gap: 2mm; margin-top: 5mm; }
+  h2 { font-size: 16pt; }
+  h2 .emoji { font-size: 13.5pt; }
+  h3 { font-size: 11.5pt; }
+  .cards { grid-template-columns: 1fr; }
+  nav.toc li { font-size: 10.5pt; gap: 2.5mm; padding: 2.5mm 0; }
+  nav.toc .rng { font-size: 8pt; }
+  .note { padding: 3.5mm 4mm; }
+  table { font-size: 9.5pt; }
+}
+</style>
+<meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
+align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
+border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
+<body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/open?id=1pQPriZ2UTTvGck6pfHYG5ojDtKTD6C4A" target="_blank" rel="noopener">Download PDF ↓</a></div>
+
+<!-- ============================================================ cover === -->
+<section class="cover" style="background:radial-gradient(700px 460px at 12% 8%,#EFEAF7 0,transparent 60%),radial-gradient(760px 520px at 96% 4%,#EAF1FB 0,transparent 58%),radial-gradient(620px 520px at 80% 96%,#FAF0E2 0,transparent 60%),var(--cream)">
+  <div>
+    <div class="avatar">✍️</div>
+    <div class="kicker" style="color:#7E5AA6">CSS English Précis &amp; Composition · with Sir Danish</div>
+    <h1>Précis Writing: The Five-Reading Method</h1>
+    <p class="subtitle">The single most decisive question on the paper, taught as a repeatable process. Five readings, a core idea that guides everything, and a draft cut to one-third in your own words.</p>
+    <p class="warm" style="color:#6E4A96">Do not write more. Write the gist. The whole skill is finding the one central idea and letting it decide what stays and what goes. ✍️</p>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>5</b> readings</span>
+    <span class="chip"><b>⅓</b> the length</span>
+    <span class="chip"><b>1</b> core idea</span>
+    <span class="chip"><b>~50 min</b> in the exam</span>
+  </div>
+</section>
+
+<!-- ============================================================== toc === -->
+<nav class="toc card">
+  <header><span class="eyebrow">Contents</span><h2><span class="emoji">🗺️</span> In this note</h2></header>
+  <ol>
+    <li><span class="dot" style="background:#7E5AA6"></span><a class="title" href="#summary">The five-minute version</a><span class="rng">summary</span></li>
+    <li><span class="dot" style="background:#5866C4"></span><a class="title" href="#t1">01 · What a précis is, and why it decides the paper</a><span class="rng">stakes</span></li>
+    <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t2">02 · The rules a précis must obey</a><span class="rng">length · own words · title</span></li>
+    <li><span class="dot" style="background:#B57A2A"></span><a class="title" href="#t3">03 · The five-reading method</a><span class="rng">the process</span></li>
+    <li><span class="dot" style="background:#C6506E"></span><a class="title" href="#t4">04 · The core idea: your north star</a><span class="rng">get this or score zero</span></li>
+    <li><span class="dot" style="background:#46955C"></span><a class="title" href="#t5">05 · Worked example: climate and national character</a><span class="rng">the method in action</span></li>
+    <li><span class="dot" style="background:#3A7CC0"></span><a class="title" href="#t6">06 · Cutting the words: say it shorter</a><span class="rng">wordiness</span></li>
+    <li><span class="dot" style="background:#B44A8C"></span><a class="title" href="#t7">07 · "The author says": attribution</a><span class="rng">a subtle mark-winner</span></li>
+    <li><span class="dot" style="background:#1F7A8C"></span><a class="title" href="#t8">08 · Second worked example: in praise of idleness</a><span class="rng">finding the gist</span></li>
+    <li><span class="dot" style="background:#A4553A"></span><a class="title" href="#t9">09 · Timing it in the exam</a><span class="rng">the 50-minute plan</span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t10">Glossary · Flashcards · Exam focus</a><span class="rng"></span></li>
+  </ol>
+</nav>
+
+<!-- ============================================================= tldr === -->
+<section id="summary" class="summary card" style="--accent:#7E5AA6; --soft:#EFEAF7; border-top-color:#7E5AA6">
+  <header><span class="eyebrow" style="color:#7E5AA6">Start here</span><h2><span class="emoji">⭐</span> The five-minute version</h2></header>
+  <ul>
+    <li><strong>What it is.</strong> A précis is a shortened version of a passage, about <strong>one-third</strong> of its length, written in <strong>your own words</strong>, that keeps every important idea and drops everything else. No examples, no quotations, no comments of your own.</li>
+    <li><strong>Why it matters.</strong> Sir Danish calls the précis <strong>the deciding factor</strong> in the Précis &amp; Composition paper. It rewards a real skill, so a strong précis lifts the whole paper and a lost core idea can sink it.</li>
+    <li><strong>The method is five readings, in order, and you skip none.</strong> (1) Read for the <strong>general sense</strong>. (2) Read to <strong>underline keywords and find the core idea</strong>. (3) Read to <strong>note down every essential point</strong>. (4) <strong>Combine the points into a first draft</strong>. (5) <strong>Revise</strong> the draft.</li>
+    <li><strong>The core idea is the whole game.</strong> It is the "north star" that tells you which points are important and which are not. Find it, and the précis writes itself around it. Miss it, and you can walk in the wrong direction and score <strong>zero</strong>.</li>
+    <li><strong>Then cut.</strong> Replace wordy phrases with single words: "due to the fact that" becomes <strong>because</strong>, "in today's modern world" becomes <strong>nowadays</strong>. Simple words with the right structure beat long ones.</li>
+    <li><strong>Give it a title.</strong> Build it from the chain of key ideas. For a passage on how climate shapes a nation's working habits, the title <strong>"Climate and National Character"</strong> falls out of that chain.</li>
+    <li><strong>In the exam, budget about 50 minutes:</strong> roughly 10 to 15 to read and find the core idea, 15 to extract and order points, 10 to 12 to draft, 10 to finalise. Keep a few minutes at the end to review.</li>
+    <li><strong>How to practise now.</strong> Quality first, speed later. Do every step slowly, and start timing yourself only from around December. Send your essential points and your final draft to your teacher so your teacher can correct the whole process, the reading and the drafting, where the marks are really won or lost.</li>
+  </ul>
+</section>
+
+<!-- ======================================================== section 1 === -->
+<section id="t1" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
+  <header>
+    <span class="eyebrow"><span class="num">1</span> The stakes</span>
+    <h2><span class="emoji">🎯</span> What a précis is, and why it decides the paper</h2>
+    <span class="timepill">Précis Writing</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">A précis is a compressed version of a passage that keeps the substance and throws away the padding. The word is the point: you are precising, boiling a passage down to its essence, in far fewer words but with nothing important lost.</p>
+
+    <p>Sir Danish is blunt about where this sits in the paper. "Usually people say that précis is the most deciding factor in Précis and Composition" <span class="ts">Practice · 01:00</span>. It carries real weight and, unlike the shorter mechanical questions, it tests a skill you cannot fake: can you read a dense passage, find what it is actually saying, and say it again, shorter and cleaner, in your own English?</p>
+
+    <div class="note">
+      <p><strong>Why it rewards you.</strong> The précis is a genuine skill, so improvement is visible and bankable. Once you own the process, "you will feel more liberated," as he puts it, because you know that whatever passage appears, you can walk it through the same five steps and come out with something worth marks <span class="ts">Practice · 01:31</span>.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>And why it can hurt you.</strong> The same weight cuts both ways. If you miss the central idea and start summarising the wrong thing, "it's very likely that you are going in a very different direction, which can cause zero marks" <span class="ts">Practice · 03:53</span>. A précis is not marked kindly for effort if it has understood the passage backwards. That single risk is why the method below front-loads so much care into <em>finding the core idea</em> before you write a word.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 2 === -->
+<section id="t2" class="chapter card" style="--accent:#2C8C86; --soft:#E4F1F0;">
+  <header>
+    <span class="eyebrow"><span class="num">2</span> The rules</span>
+    <h2><span class="emoji">📏</span> The rules a précis must obey</h2>
+    <span class="timepill">Précis Writing 2</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Before the method, the requirements. These are the fixed conditions your finished précis has to satisfy. Sir Danish has students quickly revise them before writing <span class="ts">Précis 2 · 21:04</span>; treat them as a checklist your finished précis must pass.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Requirement</th><th>What it means in practice</th></tr></thead>
+        <tbody>
+          <tr><td><strong>About one-third the length</strong></td><td>The default target is roughly a third of the original passage <span class="ts">Précis 2 · 21:14</span>. If the question specifies an exact word count (say 160 or 170 words), write to that number instead <span class="ts">Précis 2 · 22:39</span>.</td></tr>
+          <tr><td><strong>Continuous narrative</strong></td><td>It must read as one flowing piece. Each sentence should lead into the next with no jolt or jerk of thought between them <span class="ts">Précis 2 · 23:24</span>. Not a list, not bullet points.</td></tr>
+          <tr><td><strong>All important ideas kept</strong></td><td>Every relevant idea in the passage should be present. You decide what is important and what is filler, then keep the important and cut the rest.</td></tr>
+          <tr><td><strong>Your own words</strong></td><td>Do not lift the passage's phrases. Recast the meaning in your own English. This is what the exercise is testing.</td></tr>
+          <tr><td><strong>A title</strong></td><td>The précis carries a title that captures the central idea (see section 4 for how to build one).</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <p><strong>Editorial: the standard précis conventions worth adding.</strong> Beyond what the class states, examiners expect a few more fixed habits, and they are free marks once they are automatic. Write in the <strong>third person</strong> and in <strong>reported (indirect) speech</strong>, so any dialogue in the passage is converted out of quotation marks. Keep it in the <strong>past tense</strong> as the default narrative tense. Include <strong>no direct quotations, no illustrative examples, and no opinion of your own</strong>: a précis reports the passage, it does not argue with it. And it is one <strong>single, unbroken paragraph</strong>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 3 === -->
+<section id="t3" class="chapter card" style="--accent:#B57A2A; --soft:#FBF1DE;">
+  <header>
+    <span class="eyebrow"><span class="num">3</span> The process</span>
+    <h2><span class="emoji">🪜</span> The five-reading method</h2>
+    <span class="timepill">Précis Writing</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The heart of the class is a five-step method, and each step is a fresh reading of the passage with a different job. The rule is simple: <strong>do all five, in order, and skip none</strong> <span class="ts">Précis · 13:17</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Reading</th><th>Its job</th><th>What you produce</th></tr></thead>
+        <tbody>
+          <tr><td><strong>1. First reading</strong></td><td>Understand the <strong>general sense</strong> of the passage. Do not write anything. Just grasp what it is broadly about.</td><td>A feel for the topic</td></tr>
+          <tr><td><strong>2. Second reading</strong></td><td><strong>Underline keywords</strong> and <strong>find the core idea</strong>. Mark the words that carry the meaning.</td><td>Marked keywords + the central idea</td></tr>
+          <tr><td><strong>3. Third reading</strong></td><td><strong>Note down all the essential points</strong>, in your own short form, beside the passage.</td><td>A list of essential points</td></tr>
+          <tr><td><strong>4. Fourth reading</strong></td><td><strong>Combine the essential points</strong> into a first draft, in continuous sentences.</td><td>A rough first draft</td></tr>
+          <tr><td><strong>5. Fifth reading</strong></td><td><strong>Revise</strong> the draft: tighten the language, check the length, fix the flow.</td><td>The final précis</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>He repeats the sequence deliberately so it lodges in memory: "First reading, to understand a general sense of the passage. Second reading, underline keywords and find core idea. Third reading, note down all essential points. Fourth reading, combine all essential points and make first draft. Fifth reading, revise your draft" <span class="ts">Précis · 12:46</span>.</p>
+
+    <div class="note exam">
+      <p><strong>Why skipping a step backfires.</strong> Each reading does work the next one depends on. Jump straight to drafting without having isolated the core idea and your points have no spine to hang on; skip the revision and the wordiness and errors stay in. As he says, "if you miss any step, or if you want to skip it, it will not be good" <span class="ts">Précis · 13:17</span>. Right now, treat each step as a separate exercise: a whole class could be spent on any one of them.</p>
+    </div>
+
+    <div class="note">
+      <p><strong>These first drafts are rough work, and that is allowed.</strong> In the exam you do this on the <strong>last pages of the answer sheet</strong>, which are meant for rough work. You write your essential points there, then a first draft, then a revised draft, and only when you are satisfied do you copy the final version onto the main answer sheet <span class="ts">Précis · 16:21</span>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 4 === -->
+<section id="t4" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+  <header>
+    <span class="eyebrow"><span class="num">4</span> The centre of gravity</span>
+    <h2><span class="emoji">⭐</span> The core idea: your north star</h2>
+    <span class="timepill">Précis + Practice</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">If you take one thing from this note, take this. The <span class="kt">core idea</span> is the central point the whole passage exists to make, and it is the single most important thing you extract.</p>
+
+    <p>Sir Danish gives it the best possible image: the core idea is the <strong>north star that guides you</strong>, the fixed point that tells you which passing point is important and which is not, and how the points should be organised <span class="ts">Time Mgmt · 01:24</span>. Everything downstream, which points you keep, what order they go in, what the title is, is decided by the core idea. So you find it early, at the second reading, and you hold onto it.</p>
+
+    <div class="note warn">
+      <p><strong>This is where marks are won or lost outright.</strong> "If you miss the core idea and do not get the main gist of the passage, it's very likely that you are going in a very different direction, which can cause zero marks" <span class="ts">Practice · 03:53</span>. On the other hand, even if you get some smaller points slightly wrong, a correctly identified core idea keeps you pointed the right way: "it helps you to give, go in a direction; the only thing is that you can craft it better" <span class="ts">Practice · 03:22</span>. So the core idea is both the biggest risk and the biggest safety net on the paper.</p>
+    </div>
+
+    <h3>How to build the title from the core idea</h3>
+    <p>The title is just the core idea named in a few words, and Sir Danish shows how to derive it by <strong>chaining the key concepts</strong>. Working the climate passage, he lays out the links in his head: climate, then labour, then habits, then national character. From that chain he lands on <strong>"Climate and National Character"</strong> as the title, because it captures the two ends of the chain and everything in between <span class="ts">Précis · 12:15</span>. Build your title the same way: list the two or three ideas the passage connects, then name the connection.</p>
+
+    <div class="note exam">
+      <p><strong>The title is worth real marks, so never leave it blank.</strong> In the FPSC scheme the précis question carries <strong>20 marks, and 5 of those are for the title alone</strong> (the other 15 for the précis itself). That is a quarter of the question for a few words. Keep it short, four to eight words, a phrase and not a full sentence, and make sure it names the core idea rather than just a topic the passage mentions in passing.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 5 === -->
+<section id="t5" class="chapter card" style="--accent:#46955C; --soft:#E9F4EC;">
+  <header>
+    <span class="eyebrow"><span class="num">5</span> Worked example</span>
+    <h2><span class="emoji">🌡️</span> The method in action: climate and national character</h2>
+    <span class="timepill">Précis Writing</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The whole class turns on one passage, and watching it go through the five readings is the fastest way to see how the method feels. The passage argues that climate shapes the working habits of a people, and through those habits, a nation's character.</p>
+
+    <h3>Reading 1: the general sense</h3>
+    <p>The passage says climate influences labour in two ways: by energising or draining it, and, more tellingly, through the effect it has on the <strong>regularity of a worker's habits</strong> <span class="ts">Précis · 00:12</span>. After one reading you should be able to say, roughly: this is about how climate affects how steadily people work.</p>
+
+    <h3>Reading 2: keywords and core idea</h3>
+    <p>Now the underlining. The words that carry the meaning: <em>climate, labour, habits, northern regions, temperate regions, steady, industry, national character</em>. And the core idea surfaces: <strong>how climate influences labour habits, and through them the national character of a country</strong> <span class="ts">Précis · 06:51</span>. He is strict that this is discovered, not invented: "I am not creating my story, but I feel that these are important words that are underlined" <span class="ts">Précis · 03:07</span>.</p>
+
+    <h3>Reading 3: the essential points</h3>
+    <p>Noted down in short form, the points come out as:</p>
+    <ul>
+      <li>Climate influences labour and affects its habits.</li>
+      <li>People of temperate regions work steadily and regularly.</li>
+      <li>People of colder northern regions do not: severe weather and short, dark days make regular outdoor exertion hard, and the labouring class loses its motivation.</li>
+      <li>So such countries develop a <strong>changing, unstable national character</strong>, while regions of steady activity develop a steady one.</li>
+      <li>Agriculture is inconsistent where the weather is harsh <span class="ts">Précis · 05:15</span>.</li>
+    </ul>
+
+    <h3>Readings 4 and 5: draft, then revise</h3>
+    <p>The points are combined into a first draft, and then that draft is tightened. His revised version reads close to: <em>"Climate shapes national character by dictating the activities of the labour class and affecting their everyday habits"</em>, opening on the core idea, then a sentence contrasting the enterprising temperate worker with the north whose zeal is interrupted by extreme weather, so an erratic national character emerges <span class="ts">Précis · 09:38</span>. Notice the finished piece is continuous, in his own words, and built outward from the central idea.</p>
+
+    <div class="note">
+      <p><strong>The title, derived.</strong> Chaining climate → labour → habits → character, he settles on <strong>"Climate and National Character"</strong> <span class="ts">Précis · 12:15</span>. It names the two ends of the passage's argument in four words.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>What to copy from this.</strong> Do not memorise this passage; memorise the shape of the walk. General sense, then keywords and core idea, then a bare list of points, then a flowing draft that starts from the core idea, then a tightening pass. The content changes every year; the walk does not.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 6 === -->
+<section id="t6" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+  <header>
+    <span class="eyebrow"><span class="num">6</span> Compression</span>
+    <h2><span class="emoji">✂️</span> Cutting the words: say it shorter</h2>
+    <span class="timepill">Précis Writing 2</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">A précis lives or dies on economy. A large part of the second class is a drill in <strong>eliminating unnecessary words</strong>: spotting a long phrase and replacing it with the single word that means the same thing <span class="ts">Précis 2 · 02:13</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Wordy original</th><th>Tightened</th></tr></thead>
+        <tbody>
+          <tr><td>due to the fact that</td><td><strong>because</strong></td></tr>
+          <tr><td>in today's modern world</td><td><strong>nowadays</strong></td></tr>
+          <tr><td>make a decision</td><td><strong>decide</strong></td></tr>
+          <tr><td>postponed the event due to bad weather</td><td>postponed it because of <strong>bad</strong> (or <strong>inclement</strong>) weather</td></tr>
+          <tr><td>the authorities (a whole institution, one word will do)</td><td>keep only the word that carries the meaning</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The worked lines from the class: "the authorities postponed the event due to bad weather" tightens to "due to unfavourable weather," and if your vocabulary is good, "bad" can become <strong>inclement</strong> <span class="ts">Précis 2 · 02:58</span>. "In today's modern world" is simply <strong>nowadays</strong> <span class="ts">Précis 2 · 04:16</span>. Phrases like "due to the fact that" and "for the purpose of making a decision" are pure padding and go straight out <span class="ts">Précis 2 · 03:36</span>.</p>
+
+    <div class="note">
+      <p><strong>The principle underneath the drill.</strong> Sir Danish returns to this again and again: you do not need big words, you need the <em>right</em> words. Simple words in a clean structure carry more force than long or archaic ones, and in a précis every wasted word is a word you did not have room for. Cutting wordiness is not decoration; it is how you fit all the important ideas into one-third of the space.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 7 === -->
+<section id="t7" class="chapter card" style="--accent:#B44A8C; --soft:#F8EAF3;">
+  <header>
+    <span class="eyebrow"><span class="num">7</span> A subtle mark-winner</span>
+    <h2><span class="emoji">🖋️</span> "The author says": when to attribute</h2>
+    <span class="timepill">Précis Writing 2</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">A finer point that separates a good précis from an average one: knowing when to write <strong>"the author says"</strong> and when to state something as a plain fact. A student asks exactly this, and the answer is a useful rule <span class="ts">Précis 2 · 14:41</span>.</p>
+
+    <div class="note">
+      <p><strong>The rule.</strong> Look at the information being conveyed. If it is a <strong>specific, personalised claim</strong>, an opinion or a particular recommendation the writer is making, attribute it: "the author suggests", "the writer argues". If it is a <strong>general truth</strong> that holds for everyone, state it plainly, with no attribution needed <span class="ts">Précis 2 · 15:18</span>.</p>
+    </div>
+
+    <p>His worked contrast: if the passage says you should read literature, history and current affairs beyond your syllabus, that is a specific recommendation from the writer, so you write <strong>"the author advises..."</strong>. But if the underlying point is the general one, that wide reading improves writing, you can state it directly: <strong>"extensive reading is required for improving writing skills"</strong>, a generic truth that needs no attribution <span class="ts">Précis 2 · 16:47</span>.</p>
+
+    <div class="note exam">
+      <p><strong>Why this is two skills, not one.</strong> He frames it as two abilities you need at the same time: the ability to <strong>capture the central idea</strong> and state it generically, and the ability to <strong>associate that idea with the specific subject or opinion</strong> the writer attached to it. For a précis you often want both: the general truth, then, where the writer was being specific, the attribution that shows you noticed <span class="ts">Précis 2 · 17:32</span>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 8 === -->
+<section id="t8" class="chapter card" style="--accent:#1F7A8C; --soft:#E4F0F2;">
+  <header>
+    <span class="eyebrow"><span class="num">8</span> Second worked example</span>
+    <h2><span class="emoji">😴</span> Finding the gist: a passage in praise of idleness</h2>
+    <span class="timepill">Précis Practice</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">A second passage, worked live in the practice class, shows how much rests on the core idea, because this one is designed to mislead you. It looks like an attack on laziness and turns out to be the opposite.</p>
+
+    <p>The passage opens: <em>"All the evils in this world are brought about by the persons who are always up and doing, but do not know when they ought to be up, nor what they ought to be doing"</em> <span class="ts">Practice · 59:57</span>. It pictures the Devil as the busiest creature in the universe, denouncing laziness and angry at the smallest waste of time. Then it turns: the world is in a muddle, but the writer does not think laziness caused it. <em>"It is not the active virtues that it lacks, but the passive ones. It is capable of anything but kindness and a little steady thought"</em> <span class="ts">Practice · 01:02:21</span>. Its example is the statesmen who rushed to the Versailles peace conference "with a bundle of ill-digested notions and a great deal of energy," when the world would have gained had they lounged on a hillside doing nothing first.</p>
+
+    <div class="note warn">
+      <p><strong>The trap, and how the core idea springs it.</strong> Read carelessly and you summarise "laziness is bad, be active." That is the surface, and it is wrong. Students in the class first offer exactly that, then correct toward the real point <span class="ts">Practice · 01:10:09</span>. The core idea is that the <strong>world's problems come from misdirected, restless activity, not from laziness</strong>; what the world lacks is kindness and calm, steady reflection, not more energy <span class="ts">Practice · 01:18:36</span>. Everything you keep in the précis has to serve <em>that</em> idea. The busy-Devil image and the Versailles example are illustrations of it, so in the précis they compress to a single clause or drop out entirely.</p>
+    </div>
+
+    <div class="note">
+      <p><strong>The lesson stacked on the lesson.</strong> This is why the second reading matters so much. A passage can spend its first half sounding like it argues one thing and its second half reversing it. Only a reader who is hunting for the <em>whole</em> gist, not the opening sentiment, catches the turn. "Précis is about reading well," he says. "Everything is about" the reading <span class="ts">Practice · 01:08:41</span>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 9 === -->
+<section id="t9" class="chapter card" style="--accent:#A4553A; --soft:#F7EBE5;">
+  <header>
+    <span class="eyebrow"><span class="num">9</span> Under the clock</span>
+    <h2><span class="emoji">⏱️</span> Timing the précis in the exam</h2>
+    <span class="timepill">Time Management</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">In the exam the précis gets roughly <strong>50 minutes</strong>, and Sir Danish maps the five readings onto that clock so you never run out of time mid-draft <span class="ts">Time Mgmt · 01:24</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Minutes</th><th>What you are doing</th></tr></thead>
+        <tbody>
+          <tr><td><strong>First 10 to 15</strong></td><td>Read the passage repeatedly for the <strong>general sense and the core idea</strong>. This is readings 1 and 2. Do not rush it: the core idea is worth the time <span class="ts">Time Mgmt · 01:24</span>.</td></tr>
+          <tr><td><strong>Next ~15</strong></td><td><strong>Extract the essential points, arrange them in order, and plan</strong> how you will write them (reading 3).</td></tr>
+          <tr><td><strong>At ~30 min</strong></td><td>Put the passage aside. Working only from your points and your mental outline, write the <strong>rough draft</strong> in the next 10 to 12 minutes (reading 4) <span class="ts">Time Mgmt · 01:54</span>.</td></tr>
+          <tr><td><strong>Final ~10</strong></td><td>Give the draft its <strong>final form</strong> (reading 5), then copy the finished précis onto the answer sheet.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Protect the review window.</strong> His firm instruction: by about <strong>10:45</strong> in a paper that ends at 11, you should be writing out the <em>final</em> draft, not still drafting, so that you keep the <strong>last 5 to 10 minutes to review the whole paper</strong> <span class="ts">Time Mgmt · 02:23</span>. A précis finished at the buzzer with no review usually reads worse than one finished five minutes early and checked.</p>
+    </div>
+
+    <div class="note">
+      <p><strong>The mindset line.</strong> He splits the paper's outcome as roughly <strong>60% preparation and mindset, 40% what you do once the clock starts</strong> <span class="ts">Time Mgmt · 02:51</span>. And a warning that speaks to the whole paper: writing <em>more</em> does not earn more. "Just quickly writing a lot" does not bring good marks; a controlled, well-managed answer does <span class="ts">Time Mgmt · 02:51</span>.</p>
+    </div>
+
+    <h3>How to practise between now and the exam</h3>
+    <p>Two habits close the note. First, <strong>quality before speed</strong>: right now, do every step slowly and properly, without worrying about the clock, and only start timing yourself from around <strong>December</strong> once the process is solid <span class="ts">Practice · 05:08</span>. Second, <strong>practise the whole process, rough work included</strong>: send your teacher your <strong>essential points</strong> (step 3) and your <strong>revised final draft</strong> (step 5), because seeing your rough work is how a teacher catches where your <em>reading</em> went wrong, which the final draft alone would hide <span class="ts">Précis · 18:50</span>.</p>
+  </div>
+</section>
+
+<!-- ========================================================= glossary === -->
+<section id="t10" class="chapter card" style="--accent:#8B8490; --soft:#F0EEF2;">
+  <header>
+    <span class="eyebrow"><span class="num">G</span> Reference</span>
+    <h2><span class="emoji">📖</span> Glossary</h2>
+  </header>
+  <div class="section-body">
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Précis</strong></td><td>A shortened version of a passage, about one-third its length, in your own words, keeping every important idea and nothing else.</td></tr>
+          <tr><td><strong>Core idea</strong></td><td>The central point the whole passage exists to make. The "north star" that decides which points are kept and how they are ordered. Finding it is the single most important step.</td></tr>
+          <tr><td><strong>General sense</strong></td><td>The rough, whole-passage understanding you reach on the first reading, before any underlining or note-taking.</td></tr>
+          <tr><td><strong>Essential points</strong></td><td>The important ideas noted in short form on the third reading. Your rough material for the draft.</td></tr>
+          <tr><td><strong>Continuous narrative</strong></td><td>The requirement that the précis flow as one connected paragraph, each sentence leading to the next with no jerk of thought.</td></tr>
+          <tr><td><strong>Attribution</strong></td><td>Writing "the author says / advises / argues" for a specific or personal claim, while stating a general truth plainly with no attribution.</td></tr>
+          <tr><td><strong>Wordiness</strong></td><td>Padding that a précis must cut: long phrases ("due to the fact that", "in today's modern world") replaced by single words ("because", "nowadays").</td></tr>
+          <tr><td><strong>Title</strong></td><td>A few words naming the core idea, built by chaining the passage's key concepts (climate → labour → habits → character gives "Climate and National Character").</td></tr>
+          <tr><td><strong>Reported (indirect) speech</strong></td><td>The convention of converting any direct speech in the passage out of quotation marks, in the third person and past tense.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================= flashcards === -->
+<section id="t11" class="chapter card" style="--accent:#7E5AA6; --soft:#EFEAF7;">
+  <header>
+    <span class="eyebrow"><span class="num">F</span> Recall</span>
+    <h2><span class="emoji">🎴</span> Flashcards</h2>
+  </header>
+  <div class="section-body">
+    <div class="cards">
+      <div class="qa"><p class="q">What is a précis, in one line?</p><p class="a">A shortened version of a passage, about one-third its length, in your own words, keeping every important idea and dropping everything else.</p></div>
+      <div class="qa"><p class="q">Why is the précis called the deciding factor of the paper?</p><p class="a">It carries real weight and tests a genuine skill, so a strong précis lifts the whole paper and a missed core idea can score zero.</p></div>
+      <div class="qa"><p class="q">List the five readings and their jobs.</p><p class="a">1) General sense. 2) Underline keywords, find the core idea. 3) Note all essential points. 4) Combine points into a first draft. 5) Revise the draft.</p></div>
+      <div class="qa"><p class="q">What is the core idea, and why does it matter most?</p><p class="a">The central point the passage makes: the north star that decides which points to keep and how to order them. Miss it and you can walk the wrong way and score zero.</p></div>
+      <div class="qa"><p class="q">How long should a précis be?</p><p class="a">About one-third of the original, or the exact word count if the question specifies one.</p></div>
+      <div class="qa"><p class="q">Name four fixed requirements of a précis.</p><p class="a">One-third length, continuous single-paragraph narrative, all important ideas kept, your own words, plus a title. Standard conventions add third person, indirect speech, past tense, and no quotes, examples or personal comment.</p></div>
+      <div class="qa"><p class="q">Tighten: "due to the fact that", "in today's modern world", "make a decision".</p><p class="a">"because", "nowadays", "decide". Replace wordy phrases with the single word that means the same.</p></div>
+      <div class="qa"><p class="q">When do you write "the author says" versus stating a fact?</p><p class="a">Attribute a specific or personal claim ("the author advises..."); state a general truth plainly with no attribution.</p></div>
+      <div class="qa"><p class="q">How do you build the title?</p><p class="a">Chain the passage's key ideas and name the connection. Climate → labour → habits → character gives "Climate and National Character".</p></div>
+      <div class="qa"><p class="q">What was the trap in the "laziness" passage?</p><p class="a">It sounds like an attack on laziness but reverses: the world's problems come from misdirected restless activity, and it lacks kindness and steady thought, not energy.</p></div>
+      <div class="qa"><p class="q">Give the 50-minute exam plan for the précis.</p><p class="a">10 to 15 min read and find the core idea; ~15 min extract and order points; ~10 to 12 min draft; final ~10 min revise and copy out. Keep 5 to 10 min at the end to review the paper.</p></div>
+      <div class="qa"><p class="q">How should you practise now?</p><p class="a">Quality before speed: do every step slowly, start timing only from about December, and send your teacher your essential points and final draft so the process gets corrected.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== exam focus === -->
+<section id="t12" class="chapter card" style="--accent:#7E5AA6; --soft:#EFEAF7;">
+  <header>
+    <span class="eyebrow"><span class="num">X</span> Strategy</span>
+    <h2><span class="emoji">🎯</span> Exam focus</h2>
+  </header>
+  <div class="section-body">
+
+    <h3>The one habit that matters most</h3>
+    <p>Do not start writing until you can say the core idea out loud in a sentence. Everything else in this note, the points, the order, the title, the cutting, is downstream of that one sentence. A précis with the right core idea and clumsy English still scores; a polished précis of the wrong idea does not.</p>
+
+    <h3>The checklist to run before you copy out</h3>
+    <ul>
+      <li><strong>Length:</strong> about one-third, or the exact count if given. Count it.</li>
+      <li><strong>Own words:</strong> no phrases lifted from the passage.</li>
+      <li><strong>All important ideas in, illustrations out:</strong> examples and quotations compressed or dropped.</li>
+      <li><strong>One flowing paragraph:</strong> continuous narrative, no bullet points, no jerks between sentences.</li>
+      <li><strong>Third person, indirect speech, past tense.</strong></li>
+      <li><strong>No opinion of your own.</strong> You are reporting the passage, not debating it.</li>
+      <li><strong>A title</strong> that names the core idea.</li>
+    </ul>
+
+    <h3>Common ways to lose marks</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Mistake</th><th>Fix</th></tr></thead>
+        <tbody>
+          <tr><td>Summarising the opening sentiment, not the whole gist</td><td>Read to the end before deciding the core idea; watch for a mid-passage turn (the laziness trap)</td></tr>
+          <tr><td>Lifting the passage's phrases</td><td>Recast in your own words; if you have written a whole phrase from the passage, rewrite it</td></tr>
+          <tr><td>Keeping examples and quotations</td><td>Compress an illustration to the point it illustrates, or cut it</td></tr>
+          <tr><td>Writing too much because it "feels safer"</td><td>More is not better. Hit one-third and stop. Controlled beats long</td></tr>
+          <tr><td>Running out of time with no review</td><td>Be writing the final draft by ~10:45; protect the last 5 to 10 minutes</td></tr>
+          <tr><td>Forgetting the title</td><td>Build it last from the core idea, but never leave it blank</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note exam">
+      <p><strong>The through-line of the whole method.</strong> Précis is a reading skill wearing a writing skill's clothes. "Précis is about reading well," Sir Danish says, and the five steps are really four readings that make sure you have understood before one act of writing that says it back, shorter. Get the reading right and the writing is easy. Rush the reading and no amount of good English saves the answer.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="notefoot">Source recordings: <a href="https://drive.google.com/open?id=1zZY-QwrKxK-q5BspcMVz_nsLF33N7AOL" target="_blank" rel="noopener">▶ Précis Writing</a><span class="sep">·</span><a href="https://drive.google.com/open?id=1bN4Bgx4g3BffP9iCUe8_zooNuNqw8RNa" target="_blank" rel="noopener">▶ Précis Writing 2</a><span class="sep">·</span><a href="https://drive.google.com/open?id=1V_OqX9t9BdKxApqShrB_m9gI6G373KHO" target="_blank" rel="noopener">▶ Time Management</a><span class="sep">·</span><a href="https://drive.google.com/open?id=1ElSC8TV2KHBnWDtHb2wNCn-ngoYPHpgN" target="_blank" rel="noopener">▶ Précis Practice</a><span class="sep">·</span><a href="https://drive.google.com/open?id=1pQPriZ2UTTvGck6pfHYG5ojDtKTD6C4A" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+</html>

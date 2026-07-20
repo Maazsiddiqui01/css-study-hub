@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grammar, Vocabulary &amp; Exam Strategy</title>
+<style>/* Lecture Notes ebook, "warm study" theme.
+   Inspired by Mehak's MarketCanvas app: soft cream ground, rounded white cards,
+   a different pastel accent per topic, serif display + friendly sans body,
+   gentle emoji + pill badges. Playful and pretty, but still a real study book.
+   Print-first (A4 PDF via headless Edge); reads well on screen too.
+
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
+   Everything themeable keys off --accent / --soft. Titles stay ink for
+   readability; accents colour eyebrows, numbers, pills, rules and callouts.
+*/
+
+:root {
+  --cream: #FCF6F0;          /* page ground (warm) */
+  --card: #FFFFFF;
+  --ink: #2C2630;            /* plum-black body/headings */
+  --ink-soft: #5A5360;
+  --slate: #8B8490;          /* captions, timestamps */
+  --hairline: #EEE6E4;
+
+  /* section default accent (overridden per section) */
+  --accent: #C0567E;
+  --soft: #FBECF1;
+
+  --shadow: 0 1px 2px rgba(60,30,45,.05), 0 10px 26px rgba(80,40,55,.07);
+  --radius: 20px;
+
+  --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: Consolas, "Cascadia Code", ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background:
+    radial-gradient(1100px 700px at 15% -5%, #FBEEF3 0%, transparent 55%),
+    radial-gradient(1000px 700px at 100% 0%, #EEF3FB 0%, transparent 50%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  font: 10.8pt/1.62 var(--sans);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+@media screen {
+  body { max-width: 51rem; margin: 0 auto; padding: 2.5rem 1.15rem 4rem; font-size: 1.0rem; }
+}
+
+/* ---------------------------------------------------------------- page --- */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm 14mm;
+  @bottom-center {
+    content: counter(page);
+    font: 8.5pt var(--sans);
+    color: #8B8490;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+/* --------------------------------------------------------------- cards --- */
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8mm 9mm 9mm;
+  margin: 0 0 6mm;
+  box-shadow: var(--shadow);
+  break-inside: auto;
+}
+@media screen { .card { margin-bottom: 1.4rem; } }
+
+/* a soft accent wash across the top of each section card (fades to white),
+   echoing the app's pastel cards without hurting readability */
+.chapter {
+  background:
+    linear-gradient(180deg, var(--soft) 0, rgba(255,255,255,0) 34mm),
+    var(--card);
+  border-top: 3px solid var(--accent);
+  break-inside: auto;
+  break-before: page;   /* each topic starts fresh: slide on top, notes below */
+}
+/* on screen (web/PWA) sections just stack; no forced page breaks */
+@media screen { .chapter { break-before: auto; } }
+
+h2, h3, .eyebrow { break-after: avoid; }
+p { orphans: 2; widows: 2; }
+
+/* keep the section header intact (eyebrow + title + time pill together) and
+   glued to its opening slide */
+.chapter > header { break-inside: avoid; break-after: avoid; }
+figure.slide { break-before: avoid; }
+
+/* --------------------------------------------------------------- cover --- */
+
+.cover {
+  page: cover;
+  break-after: page;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32mm 22mm 24mm;
+  background:
+    radial-gradient(700px 460px at 12% 8%, #FBE6EE 0%, transparent 60%),
+    radial-gradient(760px 520px at 96% 4%, #E7EEFB 0%, transparent 58%),
+    radial-gradient(620px 520px at 80% 96%, #E6F4EC 0%, transparent 60%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+@media screen {
+  .cover { min-height: 80vh; border-radius: 24px; padding: 3.2rem 2.6rem; margin-bottom: 1.4rem; }
+}
+
+.cover .avatar { font-size: 30pt; line-height: 1; margin-bottom: 7mm; }
+.cover .kicker {
+  font: 600 9pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 5mm;
+}
+.cover h1 {
+  font: 600 31pt/1.14 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 15em;
+}
+.cover .subtitle {
+  margin-top: 5mm;
+  font: 400 13.5pt/1.5 var(--sans);
+  color: var(--ink-soft);
+  max-width: 30em;
+}
+.cover .warm {
+  margin-top: 4mm;
+  font: italic 400 12pt/1.5 var(--serif);
+  color: var(--accent);
+}
+
+.cover .chips { display: flex; flex-wrap: wrap; gap: 3mm; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.4mm 4mm;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(60,30,45,.04);
+  font: 400 9pt var(--sans);
+  color: var(--slate);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chip b { font: 700 10.5pt var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ headings --- */
+
+.chapter header { margin-bottom: 5mm; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  font: 700 8.5pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--accent);
+  margin-bottom: 3mm;
+}
+.eyebrow .num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h2 {
+  font: 600 20pt/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .emoji { font-size: 17pt; }
+
+.timepill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.5mm 3.5mm;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font: 600 8pt var(--mono);
+  letter-spacing: 0.02em;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h3 {
+  font: 600 12.5pt/1.34 var(--serif);
+  color: var(--ink);
+  margin: 6mm 0 2.5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+.ts { font: 400 8.5pt var(--mono); color: var(--slate); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- body --- */
+
+.section-body > :last-child { margin-bottom: 0; }
+p { margin: 0 0 3mm; }
+.lead { font-size: 11.2pt; color: var(--ink); }
+
+ul, ol { margin: 0 0 3mm 5.5mm; }
+li { margin-bottom: 1.7mm; padding-left: 1mm; }
+li::marker { color: var(--accent); }
+
+.kt { font-weight: 700; color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
+
+code { font: 9.5pt var(--mono); background: #F3EFF4; padding: .4pt 3.5pt; border-radius: 4px; }
+
+/* ------------------------------------------------------------ callouts --- */
+
+.note {
+  --c: var(--accent);
+  --f: var(--soft);
+  background: var(--f);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  border-left: 3px solid var(--c);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.note .label {
+  display: inline-flex; align-items: center; gap: 1.6mm;
+  font: 700 8pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c);
+  margin-bottom: 1.8mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.warn { --c: #B4791F; --f: #FaF1DF; }
+.note.exam { --c: #3B8B78; --f: #E6F3EF; }
+.note.def  { --c: var(--accent); --f: var(--soft); }
+
+/* ------------------------------------------------------- summary card --- */
+
+.summary { --accent: #C0567E; --soft: #FBECF1; }
+.summary ul { list-style: none; margin: 0; }
+.summary li { position: relative; padding: 0 0 0 7mm; margin-bottom: 3.5mm; }
+.summary li::before {
+  content: "";
+  position: absolute; left: 0; top: 2.6mm;
+  width: 3.2mm; height: 3.2mm; border-radius: 50%;
+  background: var(--accent);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.summary li:last-child { margin-bottom: 0; }
+.summary li b, .summary li strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------- TOC --- */
+
+nav.toc { --accent: #8B8490; --soft: #F3EFF4; }
+nav.toc ol { list-style: none; margin: 0; }
+nav.toc li {
+  display: flex; align-items: baseline; gap: 4mm;
+  padding: 2.7mm 0;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11pt var(--sans);
+}
+nav.toc li:last-child { border-bottom: 0; }
+nav.toc .dot { width: 3.4mm; height: 3.4mm; border-radius: 50%; flex-shrink: 0;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+nav.toc .title { flex: 1; color: var(--ink); }
+nav.toc .rng { flex-shrink: 0; font: 600 8.5pt var(--mono); color: var(--slate); }
+
+/* -------------------------------------------------------------- slides --- */
+
+figure.slide { margin: 0 0 5mm; break-inside: avoid; }
+figure.slide img {
+  width: 100%; display: block;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 10px rgba(40,30,45,.10);
+}
+figure.slide figcaption {
+  font: 400 8.5pt var(--sans);
+  color: var(--slate);
+  margin-top: 2mm;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4mm;
+}
+figure.slide figcaption .ts { color: var(--accent); }
+
+/* ------------------------------------------------------------ glossary --- */
+
+dl.glossary { margin: 0; }
+dl.glossary div { padding: 3mm 0; border-bottom: 1px solid var(--hairline); break-inside: avoid; }
+dl.glossary div:last-child { border-bottom: 0; padding-bottom: 0; }
+dl.glossary dt { font: 700 10.5pt var(--sans); color: var(--accent); margin-bottom: 1.2mm; }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- flashcards --- */
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 0; }
+.qa {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  background: linear-gradient(180deg, var(--soft) 0, #fff 60%);
+  break-inside: avoid;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.qa .q { font: 700 10pt var(--sans); color: var(--ink); margin-bottom: 2mm; }
+.qa .a { color: var(--ink-soft); font-size: 10pt; }
+
+/* ------------------------------------------------------------- tables --- */
+
+.tables-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0; break-inside: avoid; }
+th {
+  font: 700 9pt var(--sans); text-align: left; color: var(--accent);
+  border-bottom: 2px solid var(--soft); padding: 2mm 3mm 2mm 0;
+}
+td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+
+/* --- mobile / on-the-go reading (screen only; never affects the print PDF).
+   Placed LAST so it wins the cascade over the wider @media screen rules above.
+   Requires <meta name="viewport" content="width=device-width, initial-scale=1">. */
+@media screen and (max-width: 640px) {
+  body { padding: 1rem 0.85rem 2.5rem; font-size: 1.02rem; }
+  .card { padding: 5mm 5mm 6mm; border-radius: 14px; margin-bottom: 0.9rem; }
+  .cover { min-height: auto; padding: 2rem 1.3rem 1.6rem; border-radius: 16px; }
+  .cover .avatar { font-size: 24pt; margin-bottom: 4mm; }
+  .cover h1 { font-size: 20pt; max-width: 100%; }
+  .cover .subtitle { font-size: 11.5pt; }
+  .cover .warm { font-size: 11pt; }
+  .cover .chips { gap: 2mm; margin-top: 5mm; }
+  h2 { font-size: 16pt; }
+  h2 .emoji { font-size: 13.5pt; }
+  h3 { font-size: 11.5pt; }
+  .cards { grid-template-columns: 1fr; }
+  nav.toc li { font-size: 10.5pt; gap: 2.5mm; padding: 2.5mm 0; }
+  nav.toc .rng { font-size: 8pt; }
+  .note { padding: 3.5mm 4mm; }
+  table { font-size: 9.5pt; }
+}
+</style>
+<meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
+align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
+border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
+<body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/open?id=1ClnoQwRofakYGFbj6ScjrxgMw4l_PkhQ" target="_blank" rel="noopener">Download PDF ↓</a></div>
+
+<!-- ============================================================ cover === -->
+<section class="cover" style="background:radial-gradient(700px 460px at 12% 8%,#EFEAF7 0,transparent 60%),radial-gradient(760px 520px at 96% 4%,#EAF1FB 0,transparent 58%),radial-gradient(620px 520px at 80% 96%,#FAF0E2 0,transparent 60%),var(--cream)">
+  <div>
+    <div class="avatar">🧰</div>
+    <div class="kicker" style="color:#7E5AA6">CSS English Précis &amp; Composition · with Sir Danish</div>
+    <h1>Grammar, Vocabulary &amp; Exam Strategy</h1>
+    <p class="subtitle">The short questions that quietly decide the paper: prepositions, pairs of words, grouping, sentence correction. Plus how the whole paper is built, how to spend the three hours, and the daily routine that wins the marks.</p>
+    <p class="warm" style="color:#6E4A96">These sections look small and add up fast. Prepared with a few minutes a day, they are the most reliable marks on the paper. ✨</p>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>100</b> marks · 3 hrs</span>
+    <span class="chip"><b>7</b> sections</span>
+    <span class="chip"><b>3</b> words a day</span>
+    <span class="chip"><b>Daily</b> practice</span>
+  </div>
+</section>
+
+<!-- ============================================================== toc === -->
+<nav class="toc card">
+  <header><span class="eyebrow">Contents</span><h2><span class="emoji">🗺️</span> In this note</h2></header>
+  <ol>
+    <li><span class="dot" style="background:#7E5AA6"></span><a class="title" href="#summary">The five-minute version</a><span class="rng">summary</span></li>
+    <li><span class="dot" style="background:#5866C4"></span><a class="title" href="#t1">01 · The paper at a glance</a><span class="rng">seven sections</span></li>
+    <li><span class="dot" style="background:#C6506E"></span><a class="title" href="#t2">02 · How to spend the three hours</a><span class="rng">time plan</span></li>
+    <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t3">03 · Prepositions: the small words that carry weight</a><span class="rng">rules · phrasal verbs</span></li>
+    <li><span class="dot" style="background:#B57A2A"></span><a class="title" href="#t4">04 · Vocabulary: pairs of words &amp; grouping</a><span class="rng">confusable words</span></li>
+    <li><span class="dot" style="background:#46955C"></span><a class="title" href="#t5">05 · Sentence correction</a><span class="rng">minimal fixes</span></li>
+    <li><span class="dot" style="background:#3A7CC0"></span><a class="title" href="#t6">06 · The daily routine that wins these marks</a><span class="rng">little and often</span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t7">Glossary · Flashcards · Exam focus</a><span class="rng"></span></li>
+  </ol>
+</nav>
+
+<!-- ============================================================= tldr === -->
+<section id="summary" class="summary card" style="--accent:#7E5AA6; --soft:#EFEAF7; border-top-color:#7E5AA6">
+  <header><span class="eyebrow" style="color:#7E5AA6">Start here</span><h2><span class="emoji">⭐</span> The five-minute version</h2></header>
+  <ul>
+    <li><strong>The paper.</strong> English (Précis and Composition) is <strong>100 marks in 3 hours</strong>, all written (no MCQs). Seven sections: Précis (20), Comprehension (20), Grammar &amp; Vocabulary (20), Sentence Correction (10), Grouping of Words (10), Pairs of Words (10), Translation (10).</li>
+    <li><strong>The two big skills are covered in their own notes.</strong> Précis, Comprehension and Translation each have a dedicated note. This note is the rest: the grammar and vocabulary questions, and the strategy that ties the whole paper together.</li>
+    <li><strong>Spend the three hours deliberately.</strong> Sir Danish's plan: about <strong>35 minutes</strong> on comprehension, roughly <strong>an hour</strong> on the short questions (translation, pairs, prepositions, sentence correction), and about <strong>50 minutes to an hour</strong> on the précis, with a few minutes at the end to review.</li>
+    <li><strong>Prepositions are small words that carry meaning.</strong> Learn the pairs that trip people up: <strong>at</strong> vs <strong>in</strong> for time, <strong>by</strong> vs <strong>with</strong> for agent and instrument, <strong>among</strong> vs <strong>between</strong>, <strong>beside</strong> vs <strong>besides</strong>, and the phrasal verbs (call on/off/for, put up with, and the rest).</li>
+    <li><strong>Vocabulary is a daily habit, not a cram.</strong> Three confusable words a day, from a fixed source, builds 180 to 200 in two months. Cramming eight hours the night before does not stick.</li>
+    <li><strong>The governing idea.</strong> "Simple words with the right prepositions can have very strong meaning." You do not need big words. You need the right small ones, used correctly.</li>
+    <li><strong>Do not chase marks by writing more.</strong> Across the whole paper, a controlled, well-timed answer beats a long, rushed one.</li>
+  </ul>
+</section>
+
+<!-- ======================================================== section 1 === -->
+<section id="t1" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
+  <header>
+    <span class="eyebrow"><span class="num">1</span> The map</span>
+    <h2><span class="emoji">🗺️</span> The paper at a glance</h2>
+    <span class="timepill">Paper overview</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Before the individual questions, the shape of the whole paper. It is a <strong>100-mark, three-hour</strong> paper, entirely descriptive, with <strong>seven sections</strong>. Knowing the marks tells you where to spend your time.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Section</th><th>What it asks</th><th>Marks</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Précis Writing</strong></td><td>Précis a passage to one-third, and give it a title (15 for the précis, 5 for the title)</td><td><strong>20</strong></td></tr>
+          <tr><td><strong>Reading Comprehension</strong></td><td>A passage with five questions, four marks each, answered in your own words</td><td><strong>20</strong></td></tr>
+          <tr><td><strong>Grammar &amp; Vocabulary</strong></td><td>Tenses, articles, prepositions, conjunctions, punctuation, phrasal verbs, synonyms and antonyms</td><td><strong>20</strong></td></tr>
+          <tr><td><strong>Sentence Correction</strong></td><td>Rewrite flawed sentences, correcting the error with the smallest change</td><td><strong>10</strong></td></tr>
+          <tr><td><strong>Grouping of Words</strong></td><td>Pair 20 words by similar or opposite meaning</td><td><strong>10</strong></td></tr>
+          <tr><td><strong>Pairs of Words</strong></td><td>Differentiate five of ten confusable pairs, explain and use each in a sentence</td><td><strong>10</strong></td></tr>
+          <tr><td><strong>Translation</strong></td><td>Ten short Urdu sentences (or a short paragraph) into English</td><td><strong>10</strong></td></tr>
+          <tr><td colspan="2" style="text-align:right"><strong>Total</strong></td><td><strong>100</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <p><strong>This is not the Essay paper.</strong> CSS has a separate compulsory <strong>English Essay</strong> paper (100 marks, one long essay). Précis and Composition is the language-skills paper above. Do not confuse the two, and do not bring essay-style writing into the short answers here: this paper rewards precision, not expansion.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Where the reliable marks are.</strong> Précis and comprehension reward skill and carry risk. The grammar, vocabulary, grouping, pairs and translation questions, <strong>60 marks together</strong>, reward <em>preparation</em> and carry almost no risk if you have done the daily work. A candidate who quietly banks those 60 has room to breathe on the two harder sections. That is why the "small" questions deserve serious, if short, daily attention.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 2 === -->
+<section id="t2" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+  <header>
+    <span class="eyebrow"><span class="num">2</span> The clock</span>
+    <h2><span class="emoji">⏱️</span> How to spend the three hours</h2>
+    <span class="timepill">Time Management</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Sir Danish gives a concrete time plan for the whole paper. The point is to reach the précis with enough time left to do it justice, and to keep a review window at the end.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Time</th><th>What you are doing</th></tr></thead>
+        <tbody>
+          <tr><td><strong>First ~35 min</strong></td><td><strong>Comprehension.</strong> Five short answers on the passage <span class="ts">Time Mgmt Precis · 00:21</span>.</td></tr>
+          <tr><td><strong>Next ~1 hour</strong></td><td><strong>The short questions:</strong> translation, pairs of words, prepositions, sentence correction. These are the four quick 10-mark items <span class="ts">Time Mgmt Precis · 00:21</span>.</td></tr>
+          <tr><td><strong>Within that, ~25 min</strong></td><td><strong>Synonyms, antonyms and grouping.</strong> Answer clearly (write the option or the word), and keep an eye on time and efficiency <span class="ts">Time Mgmt Precis · 01:28</span>.</td></tr>
+          <tr><td><strong>Last ~50 to 60 min</strong></td><td><strong>Précis.</strong> First 10 minutes for the general sense, then points, draft and revision (see the Précis note for the minute-by-minute plan) <span class="ts">Time Mgmt Precis · 02:55</span>.</td></tr>
+          <tr><td><strong>Final 5 to 10 min</strong></td><td><strong>Review the whole paper.</strong> Protect this window; do not still be drafting at the buzzer.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <p><strong>Why the précis goes last for many candidates.</strong> There is a case, which Sir Danish discusses, for doing the précis <strong>at the end</strong>: it is the most demanding question, and finishing the mechanical sections first "liberates" you, so you meet the précis with a settled mind and a clear block of time rather than under early-paper pressure <span class="ts">Practice · 01:31</span>. The sequence on the answer sheet can differ from the order questions are printed; that is allowed, as long as you number your answers correctly.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>The mindset split.</strong> He puts the outcome at roughly <strong>60% preparation and mindset, 40% execution once the clock starts</strong>. And the warning that governs the whole paper: writing <em>more</em> does not earn more. A calm, well-managed script beats a frantic, over-long one. Answer, then stop.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 3 === -->
+<section id="t3" class="chapter card" style="--accent:#2C8C86; --soft:#E4F1F0;">
+  <header>
+    <span class="eyebrow"><span class="num">3</span> Prepositions</span>
+    <h2><span class="emoji">🔗</span> The small words that carry weight</h2>
+    <span class="timepill">Practice</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Prepositions are a favourite of this paper because they are small and precise: one wrong preposition changes the meaning. Sir Danish's framing is that they are <strong>powerful tools</strong>, and using the right one enhances your writing more than any long word could <span class="ts">Practice · 47:30</span>.</p>
+
+    <h3>The pairs that trip people up</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Pair</th><th>Rule</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><strong>at / in</strong> (time)</td><td><strong>at</strong> for a point of time; <strong>in</strong> for a period or portion of time</td><td>"at four o'clock"; "in a few weeks"</td></tr>
+          <tr><td><strong>by / with</strong></td><td><strong>by</strong> for the agent or doer; <strong>with</strong> for the instrument</td><td>"I write <strong>by</strong> hand <strong>with</strong> a pencil"</td></tr>
+          <tr><td><strong>by / with</strong> (again)</td><td><strong>by</strong> also = nearness; <strong>with</strong> = accompaniment</td><td>"he sat <strong>by</strong> the river"; "he lives <strong>with</strong> me"</td></tr>
+          <tr><td><strong>among / between</strong></td><td><strong>among</strong> for three or more; <strong>between</strong> for two</td><td>"divided <strong>among</strong> three brothers"; "<strong>between</strong> two brothers"</td></tr>
+          <tr><td><strong>beside / besides</strong></td><td><strong>beside</strong> = next to; <strong>besides</strong> = in addition to</td><td>"sat <strong>beside</strong> me"; "<strong>besides</strong> Emma, others were present"</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Worked from the class: "I write by my hand with a pencil", where <strong>by</strong> marks the doer and <strong>with</strong> the instrument <span class="ts">Practice · 44:59</span>; "the property was divided among three brothers" but "between two brothers" <span class="ts">Practice · 46:26</span>; and "besides Emma, others were present at the dinner" for <strong>besides</strong> meaning in addition to <span class="ts">Practice · 46:58</span>.</p>
+
+    <h3>Phrasal verbs: one verb, many meanings</h3>
+    <p>The other half of the prepositions question is phrasal verbs, where a single verb plus different prepositions gives completely different meanings. Sir Danish's point: if you know the exact meaning of each, <strong>they are more powerful than a single big word</strong> <span class="ts">Practice · 48:29</span>. His run of examples:</p>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Verb</th><th>Some of its phrasal forms</th></tr></thead>
+        <tbody>
+          <tr><td><strong>call</strong></td><td>call on, call off, call out, call for, call upon, call by, call into</td></tr>
+          <tr><td><strong>put</strong></td><td>put in, put off, put down, put on, put out, put through, put up, put up with</td></tr>
+          <tr><td><strong>let</strong></td><td>let in, let out, let down, let off</td></tr>
+          <tr><td><strong>make</strong></td><td>make out, make off, make up</td></tr>
+          <tr><td><strong>give / go</strong></td><td>give in, give up; go in, go out, go through</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note exam">
+      <p><strong>How to prepare prepositions.</strong> He points to <strong>chapter 3 of "Exploring the World of English"</strong> and advises dedicating a few focused hours (two to five days' worth) to it <span class="ts">Practice · 49:58</span>. Learn each phrasal verb with its meaning and one example sentence. And his closing instruction: <strong>do not learn prepositions just to pass the ten marks</strong>. Use them as tools to strengthen every sentence you write across the whole paper, including the précis and translation.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 4 === -->
+<section id="t4" class="chapter card" style="--accent:#B57A2A; --soft:#FBF1DE;">
+  <header>
+    <span class="eyebrow"><span class="num">4</span> Vocabulary</span>
+    <h2><span class="emoji">🔤</span> Pairs of words and grouping</h2>
+    <span class="timepill">Practice</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Two of the vocabulary questions reward the same daily habit: knowing your confusable words cold.</p>
+
+    <h3>Pairs of Words (10 marks)</h3>
+    <p>You are given ten pairs of confusable words and asked to <strong>differentiate five of them</strong>, explaining the difference and using each in a sentence. The words are the ones people mix up: the classic "words liable to be confused or misused". Sir Danish points to <strong>chapter 2 of "Exploring the World of English"</strong>, whose title is exactly that, as the source to work through <span class="ts">Practice · 51:13</span>.</p>
+
+    <h3>Grouping of Words (10 marks)</h3>
+    <p>A related task: you are given a set of about <strong>20 words and asked to group them into pairs</strong> of similar or opposite meaning. This is the synonyms-and-antonyms work, and in the exam it gets roughly <strong>25 minutes</strong>. Answer with clarity, either writing the matched word or, if it is set as a choice, the correct option, and keep moving so time does not run away <span class="ts">Time Mgmt Precis · 01:28</span>.</p>
+
+    <div class="note">
+      <p><strong>The method that actually works: small and daily.</strong> His strongest study advice on the whole paper is here. Do <strong>three confusable words (or pairs) a day</strong>, which takes only five to seven minutes. Over two months that is <strong>180 to 200 pairs</strong>, effectively the whole chapter, learned painlessly <span class="ts">Practice · 52:25</span>. The alternative, sitting down to cram six or eight hours of vocabulary at once, does not stick and burns a day you did not have.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Layer a past paper onto it.</strong> Alongside the daily three words, solve <strong>one past paper's worth of pairs and prepositions each day</strong> in the run-up. Over 26 or so days that is five full papers' worth of the exact question types, which is how you turn learned words into fast, confident answers under time <span class="ts">Practice · 53:22</span>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 5 === -->
+<section id="t5" class="chapter card" style="--accent:#46955C; --soft:#E9F4EC;">
+  <header>
+    <span class="eyebrow"><span class="num">5</span> Sentence correction</span>
+    <h2><span class="emoji">🩹</span> Sentence correction: the smallest fix</h2>
+    <span class="timepill">Practice</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The sentence-correction question (10 marks) gives you flawed sentences to rewrite correctly. The skill is spotting the grammatical error and fixing it with the <strong>minimum</strong> change, not rewriting the whole sentence in your own style.</p>
+
+    <div class="note">
+      <p><strong>How to prepare it.</strong> Sir Danish's advice is volume of practice from a dedicated grammar book with a large sentence-correction section: work steadily through its exercises rather than reading rules passively <span class="ts">Practice · 54:24</span>. Correction is a pattern-recognition skill, and the patterns (subject-verb agreement, tense consistency, article use, preposition choice, misplaced modifiers, parallelism) repeat, so the more sentences you correct, the faster you see the fault.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Editorial: on the recommended book.</strong> The recording names a grammar book for this practice, but the title is garbled in the audio and I have not verified it, so I am not repeating a possibly-wrong name here. Any standard, well-regarded English grammar workbook with an extensive sentence-correction exercise set serves the purpose; ask Sir Danish directly for the exact title he recommends. The <em>method</em>, steady daily correction practice, matters more than the specific book.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>The rule of minimal correction.</strong> Change only what is wrong. If a sentence has one agreement error, fix that one word and leave the rest untouched. A full rewrite risks introducing a new error and can lose the mark even if your version is elegant. Identify the fault, make the smallest change that removes it, and stop.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 6 === -->
+<section id="t6" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+  <header>
+    <span class="eyebrow"><span class="num">6</span> The habit</span>
+    <h2><span class="emoji">📅</span> The daily routine that wins these marks</h2>
+    <span class="timepill">Practice</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">If there is one idea Sir Danish repeats across the practice class, it is that these sections are won by <strong>a little, every day</strong>, not by heroic cramming. Here is the routine, pulled together.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Daily (5 to 20 min each)</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr><td><strong>3 pairs of words</strong> from chapter 2 of "Exploring the World of English"</td><td>Builds 180 to 200 in two months; 5 to 7 minutes a day <span class="ts">Practice · 52:25</span></td></tr>
+          <tr><td><strong>1 past paper's</strong> pairs and prepositions</td><td>Turns learned words into fast exam answers; 5 papers over ~26 days <span class="ts">Practice · 53:22</span></td></tr>
+          <tr><td><strong>A page or two of sentence correction</strong></td><td>Correction is pattern practice; volume is what improves it</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>In blocks (a few hours, once)</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Chapter 3 (prepositions and phrasal verbs)</strong> of "Exploring the World of English"</td><td>Learn each with its meaning and an example; 2 to 5 days' worth <span class="ts">Practice · 49:58</span></td></tr>
+          <tr><td><strong>Timed practice from December</strong></td><td>Quality first now; add the clock once the process is solid <span class="ts">Practice · 05:08</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <p><strong>The line to hold onto.</strong> The whole philosophy in one sentence: <strong>make it a daily dose of three pairs, and in two months you will have finished the whole chapter</strong> <span class="ts">Practice · 52:25</span>. Trying to eat a month's vocabulary in one sitting is like trying to eat a week's food in one meal. Break it into daily portions and it becomes effortless.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>The order of preparation across the year.</strong> Précis is the deciding factor, so give it the most sustained skill practice. But the grammar and vocabulary sections are the safest 40 to 60 marks on the paper, and they are built by the daily habit above. Do the habit from now, so that by the exam these questions are automatic and your real thinking time goes to the précis and comprehension.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================= glossary === -->
+<section id="t7" class="chapter card" style="--accent:#8B8490; --soft:#F0EEF2;">
+  <header>
+    <span class="eyebrow"><span class="num">G</span> Reference</span>
+    <h2><span class="emoji">📖</span> Glossary</h2>
+  </header>
+  <div class="section-body">
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Précis &amp; Composition</strong></td><td>The 100-mark, 3-hour compulsory language-skills paper: précis, comprehension, grammar and vocabulary, sentence correction, grouping, pairs of words, translation. Separate from the Essay paper.</td></tr>
+          <tr><td><strong>Grouping of Words</strong></td><td>A 10-mark task: pair about 20 given words by similar or opposite meaning (the synonyms-and-antonyms question).</td></tr>
+          <tr><td><strong>Pairs of Words</strong></td><td>A 10-mark task: differentiate five of ten confusable pairs, explaining each and using it in a sentence.</td></tr>
+          <tr><td><strong>Sentence Correction</strong></td><td>A 10-mark task: rewrite flawed sentences, fixing the error with the smallest change.</td></tr>
+          <tr><td><strong>Phrasal verb</strong></td><td>A verb plus a preposition or particle whose combined meaning differs from the verb alone (call off, put up with).</td></tr>
+          <tr><td><strong>at / in (time)</strong></td><td>"at" for a point of time (at four o'clock); "in" for a period (in a few weeks).</td></tr>
+          <tr><td><strong>by / with</strong></td><td>"by" for the agent or nearness; "with" for the instrument or accompaniment.</td></tr>
+          <tr><td><strong>among / between</strong></td><td>"among" for three or more; "between" for two.</td></tr>
+          <tr><td><strong>beside / besides</strong></td><td>"beside" = next to; "besides" = in addition to.</td></tr>
+          <tr><td><strong>Exploring the World of English</strong></td><td>The prep book Sir Danish points to: chapter 2 for confusable words, chapter 3 for prepositions and phrasal verbs.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================= flashcards === -->
+<section id="t8" class="chapter card" style="--accent:#7E5AA6; --soft:#EFEAF7;">
+  <header>
+    <span class="eyebrow"><span class="num">F</span> Recall</span>
+    <h2><span class="emoji">🎴</span> Flashcards</h2>
+  </header>
+  <div class="section-body">
+    <div class="cards">
+      <div class="qa"><p class="q">Give the seven sections of the paper and their marks.</p><p class="a">Précis 20, Comprehension 20, Grammar &amp; Vocabulary 20, Sentence Correction 10, Grouping of Words 10, Pairs of Words 10, Translation 10. Total 100, in 3 hours.</p></div>
+      <div class="qa"><p class="q">How does Sir Danish split the three hours?</p><p class="a">About 35 min comprehension, ~1 hour on the short questions (translation, pairs, prepositions, sentence correction), ~50 to 60 min précis, and 5 to 10 min to review.</p></div>
+      <div class="qa"><p class="q">Why do many candidates do the précis last?</p><p class="a">It is the hardest question; finishing the mechanical sections first frees the mind and leaves a clear block of time for it. The answer-sheet order may differ from the printed order.</p></div>
+      <div class="qa"><p class="q">"at" vs "in" for time?</p><p class="a">"at" for a point of time (at four o'clock); "in" for a period (in a few weeks).</p></div>
+      <div class="qa"><p class="q">"by" vs "with"?</p><p class="a">"by" for the agent or doer (and for nearness); "with" for the instrument (and for accompaniment). "I write by hand with a pencil."</p></div>
+      <div class="qa"><p class="q">"among" vs "between", "beside" vs "besides"?</p><p class="a">"among" for three or more, "between" for two. "beside" = next to, "besides" = in addition to.</p></div>
+      <div class="qa"><p class="q">Why does Sir Danish call prepositions powerful?</p><p class="a">Simple words with the right prepositions carry strong meaning; a well-chosen phrasal verb beats a big word. Do not learn them just for the 10 marks, use them everywhere.</p></div>
+      <div class="qa"><p class="q">What is the vocabulary study routine?</p><p class="a">Three confusable words a day (5 to 7 min) from chapter 2 of "Exploring the World of English", building 180 to 200 in two months. Cramming does not stick.</p></div>
+      <div class="qa"><p class="q">What does the Grouping of Words question ask?</p><p class="a">Pair about 20 given words by similar or opposite meaning. It gets roughly 25 minutes; answer clearly and keep to time.</p></div>
+      <div class="qa"><p class="q">The rule for sentence correction?</p><p class="a">Change only what is wrong, with the smallest fix. A full rewrite risks a new error. Prepare by volume of practice.</p></div>
+      <div class="qa"><p class="q">The 60/40 rule?</p><p class="a">Roughly 60% of the outcome is preparation and mindset, 40% is execution once the clock starts. Writing more does not earn more.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== exam focus === -->
+<section id="t9" class="chapter card" style="--accent:#7E5AA6; --soft:#EFEAF7;">
+  <header>
+    <span class="eyebrow"><span class="num">X</span> Strategy</span>
+    <h2><span class="emoji">🎯</span> Exam focus</h2>
+  </header>
+  <div class="section-body">
+
+    <h3>Bank the safe marks first</h3>
+    <p>Sixty of the hundred marks (grammar and vocabulary 20, sentence correction 10, grouping 10, pairs 10, translation 10) are preparation-driven and low-risk. If you have done the daily habit, they are close to guaranteed. Secure them cleanly and quickly so that your scarce thinking time and nerve go to the two skill sections, précis and comprehension.</p>
+
+    <h3>The whole-paper checklist</h3>
+    <ul>
+      <li><strong>Know the marks map</strong> so you spend time in proportion (do not lavish twenty minutes on a 10-mark grouping question).</li>
+      <li><strong>Comprehension in ~35 min</strong>, five tight answers.</li>
+      <li><strong>The short questions in ~1 hour</strong>, banked steadily.</li>
+      <li><strong>Précis in the last ~50 to 60 min</strong>, with its own internal plan.</li>
+      <li><strong>Keep 5 to 10 minutes</strong> to review the whole paper. Never still be drafting at the buzzer.</li>
+      <li><strong>Number your answers correctly</strong> if you attempt sections out of order.</li>
+    </ul>
+
+    <h3>The preparation checklist</h3>
+    <ul>
+      <li><strong>Daily:</strong> three confusable words, one past paper's pairs and prepositions, a page of sentence correction.</li>
+      <li><strong>In blocks:</strong> the prepositions and phrasal-verbs chapter, learned with meanings and examples.</li>
+      <li><strong>From December:</strong> add the clock, full timed papers, without dropping quality.</li>
+      <li><strong>Throughout:</strong> use good prepositions and simple, correct words across every section, the précis and translation as much as the grammar question.</li>
+    </ul>
+
+    <div class="note exam">
+      <p><strong>The one line to remember.</strong> This paper is not won by big vocabulary or long answers. It is won by <strong>the right small words used correctly, and a little practice every day</strong>. The daily habit turns 60 marks into near-certainties, the time plan gets you to the précis with a clear head, and the whole thing comes down to preparation plus a calm three hours.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="notefoot">Source recordings: <a href="https://drive.google.com/open?id=1ElSC8TV2KHBnWDtHb2wNCn-ngoYPHpgN" target="_blank" rel="noopener">▶ Grammar &amp; Practice class</a><span class="sep">·</span><a href="https://drive.google.com/open?id=1fG03uwJROKHq9d0YN_v2pGc8I94s9eUz" target="_blank" rel="noopener">▶ Time Management (whole paper)</a><span class="sep">·</span><a href="https://drive.google.com/open?id=1ClnoQwRofakYGFbj6ScjrxgMw4l_PkhQ" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+</html>
