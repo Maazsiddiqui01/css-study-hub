@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Accountability &amp; the Public Policy Cycle</title>
+<style>/* Lecture Notes ebook, "warm study" theme.
+   Inspired by Mehak's MarketCanvas app: soft cream ground, rounded white cards,
+   a different pastel accent per topic, serif display + friendly sans body,
+   gentle emoji + pill badges. Playful and pretty, but still a real study book.
+   Print-first (A4 PDF via headless Edge); reads well on screen too.
+
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
+   Everything themeable keys off --accent / --soft. Titles stay ink for
+   readability; accents colour eyebrows, numbers, pills, rules and callouts.
+*/
+
+:root {
+  --cream: #FCF6F0;          /* page ground (warm) */
+  --card: #FFFFFF;
+  --ink: #2C2630;            /* plum-black body/headings */
+  --ink-soft: #5A5360;
+  --slate: #8B8490;          /* captions, timestamps */
+  --hairline: #EEE6E4;
+
+  /* section default accent (overridden per section) */
+  --accent: #C0567E;
+  --soft: #FBECF1;
+
+  --shadow: 0 1px 2px rgba(60,30,45,.05), 0 10px 26px rgba(80,40,55,.07);
+  --radius: 20px;
+
+  --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: Consolas, "Cascadia Code", ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background:
+    radial-gradient(1100px 700px at 15% -5%, #FBEEF3 0%, transparent 55%),
+    radial-gradient(1000px 700px at 100% 0%, #EEF3FB 0%, transparent 50%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  font: 10.8pt/1.62 var(--sans);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+@media screen {
+  body { max-width: 51rem; margin: 0 auto; padding: 2.5rem 1.15rem 4rem; font-size: 1.0rem; }
+}
+
+/* ---------------------------------------------------------------- page --- */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm 14mm;
+  @bottom-center {
+    content: counter(page);
+    font: 8.5pt var(--sans);
+    color: #8B8490;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+/* --------------------------------------------------------------- cards --- */
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8mm 9mm 9mm;
+  margin: 0 0 6mm;
+  box-shadow: var(--shadow);
+  break-inside: auto;
+}
+@media screen { .card { margin-bottom: 1.4rem; } }
+
+/* a soft accent wash across the top of each section card (fades to white),
+   echoing the app's pastel cards without hurting readability */
+.chapter {
+  background:
+    linear-gradient(180deg, var(--soft) 0, rgba(255,255,255,0) 34mm),
+    var(--card);
+  border-top: 3px solid var(--accent);
+  break-inside: auto;
+  break-before: page;   /* each topic starts fresh: slide on top, notes below */
+}
+/* on screen (web/PWA) sections just stack; no forced page breaks */
+@media screen { .chapter { break-before: auto; } }
+
+h2, h3, .eyebrow { break-after: avoid; }
+p { orphans: 2; widows: 2; }
+
+/* keep the section header intact (eyebrow + title + time pill together) and
+   glued to its opening slide */
+.chapter > header { break-inside: avoid; break-after: avoid; }
+figure.slide { break-before: avoid; }
+
+/* --------------------------------------------------------------- cover --- */
+
+.cover {
+  page: cover;
+  break-after: page;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32mm 22mm 24mm;
+  background:
+    radial-gradient(700px 460px at 12% 8%, #FBE6EE 0%, transparent 60%),
+    radial-gradient(760px 520px at 96% 4%, #E7EEFB 0%, transparent 58%),
+    radial-gradient(620px 520px at 80% 96%, #E6F4EC 0%, transparent 60%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+@media screen {
+  .cover { min-height: 80vh; border-radius: 24px; padding: 3.2rem 2.6rem; margin-bottom: 1.4rem; }
+}
+
+.cover .avatar { font-size: 30pt; line-height: 1; margin-bottom: 7mm; }
+.cover .kicker {
+  font: 600 9pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 5mm;
+}
+.cover h1 {
+  font: 600 31pt/1.14 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 15em;
+}
+.cover .subtitle {
+  margin-top: 5mm;
+  font: 400 13.5pt/1.5 var(--sans);
+  color: var(--ink-soft);
+  max-width: 30em;
+}
+.cover .warm {
+  margin-top: 4mm;
+  font: italic 400 12pt/1.5 var(--serif);
+  color: var(--accent);
+}
+
+.cover .chips { display: flex; flex-wrap: wrap; gap: 3mm; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.4mm 4mm;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(60,30,45,.04);
+  font: 400 9pt var(--sans);
+  color: var(--slate);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chip b { font: 700 10.5pt var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ headings --- */
+
+.chapter header { margin-bottom: 5mm; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  font: 700 8.5pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--accent);
+  margin-bottom: 3mm;
+}
+.eyebrow .num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h2 {
+  font: 600 20pt/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .emoji { font-size: 17pt; }
+
+.timepill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.5mm 3.5mm;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font: 600 8pt var(--mono);
+  letter-spacing: 0.02em;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h3 {
+  font: 600 12.5pt/1.34 var(--serif);
+  color: var(--ink);
+  margin: 6mm 0 2.5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+.ts { font: 400 8.5pt var(--mono); color: var(--slate); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- body --- */
+
+.section-body > :last-child { margin-bottom: 0; }
+p { margin: 0 0 3mm; }
+.lead { font-size: 11.2pt; color: var(--ink); }
+
+ul, ol { margin: 0 0 3mm 5.5mm; }
+li { margin-bottom: 1.7mm; padding-left: 1mm; }
+li::marker { color: var(--accent); }
+
+.kt { font-weight: 700; color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
+
+code { font: 9.5pt var(--mono); background: #F3EFF4; padding: .4pt 3.5pt; border-radius: 4px; }
+
+/* ------------------------------------------------------------ callouts --- */
+
+.note {
+  --c: var(--accent);
+  --f: var(--soft);
+  background: var(--f);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  border-left: 3px solid var(--c);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.note .label {
+  display: inline-flex; align-items: center; gap: 1.6mm;
+  font: 700 8pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c);
+  margin-bottom: 1.8mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.warn { --c: #B4791F; --f: #FaF1DF; }
+.note.exam { --c: #3B8B78; --f: #E6F3EF; }
+.note.def  { --c: var(--accent); --f: var(--soft); }
+
+/* ------------------------------------------------------- summary card --- */
+
+.summary { --accent: #C0567E; --soft: #FBECF1; }
+.summary ul { list-style: none; margin: 0; }
+.summary li { position: relative; padding: 0 0 0 7mm; margin-bottom: 3.5mm; }
+.summary li::before {
+  content: "";
+  position: absolute; left: 0; top: 2.6mm;
+  width: 3.2mm; height: 3.2mm; border-radius: 50%;
+  background: var(--accent);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.summary li:last-child { margin-bottom: 0; }
+.summary li b, .summary li strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------- TOC --- */
+
+nav.toc { --accent: #8B8490; --soft: #F3EFF4; }
+nav.toc ol { list-style: none; margin: 0; }
+nav.toc li {
+  display: flex; align-items: baseline; gap: 4mm;
+  padding: 2.7mm 0;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11pt var(--sans);
+}
+nav.toc li:last-child { border-bottom: 0; }
+nav.toc .dot { width: 3.4mm; height: 3.4mm; border-radius: 50%; flex-shrink: 0;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+nav.toc .title { flex: 1; color: var(--ink); }
+nav.toc .rng { flex-shrink: 0; font: 600 8.5pt var(--mono); color: var(--slate); }
+
+/* -------------------------------------------------------------- slides --- */
+
+figure.slide { margin: 0 0 5mm; break-inside: avoid; }
+figure.slide img {
+  width: 100%; display: block;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 10px rgba(40,30,45,.10);
+}
+figure.slide figcaption {
+  font: 400 8.5pt var(--sans);
+  color: var(--slate);
+  margin-top: 2mm;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4mm;
+}
+figure.slide figcaption .ts { color: var(--accent); }
+
+/* ------------------------------------------------------------ glossary --- */
+
+dl.glossary { margin: 0; }
+dl.glossary div { padding: 3mm 0; border-bottom: 1px solid var(--hairline); break-inside: avoid; }
+dl.glossary div:last-child { border-bottom: 0; padding-bottom: 0; }
+dl.glossary dt { font: 700 10.5pt var(--sans); color: var(--accent); margin-bottom: 1.2mm; }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- flashcards --- */
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 0; }
+.qa {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  background: linear-gradient(180deg, var(--soft) 0, #fff 60%);
+  break-inside: avoid;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.qa .q { font: 700 10pt var(--sans); color: var(--ink); margin-bottom: 2mm; }
+.qa .a { color: var(--ink-soft); font-size: 10pt; }
+
+/* ------------------------------------------------------------- tables --- */
+
+.tables-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0; break-inside: avoid; }
+th {
+  font: 700 9pt var(--sans); text-align: left; color: var(--accent);
+  border-bottom: 2px solid var(--soft); padding: 2mm 3mm 2mm 0;
+}
+td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+
+/* --- mobile / on-the-go reading (screen only; never affects the print PDF).
+   Placed LAST so it wins the cascade over the wider @media screen rules above.
+   Requires <meta name="viewport" content="width=device-width, initial-scale=1">. */
+@media screen and (max-width: 640px) {
+  body { padding: 1rem 0.85rem 2.5rem; font-size: 1.02rem; }
+  .card { padding: 5mm 5mm 6mm; border-radius: 14px; margin-bottom: 0.9rem; }
+  .cover { min-height: auto; padding: 2rem 1.3rem 1.6rem; border-radius: 16px; }
+  .cover .avatar { font-size: 24pt; margin-bottom: 4mm; }
+  .cover h1 { font-size: 20pt; max-width: 100%; }
+  .cover .subtitle { font-size: 11.5pt; }
+  .cover .warm { font-size: 11pt; }
+  .cover .chips { gap: 2mm; margin-top: 5mm; }
+  h2 { font-size: 16pt; }
+  h2 .emoji { font-size: 13.5pt; }
+  h3 { font-size: 11.5pt; }
+  .cards { grid-template-columns: 1fr; }
+  nav.toc li { font-size: 10.5pt; gap: 2.5mm; padding: 2.5mm 0; }
+  nav.toc .rng { font-size: 8pt; }
+  .note { padding: 3.5mm 4mm; }
+  table { font-size: 9.5pt; }
+}
+</style>
+<meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
+align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
+border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
+<body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/open?id=1di4gMP_hqWt7kbSaFoiKKnp8Zr9qP3cy" target="_blank" rel="noopener">Download PDF ↓</a></div>
+
+<!-- ============================================================ cover === -->
+<section class="cover" style="background:radial-gradient(700px 460px at 12% 8%,#F7ECE7 0,transparent 60%),radial-gradient(760px 520px at 96% 4%,#EAF1FB 0,transparent 58%),radial-gradient(620px 520px at 80% 96%,#E9F4EC 0,transparent 60%),var(--cream)">
+  <div>
+    <div class="avatar">⚖️</div>
+    <div class="kicker" style="color:#BD6A4E">CSS Governance &amp; Public Policy · Chapter 4</div>
+    <h1>Accountability &amp; the Public Policy Cycle</h1>
+    <p class="subtitle">Who watches the power-holders, and how policy is actually made. The four kinds of accountability and Pakistan's institutions that enforce them, then public policy from problem to evaluation.</p>
+    <p class="warm" style="color:#A85338">Power without accountability is the root of the corruption in the last chapter. This one is the answer: the auditors, committees and courts that hold power to account, and the disciplined cycle by which good policy is built. ⚖️</p>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>4</b> types of accountability</span>
+    <span class="chip"><b>AGP · PAC · NAB</b></span>
+    <span class="chip"><b>Art 184(3)</b></span>
+    <span class="chip"><b>6-stage</b> policy cycle</span>
+  </div>
+</section>
+
+<!-- ============================================================== toc === -->
+<nav class="toc card">
+  <header><span class="eyebrow">Contents</span><h2><span class="emoji">🗺️</span> In this chapter</h2></header>
+  <ol>
+    <li><span class="dot" style="background:#BD6A4E"></span><a class="title" href="#summary">The five-minute version</a><span class="rng">summary</span></li>
+    <li><span class="dot" style="background:#5866C4"></span><a class="title" href="#t1">01 · What accountability is, and its four types</a><span class="rng">the frame</span></li>
+    <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t2">02 · The institutions of accountability</a><span class="rng">AGP · PAC · NAB · FIA</span></li>
+    <li><span class="dot" style="background:#C6506E"></span><a class="title" href="#t3">03 · Judicial review &amp; Article 184(3)</a><span class="rng">the courts</span></li>
+    <li><span class="dot" style="background:#B57A2A"></span><a class="title" href="#t4">04 · What public policy is</a><span class="rng">definition</span></li>
+    <li><span class="dot" style="background:#46955C"></span><a class="title" href="#t5">05 · The policy cycle</a><span class="rng">problem to evaluation</span></li>
+    <li><span class="dot" style="background:#3A7CC0"></span><a class="title" href="#t6">06 · Types of policy &amp; implementation</a><span class="rng">how it lands</span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t7">Glossary · Flashcards · Exam focus</a><span class="rng"></span></li>
+  </ol>
+</nav>
+
+<!-- ============================================================= tldr === -->
+<section id="summary" class="summary card" style="--accent:#BD6A4E; --soft:#F7ECE7; border-top-color:#BD6A4E">
+  <header><span class="eyebrow" style="color:#BD6A4E">Start here</span><h2><span class="emoji">⭐</span> The five-minute version</h2></header>
+  <ul>
+    <li><strong>Accountability is the obligation to give an account.</strong> Public servants are power-holders (political, financial, administrative), so they must answer for their duties and the resources entrusted to them. That is why they are held to a higher standard than an ordinary person.</li>
+    <li><strong>There are four types:</strong> <span class="kt">political</span> (to voters and the media), <span class="kt">judicial/legal</span> (to the courts), <span class="kt">administrative</span> (to auditors, inspectors and the internal hierarchy), and <span class="kt">professional</span> (to a profession's own standards).</li>
+    <li><strong>The institutions that enforce it:</strong> the <strong>Auditor General of Pakistan (AGP)</strong> audits public accounts; the <strong>Public Accounts Committee (PAC)</strong> scrutinises the AGP's reports in parliament; the <strong>NAB</strong>, <strong>FIA</strong>, provincial <strong>anti-corruption establishments</strong> and the <strong>Ombudsman</strong> investigate and check wrongdoing, with the media as an informal watchdog.</li>
+    <li><strong>Judicial review runs mainly through Article 184(3)</strong>, the Supreme Court's original jurisdiction on questions of public importance touching fundamental rights, the basis of suo motu action. Note the 26th and 27th Amendments have changed this landscape.</li>
+    <li><strong>Public policy is "the actions of government and the intentions that determine those actions"</strong> (Cochran), or, in the famous shorter version, <strong>"what government chooses to do or not to do"</strong> (Dye). Inaction is also policy.</li>
+    <li><strong>The policy cycle has a fixed order.</strong> It <em>starts</em> with <strong>problem identification</strong>, never policy formulation, and <em>ends</em> with <strong>evaluation</strong>, never implementation. Stages: problem identification, agenda setting, formulation, adoption, implementation, evaluation.</li>
+    <li><strong>A flaw in implementation is a failure of governance</strong>, since governance just is the implementation of public policy. Implementation works best when backed by law.</li>
+  </ul>
+</section>
+
+<!-- ======================================================== section 1 === -->
+<section id="t1" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
+  <header>
+    <span class="eyebrow"><span class="num">1</span> The frame</span>
+    <h2><span class="emoji">📋</span> What accountability is, and its four types</h2>
+    <span class="timepill">Class 4</span>
+  </header>
+  <div class="section-body">
+    <p class="lead"><span class="kt">Accountability</span> is the obligation of public servants and civil servants to <strong>present an account of their duties, their activities and the resources given to them</strong> by the government or by virtue of their office <span class="ts">Class 4 · 09:01</span>. In short: what did you do with the power and money you were trusted with, and why.</p>
+
+    <div class="note">
+      <p><strong>Why power-holders are held higher.</strong> The teacher's rationale: civil servants and public officials are <strong>power-holders</strong> who possess political, financial and administrative power, so their accountability is far greater than that of an ordinary citizen <span class="ts">Class 4 · 09:01</span>. The more power an office carries, the heavier its duty to answer for it. This is the moral logic behind every institution in the next section.</p>
+    </div>
+
+    <h3>The four types</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Type</th><th>To whom, and how</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Political</strong></td><td>To the <strong>voters and the media</strong>. Elected representatives answer at the ballot box and in public opinion. Parliamentarians are not immune; a citizen can bring a writ against a law or politician <span class="ts">Class 4 · 37:59</span></td></tr>
+          <tr><td><strong>Judicial / legal</strong></td><td>To the <strong>courts</strong>, through judicial review (see section 3). Laws or acts against the public interest can be challenged <span class="ts">Class 4 · 37:59</span></td></tr>
+          <tr><td><strong>Administrative</strong></td><td>To <strong>inspectors, auditors, controllers</strong> and the internal reporting hierarchy. The watchdogs who check whether the work is being done. This mirrors regulation theory's identify-and-correct idea <span class="ts">Class 4 · 38:31</span></td></tr>
+          <tr><td><strong>Professional</strong></td><td>To the standards and codes of one's own profession</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note exam">
+      <p><strong>The link back to the last chapter.</strong> Accountability is the structural answer to corruption. Where corruption is the misuse of entrusted power, accountability is the obligation to justify how that power was used, backed by institutions that can check and punish. Frame an anti-corruption answer around these four types and you have both the diagnosis and the cure in one structure.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 2 === -->
+<section id="t2" class="chapter card" style="--accent:#2C8C86; --soft:#E4F1F0;">
+  <header>
+    <span class="eyebrow"><span class="num">2</span> The machinery</span>
+    <h2><span class="emoji">🏛️</span> The institutions of accountability</h2>
+    <span class="timepill">Class 4</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The teacher calls these the <strong>institutional part of the government edifice that ensures accountability</strong>, the external auditors and watchdogs of the state <span class="ts">Class 4 · 58:21</span>. Know each one's role and, where given, its founding law (a favourite for MCQs).</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Institution</th><th>Role</th><th>Founding law</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Auditor General of Pakistan (AGP)</strong></td><td>The supreme audit institution; audits federal and provincial public accounts and reports whether the money given to a ministry or division was spent as it should be <span class="ts">Class 4 · 53:13</span></td><td>AGP Ordinance <strong>2001</strong> (constitutional basis: Articles 168 to 171)</td></tr>
+          <tr><td><strong>Public Accounts Committee (PAC)</strong></td><td>The parliamentary committee that scrutinises the AGP's audit reports and reports back to the legislature <span class="ts">Class 4 · 01:01:40</span></td><td>Committee of the National / Provincial Assembly</td></tr>
+          <tr><td><strong>National Accountability Bureau (NAB)</strong></td><td>The federal anti-corruption agency; investigates and prosecutes corruption by public office-holders, and can reach even the junior judiciary <span class="ts">Class 4 · 51:28</span></td><td>National Accountability Ordinance <strong>1999</strong></td></tr>
+          <tr><td><strong>Federal Investigation Agency (FIA)</strong></td><td>Federal law enforcement for cross-provincial offences: financial crime, money laundering, corruption of public officials, cybercrime, trafficking</td><td>FIA Act 1974</td></tr>
+          <tr><td><strong>Ombudsman (Wafaqi Mohtasib)</strong></td><td>Investigates and redresses <strong>maladministration</strong> by government agencies; provincial ombudsmen mirror this</td><td>Established 1983</td></tr>
+          <tr><td><strong>Anti-Corruption Establishments (ACEs)</strong></td><td>Provincial bodies handling corruption by provincial government servants</td><td>Provincial</td></tr>
+          <tr><td><strong>Intelligence Bureau (IB) &amp; the media</strong></td><td>The IB gathers intelligence; the media acts as an informal but powerful watchdog <span class="ts">Class 4 · 58:21</span></td><td>n/a</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <p><strong>Editorial: which details are added.</strong> The lecture names all these institutions and gives two founding dates directly, <strong>NAB 1999</strong> and <strong>AGP 2001</strong> (both good MCQ facts she flags herself). The other founding laws and role descriptions in the table (FIA Act 1974, the Ombudsman established 1983 to redress "maladministration", the AGP's constitutional Articles) are added here for reference and accuracy; treat them as supporting detail rather than lecture content.</p>
+    </div>
+
+    <h3>The Public Accounts Committee, in detail</h3>
+    <p>The PAC deserves its own paragraph because it is the hinge between the auditor and the parliament. It is a <strong>legislative body within the National and Provincial Assemblies</strong> <span class="ts">Class 4 · 01:01:40</span>, and its objective is to <strong>uphold transparency and accountability across all public bodies and constitutional institutions</strong> <span class="ts">Class 4 · 01:01:57</span>. The chain is: the AGP audits and produces reports; the PAC examines those reports, summons officials to answer for irregularities, and reports its findings back to the legislature, so the public can see how each department spent its money <span class="ts">Class 4 · 01:04:10</span>.</p>
+
+    <div class="note">
+      <p><strong>Editorial: two precisions on the PAC.</strong> At the <strong>federal</strong> level the PAC is not purely a National Assembly body: it has <strong>29 members, 23 from the National Assembly and 6 from the Senate</strong>, chaired by an NA member. And it questions the <strong>principal accounting officers</strong> (the secretaries of ministries and departments), not "representatives" loosely. The AGP is the <em>auditor</em>; the PAC is the <em>parliamentary forum</em> that acts on the audit. Keeping that division clear is a common way to earn or lose a mark.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction and currency: NAB's mandate has changed, and you must be current.</strong> NAB was created by the National Accountability Ordinance <strong>1999</strong>, which the teacher rightly flags for MCQs. But its powers have been through a legal rollercoaster you should know as of 2026. The <strong>2022 amendments</strong> narrowed NAB sharply: jurisdiction limited to corruption of <strong>Rs 500 million and above</strong>, and the chairman's and prosecutor-general's terms cut to three years. In <strong>September 2023</strong> the Supreme Court struck those amendments down; then in <strong>September 2024</strong>, on intra-court appeals, it <strong>reversed itself and upheld the amendments</strong>, so they stand. The appellate architecture is now shifting to the new <strong>Federal Constitutional Court</strong> created by the 26th Amendment. The line to write: <em>NAB operates under its amended 1999 law (Rs 500m threshold, three-year terms), upheld by the Supreme Court in 2024.</em></p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>How to improve accountability (the "remedies" half).</strong> The teacher's solution list, for the standard "how to strengthen accountability" question <span class="ts">Class 4 · 01:07:03</span>: <strong>establish and empower anti-corruption institutions</strong> (like NAB) at local and provincial levels; <strong>legislative reforms</strong>; <strong>strengthen institutional capacity</strong>; <strong>judicial reforms</strong>; implement <strong>freedom-of-information laws</strong>; and roll out <strong>e-governance</strong>, which ties this chapter back to the last one.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 3 === -->
+<section id="t3" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+  <header>
+    <span class="eyebrow"><span class="num">3</span> The courts</span>
+    <h2><span class="emoji">⚖️</span> Judicial review and Article 184(3)</h2>
+    <span class="timepill">Class 4</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Legal accountability runs through <strong>judicial review</strong>: the power of the courts to review an act or law you believe is against the constitution or against the public interest <span class="ts">Class 4 · 48:44</span>. The teacher anchors it to one article.</p>
+
+    <div class="note">
+      <p><strong>Article 184(3).</strong> This provision gives the <strong>Supreme Court original jurisdiction</strong> to make orders enforcing <strong>fundamental rights</strong> where a <strong>question of public importance</strong> arises <span class="ts">Class 4 · 48:44</span>. It is the constitutional basis of the Court's <strong>suo motu</strong> jurisdiction and of public-interest litigation. Under it, the judiciary can hold the executive and legislature to account when a law or action threatens the public's rights.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Editorial: judicial review is wider than 184(3), and the ground is shifting.</strong> Two accuracy points the teacher gestures at. First, 184(3) is <em>one</em> vehicle, specifically the Supreme Court's original fundamental-rights/suo motu jurisdiction. Judicial review of laws and executive action also rests on <strong>Article 8</strong> (any law repugnant to fundamental rights is void) and the <strong>High Courts' writ jurisdiction under Article 199</strong>. Second, and importantly for currency: the <strong>26th Amendment (October 2024)</strong> routed 184(3) original jurisdiction to newly created <strong>Constitutional Benches</strong> (Article 191A), and the teacher warns that the <strong>26th and 27th Amendments change the dynamics of judicial review</strong>, so any judicial-review answer should note them <span class="ts">Class 4 · 45:55</span>. Write "judicial review, chiefly through Article 184(3)" rather than treating the two as identical.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>The debate to be ready for.</strong> Judicial review is where accountability meets the separation of powers, and it is contested: welcomed as a check on executive abuse, criticised as judicial overreach when the Court steps into policy. A strong answer presents both, then locates the recent amendments as parliament's response to that tension. That combination, the doctrine plus the live constitutional debate, is exactly what a governance examiner rewards.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 4 === -->
+<section id="t4" class="chapter card" style="--accent:#B57A2A; --soft:#FBF1DE;">
+  <header>
+    <span class="eyebrow"><span class="num">4</span> Policy defined</span>
+    <h2><span class="emoji">📜</span> What public policy is</h2>
+    <span class="timepill">Class 4</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The second half of the chapter turns from checking power to using it: <span class="kt">public policy</span>. The definition on the deck: public policy is <strong>the actions of the government and the intentions that determine those actions</strong> <span class="ts">Class 4 · 01:46:11</span>. Policy is action plus the goal behind it.</p>
+
+    <div class="note">
+      <p><strong>Correction: get the two definitions and their authors right.</strong> The lecture blends two famous definitions and it is worth separating them, because the paper may ask who said what. The "<strong>actions of government and the intentions that determine those actions</strong>" formulation is <strong>Clarke Cochran</strong>. The shorter, more famous line the teacher praises as "brilliant", "<strong>what government chooses to do or not to do</strong>", is <strong>Thomas Dye</strong> (<em>Understanding Public Policy</em>, 1972), not Cochran. Cite Cochran for actions-and-intentions and Dye for to-do-or-not-to-do.</p>
+    </div>
+
+    <h3>Inaction is policy too</h3>
+    <p>The most useful idea in Dye's definition is that <strong>choosing not to act is itself a policy</strong> <span class="ts">Class 4 · 01:47:37</span>. If the government does not seriously address the education or healthcare crisis, that neglect signals a policy of not prioritising it, whatever officials say <span class="ts">Class 4 · 01:48:03</span>. And because the state deliberates before it acts (or declines to), its inaction cannot be dismissed as an oversight the way an individual's might be <span class="ts">Class 4 · 01:48:34</span>. Read a government's silences as policy.</p>
+
+    <h3>What form a policy takes</h3>
+    <p>A policy takes many forms beyond a document headed "Policy". It can be a <strong>rule, a law, a regulation, a decision, or even a verdict or ruling of the Supreme Court</strong>, and often a combination <span class="ts">Class 4 · 01:52:04</span>. If there is no written money-laundering policy but the courts consistently rule against it, the state's effective policy on money laundering can be read from those rulings <span class="ts">Class 4 · 01:53:09</span>.</p>
+
+    <div class="note exam">
+      <p><strong>Three defining features of a public policy.</strong> The deck gives three, worth memorising <span class="ts">Class 4 · 01:54:16</span>. It is <strong>goal-oriented</strong>: there is always an intended outcome. It is <strong>not a discrete (secret) decision</strong>: unlike a defence or nuclear-security decision, which should be discreet, public policy must be known so citizens can plan (a petroleum policy, for instance, affects everyone's budgeting). And it <strong>emerges in response to public demand</strong> to particular problems, because its whole aim is public service delivery and addressing people's concerns <span class="ts">Class 4 · 01:55:29</span>.</p>
+    </div>
+
+    <div class="note">
+      <p><strong>Editorial: the evaluation criteria for a policy.</strong> The deck's "goals of public policy", <strong>efficiency, equity and political practicality</strong>, are, in the standard literature, the <strong>criteria used to evaluate a policy</strong> rather than goals in themselves. Efficiency weighs benefits against costs; equity asks whether the process and outcome are fair (rights-based or redistributive); political practicality (feasibility) asks whether it can actually be enacted. The full list in the literature also includes effectiveness, administrative feasibility, liberty and legality, so treat these three as a core subset.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 5 === -->
+<section id="t5" class="chapter card" style="--accent:#46955C; --soft:#E9F4EC;">
+  <header>
+    <span class="eyebrow"><span class="num">5</span> The cycle</span>
+    <h2><span class="emoji">🔁</span> The policy cycle</h2>
+    <span class="timepill">Class 4</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The <span class="kt">policy cycle</span> is the stage-by-stage model of how a policy is made, and the teacher is emphatic about its order, because getting it wrong costs real marks.</p>
+
+    <div class="note warn">
+      <p><strong>The rule she repeats three times: the order is fixed.</strong> The cycle <strong>starts with problem identification, never with policy formulation</strong> <span class="ts">Class 4 · 01:42:59</span>, and it <strong>ends with policy evaluation, never with implementation</strong> <span class="ts">Class 4 · 01:43:39</span>. She warns that students who start at formulation or stop at implementation lose "six to seven marks" on a 20-mark question <span class="ts">Class 4 · 01:45:35</span>. This is the single most exam-critical fact in the chapter.</p>
+    </div>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Stage</th><th>What happens</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><strong>Problem identification</strong></td><td>A public need or problem is recognised. The cycle <em>always</em> begins here</td></tr>
+          <tr><td>2</td><td><strong>Agenda setting</strong></td><td>Out of many problems, choosing which ones the government will actually take up <span class="ts">Class 4 · 02:04:54</span></td></tr>
+          <tr><td>3</td><td><strong>Policy formulation</strong></td><td>Designing the proposed courses of action and alternatives</td></tr>
+          <tr><td>4</td><td><strong>Policy adoption</strong> (legitimation)</td><td>A chosen solution is endorsed and legitimised. The teacher describes this stage as advocacy and "marketing" the policy through an advocacy coalition <span class="ts">Class 4 · 02:10:18</span></td></tr>
+          <tr><td>5</td><td><strong>Implementation</strong></td><td>Civil servants and administrative bodies carry it out</td></tr>
+          <tr><td>6</td><td><strong>Evaluation</strong></td><td>Judging whether the policy met its goals. The cycle <em>always</em> ends here</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <p><strong>Editorial: whose model this is.</strong> The stages-heuristic policy cycle traces to <strong>Harold Lasswell</strong>, who first broke policy into stages, with the familiar textbook version associated with <strong>James Anderson</strong>. Crediting "Lasswell and Anderson" is the safe attribution. The point of the model is not that real policy is this tidy, but that it gives you a checklist to structure both analysis and answers.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Answer it with an example threaded through.</strong> The teacher's strong advice: do not explain the cycle abstractly, walk a real problem through it and <strong>name the administrative body</strong> at each stage <span class="ts">Class 4 · 02:16:41</span>. Take <strong>food insecurity</strong> or a <strong>flood</strong>: identify the problem, set it on the agenda, formulate options, adopt one, then implementation falls to a named body (for a flood, the <strong>NDMA</strong>), and finally evaluate. Attaching real bodies and a real problem to each stage is what turns a memorised list into a marks-winning answer.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 6 === -->
+<section id="t6" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+  <header>
+    <span class="eyebrow"><span class="num">6</span> Delivery</span>
+    <h2><span class="emoji">🚚</span> Types of policy, and implementation</h2>
+    <span class="timepill">Class 4</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Two last pieces complete the chapter: the kinds of public policy, and how implementation, the stage where policy meets reality, actually works.</p>
+
+    <h3>Types of public policy</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Type</th><th>What it does</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Constituent</strong></td><td>Sets up government agencies or institutions and defines their rules and conduct <span class="ts">Class 4 · 02:21:02</span></td><td>Creating the FATF Secretariat</td></tr>
+          <tr><td><strong>Distributive</strong></td><td>Distributes funds or benefits to people <span class="ts">Class 4 · 02:22:46</span></td><td>A subsidy or a tax holiday</td></tr>
+          <tr><td><strong>Regulatory</strong></td><td>Regulates behaviour with rules and restrictions</td><td>Penalising reckless driving (a speeding ticket) <span class="ts">Class 4 · 02:23:59</span></td></tr>
+          <tr><td><strong>Redistributive</strong></td><td>Shifts resources from one group to another</td><td>Land reforms (the teacher's Kerala example) <span class="ts">Class 4 · 02:25:17</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Implementation, and why it decides everything</h3>
+    <p>Implementation is carried out by <strong>civil servants and administrative bodies</strong>, and the teacher makes it the stage where governance is won or lost <span class="ts">Class 4 · 02:12:40</span>. Two rules to hold:</p>
+    <ul>
+      <li><strong>Back it with law.</strong> Implementation is far more effective when a policy is backed by an <strong>act or law</strong>, because violators can then be penalised and the policy actually bites <span class="ts">Class 4 · 01:53:44</span>.</li>
+      <li><strong>A flaw in implementation is a governance failure.</strong> Since governance simply is the implementation of public policy, poor implementation is by definition a failure of governance, even if the policy itself was well designed <span class="ts">Class 4 · 02:15:21</span>.</li>
+    </ul>
+
+    <div class="note exam">
+      <p><strong>Editorial: the two classic implementation models.</strong> An examiner rewards the <strong>top-down vs bottom-up</strong> distinction, which the lecture does not cover but which strengthens any implementation answer. The <strong>top-down</strong> model (Pressman and Wildavsky's <em>Implementation</em>, 1973; Sabatier and Mazmanian) sees implementation as executing a clear central decision downward, for instance the State Bank issuing a directive that all banks must follow. The <strong>bottom-up</strong> model (Lipsky's <em>Street-Level Bureaucracy</em>, 1980; Hjern) argues that the front-line officials who actually deliver a service shape the policy in practice, so implementation must account for their discretion. Naming both, and noting Sabatier later sought a synthesis, shows command of the topic.</p>
+    </div>
+
+    <div class="note">
+      <p><strong>Design failure vs implementation failure.</strong> When a policy misses its goals, the teacher insists you diagnose <em>which</em> failed: was the <strong>policy design</strong> wrong (the problem misidentified, the contents flawed), or was the <strong>implementation</strong> wrong <span class="ts">Class 4 · 02:15:21</span>? The distinction matters because the remedy differs: a design failure needs a better policy, an implementation failure needs better administration. A good evaluation answer always separates the two.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================= glossary === -->
+<section id="t7" class="chapter card" style="--accent:#8B8490; --soft:#F0EEF2;">
+  <header>
+    <span class="eyebrow"><span class="num">G</span> Reference</span>
+    <h2><span class="emoji">📖</span> Glossary</h2>
+  </header>
+  <div class="section-body">
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Accountability</strong></td><td>The obligation of public servants to give an account of their duties, activities and the resources entrusted to them. Higher for greater power.</td></tr>
+          <tr><td><strong>The four types</strong></td><td>Political (to voters and media), judicial/legal (to courts), administrative (to auditors and hierarchy), professional (to professional standards).</td></tr>
+          <tr><td><strong>Auditor General of Pakistan (AGP)</strong></td><td>The supreme audit institution (AGP Ordinance 2001; Articles 168 to 171); audits public accounts.</td></tr>
+          <tr><td><strong>Public Accounts Committee (PAC)</strong></td><td>Parliamentary committee (federal: 23 NA + 6 Senate members) that scrutinises the AGP's audit reports and reports to the legislature.</td></tr>
+          <tr><td><strong>National Accountability Bureau (NAB)</strong></td><td>Federal anti-corruption agency (Ordinance 1999); amended 2022 (Rs 500m threshold, 3-year terms), upheld by the SC in 2024.</td></tr>
+          <tr><td><strong>FIA / Ombudsman / ACEs</strong></td><td>FIA: federal law enforcement for cross-provincial crime. Ombudsman (Wafaqi Mohtasib): redresses maladministration. ACEs: provincial anti-corruption bodies.</td></tr>
+          <tr><td><strong>Judicial review</strong></td><td>The courts' power to review a law or act against the constitution or public interest. Chiefly via Article 184(3), also Articles 8 and 199.</td></tr>
+          <tr><td><strong>Article 184(3)</strong></td><td>The Supreme Court's original jurisdiction on questions of public importance touching fundamental rights; the basis of suo motu action.</td></tr>
+          <tr><td><strong>Public policy</strong></td><td>The actions of government and the intentions behind them (Cochran); "what government chooses to do or not to do" (Dye). Inaction is policy too.</td></tr>
+          <tr><td><strong>Policy cycle</strong></td><td>Problem identification → agenda setting → formulation → adoption → implementation → evaluation. Starts at problem identification, ends at evaluation (Lasswell/Anderson).</td></tr>
+          <tr><td><strong>Agenda setting</strong></td><td>Choosing, out of many problems, which the government will take up.</td></tr>
+          <tr><td><strong>Policy types</strong></td><td>Constituent (sets up agencies), distributive (gives benefits), regulatory (restricts behaviour), redistributive (shifts resources).</td></tr>
+          <tr><td><strong>Top-down vs bottom-up implementation</strong></td><td>Top-down (Pressman &amp; Wildavsky; Sabatier &amp; Mazmanian): execute a central decision downward. Bottom-up (Lipsky; Hjern): front-line officials shape the policy in practice.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================= flashcards === -->
+<section id="t8" class="chapter card" style="--accent:#BD6A4E; --soft:#F7ECE7;">
+  <header>
+    <span class="eyebrow"><span class="num">F</span> Recall</span>
+    <h2><span class="emoji">🎴</span> Flashcards</h2>
+  </header>
+  <div class="section-body">
+    <div class="cards">
+      <div class="qa"><p class="q">Define accountability, and why are power-holders held higher?</p><p class="a">The obligation to give an account of one's duties, activities and entrusted resources. Public servants hold political, financial and administrative power, so their accountability is greater than an ordinary person's.</p></div>
+      <div class="qa"><p class="q">Name the four types of accountability.</p><p class="a">Political (to voters and media), judicial/legal (to courts), administrative (to auditors and the internal hierarchy), professional (to professional standards).</p></div>
+      <div class="qa"><p class="q">What does the AGP do, and when was its ordinance?</p><p class="a">The Auditor General audits federal and provincial public accounts and reports whether money was properly spent. AGP Ordinance 2001; constitutional basis Articles 168 to 171.</p></div>
+      <div class="qa"><p class="q">What is the PAC, and how does it relate to the AGP?</p><p class="a">A parliamentary committee (federal: 23 NA + 6 Senate) that scrutinises the AGP's audit reports and reports to the legislature. The AGP audits; the PAC acts on the audit.</p></div>
+      <div class="qa"><p class="q">When was NAB created, and what is its current status?</p><p class="a">National Accountability Ordinance 1999. Its 2022 amendments (Rs 500m threshold, 3-year terms) were struck down in 2023, then upheld by the Supreme Court in 2024, so they stand; appeals are moving to the Federal Constitutional Court.</p></div>
+      <div class="qa"><p class="q">What is judicial review, and which article anchors it?</p><p class="a">The courts' power to review a law or act against the constitution or public interest. Chiefly Article 184(3) (SC original jurisdiction on public-importance fundamental-rights questions, and suo motu); also Articles 8 and 199. The 26th/27th Amendments have changed the landscape.</p></div>
+      <div class="qa"><p class="q">Give the two famous definitions of public policy and their authors.</p><p class="a">Cochran: "the actions of government and the intentions that determine those actions." Dye: "what government chooses to do or not to do." Inaction is policy too.</p></div>
+      <div class="qa"><p class="q">What are the three defining features of a public policy?</p><p class="a">Goal-oriented; not a discrete (secret) decision, unlike a defence decision; and it emerges in response to public demand to particular problems.</p></div>
+      <div class="qa"><p class="q">State the policy cycle, and the two order rules.</p><p class="a">Problem identification → agenda setting → formulation → adoption → implementation → evaluation. It always STARTS with problem identification (never formulation) and ENDS with evaluation (never implementation).</p></div>
+      <div class="qa"><p class="q">What are the four types of public policy?</p><p class="a">Constituent (sets up agencies, e.g. FATF Secretariat), distributive (subsidy, tax holiday), regulatory (restricts behaviour), redistributive (shifts resources).</p></div>
+      <div class="qa"><p class="q">Why is a flaw in implementation a governance failure?</p><p class="a">Because governance simply is the implementation of public policy, so poor implementation is by definition a failure of governance, even if the policy was well designed.</p></div>
+      <div class="qa"><p class="q">Top-down vs bottom-up implementation?</p><p class="a">Top-down (Pressman & Wildavsky; Sabatier & Mazmanian): execute a clear central decision downward. Bottom-up (Lipsky; Hjern): front-line street-level officials shape the policy in practice.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== exam focus === -->
+<section id="t9" class="chapter card" style="--accent:#BD6A4E; --soft:#F7ECE7;">
+  <header>
+    <span class="eyebrow"><span class="num">X</span> Strategy</span>
+    <h2><span class="emoji">🎯</span> Exam focus</h2>
+  </header>
+  <div class="section-body">
+
+    <h3>The marks you cannot afford to drop</h3>
+    <ul>
+      <li><strong>The policy cycle order.</strong> Start at problem identification, end at evaluation. The teacher says students routinely lose six or seven marks here. Learn it cold.</li>
+      <li><strong>The founding dates.</strong> NAB Ordinance 1999, AGP Ordinance 2001. Classic MCQ material.</li>
+      <li><strong>Cochran vs Dye.</strong> Do not attribute "to do or not to do" to Cochran; that is Dye.</li>
+      <li><strong>NAB's current status.</strong> The 2022 amendments were upheld in 2024. An outdated answer here reads as unprepared.</li>
+    </ul>
+
+    <h3>How to build an accountability answer</h3>
+    <ul>
+      <li><strong>Define</strong> accountability and give the four types.</li>
+      <li><strong>Populate each type with its institution:</strong> political (media, elections), administrative (AGP, PAC, internal audit), legal (courts, 184(3)), plus NAB, FIA and the Ombudsman across them.</li>
+      <li><strong>Add the remedies:</strong> empower anti-corruption bodies, legislative and judicial reform, freedom-of-information laws, e-governance.</li>
+      <li><strong>Note the live debate:</strong> judicial review versus overreach, and the 26th/27th Amendments.</li>
+    </ul>
+
+    <h3>How to build a policy answer</h3>
+    <ul>
+      <li><strong>Define</strong> policy (Cochran and Dye), stress that inaction is policy.</li>
+      <li><strong>Walk the six-stage cycle</strong> with a single real example (a flood, food insecurity) and a named body at each stage (NDMA for the flood).</li>
+      <li><strong>Distinguish design failure from implementation failure</strong>, and note top-down vs bottom-up implementation.</li>
+      <li><strong>Close on the governance link:</strong> a policy is only as good as its implementation, and implementation backed by law is what makes a policy bite.</li>
+    </ul>
+
+    <div class="note exam">
+      <p><strong>The one line to remember.</strong> This chapter is the state holding itself to account, then putting power to work. Accountability without good policy is empty, and policy without accountability is dangerous; the well-governed state needs both, the watchdogs of the first half and the disciplined cycle of the second.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="notefoot">Source recordings: <a href="https://drive.google.com/open?id=1TSZbe4s46Qzi21gHyp_Uo2o8fGuTbpT_" target="_blank" rel="noopener">▶ GPP Class 4</a><span class="sep">·</span><a href="https://drive.google.com/open?id=1di4gMP_hqWt7kbSaFoiKKnp8Zr9qP3cy" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+</html>

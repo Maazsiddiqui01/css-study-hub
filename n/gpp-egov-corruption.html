@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>E-Governance, Digitisation &amp; Corruption</title>
+<style>/* Lecture Notes ebook, "warm study" theme.
+   Inspired by Mehak's MarketCanvas app: soft cream ground, rounded white cards,
+   a different pastel accent per topic, serif display + friendly sans body,
+   gentle emoji + pill badges. Playful and pretty, but still a real study book.
+   Print-first (A4 PDF via headless Edge); reads well on screen too.
+
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
+   Everything themeable keys off --accent / --soft. Titles stay ink for
+   readability; accents colour eyebrows, numbers, pills, rules and callouts.
+*/
+
+:root {
+  --cream: #FCF6F0;          /* page ground (warm) */
+  --card: #FFFFFF;
+  --ink: #2C2630;            /* plum-black body/headings */
+  --ink-soft: #5A5360;
+  --slate: #8B8490;          /* captions, timestamps */
+  --hairline: #EEE6E4;
+
+  /* section default accent (overridden per section) */
+  --accent: #C0567E;
+  --soft: #FBECF1;
+
+  --shadow: 0 1px 2px rgba(60,30,45,.05), 0 10px 26px rgba(80,40,55,.07);
+  --radius: 20px;
+
+  --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: Consolas, "Cascadia Code", ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background:
+    radial-gradient(1100px 700px at 15% -5%, #FBEEF3 0%, transparent 55%),
+    radial-gradient(1000px 700px at 100% 0%, #EEF3FB 0%, transparent 50%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  font: 10.8pt/1.62 var(--sans);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+@media screen {
+  body { max-width: 51rem; margin: 0 auto; padding: 2.5rem 1.15rem 4rem; font-size: 1.0rem; }
+}
+
+/* ---------------------------------------------------------------- page --- */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm 14mm;
+  @bottom-center {
+    content: counter(page);
+    font: 8.5pt var(--sans);
+    color: #8B8490;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+/* --------------------------------------------------------------- cards --- */
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8mm 9mm 9mm;
+  margin: 0 0 6mm;
+  box-shadow: var(--shadow);
+  break-inside: auto;
+}
+@media screen { .card { margin-bottom: 1.4rem; } }
+
+/* a soft accent wash across the top of each section card (fades to white),
+   echoing the app's pastel cards without hurting readability */
+.chapter {
+  background:
+    linear-gradient(180deg, var(--soft) 0, rgba(255,255,255,0) 34mm),
+    var(--card);
+  border-top: 3px solid var(--accent);
+  break-inside: auto;
+  break-before: page;   /* each topic starts fresh: slide on top, notes below */
+}
+/* on screen (web/PWA) sections just stack; no forced page breaks */
+@media screen { .chapter { break-before: auto; } }
+
+h2, h3, .eyebrow { break-after: avoid; }
+p { orphans: 2; widows: 2; }
+
+/* keep the section header intact (eyebrow + title + time pill together) and
+   glued to its opening slide */
+.chapter > header { break-inside: avoid; break-after: avoid; }
+figure.slide { break-before: avoid; }
+
+/* --------------------------------------------------------------- cover --- */
+
+.cover {
+  page: cover;
+  break-after: page;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32mm 22mm 24mm;
+  background:
+    radial-gradient(700px 460px at 12% 8%, #FBE6EE 0%, transparent 60%),
+    radial-gradient(760px 520px at 96% 4%, #E7EEFB 0%, transparent 58%),
+    radial-gradient(620px 520px at 80% 96%, #E6F4EC 0%, transparent 60%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+@media screen {
+  .cover { min-height: 80vh; border-radius: 24px; padding: 3.2rem 2.6rem; margin-bottom: 1.4rem; }
+}
+
+.cover .avatar { font-size: 30pt; line-height: 1; margin-bottom: 7mm; }
+.cover .kicker {
+  font: 600 9pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 5mm;
+}
+.cover h1 {
+  font: 600 31pt/1.14 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 15em;
+}
+.cover .subtitle {
+  margin-top: 5mm;
+  font: 400 13.5pt/1.5 var(--sans);
+  color: var(--ink-soft);
+  max-width: 30em;
+}
+.cover .warm {
+  margin-top: 4mm;
+  font: italic 400 12pt/1.5 var(--serif);
+  color: var(--accent);
+}
+
+.cover .chips { display: flex; flex-wrap: wrap; gap: 3mm; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.4mm 4mm;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(60,30,45,.04);
+  font: 400 9pt var(--sans);
+  color: var(--slate);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chip b { font: 700 10.5pt var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ headings --- */
+
+.chapter header { margin-bottom: 5mm; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  font: 700 8.5pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--accent);
+  margin-bottom: 3mm;
+}
+.eyebrow .num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h2 {
+  font: 600 20pt/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .emoji { font-size: 17pt; }
+
+.timepill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.5mm 3.5mm;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font: 600 8pt var(--mono);
+  letter-spacing: 0.02em;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h3 {
+  font: 600 12.5pt/1.34 var(--serif);
+  color: var(--ink);
+  margin: 6mm 0 2.5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+.ts { font: 400 8.5pt var(--mono); color: var(--slate); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- body --- */
+
+.section-body > :last-child { margin-bottom: 0; }
+p { margin: 0 0 3mm; }
+.lead { font-size: 11.2pt; color: var(--ink); }
+
+ul, ol { margin: 0 0 3mm 5.5mm; }
+li { margin-bottom: 1.7mm; padding-left: 1mm; }
+li::marker { color: var(--accent); }
+
+.kt { font-weight: 700; color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
+
+code { font: 9.5pt var(--mono); background: #F3EFF4; padding: .4pt 3.5pt; border-radius: 4px; }
+
+/* ------------------------------------------------------------ callouts --- */
+
+.note {
+  --c: var(--accent);
+  --f: var(--soft);
+  background: var(--f);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  border-left: 3px solid var(--c);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.note .label {
+  display: inline-flex; align-items: center; gap: 1.6mm;
+  font: 700 8pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c);
+  margin-bottom: 1.8mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.warn { --c: #B4791F; --f: #FaF1DF; }
+.note.exam { --c: #3B8B78; --f: #E6F3EF; }
+.note.def  { --c: var(--accent); --f: var(--soft); }
+
+/* ------------------------------------------------------- summary card --- */
+
+.summary { --accent: #C0567E; --soft: #FBECF1; }
+.summary ul { list-style: none; margin: 0; }
+.summary li { position: relative; padding: 0 0 0 7mm; margin-bottom: 3.5mm; }
+.summary li::before {
+  content: "";
+  position: absolute; left: 0; top: 2.6mm;
+  width: 3.2mm; height: 3.2mm; border-radius: 50%;
+  background: var(--accent);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.summary li:last-child { margin-bottom: 0; }
+.summary li b, .summary li strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------- TOC --- */
+
+nav.toc { --accent: #8B8490; --soft: #F3EFF4; }
+nav.toc ol { list-style: none; margin: 0; }
+nav.toc li {
+  display: flex; align-items: baseline; gap: 4mm;
+  padding: 2.7mm 0;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11pt var(--sans);
+}
+nav.toc li:last-child { border-bottom: 0; }
+nav.toc .dot { width: 3.4mm; height: 3.4mm; border-radius: 50%; flex-shrink: 0;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+nav.toc .title { flex: 1; color: var(--ink); }
+nav.toc .rng { flex-shrink: 0; font: 600 8.5pt var(--mono); color: var(--slate); }
+
+/* -------------------------------------------------------------- slides --- */
+
+figure.slide { margin: 0 0 5mm; break-inside: avoid; }
+figure.slide img {
+  width: 100%; display: block;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 10px rgba(40,30,45,.10);
+}
+figure.slide figcaption {
+  font: 400 8.5pt var(--sans);
+  color: var(--slate);
+  margin-top: 2mm;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4mm;
+}
+figure.slide figcaption .ts { color: var(--accent); }
+
+/* ------------------------------------------------------------ glossary --- */
+
+dl.glossary { margin: 0; }
+dl.glossary div { padding: 3mm 0; border-bottom: 1px solid var(--hairline); break-inside: avoid; }
+dl.glossary div:last-child { border-bottom: 0; padding-bottom: 0; }
+dl.glossary dt { font: 700 10.5pt var(--sans); color: var(--accent); margin-bottom: 1.2mm; }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- flashcards --- */
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 0; }
+.qa {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  background: linear-gradient(180deg, var(--soft) 0, #fff 60%);
+  break-inside: avoid;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.qa .q { font: 700 10pt var(--sans); color: var(--ink); margin-bottom: 2mm; }
+.qa .a { color: var(--ink-soft); font-size: 10pt; }
+
+/* ------------------------------------------------------------- tables --- */
+
+.tables-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0; break-inside: avoid; }
+th {
+  font: 700 9pt var(--sans); text-align: left; color: var(--accent);
+  border-bottom: 2px solid var(--soft); padding: 2mm 3mm 2mm 0;
+}
+td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+
+/* --- mobile / on-the-go reading (screen only; never affects the print PDF).
+   Placed LAST so it wins the cascade over the wider @media screen rules above.
+   Requires <meta name="viewport" content="width=device-width, initial-scale=1">. */
+@media screen and (max-width: 640px) {
+  body { padding: 1rem 0.85rem 2.5rem; font-size: 1.02rem; }
+  .card { padding: 5mm 5mm 6mm; border-radius: 14px; margin-bottom: 0.9rem; }
+  .cover { min-height: auto; padding: 2rem 1.3rem 1.6rem; border-radius: 16px; }
+  .cover .avatar { font-size: 24pt; margin-bottom: 4mm; }
+  .cover h1 { font-size: 20pt; max-width: 100%; }
+  .cover .subtitle { font-size: 11.5pt; }
+  .cover .warm { font-size: 11pt; }
+  .cover .chips { gap: 2mm; margin-top: 5mm; }
+  h2 { font-size: 16pt; }
+  h2 .emoji { font-size: 13.5pt; }
+  h3 { font-size: 11.5pt; }
+  .cards { grid-template-columns: 1fr; }
+  nav.toc li { font-size: 10.5pt; gap: 2.5mm; padding: 2.5mm 0; }
+  nav.toc .rng { font-size: 8pt; }
+  .note { padding: 3.5mm 4mm; }
+  table { font-size: 9.5pt; }
+}
+</style>
+<meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
+align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
+border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
+<body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/open?id=1LanY1wfJ3FA_B2w_i1-k0jEr63IqWGnX" target="_blank" rel="noopener">Download PDF ↓</a></div>
+
+<!-- ============================================================ cover === -->
+<section class="cover" style="background:radial-gradient(700px 460px at 12% 8%,#F7ECE7 0,transparent 60%),radial-gradient(760px 520px at 96% 4%,#E7F1F7 0,transparent 58%),radial-gradient(620px 520px at 80% 96%,#FBEBEF 0,transparent 60%),var(--cream)">
+  <div>
+    <div class="avatar">💻</div>
+    <div class="kicker" style="color:#BD6A4E">CSS Governance &amp; Public Policy · Chapter 3</div>
+    <h1>E-Governance, Digitisation &amp; Corruption</h1>
+    <p class="subtitle">The modern fix and the oldest problem. How technology is meant to make government faster, cleaner and more open, the nine hurdles that stop it in Pakistan, and the many faces of corruption it is fighting.</p>
+    <p class="warm" style="color:#A85338">E-governance and corruption are two sides of one coin: transparency. Digitise a process and you cut the human middleman who asked for a bribe. This chapter is the tool and the target. 💻</p>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>ICT</b> for government</span>
+    <span class="chip"><b>9</b> hurdles</span>
+    <span class="chip"><b>G2C · G2B · G2G · G2E</b></span>
+    <span class="chip"><b>Forms</b> of corruption</span>
+  </div>
+</section>
+
+<!-- ============================================================== toc === -->
+<nav class="toc card">
+  <header><span class="eyebrow">Contents</span><h2><span class="emoji">🗺️</span> In this chapter</h2></header>
+  <ol>
+    <li><span class="dot" style="background:#BD6A4E"></span><a class="title" href="#summary">The five-minute version</a><span class="rng">summary</span></li>
+    <li><span class="dot" style="background:#3A7CC0"></span><a class="title" href="#t1">01 · What e-governance is</a><span class="rng">definition &amp; aims</span></li>
+    <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t2">02 · Examples, and digitisation</a><span class="rng">what it looks like</span></li>
+    <li><span class="dot" style="background:#B57A2A"></span><a class="title" href="#t3">03 · The nine hurdles in Pakistan</a><span class="rng">why it stalls</span></li>
+    <li><span class="dot" style="background:#46955C"></span><a class="title" href="#t4">04 · Solutions and how to write them</a><span class="rng">case studies</span></li>
+    <li><span class="dot" style="background:#C6506E"></span><a class="title" href="#t5">05 · Corruption: what it is</a><span class="rng">definition</span></li>
+    <li><span class="dot" style="background:#B44A8C"></span><a class="title" href="#t6">06 · The many forms of corruption</a><span class="rng">the taxonomy</span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t7">Glossary · Flashcards · Exam focus</a><span class="rng"></span></li>
+  </ol>
+</nav>
+
+<!-- ============================================================= tldr === -->
+<section id="summary" class="summary card" style="--accent:#BD6A4E; --soft:#F7ECE7; border-top-color:#BD6A4E">
+  <header><span class="eyebrow" style="color:#BD6A4E">Start here</span><h2><span class="emoji">⭐</span> The five-minute version</h2></header>
+  <ul>
+    <li><strong>E-governance is the use of ICT to make government better:</strong> more efficient, effective, transparent and accountable. It digitally transforms service delivery, decision-making, communication and citizen engagement.</li>
+    <li><strong>Its three aims:</strong> improve the accessibility of government services, streamline administrative procedures, and foster greater citizen participation.</li>
+    <li><strong>Digitisation is a subset of e-governance</strong>, not the whole of it: digitisation is just converting manual data into digital form, one small part of the larger shift.</li>
+    <li><strong>Examples:</strong> e-portals (the PM's citizen portal), an electronic voting system, a digital identity system, and e-Khidmat centres for birth, marriage, property and licence registration. Model countries: Singapore's Smart Nation, South Korea, India.</li>
+    <li><strong>Nine hurdles in Pakistan:</strong> the digital divide, weak/outdated technological infrastructure, capacity constraints, gaps in legal and regulatory frameworks, resistance to change, cyber-security risks, resource (funding) constraints, politicisation, and lack of local autonomy.</li>
+    <li><strong>Write solutions with a case study.</strong> Compare Pakistan to Asian peers (India, South Korea, Singapore) that digitised successfully, and pair each solution to a hurdle (cyber-security risk to data-protection law).</li>
+    <li><strong>Corruption is the misuse of public power for private benefit</strong>, or any deviation from the rules and SOPs done for gain. It is far more than a financial matter.</li>
+    <li><strong>There are many forms:</strong> grand vs petty; administrative; individual and moral; institutionalised and systemic; active and passive; public; intellectual; dilatory; episodic and endemic; plus bribery, embezzlement and misappropriation. Bring in the Islamic concept of governance (Hazrat Umar, Hazrat Ali's letters in the <em>Nahj al-Balagha</em>) as a governance model, framed as secular administrative example.</li>
+  </ul>
+</section>
+
+<!-- ======================================================== section 1 === -->
+<section id="t1" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+  <header>
+    <span class="eyebrow"><span class="num">1</span> The tool</span>
+    <h2><span class="emoji">🌐</span> What e-governance is</h2>
+    <span class="timepill">Class 3</span>
+  </header>
+  <div class="section-body">
+    <p class="lead"><span class="kt">E-governance</span> is the <strong>use of information and communication technologies (ICT) to enhance the efficiency, effectiveness, transparency and accountability</strong> of government processes and services <span class="ts">Class 3 · 11:06</span>. It is the digital transformation of governance: service delivery, decision-making, communication and citizen engagement, all moved onto digital rails <span class="ts">Class 3 · 12:05</span>.</p>
+
+    <div class="note">
+      <p><strong>A topic the syllabus does not print, but the exam expects.</strong> The teacher flags that e-governance and digitisation are <strong>not written in the official FPSC syllabus</strong>, which has not been fully updated since around 2015 or 2016, yet they are very much part of the live subject and do get asked <span class="ts">Class 3 · 09:01</span>. Being "abreast of current topics" that the dated syllabus omits is itself part of preparing this paper. So treat e-governance as compulsory even though the syllabus is silent on it.</p>
+    </div>
+
+    <h3>The three aims</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Aim</th><th>What it means</th></tr></thead>
+        <tbody>
+          <tr><td><strong>1. Improve accessibility</strong></td><td>Make government services easier for citizens to reach <span class="ts">Class 3 · 13:52</span></td></tr>
+          <tr><td><strong>2. Streamline procedures</strong></td><td>Simplify and speed up administrative processes</td></tr>
+          <tr><td><strong>3. Foster citizen participation</strong></td><td>Draw citizens into governance rather than leaving them outside it</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Editorial: the standard interaction types.</strong> An examiner rewards the four channels e-governance runs on. <strong>G2C</strong> (government-to-citizen: portals, e-services), <strong>G2B</strong> (government-to-business: tax filing, licensing), <strong>G2G</strong> (government-to-government: inter-agency data sharing), and <strong>G2E</strong> (government-to-employee: internal HR and payroll systems). Naming these signals you know e-governance is a whole architecture, not just a website.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 2 === -->
+<section id="t2" class="chapter card" style="--accent:#2C8C86; --soft:#E4F1F0;">
+  <header>
+    <span class="eyebrow"><span class="num">2</span> In practice</span>
+    <h2><span class="emoji">📱</span> Examples, and how digitisation fits in</h2>
+    <span class="timepill">Class 3</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Concrete examples are what turn a definition into a scoring answer. The teacher asks students to keep a stock of them, Pakistani and Asian <span class="ts">Class 3 · 15:10</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Pakistani examples</th><th>What it does</th></tr></thead>
+        <tbody>
+          <tr><td><strong>E-portals</strong> (the Prime Minister's citizen portal)</td><td>Citizens lodge complaints and track them online <span class="ts">Class 3 · 15:10</span></td></tr>
+          <tr><td><strong>Electronic voting system</strong></td><td>Digitised balloting</td></tr>
+          <tr><td><strong>Digital identity system</strong></td><td>National digital identity</td></tr>
+          <tr><td><strong>E-Khidmat centres</strong></td><td>One-window registration: birth, marriage, property, driving licence <span class="ts">Class 3 · 16:03</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>For international models, the teacher points to <strong>Asian peers</strong> rather than distant Western ones, because they are "like us" and so more persuasive as comparisons: <strong>Singapore's Smart Nation initiative</strong>, <strong>South Korea</strong> and <strong>India</strong> <span class="ts">Class 3 · 24:24</span>. Singapore's near-flawless public systems are the recurring benchmark.</p>
+
+    <div class="note warn">
+      <p><strong>Correction the teacher makes herself: digitisation is not e-governance.</strong> A common conflation. <strong>Digitisation is a subset of e-governance</strong>: it is simply the <strong>conversion of manual data into digital form</strong> <span class="ts">Class 3 · 27:30</span>. E-governance is the far larger project of running government through ICT. Do not use the two words interchangeably; digitisation is one small building block of the whole.</p>
+    </div>
+
+    <div class="note">
+      <p><strong>Why e-governance fights corruption.</strong> The link that makes this chapter cohere: digitising a service removes the human gatekeeper who could demand a bribe, and it creates a record that can be audited. That is why transparency and accountability sit inside the very definition of e-governance, and why this chapter pairs it with corruption. Every process moved online is one fewer counter at which "petty corruption" can happen.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 3 === -->
+<section id="t3" class="chapter card" style="--accent:#B57A2A; --soft:#FBF1DE;">
+  <header>
+    <span class="eyebrow"><span class="num">3</span> The obstacles</span>
+    <h2><span class="emoji">🚧</span> The nine hurdles in Pakistan</h2>
+    <span class="timepill">Class 3</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The heart of any e-governance question is the challenges. The teacher builds a nine-point list of hurdles to adopting e-governance in Pakistan <span class="ts">Class 3 · 01:14:33</span>, and the examiner almost always pairs "challenges" with "remedies".</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Hurdle</th><th>What it means</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><strong>Digital divide</strong></td><td>Some areas have digital infrastructure and signal, others none; and many can afford a smartphone but not a computer, so digitisation cannot reach everyone equally <span class="ts">Class 3 · 01:06:12</span></td></tr>
+          <tr><td>2</td><td><strong>Technological / infrastructure</strong></td><td>Inadequate or outdated hardware and software for digitisation <span class="ts">Class 3 · 01:07:58</span></td></tr>
+          <tr><td>3</td><td><strong>Capacity constraints</strong></td><td>Limited technology expertise; few in the civil service know how to implement it <span class="ts">Class 3 · 01:08:51</span></td></tr>
+          <tr><td>4</td><td><strong>Legal &amp; regulatory frameworks</strong></td><td>Inadequate laws on data protection, privacy and cyber-security, so people distrust going online <span class="ts">Class 3 · 01:09:22</span></td></tr>
+          <tr><td>5</td><td><strong>Resistance to change</strong></td><td>A mindset problem across the public, civil servants and politicians; even educated people avoid, say, online banking, and there is often no political will behind the shift <span class="ts">Class 3 · 01:10:58</span></td></tr>
+          <tr><td>6</td><td><strong>Cyber-security risks</strong></td><td>Weak protection of data and systems <span class="ts">Class 3 · 01:11:30</span></td></tr>
+          <tr><td>7</td><td><strong>Resource constraints</strong></td><td>The biggest one: no budget to fund a digitisation initiative <span class="ts">Class 3 · 01:12:04</span></td></tr>
+          <tr><td>8</td><td><strong>Politicisation</strong></td><td>Local or provincial governments treating digitisation as a political rather than a service project <span class="ts">Class 3 · 01:12:04</span></td></tr>
+          <tr><td>9</td><td><strong>Lack of local autonomy</strong></td><td>Weak grassroots and local government, so digitisation cannot take root at the level closest to citizens <span class="ts">Class 3 · 01:13:21</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note exam">
+      <p><strong>The "digital divide" is the term to bank.</strong> The teacher singles it out as a word you will meet in articles and should be able to use precisely <span class="ts">Class 3 · 01:06:12</span>: the gap between those with access to digital technology and those without. It is the single most quotable concept in an e-governance answer, because it explains why a national digital service can still exclude the poorest and most remote citizens.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 4 === -->
+<section id="t4" class="chapter card" style="--accent:#46955C; --soft:#E9F4EC;">
+  <header>
+    <span class="eyebrow"><span class="num">4</span> The remedies</span>
+    <h2><span class="emoji">🛠️</span> Solutions, and how to write them</h2>
+    <span class="timepill">Class 3</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The teacher's method for the solutions half is specific and worth copying: pair each solution to its hurdle, and anchor it in a real country's example <span class="ts">Class 3 · 01:15:32</span>.</p>
+
+    <div class="note">
+      <p><strong>Pair the solution to the problem.</strong> The cleanest structure is a two-column answer: for each hurdle, the matching remedy. Cyber-security risk is answered by <strong>data-protection legislation</strong>; the digital divide by <strong>infrastructure roll-out to underserved areas</strong>; capacity constraints by <strong>training and specialist hiring</strong>; resistance to change by <strong>political will and public awareness</strong>; resource constraints by <strong>budget allocation and donor or public-private funding</strong> <span class="ts">Class 3 · 01:16:28</span>. Every challenge should leave the page with its remedy attached.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Choose your comparison country carefully.</strong> The teacher's advice: compare Pakistan to countries that are <strong>"like us"</strong> and succeeded, mainly the Asian peers <strong>India, South Korea and Singapore</strong>, because a leap from Pakistan to a comparable country is more credible than one to a very different context <span class="ts">Class 3 · 01:15:32</span>. She adds a sharp nuance: even a developed country like <strong>Germany</strong> faces real digitisation problems, so you can cite it to show the challenge is universal, not just a poor-country failing <span class="ts">Class 3 · 01:16:03</span>. A comparison that acknowledges even rich states struggle reads as more informed.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 5 === -->
+<section id="t5" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+  <header>
+    <span class="eyebrow"><span class="num">5</span> The problem</span>
+    <h2><span class="emoji">💰</span> Corruption: what it is</h2>
+    <span class="timepill">Class 3</span>
+  </header>
+  <div class="section-body">
+    <p class="lead"><span class="kt">Corruption</span> is the <strong>misuse and abuse of public power</strong>, the power given by the constitution or a particular office, <strong>for private benefit</strong> <span class="ts">Class 3 · 01:27:15</span>. It is also any <strong>deviation from the rules or SOPs done with the intention of gain</strong> <span class="ts">Class 3 · 01:28:25</span>.</p>
+
+    <p>The teacher's framing: corruption is privileging a small group or private party you are loyal to, so that the rights of the wider public go unfulfilled <span class="ts">Class 3 · 01:27:53</span>. And it is emphatically <strong>more than a financial matter</strong>. That single point, that corruption has many non-financial forms, is the setup for the whole taxonomy in the next section <span class="ts">Class 3 · 01:28:25</span>.</p>
+
+    <div class="note exam">
+      <p><strong>Bring in the Islamic concept of governance, framed correctly.</strong> The teacher's strong recommendation for corruption-and-accountability answers: incorporate the <strong>Islamic model of governance</strong>, the <strong>golden era of Islam</strong> and the caliphate of <strong>Hazrat Umar</strong>, and <strong>Hazrat Ali's letters</strong> on accountability, collected in the <em>Nahj al-Balagha</em> ("Peak of Eloquence") <span class="ts">Class 3 · 01:25:57</span>. Her crucial instruction on <em>how</em> to use it: present it <strong>not as a religious text but as a secular model of administration</strong> <span class="ts">Class 3 · 01:26:23</span>. In an exam, an example of just governance drawn from early Islamic administration is powerful precisely because it is offered as a governance case study, not a sermon.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 6 === -->
+<section id="t6" class="chapter card" style="--accent:#B44A8C; --soft:#F8EAF3;">
+  <header>
+    <span class="eyebrow"><span class="num">6</span> The taxonomy</span>
+    <h2><span class="emoji">🗂️</span> The many forms of corruption</h2>
+    <span class="timepill">Class 3</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The teacher's point is that corruption is far wider than bribery, and being able to name its forms is what separates a thin answer from a full one. Here is the taxonomy she builds.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Form</th><th>What it is</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Grand / mega corruption</strong></td><td>Large sums, often misused donor or aid funds: a project gets billions, a sliver goes to the real work, the rest is diverted <span class="ts">Class 3 · 01:29:52</span></td></tr>
+          <tr><td><strong>Petty corruption</strong></td><td>Small everyday bribes, the clerk who wants 500 to do a 200 job <span class="ts">Class 3 · 01:37:02</span></td></tr>
+          <tr><td><strong>Administrative corruption</strong></td><td>Working while violating the SOPs, rules and procedures, with wrong intent <span class="ts">Class 3 · 01:37:02</span></td></tr>
+          <tr><td><strong>Individual / moral corruption</strong></td><td>Personal ethical failings: lying, violating others' rights <span class="ts">Class 3 · 01:38:12</span></td></tr>
+          <tr><td><strong>Institutionalised corruption</strong></td><td>An entire institution captured, where every person takes part, so corruption becomes the institution's norm <span class="ts">Class 3 · 01:39:17</span></td></tr>
+          <tr><td><strong>Systemic corruption</strong></td><td>Malpractice and malfeasance woven through the whole system <span class="ts">Class 3 · 01:40:17</span></td></tr>
+          <tr><td><strong>Active corruption</strong></td><td>Actively taking part and taking a cut <span class="ts">Class 3 · 01:40:35</span></td></tr>
+          <tr><td><strong>Passive corruption</strong></td><td>Not doing it yourself but knowing subordinates do and turning a blind eye. "Like passive smoking" <span class="ts">Class 3 · 01:40:35</span></td></tr>
+          <tr><td><strong>Public corruption</strong></td><td>Breach of public trust by civil servants, politicians or business <span class="ts">Class 3 · 01:41:37</span></td></tr>
+          <tr><td><strong>Intellectual corruption</strong></td><td>Plagiarism, cheating in exams; in the service, hiding a project's real results from decision-makers <span class="ts">Class 3 · 01:43:18</span></td></tr>
+          <tr><td><strong>Dilatory corruption</strong></td><td>Deliberate delaying tactics to force a citizen to pay to get their own work done <span class="ts">Class 3 · 01:44:24</span></td></tr>
+          <tr><td><strong>Episodic corruption</strong></td><td>Occurs in episodes: sometimes it happens, then stops, then recurs <span class="ts">Class 3 · 01:45:58</span></td></tr>
+          <tr><td><strong>Endemic corruption</strong></td><td>Traditionally found in a specific locality or institution (the opposite of pandemic, which is everywhere) <span class="ts">Class 3 · 01:46:30</span></td></tr>
+          <tr><td><strong>Bribery, embezzlement, misappropriation</strong></td><td>Bribery (rishwat); embezzlement (stealing entrusted funds); misappropriation (spending funds meant for one thing on another without authority) <span class="ts">Class 3 · 01:47:27</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <p><strong>The two most useful distinctions.</strong> Two pairs do a lot of analytical work in an answer. <strong>Active vs passive</strong>: complicity by silence is still corruption, which widens responsibility from the person taking the money to everyone who covers for them. <strong>Grand vs petty</strong>: the mega-scale theft of aid and development funds is a different problem, needing different remedies, from the everyday small bribe at a counter. And <strong>institutionalised vs systemic</strong>: one describes a captured institution, the other a rot that runs through the whole system. Deploying these pairs shows you understand corruption as a structure, not just a crime.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>How this connects to the next chapter.</strong> If corruption is this varied and this deep, the answer is layered accountability, which is exactly where the syllabus goes next: the Auditor General, the Public Accounts Committees, NAB, FIA, the Ombudsman and judicial review. Read this taxonomy as the disease, and the accountability institutions of the next chapter as the treatment. A strong corruption essay names the forms, then prescribes the specific institution that checks each.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================= glossary === -->
+<section id="t7" class="chapter card" style="--accent:#8B8490; --soft:#F0EEF2;">
+  <header>
+    <span class="eyebrow"><span class="num">G</span> Reference</span>
+    <h2><span class="emoji">📖</span> Glossary</h2>
+  </header>
+  <div class="section-body">
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><strong>E-governance</strong></td><td>The use of ICT to enhance the efficiency, effectiveness, transparency and accountability of government processes and services.</td></tr>
+          <tr><td><strong>Digitisation</strong></td><td>The conversion of manual data into digital form. A subset of e-governance, not the whole of it.</td></tr>
+          <tr><td><strong>G2C / G2B / G2G / G2E</strong></td><td>The four interaction types: government to citizen, to business, to government, to employee.</td></tr>
+          <tr><td><strong>Digital divide</strong></td><td>The gap between those with access to digital technology and those without. The key hurdle to inclusive e-governance.</td></tr>
+          <tr><td><strong>Smart Nation</strong></td><td>Singapore's flagship e-governance initiative, the recurring international benchmark.</td></tr>
+          <tr><td><strong>Corruption</strong></td><td>Misuse of public power for private benefit, or any deviation from rules and SOPs done for gain. Not only financial.</td></tr>
+          <tr><td><strong>Grand vs petty corruption</strong></td><td>Large-scale theft of major funds versus small everyday bribes.</td></tr>
+          <tr><td><strong>Active vs passive corruption</strong></td><td>Taking part directly versus knowing of it and turning a blind eye. Both are corruption.</td></tr>
+          <tr><td><strong>Institutionalised vs systemic corruption</strong></td><td>A single institution wholly captured versus rot running through the whole system.</td></tr>
+          <tr><td><strong>Dilatory corruption</strong></td><td>Deliberate delay to extract payment for doing one's own job.</td></tr>
+          <tr><td><strong>Endemic corruption</strong></td><td>Corruption traditionally rooted in one locality or institution.</td></tr>
+          <tr><td><strong>Embezzlement / misappropriation</strong></td><td>Stealing entrusted funds; spending funds meant for one purpose on another without authority.</td></tr>
+          <tr><td><strong>Nahj al-Balagha</strong></td><td>"Peak of Eloquence", the collection including Hazrat Ali's letters on justice and accountability, to be cited as a secular model of administration.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================= flashcards === -->
+<section id="t8" class="chapter card" style="--accent:#BD6A4E; --soft:#F7ECE7;">
+  <header>
+    <span class="eyebrow"><span class="num">F</span> Recall</span>
+    <h2><span class="emoji">🎴</span> Flashcards</h2>
+  </header>
+  <div class="section-body">
+    <div class="cards">
+      <div class="qa"><p class="q">Define e-governance.</p><p class="a">The use of ICT to enhance the efficiency, effectiveness, transparency and accountability of government processes and services.</p></div>
+      <div class="qa"><p class="q">What are the three aims of e-governance?</p><p class="a">Improve accessibility of government services, streamline administrative procedures, and foster greater citizen participation.</p></div>
+      <div class="qa"><p class="q">How does digitisation relate to e-governance?</p><p class="a">Digitisation (converting manual data to digital form) is a subset of e-governance, not the same thing. E-governance is the larger project of running government through ICT.</p></div>
+      <div class="qa"><p class="q">Name the four e-governance interaction types.</p><p class="a">G2C (citizen), G2B (business), G2G (government), G2E (employee).</p></div>
+      <div class="qa"><p class="q">Give Pakistani and Asian examples of e-governance.</p><p class="a">Pakistan: PM's citizen portal, electronic voting system, digital identity, e-Khidmat centres. Asia: Singapore's Smart Nation, South Korea, India.</p></div>
+      <div class="qa"><p class="q">List the nine hurdles to e-governance in Pakistan.</p><p class="a">Digital divide, weak/outdated infrastructure, capacity constraints, weak legal frameworks, resistance to change, cyber-security risks, resource constraints, politicisation, lack of local autonomy.</p></div>
+      <div class="qa"><p class="q">What is the digital divide?</p><p class="a">The gap between those with access to digital technology and those without, the key reason e-governance can exclude the poorest and most remote citizens.</p></div>
+      <div class="qa"><p class="q">How should you write the solutions to e-governance challenges?</p><p class="a">Pair each solution to its hurdle, and anchor it in a comparable country's example (India, South Korea, Singapore), noting even Germany struggles.</p></div>
+      <div class="qa"><p class="q">Define corruption.</p><p class="a">The misuse of public power for private benefit, or any deviation from rules and SOPs done for gain. Not only financial.</p></div>
+      <div class="qa"><p class="q">Distinguish active and passive corruption.</p><p class="a">Active: taking part directly. Passive: not doing it yourself but knowing of it and turning a blind eye, like passive smoking. Both count.</p></div>
+      <div class="qa"><p class="q">Distinguish institutionalised and systemic corruption.</p><p class="a">Institutionalised: a single institution wholly captured, everyone taking part. Systemic: malpractice running through the whole system.</p></div>
+      <div class="qa"><p class="q">How should the Islamic model of governance be used in a corruption answer?</p><p class="a">Cite Hazrat Umar's caliphate and Hazrat Ali's letters (Nahj al-Balagha) as a secular model of just administration, not as a religious text.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== exam focus === -->
+<section id="t9" class="chapter card" style="--accent:#BD6A4E; --soft:#F7ECE7;">
+  <header>
+    <span class="eyebrow"><span class="num">X</span> Strategy</span>
+    <h2><span class="emoji">🎯</span> Exam focus</h2>
+  </header>
+  <div class="section-body">
+
+    <h3>The e-governance answer, built</h3>
+    <ul>
+      <li><strong>Define</strong> e-governance by its four goals (efficiency, effectiveness, transparency, accountability) and name the G2C/G2B/G2G/G2E channels.</li>
+      <li><strong>State the three aims</strong> and give two or three concrete examples (PM portal, e-Khidmat, Smart Nation).</li>
+      <li><strong>List the nine hurdles</strong>, leading with the digital divide, and <strong>pair each with a remedy</strong>.</li>
+      <li><strong>Anchor with a case study</strong> from a comparable Asian country, adding that even developed states struggle.</li>
+      <li><strong>Close on the link to corruption:</strong> every process digitised is a bribe counter removed.</li>
+    </ul>
+
+    <h3>The corruption answer, built</h3>
+    <ul>
+      <li><strong>Define</strong> corruption as misuse of public power for private benefit, stressing it is not only financial.</li>
+      <li><strong>Classify the forms</strong>, using the strong pairs (grand/petty, active/passive, institutionalised/systemic) as your structure rather than a flat list.</li>
+      <li><strong>Bring in the Islamic model</strong> (Hazrat Umar, Hazrat Ali's letters) as a secular governance case.</li>
+      <li><strong>Prescribe accountability</strong>: match each type of corruption to the institution that checks it (leading into the next chapter).</li>
+    </ul>
+
+    <div class="note exam">
+      <p><strong>The one line to remember.</strong> E-governance and corruption are the same story told twice. Corruption thrives on opacity and human discretion; e-governance attacks both by making processes transparent and automatic. Frame the two together and each answer strengthens the other: the case for digitisation is the catalogue of corruption it would design out.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="notefoot">Source recordings: <a href="https://drive.google.com/open?id=17BRlIuFyLrFj74zj5ks7xLuZyoMgiy_2" target="_blank" rel="noopener">▶ GPP Class 3</a><span class="sep">·</span><a href="https://drive.google.com/open?id=1LanY1wfJ3FA_B2w_i1-k0jEr63IqWGnX" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+</html>

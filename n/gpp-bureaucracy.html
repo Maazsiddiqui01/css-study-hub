@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Bureaucracy: Weber, Marx, Mill, Wilson &amp; Its Flaws</title>
+<style>/* Lecture Notes ebook, "warm study" theme.
+   Inspired by Mehak's MarketCanvas app: soft cream ground, rounded white cards,
+   a different pastel accent per topic, serif display + friendly sans body,
+   gentle emoji + pill badges. Playful and pretty, but still a real study book.
+   Print-first (A4 PDF via headless Edge); reads well on screen too.
+
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
+   Everything themeable keys off --accent / --soft. Titles stay ink for
+   readability; accents colour eyebrows, numbers, pills, rules and callouts.
+*/
+
+:root {
+  --cream: #FCF6F0;          /* page ground (warm) */
+  --card: #FFFFFF;
+  --ink: #2C2630;            /* plum-black body/headings */
+  --ink-soft: #5A5360;
+  --slate: #8B8490;          /* captions, timestamps */
+  --hairline: #EEE6E4;
+
+  /* section default accent (overridden per section) */
+  --accent: #C0567E;
+  --soft: #FBECF1;
+
+  --shadow: 0 1px 2px rgba(60,30,45,.05), 0 10px 26px rgba(80,40,55,.07);
+  --radius: 20px;
+
+  --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: Consolas, "Cascadia Code", ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background:
+    radial-gradient(1100px 700px at 15% -5%, #FBEEF3 0%, transparent 55%),
+    radial-gradient(1000px 700px at 100% 0%, #EEF3FB 0%, transparent 50%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  font: 10.8pt/1.62 var(--sans);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+@media screen {
+  body { max-width: 51rem; margin: 0 auto; padding: 2.5rem 1.15rem 4rem; font-size: 1.0rem; }
+}
+
+/* ---------------------------------------------------------------- page --- */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm 14mm;
+  @bottom-center {
+    content: counter(page);
+    font: 8.5pt var(--sans);
+    color: #8B8490;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+/* --------------------------------------------------------------- cards --- */
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8mm 9mm 9mm;
+  margin: 0 0 6mm;
+  box-shadow: var(--shadow);
+  break-inside: auto;
+}
+@media screen { .card { margin-bottom: 1.4rem; } }
+
+/* a soft accent wash across the top of each section card (fades to white),
+   echoing the app's pastel cards without hurting readability */
+.chapter {
+  background:
+    linear-gradient(180deg, var(--soft) 0, rgba(255,255,255,0) 34mm),
+    var(--card);
+  border-top: 3px solid var(--accent);
+  break-inside: auto;
+  break-before: page;   /* each topic starts fresh: slide on top, notes below */
+}
+/* on screen (web/PWA) sections just stack; no forced page breaks */
+@media screen { .chapter { break-before: auto; } }
+
+h2, h3, .eyebrow { break-after: avoid; }
+p { orphans: 2; widows: 2; }
+
+/* keep the section header intact (eyebrow + title + time pill together) and
+   glued to its opening slide */
+.chapter > header { break-inside: avoid; break-after: avoid; }
+figure.slide { break-before: avoid; }
+
+/* --------------------------------------------------------------- cover --- */
+
+.cover {
+  page: cover;
+  break-after: page;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32mm 22mm 24mm;
+  background:
+    radial-gradient(700px 460px at 12% 8%, #FBE6EE 0%, transparent 60%),
+    radial-gradient(760px 520px at 96% 4%, #E7EEFB 0%, transparent 58%),
+    radial-gradient(620px 520px at 80% 96%, #E6F4EC 0%, transparent 60%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+@media screen {
+  .cover { min-height: 80vh; border-radius: 24px; padding: 3.2rem 2.6rem; margin-bottom: 1.4rem; }
+}
+
+.cover .avatar { font-size: 30pt; line-height: 1; margin-bottom: 7mm; }
+.cover .kicker {
+  font: 600 9pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 5mm;
+}
+.cover h1 {
+  font: 600 31pt/1.14 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 15em;
+}
+.cover .subtitle {
+  margin-top: 5mm;
+  font: 400 13.5pt/1.5 var(--sans);
+  color: var(--ink-soft);
+  max-width: 30em;
+}
+.cover .warm {
+  margin-top: 4mm;
+  font: italic 400 12pt/1.5 var(--serif);
+  color: var(--accent);
+}
+
+.cover .chips { display: flex; flex-wrap: wrap; gap: 3mm; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.4mm 4mm;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(60,30,45,.04);
+  font: 400 9pt var(--sans);
+  color: var(--slate);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chip b { font: 700 10.5pt var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ headings --- */
+
+.chapter header { margin-bottom: 5mm; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  font: 700 8.5pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--accent);
+  margin-bottom: 3mm;
+}
+.eyebrow .num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h2 {
+  font: 600 20pt/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .emoji { font-size: 17pt; }
+
+.timepill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.5mm 3.5mm;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font: 600 8pt var(--mono);
+  letter-spacing: 0.02em;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h3 {
+  font: 600 12.5pt/1.34 var(--serif);
+  color: var(--ink);
+  margin: 6mm 0 2.5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+.ts { font: 400 8.5pt var(--mono); color: var(--slate); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- body --- */
+
+.section-body > :last-child { margin-bottom: 0; }
+p { margin: 0 0 3mm; }
+.lead { font-size: 11.2pt; color: var(--ink); }
+
+ul, ol { margin: 0 0 3mm 5.5mm; }
+li { margin-bottom: 1.7mm; padding-left: 1mm; }
+li::marker { color: var(--accent); }
+
+.kt { font-weight: 700; color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
+
+code { font: 9.5pt var(--mono); background: #F3EFF4; padding: .4pt 3.5pt; border-radius: 4px; }
+
+/* ------------------------------------------------------------ callouts --- */
+
+.note {
+  --c: var(--accent);
+  --f: var(--soft);
+  background: var(--f);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  border-left: 3px solid var(--c);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.note .label {
+  display: inline-flex; align-items: center; gap: 1.6mm;
+  font: 700 8pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c);
+  margin-bottom: 1.8mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.warn { --c: #B4791F; --f: #FaF1DF; }
+.note.exam { --c: #3B8B78; --f: #E6F3EF; }
+.note.def  { --c: var(--accent); --f: var(--soft); }
+
+/* ------------------------------------------------------- summary card --- */
+
+.summary { --accent: #C0567E; --soft: #FBECF1; }
+.summary ul { list-style: none; margin: 0; }
+.summary li { position: relative; padding: 0 0 0 7mm; margin-bottom: 3.5mm; }
+.summary li::before {
+  content: "";
+  position: absolute; left: 0; top: 2.6mm;
+  width: 3.2mm; height: 3.2mm; border-radius: 50%;
+  background: var(--accent);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.summary li:last-child { margin-bottom: 0; }
+.summary li b, .summary li strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------- TOC --- */
+
+nav.toc { --accent: #8B8490; --soft: #F3EFF4; }
+nav.toc ol { list-style: none; margin: 0; }
+nav.toc li {
+  display: flex; align-items: baseline; gap: 4mm;
+  padding: 2.7mm 0;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11pt var(--sans);
+}
+nav.toc li:last-child { border-bottom: 0; }
+nav.toc .dot { width: 3.4mm; height: 3.4mm; border-radius: 50%; flex-shrink: 0;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+nav.toc .title { flex: 1; color: var(--ink); }
+nav.toc .rng { flex-shrink: 0; font: 600 8.5pt var(--mono); color: var(--slate); }
+
+/* -------------------------------------------------------------- slides --- */
+
+figure.slide { margin: 0 0 5mm; break-inside: avoid; }
+figure.slide img {
+  width: 100%; display: block;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 10px rgba(40,30,45,.10);
+}
+figure.slide figcaption {
+  font: 400 8.5pt var(--sans);
+  color: var(--slate);
+  margin-top: 2mm;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4mm;
+}
+figure.slide figcaption .ts { color: var(--accent); }
+
+/* ------------------------------------------------------------ glossary --- */
+
+dl.glossary { margin: 0; }
+dl.glossary div { padding: 3mm 0; border-bottom: 1px solid var(--hairline); break-inside: avoid; }
+dl.glossary div:last-child { border-bottom: 0; padding-bottom: 0; }
+dl.glossary dt { font: 700 10.5pt var(--sans); color: var(--accent); margin-bottom: 1.2mm; }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- flashcards --- */
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 0; }
+.qa {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  background: linear-gradient(180deg, var(--soft) 0, #fff 60%);
+  break-inside: avoid;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.qa .q { font: 700 10pt var(--sans); color: var(--ink); margin-bottom: 2mm; }
+.qa .a { color: var(--ink-soft); font-size: 10pt; }
+
+/* ------------------------------------------------------------- tables --- */
+
+.tables-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0; break-inside: avoid; }
+th {
+  font: 700 9pt var(--sans); text-align: left; color: var(--accent);
+  border-bottom: 2px solid var(--soft); padding: 2mm 3mm 2mm 0;
+}
+td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+
+/* --- mobile / on-the-go reading (screen only; never affects the print PDF).
+   Placed LAST so it wins the cascade over the wider @media screen rules above.
+   Requires <meta name="viewport" content="width=device-width, initial-scale=1">. */
+@media screen and (max-width: 640px) {
+  body { padding: 1rem 0.85rem 2.5rem; font-size: 1.02rem; }
+  .card { padding: 5mm 5mm 6mm; border-radius: 14px; margin-bottom: 0.9rem; }
+  .cover { min-height: auto; padding: 2rem 1.3rem 1.6rem; border-radius: 16px; }
+  .cover .avatar { font-size: 24pt; margin-bottom: 4mm; }
+  .cover h1 { font-size: 20pt; max-width: 100%; }
+  .cover .subtitle { font-size: 11.5pt; }
+  .cover .warm { font-size: 11pt; }
+  .cover .chips { gap: 2mm; margin-top: 5mm; }
+  h2 { font-size: 16pt; }
+  h2 .emoji { font-size: 13.5pt; }
+  h3 { font-size: 11.5pt; }
+  .cards { grid-template-columns: 1fr; }
+  nav.toc li { font-size: 10.5pt; gap: 2.5mm; padding: 2.5mm 0; }
+  nav.toc .rng { font-size: 8pt; }
+  .note { padding: 3.5mm 4mm; }
+  table { font-size: 9.5pt; }
+}
+</style>
+<meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
+align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
+border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
+<body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/open?id=1q-qDAvyBrCUkaVrHrBYZNwowciRGzy18" target="_blank" rel="noopener">Download PDF ↓</a></div>
+
+<!-- ============================================================ cover === -->
+<section class="cover" style="background:radial-gradient(700px 460px at 12% 8%,#F7ECE7 0,transparent 60%),radial-gradient(760px 520px at 96% 4%,#EAF1FB 0,transparent 58%),radial-gradient(620px 520px at 80% 96%,#EDECF4 0,transparent 60%),var(--cream)">
+  <div>
+    <div class="avatar">🏢</div>
+    <div class="kicker" style="color:#BD6A4E">CSS Governance &amp; Public Policy · Chapter 2</div>
+    <h1>The Bureaucracy: Weber, Marx, Mill, Wilson &amp; Its Flaws</h1>
+    <p class="subtitle">The engine of the state, seen through four theorists. What makes a bureaucracy work (Weber's rational-legal model), what it is for (Marx and Mill), how it must stay out of politics (Wilson), and where it goes wrong.</p>
+    <p class="warm" style="color:#A85338">Call yourself a civil servant, not a bureaucrat. The same institution can be the steel frame that holds a state together or the rigid machine that grinds reform to a halt. This chapter is both faces. 🏢</p>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>4</b> theorists</span>
+    <span class="chip"><b>Weberian</b> civil service</span>
+    <span class="chip"><b>Steel frame</b> · 1922</span>
+    <span class="chip"><b>7</b> pathologies</span>
+  </div>
+</section>
+
+<!-- ============================================================== toc === -->
+<nav class="toc card">
+  <header><span class="eyebrow">Contents</span><h2><span class="emoji">🗺️</span> In this chapter</h2></header>
+  <ol>
+    <li><span class="dot" style="background:#BD6A4E"></span><a class="title" href="#summary">The five-minute version</a><span class="rng">summary</span></li>
+    <li><span class="dot" style="background:#5866C4"></span><a class="title" href="#t1">01 · What bureaucracy is, and the engine metaphor</a><span class="rng">definition</span></li>
+    <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t2">02 · Max Weber: the rational-legal model</a><span class="rng">the classic</span></li>
+    <li><span class="dot" style="background:#C6506E"></span><a class="title" href="#t3">03 · Karl Marx: the bridge and the "imaginary state"</a><span class="rng">function</span></li>
+    <li><span class="dot" style="background:#B57A2A"></span><a class="title" href="#t4">04 · John Stuart Mill: bureaucracy vs democracy</a><span class="rng">selected vs elected</span></li>
+    <li><span class="dot" style="background:#46955C"></span><a class="title" href="#t5">05 · Woodrow Wilson: keep it out of politics</a><span class="rng">the dichotomy</span></li>
+    <li><span class="dot" style="background:#7A5AA8"></span><a class="title" href="#t6">06 · The steel frame</a><span class="rng">structures &amp; components</span></li>
+    <li><span class="dot" style="background:#B44A8C"></span><a class="title" href="#t7">07 · The pathologies of bureaucracy</a><span class="rng">where it fails</span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t8">Glossary · Flashcards · Exam focus</a><span class="rng"></span></li>
+  </ol>
+</nav>
+
+<!-- ============================================================= tldr === -->
+<section id="summary" class="summary card" style="--accent:#BD6A4E; --soft:#F7ECE7; border-top-color:#BD6A4E">
+  <header><span class="eyebrow" style="color:#BD6A4E">Start here</span><h2><span class="emoji">⭐</span> The five-minute version</h2></header>
+  <ul>
+    <li><strong>Bureaucracy is the state's engine.</strong> It is the implementation arm of government, the civil service and public administration, that carries out policy within an organisation's rules. Take it out of the state and, in the teacher's image, you are left with a beautiful car that cannot move.</li>
+    <li><strong>Say "civil servant", not "bureaucrat".</strong> "Bureaucrat" carries negative connotations (rigidity, red tape); "civil servant" matches the job's real service purpose. The chapter opens and closes on this distinction.</li>
+    <li><strong>Four theorists, and all four ultimately defend bureaucracy.</strong> <span class="kt">Weber</span> gives the model (rational, efficient, structured, indispensable). <span class="kt">Marx</span> calls it the "imaginary state beside the real state", the bridge between state and public. <span class="kt">Mill</span> shows strong bureaucracies keep regimes stable, and separates the <em>selected</em> civil servant from the <em>elected</em> politician. <span class="kt">Wilson</span> insists administration must stay out of politics.</li>
+    <li><strong>Weber's model is the core.</strong> His bureaucracy runs on <strong>hierarchy, division of labour, formal written rules, impersonality, merit-based careers and written records</strong>, which makes it the most technically efficient form of organisation. Its features live on in the <strong>Weberian civil service</strong>, which is really the British civil service that all its former colonies (Pakistan, India, Malaysia, Singapore) inherited.</li>
+    <li><strong>Impersonality is the signature trait:</strong> apply every rule uniformly, no favouritism, and no personal innovation. A strength for fairness, a weakness for adaptability.</li>
+    <li><strong>The "steel frame"</strong> is the phrase for the strong structures, processes and personnel that give administration stability and continuity through changes of government. (The phrase itself famously described the Indian Civil Service, as section 6 explains.)</li>
+    <li><strong>The same traits become pathologies</strong> when taken too far: detachment, too many hierarchical layers, rigidity, risk aversion, waste, policy capture and entrenched inequality. Knowing both faces is what a good answer shows.</li>
+  </ul>
+</section>
+
+<!-- ======================================================== section 1 === -->
+<section id="t1" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
+  <header>
+    <span class="eyebrow"><span class="num">1</span> The tool</span>
+    <h2><span class="emoji">⚙️</span> What bureaucracy is, and the engine metaphor</h2>
+    <span class="timepill">Class 2</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Bureaucracy is the tool of governance the syllabus focuses on. Defined simply: it is the <strong>implementation of government processes and regulations within the purview of an organisation</strong> <span class="ts">Class 2 · 01:41:44</span>. It is the executive arm, the civil service, public administration, the machinery that turns policy into action.</p>
+
+    <div class="note">
+      <p><strong>The engine metaphor.</strong> The teacher's central image: bureaucracy is to the state what an engine is to a car, a compressor to an air conditioner <span class="ts">Class 2 · 01:43:09</span>. A state without a functioning bureaucracy is "a very beautiful car" with no engine, fit only for a museum <span class="ts">Class 2 · 01:44:17</span>. This is why Weber and the others call bureaucracy <strong>indispensable</strong>: the state cannot function without it. The civil service is counted among the pillars of the state, the executive.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>"Civil servant", not "bureaucrat".</strong> The teacher makes a point of this from the first class. Aim to be a <strong>civil servant</strong>, not a <strong>bureaucrat</strong>, because "bureaucrat" carries negative connotations (rigidity, self-importance, red tape) while "civil servant" reflects the job's actual purpose of public service <span class="ts">Class 2 · 01:41:11</span>. It is a small point that signals you understand the difference between the institution's ideal and its caricature, which is exactly the tension this chapter explores.</p>
+    </div>
+
+    <p>One important limit built into the definition: bureaucracy works <strong>within the purview of an organisation</strong>, meaning within what the constitution, the rules of business and the departmental rule book allow. There is little room for innovation; a civil servant plays the part the rules permit, no more <span class="ts">Class 2 · 01:42:14</span>. Hold onto that, because it is both the source of the bureaucracy's fairness and, later, of its rigidity.</p>
+  </div>
+</section>
+
+<!-- ======================================================== section 2 === -->
+<section id="t2" class="chapter card" style="--accent:#2C8C86; --soft:#E4F1F0;">
+  <header>
+    <span class="eyebrow"><span class="num">2</span> Theorist one</span>
+    <h2><span class="emoji">📐</span> Max Weber: the rational-legal model</h2>
+    <span class="timepill">Class 2</span>
+  </header>
+  <div class="section-body">
+    <p class="lead"><strong>Max Weber</strong>, the German sociologist, is the theorist who studied bureaucracy most extensively and gave it its defining model. His verdict: of the many forms of public administration, bureaucracy is the <strong>best and most efficient</strong> <span class="ts">Class 2 · 01:49:52</span>.</p>
+
+    <p>Weber described bureaucratic administration as <strong>"domination through knowledge and expertise"</strong> <span class="ts">Class 2 · 01:48:01</span>. The reason it works, in his account, is <strong>career progression</strong>: because civil servants spend their working lives on one kind of task in one parent department, their know-how becomes near-perfect, unlike the private sector where people change firms and never accumulate the same depth <span class="ts">Class 2 · 01:48:27</span>.</p>
+
+    <h3>The features Weber prized</h3>
+    <p>The teacher lists the headline features that, for Weber, make bureaucracy better than other jobs <span class="ts">Class 2 · 01:50:43</span>:</p>
+    <ul>
+      <li><strong>Rationality</strong>, decisions based on logic and sense, not emotion.</li>
+      <li><strong>Efficiency.</strong></li>
+      <li><strong>An organised, structured way</strong> of working.</li>
+      <li><strong>Indispensability</strong>, the engine without which the state cannot run.</li>
+    </ul>
+
+    <div class="note">
+      <p><strong>Editorial: the fuller Weberian model.</strong> The features above are the lecture's shortlist; the standard six characteristics an examiner expects are worth memorising in full. Weber's <strong>rational-legal bureaucracy</strong> rests on: (1) <strong>division of labour and specialisation</strong>, (2) a clear <strong>hierarchy of authority</strong>, (3) <strong>formal written rules and regulations</strong>, (4) <strong>impersonality</strong>, (5) <strong>employment and careers based on technical qualifications</strong> (merit), and (6) reliance on <strong>written documents and records</strong>. Weber held this to be the most technically efficient form of organisation for mass administration. He also warned of its dark side, the <strong>"iron cage"</strong>: a fully bureaucratised order can become impersonal, dehumanising and near-impossible to dismantle, which is precisely the pathology section later in this chapter.</p>
+    </div>
+
+    <h3>The Weberian civil service, and where you find it</h3>
+    <p>The features Weber prized define what is called the <span class="kt">Weberian civil service</span>, and its historical exemplar was the <strong>British civil service</strong> <span class="ts">Class 2 · 01:50:14</span>. That matters directly for Pakistan: the British civil service was inherited by every British colony, so India, Pakistan, Malaysia, Singapore and Indonesia all carry Weberian features in their bureaucracies <span class="ts">Class 2 · 01:55:02</span>. The teacher's honest aside: those features are strong in Malaysia and Singapore, and weaker in present-day Pakistan and India, even though all four inherited the same frame <span class="ts">Class 2 · 01:55:32</span>.</p>
+
+    <h3>Impersonality, in two senses</h3>
+    <div class="note exam">
+      <p><strong>The signature Weberian trait.</strong> A civil servant operates with <span class="kt">impersonality</span>, and the teacher splits it into two <span class="ts">Class 2 · 01:58:17</span>. First, <strong>no favouritism</strong>: the rules apply to every member of the public equally, with no bending them for a brother, a daughter or an acquaintance. Second, <strong>uniform application with no personal touch</strong>: you implement every rule the same way and bring no personal innovation or creativity to it. Impersonality is therefore a strength (fairness, equality before the rules) that shades into a weakness (rigidity, no room to adapt), which is the hinge on which the whole chapter turns.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 3 === -->
+<section id="t3" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+  <header>
+    <span class="eyebrow"><span class="num">3</span> Theorist two</span>
+    <h2><span class="emoji">🌉</span> Karl Marx: the bridge and the "imaginary state"</h2>
+    <span class="timepill">Class 2</span>
+  </header>
+  <div class="section-body">
+    <p class="lead"><strong>Karl Marx</strong> is usually read as bureaucracy's critic, but the teacher stresses that even Marx <strong>does not deny its importance</strong> <span class="ts">Class 2 · 02:16:21</span>. His contribution here is a way of describing what the bureaucracy <em>is</em> in relation to the state.</p>
+
+    <div class="note">
+      <p><strong>The "imaginary state beside the real state".</strong> Marx's image, as taught: the bureaucracy is an <strong>imaginary state alongside the real state</strong> <span class="ts">Class 2 · 02:16:21</span>. The teacher's analogy is a husband and wife, both equal and essential, but with distinct, non-interchangeable identities. In the same way, the state is one thing and the bureaucracy (civil service, public administration, the executive) is another, both indispensable, neither reducible to the other <span class="ts">Class 2 · 02:16:49</span>.</p>
+    </div>
+
+    <p>The reason it cannot be undermined: <strong>bureaucracy is the bridge between the state and the public</strong> <span class="ts">Class 2 · 02:17:57</span>. The state issues orders; the civil servants execute them upon the public; the public's response and feedback flow back up through the civil servants to the government. Remove the bridge and the two banks cannot reach each other <span class="ts">Class 2 · 02:18:27</span>.</p>
+
+    <div class="note">
+      <p><strong>The features Marx assigns it.</strong> In Marx's account the bureaucracy <strong>comprises a hierarchy of information and passive obedience</strong> <span class="ts">Class 2 · 02:21:48</span>: authority is layered, and juniors are expected to have faith in and obey their seniors. Its operations are <strong>formal and fixed</strong>, run by principles, rules and <strong>SOPs (standard operating procedures)</strong>, and the view of bureaucracy here is rigid, with traditions in the rule book that have not changed since 1947 <span class="ts">Class 2 · 02:24:11</span>. The teacher's careful point: these are <strong>neutral traits</strong>, neither good nor bad in themselves, like a person's height or hair colour. Rigidity is a fault in one context (blocking innovation) and a virtue in another (stability, reliable SOPs), so always read a trait in its context <span class="ts">Class 2 · 02:22:48</span>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 4 === -->
+<section id="t4" class="chapter card" style="--accent:#B57A2A; --soft:#FBF1DE;">
+  <header>
+    <span class="eyebrow"><span class="num">4</span> Theorist three</span>
+    <h2><span class="emoji">👑</span> John Stuart Mill: bureaucracy vs democracy</h2>
+    <span class="timepill">Class 2</span>
+  </header>
+  <div class="section-body">
+    <p class="lead"><strong>John Stuart Mill</strong>, the political theorist, arrived at his view of bureaucracy by studying monarchies. His finding: the monarchies that lasted longest were the ones with the strongest administrations <span class="ts">Class 2 · 02:25:43</span>.</p>
+
+    <p>Writing around 1860, Mill observed that the most successful and enduring monarchies of Europe, China and Russia had <strong>good, stable, uniform, rational and highly organised bureaucracies</strong> <span class="ts">Class 2 · 02:26:50</span>. The implication is striking: a strong public administration can hold a regime together and blunt the impulse to rebel, because people are reasonably well served. Where administration was weak, monarchies fell.</p>
+
+    <div class="note exam">
+      <p><strong>Selected vs elected.</strong> Mill's most exam-useful contribution is the distinction between the <strong>selected</strong> civil servant and the <strong>elected</strong> politician <span class="ts">Class 2 · 02:31:18</span>. The civil servant is <em>selected</em> on merit, by fulfilling a fixed criterion (the exam, the qualifications); the politician is <em>elected</em>. This is the heart of the bureaucracy-versus-democracy debate: bureaucracy is <strong>separate from democracy</strong> and as important to the state as the elected government, but it draws its authority from merit rather than the ballot <span class="ts">Class 2 · 02:28:29</span>.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>The negative side Mill names.</strong> Mill is not uncritical. His famous charge, which the teacher flags as a clearly negative connotation, is that <strong>bureaucracy can "stifle the mind"</strong> <span class="ts">Class 2 · 02:31:55</span>: an over-rigid, rule-bound administration can deaden initiative and produce pedantry. So Mill holds both ideas at once, a strong bureaucracy sustains a state, yet an over-strong one can smother the very creativity a society needs. That tension is worth quoting directly in an answer on the limits of bureaucracy.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 5 === -->
+<section id="t5" class="chapter card" style="--accent:#46955C; --soft:#E9F4EC;">
+  <header>
+    <span class="eyebrow"><span class="num">5</span> Theorist four</span>
+    <h2><span class="emoji">🚧</span> Woodrow Wilson: keep administration out of politics</h2>
+    <span class="timepill">Class 2</span>
+  </header>
+  <div class="section-body">
+    <p class="lead"><strong>Woodrow Wilson</strong>, the political scientist who later became US President, is the fourth theorist, and like the others he <strong>favoured bureaucracy</strong>. His single great idea is the separation of administration from politics <span class="ts">Class 2 · 02:34:55</span>.</p>
+
+    <div class="note">
+      <p><strong>The politics-administration dichotomy.</strong> Wilson's core claim, in the teacher's words: <strong>"political questions are not administrative questions"</strong> <span class="ts">Class 2 · 02:34:09</span>. Politics and the civil service should not interfere in one another, because they deal with different matters. Administration must <strong>not be politicised</strong>: if there is no gap between politicians and civil servants, politicians can manipulate the service for their own ends, and it is public service delivery, and the poor who depend on it, that suffers <span class="ts">Class 2 · 02:37:05</span>. The civil service should be a <strong>professional cadre devoid of political leanings</strong> <span class="ts">Class 2 · 02:37:38</span>.</p>
+    </div>
+
+    <div class="note">
+      <p><strong>Editorial: pin the citation.</strong> Wilson set out this argument in his 1887 essay <strong>"The Study of Administration"</strong>, which is regarded as a founding text of the field and the origin of the <strong>politics-administration dichotomy</strong>. He is fairly credited as the originator; the fuller academic statement came a little later from <strong>Frank Goodnow</strong> in <em>Politics and Administration</em> (1900), the usual second name to cite. Wilson's motive was a reaction against the American <strong>"spoils system"</strong>, where jobs were handed out for political loyalty; he wanted a merit-based, non-partisan administration insulated from that.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Editorial: a small correction on the ICS aside.</strong> The lecture mentions <strong>Warren Hastings</strong> as the "Indian Viceroy" who introduced civil services in India <span class="ts">Class 2 · 02:38:47</span>. Two points for accuracy: Hastings was the first <strong>Governor-General of Bengal (from 1774)</strong>, not a Viceroy (the office of Viceroy only began in 1858). And while Hastings did begin reforming the East India Company's administration, the <strong>covenanted civil service</strong> is more usually credited to <strong>Lord Cornwallis</strong> in the 1790s. Use "early Company administration" language rather than pinning the civil service's founding to one name.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 6 === -->
+<section id="t6" class="chapter card" style="--accent:#7A5AA8; --soft:#F0EBF8;">
+  <header>
+    <span class="eyebrow"><span class="num">6</span> The structure</span>
+    <h2><span class="emoji">🏗️</span> The steel frame of bureaucracy</h2>
+    <span class="timepill">Class 2</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The <span class="kt">steel frame</span> is the phrase for the strong structures that hold a bureaucratic system up. The teacher defines it as the core elements of the bureaucratic system: its <strong>structures, processes and personnel</strong> <span class="ts">Class 2 · 02:00:43</span>, the things that give governance <strong>stability, efficiency and continuity</strong> <span class="ts">Class 2 · 02:03:12</span>.</p>
+
+    <div class="note">
+      <p><strong>Editorial: where the phrase comes from.</strong> "Steel frame" is a famous description of the <strong>Indian Civil Service</strong>, coined by British Prime Minister <strong>David Lloyd George in the House of Commons on 2 August 1922</strong>: he called the ICS the "steel frame" on which "the whole structure of government and of administration in India" rested, warning that "if you take that steel frame out of the fabric it will collapse." Pakistan's Civil Service of Pakistan (CSP) inherited exactly this legacy, which is why the phrase recurs in a Pakistani governance paper.</p>
+    </div>
+
+    <h3>The key components</h3>
+    <p>The teacher lists the components of the steel frame, which overlap heavily with the Weberian features (the exam sometimes asks for the similarities between them) <span class="ts">Class 2 · 02:04:49</span>:</p>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Component</th><th>What it means</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Career civil service</strong></td><td>Induction and progression by merit, through grades</td></tr>
+          <tr><td><strong>Hierarchy / chain of command</strong></td><td>Layered authority</td></tr>
+          <tr><td><strong>Division of labour</strong></td><td>Specialised people for specialised tasks</td></tr>
+          <tr><td><strong>Rules and procedures</strong></td><td>The service is bound by rules; little room for innovation</td></tr>
+          <tr><td><strong>Impersonality / uniformity</strong></td><td>Decisions on merit, applied the same to everyone</td></tr>
+          <tr><td><strong>Meritocracy</strong></td><td>Selection and advancement on merit</td></tr>
+          <tr><td><strong>Stability and continuity</strong></td><td>The service works the same way regardless of regime change, war, recession or constitutional amendment <span class="ts">Class 2 · 02:06:53</span></td></tr>
+          <tr><td><strong>Rationality</strong></td><td>Decisions based on logic and evidence, not emotion, especially under a limited budget <span class="ts">Class 2 · 02:07:34</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note exam">
+      <p><strong>The exam angle.</strong> A stock question asks for the <strong>similarities between the steel frame and Weberian bureaucracy</strong> <span class="ts">Class 2 · 02:09:03</span>. The overlap is the answer: hierarchy, division of labour, formal rules and procedures, meritocracy, specialisation of knowledge, career civil service, impartiality/impersonality, formalised communication, continuity of operations, rationality and efficiency all appear on both lists. Learn the shared list once and it serves both questions.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 7 === -->
+<section id="t7" class="chapter card" style="--accent:#B44A8C; --soft:#F8EAF3;">
+  <header>
+    <span class="eyebrow"><span class="num">7</span> The other face</span>
+    <h2><span class="emoji">🩹</span> The pathologies of bureaucracy</h2>
+    <span class="timepill">Class 3</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Every strength above has a shadow, and the next class opens by naming them. These are the <strong>pathologies</strong>, the ways the same traits that make bureaucracy reliable make it fail. This is the material for any "critically evaluate bureaucracy" question.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Pathology</th><th>How the strength turns into a fault</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Impersonality (overdone)</strong></td><td>Officials feel detached; the long-run goal is lost as they cling to the rules, and efficiency is paralysed <span class="ts">Class 3 · 00:48</span></td></tr>
+          <tr><td><strong>Bureaucratic hierarchy</strong></td><td>Hierarchy itself is fine, but too many layers and no open-door policy mean every layer must approve, and one unconvinced official can block a public-welfare idea <span class="ts">Class 3 · 02:26</span></td></tr>
+          <tr><td><strong>Lack of flexibility</strong></td><td>Being so rule-bound and impersonal that the service cannot adapt to today's challenges <span class="ts">Class 3 · 03:51</span></td></tr>
+          <tr><td><strong>Risk aversion</strong></td><td>Comfort with routine means no appetite to try new methods, so the most efficient way of delivering a service is never found <span class="ts">Class 3 · 05:11</span></td></tr>
+          <tr><td><strong>Waste of resources</strong></td><td>Time, money and manpower wasted through inefficiency <span class="ts">Class 3 · 06:00</span></td></tr>
+          <tr><td><strong>Policy capture</strong></td><td>The Marxist idea again: policy shaped to serve narrow interests rather than the public <span class="ts">Class 3 · 06:00</span></td></tr>
+          <tr><td><strong>Entrenched inequality</strong></td><td>Not all civil servants are equal; some are more favoured, influential or learned, so inequality sets in within the service itself <span class="ts">Class 3 · 07:05</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Why this is the whole point of the chapter.</strong> The teacher's opening warning, "aim to be a civil servant, not a bureaucrat", is really a preview of this list. The <em>Weberian</em> features (hierarchy, impersonality, rule-boundness, stability) are exactly the ones that, taken too far, become <em>pathologies</em> (rigid layers, detachment, inflexibility, risk aversion). A top answer does not treat bureaucracy as simply good or simply bad; it shows that each virtue and its matching vice are the same trait seen in different contexts, and then argues for the balance, or the reforms, that keep the virtue without the vice.</p>
+    </div>
+
+    <div class="note">
+      <p><strong>Editorial: the reforms this sets up.</strong> These pathologies are the reason the next chapter turns to <strong>e-governance and digitisation</strong> (to cut layers, speed service delivery and add transparency) and to <strong>accountability institutions</strong> (to check waste and capture). Read this pathology list as the problem statement that the rest of the syllabus answers.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================= glossary === -->
+<section id="t8" class="chapter card" style="--accent:#8B8490; --soft:#F0EEF2;">
+  <header>
+    <span class="eyebrow"><span class="num">G</span> Reference</span>
+    <h2><span class="emoji">📖</span> Glossary</h2>
+  </header>
+  <div class="section-body">
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Bureaucracy</strong></td><td>The implementation arm of government: the civil service and public administration that carries out policy within an organisation's rules. The "engine" of the state.</td></tr>
+          <tr><td><strong>Bureaucrat vs civil servant</strong></td><td>Same role, different connotation. "Bureaucrat" implies rigidity and red tape; "civil servant" reflects the service purpose. Prefer the latter.</td></tr>
+          <tr><td><strong>Rational-legal bureaucracy</strong></td><td>Weber's model: hierarchy, division of labour, formal written rules, impersonality, merit-based careers, written records. The most technically efficient form of organisation.</td></tr>
+          <tr><td><strong>Weberian civil service</strong></td><td>A civil service with Weber's features; historically the British civil service, inherited by its colonies including Pakistan.</td></tr>
+          <tr><td><strong>Impersonality</strong></td><td>Applying every rule uniformly with no favouritism and no personal innovation. A strength for fairness, a weakness for adaptability.</td></tr>
+          <tr><td><strong>Iron cage</strong></td><td>Weber's warning that a fully bureaucratised order becomes impersonal, dehumanising and near-impossible to dismantle.</td></tr>
+          <tr><td><strong>Imaginary state beside the real state</strong></td><td>Marx's image of the bureaucracy: distinct from the state yet equally essential, and the bridge between state and public.</td></tr>
+          <tr><td><strong>Passive obedience</strong></td><td>In Marx's account, the expectation that juniors obey and trust their seniors within a hierarchy of information.</td></tr>
+          <tr><td><strong>Selected vs elected</strong></td><td>Mill's distinction: the civil servant is selected on merit; the politician is elected. The basis of the bureaucracy-versus-democracy debate.</td></tr>
+          <tr><td><strong>Politics-administration dichotomy</strong></td><td>Wilson's principle (1887, "The Study of Administration"; later Goodnow, 1900): administration should be kept separate from politics, staffed by a merit-based, non-partisan cadre.</td></tr>
+          <tr><td><strong>Steel frame</strong></td><td>The strong structures, processes and personnel giving administration stability and continuity. From the Indian Civil Service (Lloyd George, 1922).</td></tr>
+          <tr><td><strong>SOPs</strong></td><td>Standard operating procedures: the fixed rules that govern bureaucratic operations.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================= flashcards === -->
+<section id="t9" class="chapter card" style="--accent:#BD6A4E; --soft:#F7ECE7;">
+  <header>
+    <span class="eyebrow"><span class="num">F</span> Recall</span>
+    <h2><span class="emoji">🎴</span> Flashcards</h2>
+  </header>
+  <div class="section-body">
+    <div class="cards">
+      <div class="qa"><p class="q">What is bureaucracy, and what is the engine metaphor?</p><p class="a">The implementation arm of government within an organisation's rules. It is to the state what an engine is to a car: remove it and you have a beautiful vehicle that cannot move.</p></div>
+      <div class="qa"><p class="q">Why "civil servant" over "bureaucrat"?</p><p class="a">"Bureaucrat" carries negative connotations of rigidity and red tape; "civil servant" reflects the real purpose of public service.</p></div>
+      <div class="qa"><p class="q">Name the four theorists of bureaucracy and their one-line stance.</p><p class="a">Weber: the rational, efficient, indispensable model. Marx: the bridge / imaginary state beside the real state. Mill: strong bureaucracies sustain regimes; selected vs elected. Wilson: keep administration out of politics.</p></div>
+      <div class="qa"><p class="q">Give Weber's six characteristics of bureaucracy.</p><p class="a">Division of labour/specialisation, hierarchy of authority, formal written rules, impersonality, merit-based careers, and written records. The most technically efficient organisation.</p></div>
+      <div class="qa"><p class="q">What is the Weberian civil service, and who inherited it?</p><p class="a">A civil service with Weber's features, historically the British one. Its former colonies (Pakistan, India, Malaysia, Singapore, Indonesia) all inherited it.</p></div>
+      <div class="qa"><p class="q">Explain impersonality in its two senses.</p><p class="a">No favouritism (rules apply equally to all) and uniform application with no personal innovation. Fair, but potentially rigid.</p></div>
+      <div class="qa"><p class="q">How does Marx describe the bureaucracy?</p><p class="a">As an "imaginary state beside the real state" and the bridge between state and public. It comprises a hierarchy of information and passive obedience, with fixed formal SOPs.</p></div>
+      <div class="qa"><p class="q">What is Mill's "selected vs elected" distinction?</p><p class="a">The civil servant is selected on merit; the politician is elected. Bureaucracy is separate from democracy but equally important to the state.</p></div>
+      <div class="qa"><p class="q">State Wilson's politics-administration dichotomy and its source.</p><p class="a">"Political questions are not administrative questions": administration must stay out of politics, run by a professional non-partisan cadre. From Wilson's 1887 essay "The Study of Administration" (later Goodnow, 1900).</p></div>
+      <div class="qa"><p class="q">Where does "steel frame" come from?</p><p class="a">A description of the Indian Civil Service by British PM Lloyd George in the Commons on 2 August 1922. It denotes the structures, processes and personnel that give administration stability and continuity.</p></div>
+      <div class="qa"><p class="q">List the pathologies of bureaucracy.</p><p class="a">Overdone impersonality/detachment, bureaucratic hierarchy (too many layers), lack of flexibility, risk aversion, waste of resources, policy capture, and entrenched inequality.</p></div>
+      <div class="qa"><p class="q">What is the chapter's key insight about virtues and vices?</p><p class="a">Each strength is also a potential pathology: the same trait (hierarchy, impersonality, rule-boundness) is a virtue in one context and a vice in another. A good answer argues for the balance.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== exam focus === -->
+<section id="t10" class="chapter card" style="--accent:#BD6A4E; --soft:#F7ECE7;">
+  <header>
+    <span class="eyebrow"><span class="num">X</span> Strategy</span>
+    <h2><span class="emoji">🎯</span> Exam focus</h2>
+  </header>
+  <div class="section-body">
+
+    <h3>The theorists at a glance</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Theorist</th><th>Contribution</th><th>Cite</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Max Weber</strong></td><td>The rational-legal model; six characteristics; most efficient; iron cage</td><td>Weberian civil service = British</td></tr>
+          <tr><td><strong>Karl Marx</strong></td><td>Bridge between state and public; imaginary state beside the real state</td><td>Hierarchy of information, passive obedience</td></tr>
+          <tr><td><strong>J.S. Mill</strong></td><td>Strong bureaucracies sustain regimes; selected vs elected; can "stifle the mind"</td><td>c. 1860, study of monarchies</td></tr>
+          <tr><td><strong>Woodrow Wilson</strong></td><td>Politics-administration dichotomy; professional, non-partisan cadre</td><td>"The Study of Administration", 1887</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>How to answer a bureaucracy question</h3>
+    <ul>
+      <li><strong>Define it as the engine of the state</strong> and use the civil-servant-not-bureaucrat framing to signal nuance.</li>
+      <li><strong>Give Weber's model in full</strong> (the six characteristics), then note the Weberian civil service and Pakistan's inheritance of it.</li>
+      <li><strong>Bring in the other three theorists</strong> to show breadth: Marx (bridge), Mill (selected vs elected, and the "stifling" critique), Wilson (keep it out of politics).</li>
+      <li><strong>Turn to the pathologies</strong> for any critical or evaluative question, and pair each with the Weberian virtue it distorts.</li>
+      <li><strong>Close on balance or reform:</strong> the point is not to abolish bureaucracy but to keep its virtues (stability, merit, fairness) while curbing its vices (rigidity, capture), which is where e-governance and accountability come in.</li>
+    </ul>
+
+    <div class="note exam">
+      <p><strong>The one line to remember.</strong> Bureaucracy is the steel frame that holds a state upright and the iron cage that can trap it, and both descriptions are true. The whole chapter, four theorists and seven pathologies, is really an argument about how to keep the frame without building the cage.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="notefoot">Source recordings: <a href="https://drive.google.com/open?id=1QDTpBOOqzmxUl4yjcdemWd_U2cwm2KAX" target="_blank" rel="noopener">▶ GPP Class 2</a><span class="sep">·</span><a href="https://drive.google.com/open?id=17BRlIuFyLrFj74zj5ks7xLuZyoMgiy_2" target="_blank" rel="noopener">▶ GPP Class 3</a><span class="sep">·</span><a href="https://drive.google.com/open?id=1q-qDAvyBrCUkaVrHrBYZNwowciRGzy18" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+</html>

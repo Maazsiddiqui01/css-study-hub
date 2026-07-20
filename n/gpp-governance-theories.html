@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Governance: What It Is &amp; the Theories Behind It</title>
+<style>/* Lecture Notes ebook, "warm study" theme.
+   Inspired by Mehak's MarketCanvas app: soft cream ground, rounded white cards,
+   a different pastel accent per topic, serif display + friendly sans body,
+   gentle emoji + pill badges. Playful and pretty, but still a real study book.
+   Print-first (A4 PDF via headless Edge); reads well on screen too.
+
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
+   Everything themeable keys off --accent / --soft. Titles stay ink for
+   readability; accents colour eyebrows, numbers, pills, rules and callouts.
+*/
+
+:root {
+  --cream: #FCF6F0;          /* page ground (warm) */
+  --card: #FFFFFF;
+  --ink: #2C2630;            /* plum-black body/headings */
+  --ink-soft: #5A5360;
+  --slate: #8B8490;          /* captions, timestamps */
+  --hairline: #EEE6E4;
+
+  /* section default accent (overridden per section) */
+  --accent: #C0567E;
+  --soft: #FBECF1;
+
+  --shadow: 0 1px 2px rgba(60,30,45,.05), 0 10px 26px rgba(80,40,55,.07);
+  --radius: 20px;
+
+  --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: Consolas, "Cascadia Code", ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background:
+    radial-gradient(1100px 700px at 15% -5%, #FBEEF3 0%, transparent 55%),
+    radial-gradient(1000px 700px at 100% 0%, #EEF3FB 0%, transparent 50%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  font: 10.8pt/1.62 var(--sans);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+@media screen {
+  body { max-width: 51rem; margin: 0 auto; padding: 2.5rem 1.15rem 4rem; font-size: 1.0rem; }
+}
+
+/* ---------------------------------------------------------------- page --- */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm 14mm;
+  @bottom-center {
+    content: counter(page);
+    font: 8.5pt var(--sans);
+    color: #8B8490;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+/* --------------------------------------------------------------- cards --- */
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8mm 9mm 9mm;
+  margin: 0 0 6mm;
+  box-shadow: var(--shadow);
+  break-inside: auto;
+}
+@media screen { .card { margin-bottom: 1.4rem; } }
+
+/* a soft accent wash across the top of each section card (fades to white),
+   echoing the app's pastel cards without hurting readability */
+.chapter {
+  background:
+    linear-gradient(180deg, var(--soft) 0, rgba(255,255,255,0) 34mm),
+    var(--card);
+  border-top: 3px solid var(--accent);
+  break-inside: auto;
+  break-before: page;   /* each topic starts fresh: slide on top, notes below */
+}
+/* on screen (web/PWA) sections just stack; no forced page breaks */
+@media screen { .chapter { break-before: auto; } }
+
+h2, h3, .eyebrow { break-after: avoid; }
+p { orphans: 2; widows: 2; }
+
+/* keep the section header intact (eyebrow + title + time pill together) and
+   glued to its opening slide */
+.chapter > header { break-inside: avoid; break-after: avoid; }
+figure.slide { break-before: avoid; }
+
+/* --------------------------------------------------------------- cover --- */
+
+.cover {
+  page: cover;
+  break-after: page;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32mm 22mm 24mm;
+  background:
+    radial-gradient(700px 460px at 12% 8%, #FBE6EE 0%, transparent 60%),
+    radial-gradient(760px 520px at 96% 4%, #E7EEFB 0%, transparent 58%),
+    radial-gradient(620px 520px at 80% 96%, #E6F4EC 0%, transparent 60%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+@media screen {
+  .cover { min-height: 80vh; border-radius: 24px; padding: 3.2rem 2.6rem; margin-bottom: 1.4rem; }
+}
+
+.cover .avatar { font-size: 30pt; line-height: 1; margin-bottom: 7mm; }
+.cover .kicker {
+  font: 600 9pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 5mm;
+}
+.cover h1 {
+  font: 600 31pt/1.14 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 15em;
+}
+.cover .subtitle {
+  margin-top: 5mm;
+  font: 400 13.5pt/1.5 var(--sans);
+  color: var(--ink-soft);
+  max-width: 30em;
+}
+.cover .warm {
+  margin-top: 4mm;
+  font: italic 400 12pt/1.5 var(--serif);
+  color: var(--accent);
+}
+
+.cover .chips { display: flex; flex-wrap: wrap; gap: 3mm; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.4mm 4mm;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(60,30,45,.04);
+  font: 400 9pt var(--sans);
+  color: var(--slate);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chip b { font: 700 10.5pt var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ headings --- */
+
+.chapter header { margin-bottom: 5mm; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  font: 700 8.5pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--accent);
+  margin-bottom: 3mm;
+}
+.eyebrow .num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h2 {
+  font: 600 20pt/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .emoji { font-size: 17pt; }
+
+.timepill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.5mm 3.5mm;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font: 600 8pt var(--mono);
+  letter-spacing: 0.02em;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h3 {
+  font: 600 12.5pt/1.34 var(--serif);
+  color: var(--ink);
+  margin: 6mm 0 2.5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+.ts { font: 400 8.5pt var(--mono); color: var(--slate); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- body --- */
+
+.section-body > :last-child { margin-bottom: 0; }
+p { margin: 0 0 3mm; }
+.lead { font-size: 11.2pt; color: var(--ink); }
+
+ul, ol { margin: 0 0 3mm 5.5mm; }
+li { margin-bottom: 1.7mm; padding-left: 1mm; }
+li::marker { color: var(--accent); }
+
+.kt { font-weight: 700; color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
+
+code { font: 9.5pt var(--mono); background: #F3EFF4; padding: .4pt 3.5pt; border-radius: 4px; }
+
+/* ------------------------------------------------------------ callouts --- */
+
+.note {
+  --c: var(--accent);
+  --f: var(--soft);
+  background: var(--f);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  border-left: 3px solid var(--c);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.note .label {
+  display: inline-flex; align-items: center; gap: 1.6mm;
+  font: 700 8pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c);
+  margin-bottom: 1.8mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.warn { --c: #B4791F; --f: #FaF1DF; }
+.note.exam { --c: #3B8B78; --f: #E6F3EF; }
+.note.def  { --c: var(--accent); --f: var(--soft); }
+
+/* ------------------------------------------------------- summary card --- */
+
+.summary { --accent: #C0567E; --soft: #FBECF1; }
+.summary ul { list-style: none; margin: 0; }
+.summary li { position: relative; padding: 0 0 0 7mm; margin-bottom: 3.5mm; }
+.summary li::before {
+  content: "";
+  position: absolute; left: 0; top: 2.6mm;
+  width: 3.2mm; height: 3.2mm; border-radius: 50%;
+  background: var(--accent);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.summary li:last-child { margin-bottom: 0; }
+.summary li b, .summary li strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------- TOC --- */
+
+nav.toc { --accent: #8B8490; --soft: #F3EFF4; }
+nav.toc ol { list-style: none; margin: 0; }
+nav.toc li {
+  display: flex; align-items: baseline; gap: 4mm;
+  padding: 2.7mm 0;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11pt var(--sans);
+}
+nav.toc li:last-child { border-bottom: 0; }
+nav.toc .dot { width: 3.4mm; height: 3.4mm; border-radius: 50%; flex-shrink: 0;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+nav.toc .title { flex: 1; color: var(--ink); }
+nav.toc .rng { flex-shrink: 0; font: 600 8.5pt var(--mono); color: var(--slate); }
+
+/* -------------------------------------------------------------- slides --- */
+
+figure.slide { margin: 0 0 5mm; break-inside: avoid; }
+figure.slide img {
+  width: 100%; display: block;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 10px rgba(40,30,45,.10);
+}
+figure.slide figcaption {
+  font: 400 8.5pt var(--sans);
+  color: var(--slate);
+  margin-top: 2mm;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4mm;
+}
+figure.slide figcaption .ts { color: var(--accent); }
+
+/* ------------------------------------------------------------ glossary --- */
+
+dl.glossary { margin: 0; }
+dl.glossary div { padding: 3mm 0; border-bottom: 1px solid var(--hairline); break-inside: avoid; }
+dl.glossary div:last-child { border-bottom: 0; padding-bottom: 0; }
+dl.glossary dt { font: 700 10.5pt var(--sans); color: var(--accent); margin-bottom: 1.2mm; }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- flashcards --- */
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 0; }
+.qa {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  background: linear-gradient(180deg, var(--soft) 0, #fff 60%);
+  break-inside: avoid;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.qa .q { font: 700 10pt var(--sans); color: var(--ink); margin-bottom: 2mm; }
+.qa .a { color: var(--ink-soft); font-size: 10pt; }
+
+/* ------------------------------------------------------------- tables --- */
+
+.tables-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0; break-inside: avoid; }
+th {
+  font: 700 9pt var(--sans); text-align: left; color: var(--accent);
+  border-bottom: 2px solid var(--soft); padding: 2mm 3mm 2mm 0;
+}
+td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+
+/* --- mobile / on-the-go reading (screen only; never affects the print PDF).
+   Placed LAST so it wins the cascade over the wider @media screen rules above.
+   Requires <meta name="viewport" content="width=device-width, initial-scale=1">. */
+@media screen and (max-width: 640px) {
+  body { padding: 1rem 0.85rem 2.5rem; font-size: 1.02rem; }
+  .card { padding: 5mm 5mm 6mm; border-radius: 14px; margin-bottom: 0.9rem; }
+  .cover { min-height: auto; padding: 2rem 1.3rem 1.6rem; border-radius: 16px; }
+  .cover .avatar { font-size: 24pt; margin-bottom: 4mm; }
+  .cover h1 { font-size: 20pt; max-width: 100%; }
+  .cover .subtitle { font-size: 11.5pt; }
+  .cover .warm { font-size: 11pt; }
+  .cover .chips { gap: 2mm; margin-top: 5mm; }
+  h2 { font-size: 16pt; }
+  h2 .emoji { font-size: 13.5pt; }
+  h3 { font-size: 11.5pt; }
+  .cards { grid-template-columns: 1fr; }
+  nav.toc li { font-size: 10.5pt; gap: 2.5mm; padding: 2.5mm 0; }
+  nav.toc .rng { font-size: 8pt; }
+  .note { padding: 3.5mm 4mm; }
+  table { font-size: 9.5pt; }
+}
+</style>
+<meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
+align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
+border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
+<body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/open?id=1XssKZcEMjB-o8FnKAqcEqgb5Blh8mfpJ" target="_blank" rel="noopener">Download PDF ↓</a></div>
+
+<!-- ============================================================ cover === -->
+<section class="cover" style="background:radial-gradient(700px 460px at 12% 8%,#F7ECE7 0,transparent 60%),radial-gradient(760px 520px at 96% 4%,#EAF1FB 0,transparent 58%),radial-gradient(620px 520px at 80% 96%,#F0EBF8 0,transparent 60%),var(--cream)">
+  <div>
+    <div class="avatar">🏛️</div>
+    <div class="kicker" style="color:#BD6A4E">CSS Governance &amp; Public Policy · Chapter 1</div>
+    <h1>Governance: What It Is &amp; the Theories Behind It</h1>
+    <p class="subtitle">The meaning of governance, and the lenses through which the subject reads it: the decentred and interpretive view, the Marxist critique, the neoliberal case for a small state, and regulation theory.</p>
+    <p class="warm" style="color:#A85338">Governance is not government. It is how a whole society, its many actors and networks, is actually steered. Each theory is a different answer to the question: steered by whom, and for whom? 🏛️</p>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>UNDP</b> definition</span>
+    <span class="chip"><b>Decentred</b> theory</span>
+    <span class="chip"><b>Marxism</b> · neoliberalism</span>
+    <span class="chip"><b>Regulation</b> theory</span>
+  </div>
+</section>
+
+<!-- ============================================================== toc === -->
+<nav class="toc card">
+  <header><span class="eyebrow">Contents</span><h2><span class="emoji">🗺️</span> In this chapter</h2></header>
+  <ol>
+    <li><span class="dot" style="background:#BD6A4E"></span><a class="title" href="#summary">The five-minute version</a><span class="rng">summary</span></li>
+    <li><span class="dot" style="background:#5866C4"></span><a class="title" href="#t1">01 · What governance means</a><span class="rng">definition</span></li>
+    <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t2">02 · The decentred, interpretive theory</a><span class="rng">Bevir &amp; Rhodes</span></li>
+    <li><span class="dot" style="background:#C6506E"></span><a class="title" href="#t3">03 · The Marxist approach</a><span class="rng">class &amp; capture</span></li>
+    <li><span class="dot" style="background:#B57A2A"></span><a class="title" href="#t4">04 · Libertarianism &amp; neoliberalism</a><span class="rng">the small state</span></li>
+    <li><span class="dot" style="background:#46955C"></span><a class="title" href="#t5">05 · Regulation theory</a><span class="rng">systemic flaws</span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t6">Glossary · Flashcards · Exam focus</a><span class="rng"></span></li>
+  </ol>
+</nav>
+
+<!-- ============================================================= tldr === -->
+<section id="summary" class="summary card" style="--accent:#BD6A4E; --soft:#F7ECE7; border-top-color:#BD6A4E">
+  <header><span class="eyebrow" style="color:#BD6A4E">Start here</span><h2><span class="emoji">⭐</span> The five-minute version</h2></header>
+  <ul>
+    <li><strong>Governance is not government.</strong> Government is the institution; governance is the <em>process</em> of steering a society, the making and implementing of public policy across many actors, of which the state is only one. The UNDP frames it as the exercise of authority to manage a country's affairs at every level.</li>
+    <li><strong>The decentred (interpretive) theory (Bevir and Rhodes)</strong> says governance has no single control room. It happens through <span class="kt">networks</span> and many centres (<span class="kt">polycentric governance</span>), and it turns on <span class="kt">situated agency</span>: people act from their own beliefs, traditions and historical and cultural context, so no one policy fits everyone.</li>
+    <li><strong>The Marxist approach</strong> reads governance as a contest between the <strong>bourgeoisie</strong> (owners of capital and land) and the <strong>proletariat</strong> (labour). Left unchecked, policy is captured by the rich (<span class="kt">policy capture</span>, <span class="kt">elite capture</span>), and the resulting inequality drives revolution or separatism. The remedy is to build balance and include the masses in policy.</li>
+    <li><strong>Libertarianism and neoliberalism</strong> argue the opposite: keep the state <strong>out</strong> of the economy. Minimum intervention, a free market, a strong private sector, ease of doing business, and democracy rather than dictatorship.</li>
+    <li><strong>Regulation theory</strong> looks at the whole <strong>system</strong>: if one part of an institution is flawed (wrong people, wrong policy, wrong legal framework), the whole institution malfunctions and destabilises society. The job is to identify the faulty parts and correct them before instability spreads.</li>
+    <li><strong>How to use this in the exam.</strong> Each theory is a <em>lens</em>. A good answer names the theory, states its core claim, and applies it to a real Pakistani example (a fuel-price policy read through Marxism, provincial autonomy read through polycentric governance, privatisation read through neoliberalism).</li>
+    <li><strong>The recurring instruction from the teacher:</strong> no subject stands alone. The Marxism you met in Political Science or Sociology is the same idea; what changes is how you <em>apply</em> it to governance and policy.</li>
+  </ul>
+</section>
+
+<!-- ======================================================== section 1 === -->
+<section id="t1" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
+  <header>
+    <span class="eyebrow"><span class="num">1</span> The concept</span>
+    <h2><span class="emoji">🧭</span> What governance means</h2>
+    <span class="timepill">Class 2</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Start by separating two words students constantly merge. <strong>Government</strong> is the institution, the set of offices and people. <strong>Governance</strong> is the <em>activity</em>: the actual steering of a society, the making and carrying out of public policy.</p>
+
+    <p>The working definition to remember, from the deck: <strong>governance is the implementation of public policy</strong>, the management of the socio-economic development process, by attending to the meanings and beliefs that inform the actions of different actors <span class="ts">Class 2 · 11:05</span>. The slide adds that governance is a <strong>multi-dimensional</strong> concept with no single universally agreed definition, which is why the theories below each define it differently.</p>
+
+    <div class="note">
+      <p><strong>The UNDP definition.</strong> The standard formulation the paper expects, from the United Nations Development Programme, is that governance is <strong>the exercise of economic, political and administrative authority to manage a country's affairs at all levels</strong>. It works through the rules, institutions and processes by which citizens and groups voice their interests, exercise their rights and mediate their differences. The lecture slide's own shorthand, which cites UNDP for "rules of the political system to resolve conflicts between actors through legality and legitimacy", is a compressed version of that idea; use the fuller UNDP wording above in an answer.</p>
+    </div>
+
+    <h3>Who the "actors" are</h3>
+    <p>Governance is done by many hands, and naming them is the first move in almost any answer. The <span class="kt">actors</span>, or stakeholders, are: the <strong>public</strong> (the largest actor, the one governance affects), the <strong>government</strong>, the <strong>civil servants</strong> who are the tool of governance, and then politicians, the business community, the education and healthcare communities, the media, NGOs, and others <span class="ts">Class 2 · 12:12</span>. Each carries its own beliefs, demands and mindset, and good governance means understanding those before you implement anything.</p>
+
+    <div class="note exam">
+      <p><strong>Why the actor list matters.</strong> The whole subject rests on the idea that governance is a negotiation among actors with different interests. If a question asks about any policy problem, listing the relevant actors and what each wants is a reliable, high-value opening. It also sets up every theory below, because each theory is really a claim about <em>which</em> actors hold the power and whose interests the policy ends up serving.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 2 === -->
+<section id="t2" class="chapter card" style="--accent:#2C8C86; --soft:#E4F1F0;">
+  <header>
+    <span class="eyebrow"><span class="num">2</span> Theory one</span>
+    <h2><span class="emoji">🕸️</span> The decentred, interpretive theory</h2>
+    <span class="timepill">Class 2</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The <span class="kt">decentred theory of governance</span>, associated with <strong>Mark Bevir and R.A.W. Rhodes</strong>, is the interpretive lens. Its claim: governance has no single centre and cannot be understood from the top down. It emerges from the beliefs and actions of many actors, read in their own context.</p>
+
+    <h3>Situated agency</h3>
+    <p>The foundation is <span class="kt">situated agency</span>. "Agency" means autonomy, the capacity to decide and act. "Situated" means that capacity is exercised inside a context <span class="ts">Class 2 · 06:18</span>. Institutions and social norms shape people but do not fully determine them; their personal choices and character make a difference, always against the background of their history, culture and relationships <span class="ts">Class 2 · 37:18</span>.</p>
+
+    <div class="note warn">
+      <p><strong>A nuance worth getting right.</strong> The lecture's slide says "individuals' actions are <em>not</em> impacted by the institutions and social norms", which, taken literally, overstates the theory. Bevir and Rhodes do not claim people are unaffected by their surroundings. Their actual point is subtler and stronger for an answer: individuals <strong>inherit</strong> traditions and norms, but they can <strong>reason about them and modify them</strong>, so their agency is real but <em>situated</em> within, not free of, that inherited background. The teacher's own examples make this clearer than the slide: a person raised amid corrupt practices who still chooses integrity, or a family whose belief that "girls do not work" is revised when economic hardship forces a rethink <span class="ts">Class 2 · 08:46</span>. The tradition is there; the agent works on it.</p>
+    </div>
+
+    <h3>Networks and polycentric governance</h3>
+    <p>If agency is situated, then power is spread out. The theory therefore emphasises <span class="kt">network governance</span> and <span class="kt">polycentric governance</span>: policy is not made only in Islamabad (or Washington, or Delhi), but across <strong>many centres</strong>, communities, provinces, the media, civil service, business, the army, NGOs <span class="ts">Class 2 · 26:39</span>. The idea is to <strong>empower communities to manage their own problems</strong>, and to keep the many centres of decision-making in view when a policy is made <span class="ts">Class 2 · 27:17</span>. These networks interact through negotiation, cooperation and conflict, and the theory's prescription is that power should be <strong>distributed across them rather than concentrated at the centre</strong> <span class="ts">Class 2 · 35:49</span>.</p>
+
+    <h3>History, culture, and evolution</h3>
+    <p>Because agency is situated, the theory insists that governance cannot be understood without the <strong>historical and cultural context</strong> of the actors involved <span class="ts">Class 2 · 30:57</span>. A person shaped by famine is sensitive to food insecurity; a naturalised community brings the culture of its origin into its policy preferences. And governance <strong>evolves over time</strong>: you cannot apply the policies of an earlier age unchanged, because needs, values and resources have moved on, though past practices, institutional legacies and cultural norms still shape what is possible <span class="ts">Class 2 · 32:42</span>.</p>
+
+    <div class="note exam">
+      <p><strong>The single sentence that captures it.</strong> "No one policy can satisfy an entire population" <span class="ts">Class 2 · 26:39</span>. That is the decentred theory in one line, and it justifies devolution, local government, community empowerment and context-sensitive policy. Use it whenever a question assumes a single national policy can fix a diverse country.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 3 === -->
+<section id="t3" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+  <header>
+    <span class="eyebrow"><span class="num">3</span> Theory two</span>
+    <h2><span class="emoji">⚒️</span> The Marxist approach to governance</h2>
+    <span class="timepill">Class 2</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The Marxist lens reads governance as a struggle between classes, and reads most policy as serving the powerful. The teacher stresses that this is the same Marxism from Political Science and Sociology, applied here to policy <span class="ts">Class 2 · 50:44</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Class</th><th>Who they are</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Bourgeoisie</strong> (capitalist class)</td><td>Owners of capital, investment and large land, who employ and, in the Marxist account, exploit labour <span class="ts">Class 2 · 45:15</span></td></tr>
+          <tr><td><strong>Proletariat</strong> (working class)</td><td>The labour that produces the value but does not own the means of production</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Applied to governance, the argument runs: when the capitalist class controls policy-making, <strong>policies come out pro-rich rather than pro-public</strong> <span class="ts">Class 2 · 46:34</span>. The masses, who are not rich, feel the difference in the price of fuel, the weight of a roti, the cost of vegetables and kitchen essentials, while the benefits accrue upward <span class="ts">Class 2 · 47:07</span>. Excluded from planning, the public eventually revolts.</p>
+
+    <div class="note">
+      <p><strong>Where the theory points: revolution and separatism.</strong> The lecture's throughline is that unaddressed inequality and class conflict do not stay quiet. They produce <strong>revolution</strong>, the Russian and French Revolutions being the stock examples, where people toppled and replaced governments <span class="ts">Class 2 · 48:22</span>; or they produce <strong>separatism</strong>, when a group whose needs are ignored seeks to break away. The teacher uses Balochistan as the live Pakistani illustration of grievance feeding separatist sentiment <span class="ts">Class 2 · 49:23</span>. The Marxist prescription is to build balance and equality into the economy and the policy process so the pressure never reaches that point. Contemporary examples of the balance-seeking mindset offered: the USSR of the past, and China and Cuba.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Two jargon terms to bank: policy capture and elite capture.</strong> The teacher flags both as the terms to attach to the Marxist reading <span class="ts">Class 2 · 51:08</span>. <span class="kt">Policy capture</span> is when policy is shaped to serve a narrow interest rather than the public. <span class="kt">Elite capture</span> is when a privileged few divert public resources and benefits to themselves. Naming these in an answer signals you can move from the theory to its concrete mechanism, which is what turns a definition into analysis.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 4 === -->
+<section id="t4" class="chapter card" style="--accent:#B57A2A; --soft:#FBF1DE;">
+  <header>
+    <span class="eyebrow"><span class="num">4</span> Theory three</span>
+    <h2><span class="emoji">🏪</span> Libertarianism and neoliberalism</h2>
+    <span class="timepill">Class 2</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Where Marxism wants the state to correct the market, libertarianism and neoliberalism want the state to <strong>step back</strong> from it. The teacher treats the two together, since in a governance context their message is much the same, while noting they are formally distinct theories <span class="ts">Class 2 · 52:10</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Core message</th><th>What it means</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Minimum government intervention</strong></td><td>The state stays out of economic affairs as far as possible <span class="ts">Class 2 · 52:10</span></td></tr>
+          <tr><td><strong>Adoption of democracy</strong></td><td>Governance improves under democracy, not dictatorship or theocracy <span class="ts">Class 2 · 01:02:02</span></td></tr>
+          <tr><td><strong>Empowerment of the private sector</strong></td><td>Business, not the state, drives the economy</td></tr>
+          <tr><td><strong>Ease of doing business</strong></td><td>The state's role narrows to improving conditions for enterprise <span class="ts">Class 2 · 54:47</span></td></tr>
+          <tr><td><strong>Adoption of capitalism / free market</strong></td><td>Prices set by market principles, not by the state</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <p><strong>The distinction, for a careful answer.</strong> The teacher's own gloss: the framing leans toward a <strong>capitalist, free-market school of thought</strong>, with <strong>neoliberalism</strong> emphasising the free-market economy, hyper-individualism, capitalism and limited government intervention, while <strong>libertarianism</strong> shades toward the more strongly liberal, minimal-state position <span class="ts">Class 2 · 01:02:02</span>. For most governance answers, treating them as one pro-market, small-state family is fine; if a question demands the difference, libertarianism is the more absolute anti-state stance, neoliberalism the market-first economic-policy programme.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Editorial: connect it to real policy.</strong> This is the lens behind privatisation, deregulation, IMF-style structural adjustment, and the "ease of doing business" reforms Pakistan pursues. When a question asks about privatising state enterprises or cutting subsidies, the neoliberal case (efficiency, private-sector dynamism, a leaner state) is one half of the answer, and the Marxist objection (policy capture, the burden falling on the masses) is the other. Setting the two lenses against each other is a strong essay structure.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 5 === -->
+<section id="t5" class="chapter card" style="--accent:#46955C; --soft:#E9F4EC;">
+  <header>
+    <span class="eyebrow"><span class="num">5</span> Theory four</span>
+    <h2><span class="emoji">🔧</span> Regulation theory</h2>
+    <span class="timepill">Class 2</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The last theory of the chapter is <span class="kt">regulation theory</span>, and the teacher's version is a systems view: a governance system is only as sound as its weakest part, so the task is to find the faulty parts and correct them.</p>
+
+    <p>The core claim as taught: <strong>if any one part of an institution is flawed, the whole institution is flawed</strong> <span class="ts">Class 2 · 01:03:43</span>. Recruit the wrong people and the institution's whole working fails; write the wrong policy and even good implementers cannot save it; leave a legal framework broken and the institution starts to destabilise the society around it <span class="ts">Class 2 · 01:06:16</span>. The consequence the teacher stresses is a <strong>loss of citizenship</strong> in the sense of belonging: when institutions malfunction, people stop feeling the country is theirs and look to leave <span class="ts">Class 2 · 01:05:15</span>.</p>
+
+    <div class="note">
+      <p><strong>What the theory asks you to do.</strong> Use the system to <strong>identify problematic features and correct them</strong> before instability compounds, because in a capitalist society, the teacher warns, imbalance spreads fast <span class="ts">Class 2 · 01:06:47</span>. The specific target is any system that promotes <strong>socio-economic inequality and class conflict</strong>: left uncorrected, these breed the revolution or separatism the Marxist section described <span class="ts">Class 2 · 01:07:14</span>. The teacher's homely image: regulation is like a remote-controlled air conditioner, a way to keep checking and adjusting the system to the setting you want <span class="ts">Class 2 · 01:08:20</span>.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Editorial: know the academic term, and note where the lecture drifts.</strong> In the scholarly literature, <strong>Regulation Theory</strong> (the French <em>régulation</em> school of Michel Aglietta, Robert Boyer and Alain Lipietz) is a Marx-influenced political economy, and its central question is the opposite of what the slide implies: it studies how a set of institutions and norms lets capitalism achieve <strong>temporary stability despite its built-in contradictions</strong>, and why those arrangements eventually break down. So the theory is about the institutions that <em>stabilise</em> capitalism, not ones that "cause instability". Two more precision points: its acknowledged roots are <strong>structural Marxism, institutionalism and the Annales school (and Polanyi)</strong>, <em>not</em> systems theory, so treat the slide's "roots in Marxism and systems theory" as a loose gloss rather than a citable fact. And the lecture's "a flaw in one part fails the whole institution" is really a general <strong>systems-thinking</strong> account of institutional failure. For a CSS answer, present the identify-and-correct systemic idea the way the teacher does, but if you name Regulation Theory as a school, attribute it to Aglietta and the régulation tradition and describe it as explaining capitalism's periods of stability.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>The chapter's takeaway.</strong> Four lenses, four different answers to "who steers, and for whom". The decentred theory says many centres steer, so devolve power. Marxism says the rich steer, so rebalance. Neoliberalism says the market should steer, so shrink the state. Regulation theory says the system steers, so fix its faulty parts. A strong answer rarely picks just one; it reads the same policy problem through two or three and shows what each reveals.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================= glossary === -->
+<section id="t6" class="chapter card" style="--accent:#8B8490; --soft:#F0EEF2;">
+  <header>
+    <span class="eyebrow"><span class="num">G</span> Reference</span>
+    <h2><span class="emoji">📖</span> Glossary</h2>
+  </header>
+  <div class="section-body">
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Governance</strong></td><td>The process of steering a society: making and implementing public policy across many actors. The UNDP: the exercise of economic, political and administrative authority to manage a country's affairs at all levels.</td></tr>
+          <tr><td><strong>Government vs governance</strong></td><td>Government is the institution; governance is the activity of steering, which involves far more actors than the state alone.</td></tr>
+          <tr><td><strong>Actors / stakeholders</strong></td><td>Everyone involved in or affected by governance: the public, government, civil servants, politicians, business, media, NGOs and others.</td></tr>
+          <tr><td><strong>Decentred theory of governance</strong></td><td>Bevir and Rhodes: governance has no single centre; it emerges from the beliefs and actions of many actors, read in context.</td></tr>
+          <tr><td><strong>Situated agency</strong></td><td>People act with real autonomy, but always inside a context of inherited traditions, norms, history and culture that they can reason about and modify.</td></tr>
+          <tr><td><strong>Network / polycentric governance</strong></td><td>Policy made across many interacting centres (communities, provinces, media, business, army, NGOs) rather than at the capital alone.</td></tr>
+          <tr><td><strong>Bourgeoisie / proletariat</strong></td><td>In Marxism, the owning capitalist class and the working labour class, in structural conflict.</td></tr>
+          <tr><td><strong>Policy capture</strong></td><td>Policy shaped to serve a narrow interest rather than the public.</td></tr>
+          <tr><td><strong>Elite capture</strong></td><td>A privileged few diverting public resources and benefits to themselves.</td></tr>
+          <tr><td><strong>Neoliberalism</strong></td><td>A pro-market programme: minimum state intervention, free market, private-sector empowerment, ease of doing business.</td></tr>
+          <tr><td><strong>Libertarianism</strong></td><td>The more absolute small-state position; treated with neoliberalism in governance as one pro-market family.</td></tr>
+          <tr><td><strong>Regulation theory</strong></td><td>As taught: a systems view in which a flaw in one part of an institution fails the whole, so systemic faults must be identified and corrected. The academic régulation school (Aglietta, Boyer, Lipietz), rooted in Marxism, actually studies how institutions let capitalism achieve temporary stability.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================= flashcards === -->
+<section id="t7" class="chapter card" style="--accent:#BD6A4E; --soft:#F7ECE7;">
+  <header>
+    <span class="eyebrow"><span class="num">F</span> Recall</span>
+    <h2><span class="emoji">🎴</span> Flashcards</h2>
+  </header>
+  <div class="section-body">
+    <div class="cards">
+      <div class="qa"><p class="q">Governance vs government?</p><p class="a">Government is the institution; governance is the process of steering a society, making and implementing public policy across many actors.</p></div>
+      <div class="qa"><p class="q">Give the UNDP definition of governance.</p><p class="a">The exercise of economic, political and administrative authority to manage a country's affairs at all levels.</p></div>
+      <div class="qa"><p class="q">Who are the "actors" in governance?</p><p class="a">The public (the largest), government, civil servants, politicians, business, education/health communities, media and NGOs, each with their own beliefs and demands.</p></div>
+      <div class="qa"><p class="q">Whose theory is the decentred theory of governance, and what is its core idea?</p><p class="a">Bevir and Rhodes. Governance has no single centre; it emerges from many actors' beliefs and actions, read in their historical and cultural context.</p></div>
+      <div class="qa"><p class="q">What is situated agency?</p><p class="a">People act with real autonomy, but within a context of inherited traditions and norms they can reason about and modify. Not pure freedom, not pure programming.</p></div>
+      <div class="qa"><p class="q">What do network and polycentric governance mean?</p><p class="a">Policy is made across many interacting centres (communities, provinces, media, business, NGOs), so power should be distributed rather than concentrated at the capital.</p></div>
+      <div class="qa"><p class="q">The one-line summary of the decentred theory?</p><p class="a">"No one policy can satisfy an entire population." It justifies devolution, local government and context-sensitive policy.</p></div>
+      <div class="qa"><p class="q">How does the Marxist approach read governance?</p><p class="a">As class conflict between bourgeoisie and proletariat; unchecked, policy is captured by the rich, and the resulting inequality drives revolution or separatism.</p></div>
+      <div class="qa"><p class="q">Policy capture vs elite capture?</p><p class="a">Policy capture: policy serves a narrow interest not the public. Elite capture: a privileged few divert public resources and benefits to themselves.</p></div>
+      <div class="qa"><p class="q">What do neoliberalism and libertarianism argue?</p><p class="a">Keep the state out of the economy: minimum intervention, free market, private-sector empowerment, ease of doing business, democracy over dictatorship.</p></div>
+      <div class="qa"><p class="q">State regulation theory as taught, and how the academic school differs.</p><p class="a">As taught: a flaw in one part of an institution fails the whole, so systemic faults must be found and corrected. The academic régulation school (Aglietta, Boyer, Lipietz; Marxist roots) actually studies how institutions let capitalism achieve temporary stability, not what causes instability.</p></div>
+      <div class="qa"><p class="q">What is the exam value of having four theories?</p><p class="a">Each is a lens on "who steers and for whom". Read one policy problem through two or three (Marxist vs neoliberal, plus polycentric) to build an analytical answer.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== exam focus === -->
+<section id="t8" class="chapter card" style="--accent:#BD6A4E; --soft:#F7ECE7;">
+  <header>
+    <span class="eyebrow"><span class="num">X</span> Strategy</span>
+    <h2><span class="emoji">🎯</span> Exam focus</h2>
+  </header>
+  <div class="section-body">
+
+    <h3>The four lenses at a glance</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Theory</th><th>Who steers?</th><th>Prescription</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Decentred / interpretive</strong></td><td>Many centres and networks</td><td>Devolve power; context-sensitive, community-led policy</td></tr>
+          <tr><td><strong>Marxist</strong></td><td>The owning class (capture)</td><td>Rebalance; include the masses; reduce inequality</td></tr>
+          <tr><td><strong>Neoliberal / libertarian</strong></td><td>The market should</td><td>Shrink the state; free market, private sector, ease of doing business</td></tr>
+          <tr><td><strong>Regulation</strong></td><td>The institutional system</td><td>Identify and correct the faulty parts before instability spreads</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>How to write a theory answer</h3>
+    <ul>
+      <li><strong>Name the theory and its theorist</strong> where there is one (decentred → Bevir and Rhodes).</li>
+      <li><strong>State the core claim in one sentence</strong> before elaborating.</li>
+      <li><strong>Apply it to a real example.</strong> A fuel-price or subsidy decision read through Marxism; provincial autonomy or local government read through polycentric governance; privatisation read through neoliberalism; a failing institution read through regulation theory.</li>
+      <li><strong>Set two lenses against each other</strong> for essay-style questions. The neoliberal case for privatisation versus the Marxist warning of elite capture is a ready-made structure.</li>
+      <li><strong>Bank the jargon:</strong> situated agency, polycentric/network governance, policy capture, elite capture, ease of doing business. Correct terms signal command of the subject.</li>
+    </ul>
+
+    <div class="note exam">
+      <p><strong>The teacher's standing advice.</strong> No subject is learned in isolation. The Marxism, neoliberalism and interpretive theory here are the same ideas you met in Political Science, Sociology or International Relations; what earns marks in <em>this</em> paper is applying them to governance and public policy specifically, with a Pakistani example attached. Build your notes so each theory carries at least one such example you can deploy on demand.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="notefoot">Source recordings: <a href="https://drive.google.com/open?id=1QDTpBOOqzmxUl4yjcdemWd_U2cwm2KAX" target="_blank" rel="noopener">▶ GPP Class 2</a><span class="sep">·</span><a href="https://drive.google.com/open?id=1XssKZcEMjB-o8FnKAqcEqgb5Blh8mfpJ" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+</html>
