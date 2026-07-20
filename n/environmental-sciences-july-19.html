@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Biodiversity Loss, Water Pollution &amp; Eutrophication</title>
+<style>/* Lecture Notes ebook, "warm study" theme.
+   Inspired by Mehak's MarketCanvas app: soft cream ground, rounded white cards,
+   a different pastel accent per topic, serif display + friendly sans body,
+   gentle emoji + pill badges. Playful and pretty, but still a real study book.
+   Print-first (A4 PDF via headless Edge); reads well on screen too.
+
+   Each section sets its own accent inline:
+     <section id="t1" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+   Everything themeable keys off --accent / --soft. Titles stay ink for
+   readability; accents colour eyebrows, numbers, pills, rules and callouts.
+*/
+
+:root {
+  --cream: #FCF6F0;          /* page ground (warm) */
+  --card: #FFFFFF;
+  --ink: #2C2630;            /* plum-black body/headings */
+  --ink-soft: #5A5360;
+  --slate: #8B8490;          /* captions, timestamps */
+  --hairline: #EEE6E4;
+
+  /* section default accent (overridden per section) */
+  --accent: #C0567E;
+  --soft: #FBECF1;
+
+  --shadow: 0 1px 2px rgba(60,30,45,.05), 0 10px 26px rgba(80,40,55,.07);
+  --radius: 20px;
+
+  --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: Consolas, "Cascadia Code", ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background:
+    radial-gradient(1100px 700px at 15% -5%, #FBEEF3 0%, transparent 55%),
+    radial-gradient(1000px 700px at 100% 0%, #EEF3FB 0%, transparent 50%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  font: 10.8pt/1.62 var(--sans);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+@media screen {
+  body { max-width: 51rem; margin: 0 auto; padding: 2.5rem 1.15rem 4rem; font-size: 1.0rem; }
+}
+
+/* ---------------------------------------------------------------- page --- */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm 14mm;
+  @bottom-center {
+    content: counter(page);
+    font: 8.5pt var(--sans);
+    color: #8B8490;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+/* --------------------------------------------------------------- cards --- */
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8mm 9mm 9mm;
+  margin: 0 0 6mm;
+  box-shadow: var(--shadow);
+  break-inside: auto;
+}
+@media screen { .card { margin-bottom: 1.4rem; } }
+
+/* a soft accent wash across the top of each section card (fades to white),
+   echoing the app's pastel cards without hurting readability */
+.chapter {
+  background:
+    linear-gradient(180deg, var(--soft) 0, rgba(255,255,255,0) 34mm),
+    var(--card);
+  border-top: 3px solid var(--accent);
+  break-inside: auto;
+  break-before: page;   /* each topic starts fresh: slide on top, notes below */
+}
+/* on screen (web/PWA) sections just stack; no forced page breaks */
+@media screen { .chapter { break-before: auto; } }
+
+h2, h3, .eyebrow { break-after: avoid; }
+p { orphans: 2; widows: 2; }
+
+/* keep the section header intact (eyebrow + title + time pill together) and
+   glued to its opening slide */
+.chapter > header { break-inside: avoid; break-after: avoid; }
+figure.slide { break-before: avoid; }
+
+/* --------------------------------------------------------------- cover --- */
+
+.cover {
+  page: cover;
+  break-after: page;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32mm 22mm 24mm;
+  background:
+    radial-gradient(700px 460px at 12% 8%, #FBE6EE 0%, transparent 60%),
+    radial-gradient(760px 520px at 96% 4%, #E7EEFB 0%, transparent 58%),
+    radial-gradient(620px 520px at 80% 96%, #E6F4EC 0%, transparent 60%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+@media screen {
+  .cover { min-height: 80vh; border-radius: 24px; padding: 3.2rem 2.6rem; margin-bottom: 1.4rem; }
+}
+
+.cover .avatar { font-size: 30pt; line-height: 1; margin-bottom: 7mm; }
+.cover .kicker {
+  font: 600 9pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 5mm;
+}
+.cover h1 {
+  font: 600 31pt/1.14 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 15em;
+}
+.cover .subtitle {
+  margin-top: 5mm;
+  font: 400 13.5pt/1.5 var(--sans);
+  color: var(--ink-soft);
+  max-width: 30em;
+}
+.cover .warm {
+  margin-top: 4mm;
+  font: italic 400 12pt/1.5 var(--serif);
+  color: var(--accent);
+}
+
+.cover .chips { display: flex; flex-wrap: wrap; gap: 3mm; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.4mm 4mm;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(60,30,45,.04);
+  font: 400 9pt var(--sans);
+  color: var(--slate);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chip b { font: 700 10.5pt var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ headings --- */
+
+.chapter header { margin-bottom: 5mm; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  font: 700 8.5pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--accent);
+  margin-bottom: 3mm;
+}
+.eyebrow .num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h2 {
+  font: 600 20pt/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .emoji { font-size: 17pt; }
+
+.timepill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.5mm 3.5mm;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font: 600 8pt var(--mono);
+  letter-spacing: 0.02em;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h3 {
+  font: 600 12.5pt/1.34 var(--serif);
+  color: var(--ink);
+  margin: 6mm 0 2.5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+.ts { font: 400 8.5pt var(--mono); color: var(--slate); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- body --- */
+
+.section-body > :last-child { margin-bottom: 0; }
+p { margin: 0 0 3mm; }
+.lead { font-size: 11.2pt; color: var(--ink); }
+
+ul, ol { margin: 0 0 3mm 5.5mm; }
+li { margin-bottom: 1.7mm; padding-left: 1mm; }
+li::marker { color: var(--accent); }
+
+.kt { font-weight: 700; color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
+
+code { font: 9.5pt var(--mono); background: #F3EFF4; padding: .4pt 3.5pt; border-radius: 4px; }
+
+/* ------------------------------------------------------------ callouts --- */
+
+.note {
+  --c: var(--accent);
+  --f: var(--soft);
+  background: var(--f);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  border-left: 3px solid var(--c);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.note .label {
+  display: inline-flex; align-items: center; gap: 1.6mm;
+  font: 700 8pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c);
+  margin-bottom: 1.8mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.warn { --c: #B4791F; --f: #FaF1DF; }
+.note.exam { --c: #3B8B78; --f: #E6F3EF; }
+.note.def  { --c: var(--accent); --f: var(--soft); }
+
+/* ------------------------------------------------------- summary card --- */
+
+.summary { --accent: #C0567E; --soft: #FBECF1; }
+.summary ul { list-style: none; margin: 0; }
+.summary li { position: relative; padding: 0 0 0 7mm; margin-bottom: 3.5mm; }
+.summary li::before {
+  content: "";
+  position: absolute; left: 0; top: 2.6mm;
+  width: 3.2mm; height: 3.2mm; border-radius: 50%;
+  background: var(--accent);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.summary li:last-child { margin-bottom: 0; }
+.summary li b, .summary li strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------- TOC --- */
+
+nav.toc { --accent: #8B8490; --soft: #F3EFF4; }
+nav.toc ol { list-style: none; margin: 0; }
+nav.toc li {
+  display: flex; align-items: baseline; gap: 4mm;
+  padding: 2.7mm 0;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11pt var(--sans);
+}
+nav.toc li:last-child { border-bottom: 0; }
+nav.toc .dot { width: 3.4mm; height: 3.4mm; border-radius: 50%; flex-shrink: 0;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+nav.toc .title { flex: 1; color: var(--ink); }
+nav.toc .rng { flex-shrink: 0; font: 600 8.5pt var(--mono); color: var(--slate); }
+
+/* -------------------------------------------------------------- slides --- */
+
+figure.slide { margin: 0 0 5mm; break-inside: avoid; }
+figure.slide img {
+  width: 100%; display: block;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 10px rgba(40,30,45,.10);
+}
+figure.slide figcaption {
+  font: 400 8.5pt var(--sans);
+  color: var(--slate);
+  margin-top: 2mm;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4mm;
+}
+figure.slide figcaption .ts { color: var(--accent); }
+
+/* ------------------------------------------------------------ glossary --- */
+
+dl.glossary { margin: 0; }
+dl.glossary div { padding: 3mm 0; border-bottom: 1px solid var(--hairline); break-inside: avoid; }
+dl.glossary div:last-child { border-bottom: 0; padding-bottom: 0; }
+dl.glossary dt { font: 700 10.5pt var(--sans); color: var(--accent); margin-bottom: 1.2mm; }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- flashcards --- */
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 0; }
+.qa {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  background: linear-gradient(180deg, var(--soft) 0, #fff 60%);
+  break-inside: avoid;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.qa .q { font: 700 10pt var(--sans); color: var(--ink); margin-bottom: 2mm; }
+.qa .a { color: var(--ink-soft); font-size: 10pt; }
+
+/* ------------------------------------------------------------- tables --- */
+
+.tables-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0; break-inside: avoid; }
+th {
+  font: 700 9pt var(--sans); text-align: left; color: var(--accent);
+  border-bottom: 2px solid var(--soft); padding: 2mm 3mm 2mm 0;
+}
+td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+
+/* --- mobile / on-the-go reading (screen only; never affects the print PDF).
+   Placed LAST so it wins the cascade over the wider @media screen rules above.
+   Requires <meta name="viewport" content="width=device-width, initial-scale=1">. */
+@media screen and (max-width: 640px) {
+  body { padding: 1rem 0.85rem 2.5rem; font-size: 1.02rem; }
+  .card { padding: 5mm 5mm 6mm; border-radius: 14px; margin-bottom: 0.9rem; }
+  .cover { min-height: auto; padding: 2rem 1.3rem 1.6rem; border-radius: 16px; }
+  .cover .avatar { font-size: 24pt; margin-bottom: 4mm; }
+  .cover h1 { font-size: 20pt; max-width: 100%; }
+  .cover .subtitle { font-size: 11.5pt; }
+  .cover .warm { font-size: 11pt; }
+  .cover .chips { gap: 2mm; margin-top: 5mm; }
+  h2 { font-size: 16pt; }
+  h2 .emoji { font-size: 13.5pt; }
+  h3 { font-size: 11.5pt; }
+  .cards { grid-template-columns: 1fr; }
+  nav.toc li { font-size: 10.5pt; gap: 2.5mm; padding: 2.5mm 0; }
+  nav.toc .rng { font-size: 8pt; }
+  .note { padding: 3.5mm 4mm; }
+  table { font-size: 9.5pt; }
+}
+</style>
+<meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
+align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
+border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
+<body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/open?id=1TqQMrg9PxKorGmMJjx_G8tKN3ILb3132" target="_blank" rel="noopener">Download PDF ↓</a></div>
+
+<!-- ============================================================ cover === -->
+<section class="cover" style="background:radial-gradient(700px 460px at 12% 8%,#E4F3EB 0,transparent 60%),radial-gradient(760px 520px at 96% 4%,#E7F1FB 0,transparent 58%),radial-gradient(620px 520px at 80% 96%,#F9EBF4 0,transparent 60%),var(--cream)">
+  <div>
+    <div class="avatar">🌍</div>
+    <div class="kicker" style="color:#2E9E6A">CSS Environmental Science · 19 July class</div>
+    <h1>Biodiversity Loss, Water Pollution &amp; Eutrophication</h1>
+    <p class="subtitle">Closing the global-warming mitigation list, then the full biodiversity topic (what it is, why it matters, how it is being lost, how to conserve it), and water pollution end to end, including the eutrophication chain.</p>
+    <p class="warm" style="color:#2C8A5E">Four topics, one habit: every one is definition, then causes, then effects, then controls. Learn the shape and the content follows. 🌍</p>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>2h 43m</b> class</span>
+    <span class="chip"><b>8</b> topics</span>
+    <span class="chip"><b>12</b> causes of loss</span>
+    <span class="chip"><b>9</b>-step eutrophication</span>
+  </div>
+</section>
+
+<!-- ============================================================== toc === -->
+<nav class="toc card">
+  <header><span class="eyebrow">Contents</span><h2><span class="emoji">🗺️</span> In this class</h2></header>
+  <ol>
+    <li><span class="dot" style="background:#2E9E6A"></span><a class="title" href="#summary">The five-minute version</a><span class="rng">summary</span></li>
+    <li><span class="dot" style="background:#B57A2A"></span><a class="title" href="#t1">01 · Finishing global-warming mitigation</a><span class="rng">points 6 to 10</span></li>
+    <li><span class="dot" style="background:#46955C"></span><a class="title" href="#t2">02 · What biodiversity is</a><span class="rng">definitions · 3 levels</span></li>
+    <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t3">03 · Why biodiversity matters</a><span class="rng">7 values</span></li>
+    <li><span class="dot" style="background:#C6506E"></span><a class="title" href="#t4">04 · Biodiversity loss</a><span class="rng">12 causes · the numbers</span></li>
+    <li><span class="dot" style="background:#2E9E6A"></span><a class="title" href="#t5">05 · Conserving biodiversity</a><span class="rng">9 measures</span></li>
+    <li><span class="dot" style="background:#3A7CC0"></span><a class="title" href="#t6">06 · Water pollution</a><span class="rng">3 types &amp; sources</span></li>
+    <li><span class="dot" style="background:#B44A8C"></span><a class="title" href="#t7">07 · Eutrophication</a><span class="rng">the 9-step chain</span></li>
+    <li><span class="dot" style="background:#5866C4"></span><a class="title" href="#t8">08 · Water pollution: effects &amp; controls</a><span class="rng">8 measures</span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t9">Glossary · Flashcards · Exam focus</a><span class="rng"></span></li>
+  </ol>
+</nav>
+
+<!-- ============================================================= tldr === -->
+<section class="summary card" style="--accent:#2E9E6A; --soft:#E4F3EB; border-top-color:#2E9E6A">
+  <header><span class="eyebrow" style="color:#2E9E6A">Start here</span><h2><span class="emoji">⭐</span> The five-minute version</h2></header>
+  <ul>
+    <li><strong>The class opens by finishing global-warming mitigation</strong> (points 6 to 10): promote <strong>sustainable industrialisation</strong> by installing pollution-control technology, implement <strong>international commitments</strong> (UNFCCC 1992, Kyoto 1997, Paris 2015), improve <strong>disaster management</strong>, build <strong>environmental governance</strong>, and strengthen <strong>international cooperation</strong> with developed countries leading.</li>
+    <li><strong>Biodiversity is the variety of life on Earth</strong>, and it works at <strong>three levels</strong>: <span class="kt">genetic</span> (variation within a species' genetic make-up), <span class="kt">species</span> (the number and kinds of organisms in an area), and <span class="kt">ecosystem</span> (variation between the habitats organisms live in, since a desert supports life a forest or ocean cannot).</li>
+    <li><strong>It matters because almost everything traces back to it:</strong> food, timber, medicine, energy, culture and clothing, environmental services such as pollution control and climate stability, and research.</li>
+    <li><strong>Biodiversity loss is "the declining numbers and kinds of living organisms on earth"</strong>, driven by <strong>12 causes</strong> the lecturer lists, headed by population explosion, over-exploitation, all four kinds of pollution, climate change, invasive species and deforestation.</li>
+    <li><strong>Conservation is a 9-point list</strong>, running from controlling over-exploitation and pollution to protected areas, <strong>in-situ and ex-situ conservation</strong>, awareness, and implementing the <strong>Convention on Biological Diversity</strong>.</li>
+    <li><strong>Water pollution is any physical, chemical or biological change in water quality that makes it unsuitable for its desired use</strong>, and it comes in <strong>three types</strong>: physical (colour, taste, odour), chemical (nitrates, phosphorus, heavy metals) and biological (bacteria and algal growth).</li>
+    <li><strong>Eutrophication is the headline case:</strong> nitrogen and phosphorus wash in, algae bloom across the surface, sunlight can no longer reach the plants below, photosynthesis stops, the bloom then collapses, and bacteria decomposing the dead mass strip the oxygen until the fish suffocate. Learn it as a <strong>chain</strong>, because that is how it is examined.</li>
+    <li><strong>How to answer any of these.</strong> Definition, then causes, then effects, then controls. Every topic in this class is built that way, and the controls should mirror the causes one for one.</li>
+  </ul>
+</section>
+
+<!-- ======================================================== section 1 === -->
+<section id="t2" class="chapter card" style="--accent:#B57A2A; --soft:#FAF0E2;">
+  <header>
+    <span class="eyebrow"><span class="num">1</span> Carried over</span>
+    <h2><span class="emoji">🏭</span> Finishing global-warming mitigation</h2>
+    <span class="timepill">00:00 – 00:12</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The class picks up a mitigation-and-adaptation list already in progress, running points <strong>6 to 10</strong> <span class="ts">00:00:00</span>. The theme throughout: nobody is asking industry to stop, only to become sustainable.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Measure</th><th>What it means</th></tr></thead>
+        <tbody>
+          <tr><td><strong>6</strong></td><td><strong>Promotion of sustainable industrialisation</strong></td><td>Install <strong>pollution-control methods and technologies</strong>: absorption, adsorption, fabric filters, bio-filters, catalytic reactors, cyclone method, smog towers. Stop the pollutant at the source and global warming, air pollution and climate change all begin to ease together <span class="ts">00:01:13</span>.</td></tr>
+          <tr><td><strong>7</strong></td><td><strong>Implementing national and international commitments</strong></td><td><strong>UNFCCC 1992</strong>, the <strong>Kyoto Protocol 1997</strong>, the <strong>Paris Agreement 2015</strong>.</td></tr>
+          <tr><td><strong>8</strong></td><td><strong>Improving disaster management</strong></td><td>Strengthen the authorities through <strong>capacity building</strong>: technical, scientific and financial.</td></tr>
+          <tr><td><strong>9</strong></td><td><strong>Environmental governance</strong></td><td>Policy, <strong>environmental law</strong>, and environmental institutions.</td></tr>
+          <tr><td><strong>10</strong></td><td><strong>Improving international cooperation</strong></td><td>Technical, scientific and financial, with the <strong>lead role for developed countries</strong>. Split into <strong>financial</strong>, <strong>scientific and technical</strong>, and <strong>social</strong> climate responsibility.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Why point 6 is the one to develop.</strong> The lecturer flags it as a full topic in its own right. The argument to make is that industrialisation is not the enemy: the pollutant is. Name two or three of the control technologies (scrubbing by absorption, fabric filters, catalytic reactors, smog towers) and you have shown that "sustainable industrialisation" is an engineering programme rather than a slogan.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 2 === -->
+<section id="t3" class="chapter card" style="--accent:#46955C; --soft:#E9F4ED;">
+  <header>
+    <span class="eyebrow"><span class="num">2</span> Definitions</span>
+    <h2><span class="emoji">🧬</span> What biodiversity is</h2>
+    <span class="timepill">00:14 – 00:32</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Start from the word itself: <strong>bio</strong> means life and <strong>diversity</strong> means variety, so biodiversity is the <strong>variety of life on Earth</strong>. It covers plants, animals and microbes, and in each case the point is <em>variety</em> rather than a single species.</p>
+
+    <div class="note">
+      <p><strong>Two formal definitions to quote.</strong></p>
+      <ul>
+        <li><strong>Global biodiversity strategy:</strong> "the <strong>totality of genes, numbers and kinds</strong> of living organisms on earth".</li>
+        <li><strong>Convention on Biological Diversity:</strong> the <strong>variation between</strong> living organisms, <strong>among</strong> living organisms, and <strong>within the species</strong> of living organisms.</li>
+      </ul>
+      <p>Notice that the CBD definition already contains the three levels below, which is why it is the more useful one to open an answer with.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: both definitions as dictated drop the word "ecosystems", and that is a third of the answer.</strong> On a definition question this is expensive, so use the real wording:</p>
+      <ul>
+        <li><strong>CBD, Article 2</strong> (the one to quote): biological diversity means <em>"the variability among living organisms from all sources… this includes diversity <strong>within species, between species and of ecosystems</strong>."</em> The class version says "between… among… within", which repeats one idea twice and loses the ecosystem level.</li>
+        <li><strong>Global Biodiversity Strategy:</strong> the totality of <strong>genes, species and ecosystems</strong>, rather than "genes, numbers and kinds".</li>
+      </ul>
+      <p>Both correct versions name all three levels, which sets up the next part of the answer for free.</p>
+    </div>
+
+    <h3>The three levels of biodiversity</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Level</th><th>What varies</th><th>The lecturer's handle on it</th></tr></thead>
+        <tbody>
+          <tr><td><strong>1. Genetic diversity</strong></td><td>The genetic make-up within a species</td><td>Every living organism has its own genetic make-up, so each life form carries its own characters.</td></tr>
+          <tr><td><strong>2. Species diversity</strong></td><td>The total numbers and kinds of organisms in a place</td><td>It refers to the total numbers and kinds of living organisms at a particular area or location, and their distribution is <strong>uneven</strong>.</td></tr>
+          <tr><td><strong>3. Ecosystem diversity</strong></td><td>The habitats themselves</td><td>Variation in the ecosystems <em>where the living organisms reside</em>. Each ecosystem has its own environment and can support its own type of life <span class="ts">00:30:41</span>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <p><strong>The example that fixes ecosystem diversity.</strong> What you find in a <strong>desert</strong> you cannot expect in the <strong>sea</strong>, and what lives in the sea you cannot expect in a <strong>forest</strong> <span class="ts">00:31:15</span>. Every ecosystem has its own living conditions and its own suitable environment, so it hosts its own life forms. That is the level people most often forget, and the easiest to illustrate.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 3 === -->
+<section id="t4" class="chapter card" style="--accent:#2C8C86; --soft:#E4F2F1;">
+  <header>
+    <span class="eyebrow"><span class="num">3</span> The value</span>
+    <h2><span class="emoji">💚</span> Why biodiversity matters</h2>
+    <span class="timepill">00:33 – 00:50</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The framing to open with: major aspects of life, the <strong>economy, society, culture, education, energy, employment and survival itself</strong>, are all directly or indirectly linked with biodiversity. Then give the seven specifics.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Value</th><th>Detail</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><strong>Food</strong></td><td>All essential nutrients (carbohydrates, proteins, fats, minerals, vitamins, fibre) come through fruits, vegetables and meat. Plus the whole <strong>food industry</strong>, its employment and economic gains.</td></tr>
+          <tr><td>2</td><td><strong>Timber products</strong></td><td>Furniture and paper production, with the employment and economic gains behind them.</td></tr>
+          <tr><td>3</td><td><strong>Treatment</strong></td><td>Medicines come overwhelmingly from living things, plus pharmaceutical employment and economic gains. (The class gives 70% from plants and 30% from animals and microbes; see the correction below before quoting that.)</td></tr>
+          <tr><td>4</td><td><strong>Energy</strong></td><td>Fuels, wood, and biological material for <strong>biofuels</strong>.</td></tr>
+          <tr><td>5</td><td><strong>Cultural</strong></td><td>Dressing: leather jackets, cotton, and the economic activity and livelihoods around them.</td></tr>
+          <tr><td>6</td><td><strong>Environmental services</strong></td><td><strong>Pollution control</strong> by plants and microbes, <strong>temperature and climate stability</strong> from forests, and <strong>sustenance of the food chain</strong>.</td></tr>
+          <tr><td>7</td><td><strong>Research</strong></td><td>Sampling and analysis, and genetic modification.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the "70% of medicines from plants" figure.</strong> No authoritative source gives a 70/30 plant-to-animal split. Use one of these instead, each defensible:</p>
+      <ul>
+        <li><strong>About 25%</strong> of modern prescription drugs are derived from higher <strong>plants</strong>.</li>
+        <li><strong>About half</strong> of new small-molecule drugs approved since 1981 are natural products or derived from them.</li>
+        <li><strong>WHO: about 80%</strong> of people in developing countries rely on <strong>traditional, largely plant-based medicine</strong> for primary healthcare. This is the strongest line for a CSS answer, and is probably the figure that became "70%" in class.</li>
+      </ul>
+      <p>The lecturer's underlying point stands completely: medicine depends on biodiversity. Only the number needs replacing.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Turn the values into the effects of loss.</strong> The lecturer's own instruction on this slide is to <em>convert the importance into effects</em>. That is a genuinely efficient exam trick: every value listed above becomes a loss when biodiversity declines. Lose biodiversity and you lose food security, medicine, timber, energy, cultural livelihoods and climate stability. Write the list once, then invert it.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 4 === -->
+<section id="t5" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+  <header>
+    <span class="eyebrow"><span class="num">4</span> The problem</span>
+    <h2><span class="emoji">📉</span> Biodiversity loss</h2>
+    <span class="timepill">00:50 – 01:05</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Definition first: biodiversity loss is <strong>"the declining numbers and kinds of living organisms on earth"</strong>. Note it mirrors the species-diversity definition exactly, but in reverse.</p>
+
+    <h3>The twelve causes</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Cause</th><th>#</th><th>Cause</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Population explosion</td><td>7</td><td>Global warming &amp; climate change</td></tr>
+          <tr><td>2</td><td>Over-exploitation</td><td>8</td><td>Invasion of non-native species</td></tr>
+          <tr><td>3</td><td>Air pollution</td><td>9</td><td>Water logging</td></tr>
+          <tr><td>4</td><td>Water pollution</td><td>10</td><td>Deforestation</td></tr>
+          <tr><td>5</td><td>Land pollution</td><td>11</td><td>Urbanisation</td></tr>
+          <tr><td>6</td><td>Noise pollution (disturbs animals' sleeping patterns)</td><td>12</td><td>Environmental crime</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>The numbers to quote</h3>
+    <p>This is where a biodiversity answer earns its marks, so the figures have to be right. Several of the ones given in class do not match the source bodies, so the table below gives <strong>what was taught</strong> beside <strong>what to actually write</strong>, each checked against the originating organisation.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Source</th><th>As taught in class</th><th>Verified figure to write</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Millennium Ecosystem Assessment</strong></td>
+            <td>10 to 15% of mammals and birds threatened</td>
+            <td><strong>10 to 30%</strong> of <strong>mammal, bird <em>and amphibian</em></strong> species are threatened with extinction (MEA, <strong>2005</strong>). Components: 12% birds, 23% mammals, 32% amphibians.</td>
+          </tr>
+          <tr>
+            <td><strong>IPCC</strong></td>
+            <td>70% of identified living organisms at risk above 3.5°C</td>
+            <td><strong>40 to 70% of species <em>assessed</em></strong> face significant extinction risk as warming exceeds about <strong>3.5°C</strong> (AR4, 2007). Also: 20 to 30% at risk above 1.5 to 2.5°C.</td>
+          </tr>
+          <tr>
+            <td><strong>IUCN</strong> Red List</td>
+            <td>1/4 of birds and 1/3 of mammals threatened</td>
+            <td><strong>The two are swapped.</strong> About <strong>1 in 8 birds (≈12%)</strong> and about <strong>1 in 4 mammals (≈26%)</strong> are threatened.</td>
+          </tr>
+          <tr>
+            <td><strong>IUCN</strong> marine turtles</td>
+            <td>6 of 7 marine turtle species threatened</td>
+            <td>Correct until recently. The <strong>green turtle was downlisted to Least Concern in October 2025</strong>, so it is now <strong>5 of 7</strong> (the flatback is Data Deficient). Safest: give both with the date.</td>
+          </tr>
+          <tr>
+            <td><strong>Crop genetic diversity</strong></td>
+            <td>IUCN: 70% lost</td>
+            <td>It is <strong>FAO</strong>, not IUCN, and about <strong>75%</strong> lost <strong>between 1900 and 2000</strong>. Companion stat: ~75% of the world's food comes from just 12 plant and 5 animal species.</td>
+          </tr>
+          <tr>
+            <td><strong>Global fisheries</strong></td>
+            <td>Marine Policy: 70 to 75% over-exploited</td>
+            <td><strong>37.7%</strong> of stocks are fished at biologically <strong>unsustainable</strong> levels (FAO, <em>SOFIA 2024</em>). The ~70 to 90% figure only holds for <strong>"fully exploited <em>or</em> overexploited" combined</strong>, which is a different claim.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the IUCN bird and mammal figures are reversed.</strong> This is the single most-examined biodiversity statistic, and as taught it is wrong in both directions. Birds are the <em>less</em> threatened of the two at roughly <strong>1 in 8</strong>; mammals are the <em>more</em> threatened at roughly <strong>1 in 4</strong>. The "1/3 of mammals" figure also overstates the real number. If you remember one correction from this page, make it this one.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 5 === -->
+<section id="t6" class="chapter card" style="--accent:#2E9E6A; --soft:#E4F3EB;">
+  <header>
+    <span class="eyebrow"><span class="num">5</span> The response</span>
+    <h2><span class="emoji">🛡️</span> Conserving biodiversity</h2>
+    <span class="timepill">01:05 – 01:10</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Nine measures, and they map back onto the twelve causes almost one for one, which is exactly how they should be presented <span class="ts">01:05:34</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Measure</th><th>Answers which cause</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Controlling <strong>over-exploitation</strong> of biodiversity resources, controlling environmental crime, controlling population growth</td><td>Causes 1, 2, 12</td></tr>
+          <tr><td>2</td><td>Promotion of the <strong>sustainable use</strong> of biodiversity resources</td><td>Cause 2</td></tr>
+          <tr><td>3</td><td>Through <strong>legal means and institutions</strong>: monitoring, check and balance</td><td>Cause 12</td></tr>
+          <tr><td>4</td><td>Controlling <strong>environmental pollution</strong>: air, water, land, noise</td><td>Causes 3 to 6</td></tr>
+          <tr><td>5</td><td>Controlling <strong>global warming and climate change</strong></td><td>Cause 7</td></tr>
+          <tr><td>6</td><td>Developing <strong>national parks, protected areas, botanical gardens, zoological gardens</strong></td><td>Causes 10, 11</td></tr>
+          <tr><td>7</td><td><strong>In-situ</strong> and <strong>ex-situ</strong> conservation</td><td>Habitat and species protection</td></tr>
+          <tr><td>8</td><td><strong>Awareness</strong></td><td>Underpins all of them</td></tr>
+          <tr><td>9</td><td>Implementing the <strong>CBD</strong> (Convention on Biological Diversity)</td><td>The international commitment</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <p><strong>In-situ against ex-situ, since the terms are always asked.</strong> <span class="kt">In-situ</span> conservation protects a species <em>in its own natural habitat</em>, which is what national parks and protected areas do. <span class="kt">Ex-situ</span> conservation protects it <em>outside</em> that habitat, in botanical gardens, zoos, seed banks and gene banks. The lecturer's list pairs them deliberately: the parks in point 6 are the in-situ arm, the gardens and zoos the ex-situ arm.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>How he frames the whole answer</strong> <span class="ts">01:05:34</span>: to counter biodiversity loss you apply <strong>several means at once</strong>, legal means, institutional involvement, better public awareness, and the technical work of developing protected areas and national parks. Presenting conservation as a package rather than a list is what makes it read as policy.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 6 === -->
+<section id="t7" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+  <header>
+    <span class="eyebrow"><span class="num">6</span> The second topic</span>
+    <h2><span class="emoji">💧</span> Water pollution: types &amp; sources</h2>
+    <span class="timepill">01:35 – 01:50</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The definition as dictated: water pollution is <strong>"any physical or chemical change in the quality of water which makes water unsuitable for desirable use"</strong>. The phrase <em>unsuitable for desirable use</em> is doing the work, because water fit for irrigation may still be unfit to drink.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: add "biological" to the definition.</strong> The standard wording is any <strong>physical, chemical <em>or biological</em></strong> change in water quality that harms living organisms or makes the water unfit for its intended use. Dropping "biological" contradicts the lecture itself, since it immediately goes on to give a <em>biological</em> type of pollution and to list cholera, typhoid and hepatitis. Write all three.</p>
+    </div>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Type</th><th>What changes</th><th>Sources</th></tr></thead>
+        <tbody>
+          <tr><td><strong>1. Physical</strong></td><td>Any <strong>physical</strong> change in water quality: colour, taste, odour <span class="ts">01:40:37</span></td><td>Industrial effluent; <strong>municipal sources</strong> (domestic waste water from homes); commercial centres and markets <span class="ts">01:40:07</span></td></tr>
+          <tr><td><strong>2. Chemical</strong></td><td>The addition of <strong>chemicals</strong>: nitrates, nitrogen, phosphorus, carbon, acids, and <strong>heavy metals</strong> (cadmium, arsenic, lead)</td><td>Industries and chemicals; domestic <strong>detergents</strong>; <strong>oil spills</strong></td></tr>
+          <tr><td><strong>3. Biological</strong></td><td>The addition or <strong>growth of biological organisms</strong> in the water: bacteria, algae</td><td>Nutrient enrichment. The headline case is <strong>eutrophication</strong>, the next section</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <p><strong>The logic behind the sources.</strong> Whether the waste water comes from a home, an industry or a commercial centre, the moment it is added to a nearby water body the natural water changes, and that change is what we classify as pollution <span class="ts">01:40:37</span>. Source and type are therefore separate questions, and a good answer keeps them apart.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 7 === -->
+<section id="t8" class="chapter card" style="--accent:#B44A8C; --soft:#F9EBF4;">
+  <header>
+    <span class="eyebrow"><span class="num">7</span> The chain</span>
+    <h2><span class="emoji">🦠</span> Eutrophication</h2>
+    <span class="timepill">01:50 – 02:15</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Definition: eutrophication is <strong>"an excessive plant and algal growth in the water bodies due to the increasing levels of growth factors in the water bodies"</strong>. It belongs to <strong>shallow</strong> and <strong>stagnant</strong> waters, and it is a form of water pollution.</p>
+
+    <div class="note">
+      <p><strong>Growth factors and causes.</strong> The <strong>growth factors</strong> are the nutrients: carbon, nitrogen, <strong>phosphorus</strong>, magnesium, potassium, calcium and so on. They arrive through <strong>agrochemical and fertiliser remains carried by agricultural water run-off</strong>, and through <strong>organic waste</strong>: plant waste, animal waste and crop waste.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Two precision points that earn marks.</strong></p>
+      <ul>
+        <li><strong>Name the two nutrients.</strong> "Increasing levels of growth factors" is vague. The drivers are <strong>nitrogen and phosphorus</strong>. Add the standard refinement: <strong>phosphorus is usually the limiting nutrient in freshwater, nitrogen in marine and estuarine water</strong>.</li>
+        <li><strong>Classification.</strong> The class files eutrophication under <em>biological</em> water pollution. Examiners normally call it <strong>nutrient pollution</strong>, a chemical enrichment process with biological consequences; "biological pollution" usually means pathogens or invasive species. The safe phrasing keeps both: <em>"nutrient pollution, whose visible effect is biological (an algal bloom)."</em></li>
+      </ul>
+    </div>
+
+    <h3>The nine-step process</h3>
+    <p>The lecturer builds this as a causal chain on the board, each step causing the next. Reproduce it as a chain and the marks follow:</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>What happens</th><th>Which causes…</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>A <strong>fertiliser flows into the water body</strong></td><td>↓</td></tr>
+          <tr><td>2</td><td><strong>Excessive plant and algal growth</strong> across the surface</td><td>↓</td></tr>
+          <tr><td>3</td><td>It <strong>prevents the penetration of solar heat and sunlight</strong> into the water body <span class="ts">02:05:10</span></td><td>↓</td></tr>
+          <tr><td>4</td><td><strong>Photosynthesis is disturbed</strong> in the plants below, because photosynthesis needs sunlight <span class="ts">02:05:37</span></td><td>↓</td></tr>
+          <tr><td>5</td><td><strong>Food preparation is disturbed</strong> in those plants <span class="ts">02:06:01</span></td><td>↓</td></tr>
+          <tr><td>6</td><td>The <strong>smaller green lives die</strong></td><td>↓</td></tr>
+          <tr><td>7</td><td>The <strong>dead plants decompose</strong></td><td>↓</td></tr>
+          <tr><td>8</td><td><strong>Oxygen is consumed and CO₂ increases</strong></td><td>↓</td></tr>
+          <tr><td>9</td><td><strong>Suffocation</strong>, causing the death of fisheries and aquatic animals</td><td>the end state</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Three refinements to the chain, all worth marks.</strong> The class version is substantially right, including the two load-bearing steps (the bloom really does block the light, and decomposition really is what consumes the oxygen). Tighten it like this:</p>
+      <ul>
+        <li><strong>Name the decomposers.</strong> It is <strong>aerobic bacterial decomposition</strong> that strips the oxygen, not "decomposition" in the abstract.</li>
+        <li><strong>Put the algal die-off first.</strong> The dominant oxygen sink is the decay of the <strong>algal bloom itself when it collapses</strong>, not mainly the shaded plants underneath.</li>
+        <li><strong>Fish die of hypoxia, not CO₂.</strong> The killer is <strong>dissolved-oxygen depletion</strong>. Worth adding that algae also consume oxygen by <strong>respiring at night</strong>, before the bloom even dies, and that some cyanobacteria release <strong>toxins</strong> that kill fish directly.</li>
+      </ul>
+      <p><strong>The mark-perfect chain:</strong> fertiliser and sewage run-off → nitrogen and phosphorus enrichment → algal bloom → bloom blocks light → submerged plants die → bloom collapses → aerobic bacteria decompose the dead mass → dissolved oxygen crashes → <strong>hypoxia</strong> and "dead zones" → fish kills.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Why this chain is such a good exam answer.</strong> It connects an <em>agricultural</em> practice to a <em>chemical</em> input, a <em>biological</em> response, a <em>physical</em> effect on light, and finally an <em>ecological</em> collapse. If a question asks how farming kills fish, this is the answer, and each arrow is a mark.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 8 === -->
+<section id="t9" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
+  <header>
+    <span class="eyebrow"><span class="num">8</span> Damage and response</span>
+    <h2><span class="emoji">🚰</span> Water pollution: effects &amp; controls</h2>
+    <span class="timepill">02:15 – 02:43</span>
+  </header>
+  <div class="section-body">
+    <h3>Effects</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Effect</th><th>Detail</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Harms the water itself</td><td>Clarity, taste and odour.</td></tr>
+          <tr><td>2</td><td><strong>Harms human health</strong></td><td><strong>Cholera, typhoid, hepatitis</strong> from pathogens; <strong>renal damage and kidney dysfunction</strong> and <strong>pain in joints</strong> from <strong>heavy metals</strong>. (The class also lists leukaemia here; see the correction below.)</td></tr>
+          <tr><td>3</td><td><strong>Biodiversity loss</strong></td><td>The killing of fisheries. This is where the two halves of the class join up.</td></tr>
+          <tr><td>4</td><td>Harms the <strong>aesthetic value</strong></td><td>Of the water bodies themselves.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: leukaemia is not a heavy-metal disease.</strong> Leukaemia is classically linked to <strong>benzene</strong> (an organic solvent) and ionising radiation, not to the metals in polluted water. Arsenic causes skin, bladder and lung cancer rather than leukaemia. Note also that the two symptoms listed separately in class, <em>kidney damage</em> and <em>joint pain</em>, are the <strong>same agent</strong>: cadmium.</p>
+      <p><strong>The mapping to memorise instead:</strong></p>
+      <ul>
+        <li><strong>Cadmium</strong> → renal tubular damage <em>and</em> <strong>itai-itai disease</strong> (severe bone and joint pain, from cadmium-contaminated irrigation water in Japan's Jinzu River basin).</li>
+        <li><strong>Arsenic</strong> → skin lesions and pigmentation changes, skin, bladder and lung cancer.</li>
+        <li><strong>Lead</strong> → neurological damage, loss of IQ in children, anaemia.</li>
+        <li><strong>Mercury</strong> → <strong>Minamata disease</strong> (central nervous system damage).</li>
+        <li><strong>Nitrate</strong> → methaemoglobinaemia, the "blue-baby syndrome".</li>
+      </ul>
+      <p><strong>Pakistan-specific marks:</strong> arsenic in Indus-plain groundwater, and fluoride causing fluorosis. Both are examiner-friendly and locally grounded.</p>
+    </div>
+
+    <h3>The eight controlling measures</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Measure</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><strong>Reducing the use of agrochemicals</strong>, and promoting <strong>bio-fertilisers</strong> such as compost and sludge</td></tr>
+          <tr><td>2</td><td>Ensuring <strong>solid waste management</strong></td></tr>
+          <tr><td>3</td><td><strong>Environmental awareness</strong></td></tr>
+          <tr><td>4</td><td>Developing a <strong>separate mitigation system for agricultural water run-off</strong></td></tr>
+          <tr><td>5</td><td>Installation of <strong>waste water treatment plants</strong></td></tr>
+          <tr><td>6</td><td>Using <strong>micro-organisms</strong> to treat waste water, for example <strong>sulfur-oxidising bacteria (SOBs)</strong> and <strong>Effective Micro-organisms (EM)</strong></td></tr>
+          <tr><td>7</td><td><strong>Screening of solid waste</strong></td></tr>
+          <tr><td>8</td><td>Implementing water-related <strong>commitments, legislation and the SDGs</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <p><strong>On measure 6, one half is solid and one is contested.</strong> <strong>Sulfur-oxidising bacteria</strong> are well established, used for biological nitrogen removal and for stripping hydrogen sulfide from sewers and biogas. <strong>Effective Micro-organisms</strong> are real but scientifically <strong>contested</strong>: the mixture is proprietary and results are inconsistent, so treat EM as a low-cost adjunct rather than a standard process. Anchor any treatment answer on conventional <strong>primary, secondary and tertiary treatment</strong>, then add these as supplements.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Match the control to the cause.</strong> Measures 1 and 4 answer agricultural run-off, which is the trigger of eutrophication. Measures 2 and 7 answer solid waste. Measures 5 and 6 answer the effluent itself. Measures 3 and 8 are the behavioural and legal layer. An answer that pairs them this way reads as a plan rather than a list, and it lets you carry the eutrophication chain straight into the solution.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================= glossary === -->
+<section id="t10" class="chapter card" style="--accent:#7A7484; --soft:#F2EFF4;">
+  <header><span class="eyebrow">Reference</span><h2><span class="emoji">📖</span> Glossary</h2></header>
+  <dl class="glossary">
+    <div><dt>Biodiversity</dt><dd>The variety of life on Earth. Formally (CBD Article 2), variability among living organisms including diversity <em>within species, between species and of ecosystems</em>.</dd></div>
+    <div><dt>Genetic diversity</dt><dd>Level 1: variation in the genetic make-up within a species, giving each life form its own characters.</dd></div>
+    <div><dt>Species diversity</dt><dd>Level 2: the total numbers and kinds of living organisms in a particular area, unevenly distributed.</dd></div>
+    <div><dt>Ecosystem diversity</dt><dd>Level 3: variation between the ecosystems organisms live in, each supporting its own type of life (desert, sea, forest).</dd></div>
+    <div><dt>Biodiversity loss</dt><dd>The declining numbers and kinds of living organisms on earth.</dd></div>
+    <div><dt>In-situ conservation</dt><dd>Protecting a species inside its own natural habitat: national parks and protected areas.</dd></div>
+    <div><dt>Ex-situ conservation</dt><dd>Protecting a species outside its habitat: botanical gardens, zoos, seed and gene banks.</dd></div>
+    <div><dt>CBD</dt><dd>The Convention on Biological Diversity, the international agreement whose implementation is the ninth conservation measure.</dd></div>
+    <div><dt>IUCN</dt><dd>International Union for Conservation of Nature, the source of the threatened-species figures.</dd></div>
+    <div><dt>Water pollution</dt><dd>Any physical or chemical change in the quality of water that makes it unsuitable for its desirable use.</dd></div>
+    <div><dt>Physical water pollution</dt><dd>Change in colour, taste or odour, from industrial effluent, municipal and commercial sources.</dd></div>
+    <div><dt>Chemical water pollution</dt><dd>Addition of nitrates, nitrogen, phosphorus, carbon, acids or heavy metals (cadmium, arsenic, lead), from industry, detergents and oil spills.</dd></div>
+    <div><dt>Biological water pollution</dt><dd>Addition or growth of biological organisms such as bacteria and algae; eutrophication is the main case.</dd></div>
+    <div><dt>Eutrophication</dt><dd>Nutrient enrichment (mainly nitrogen and phosphorus) driving excessive algal and plant growth and then oxygen depletion; typical of shallow, stagnant water. Standardly called nutrient pollution.</dd></div>
+    <div><dt>Growth factors</dt><dd>The nutrients that drive a bloom: carbon, nitrogen, phosphorus, magnesium, potassium, calcium.</dd></div>
+    <div><dt>Agricultural run-off</dt><dd>Water carrying fertiliser and agrochemical remains off farmland into water bodies; the trigger of eutrophication.</dd></div>
+    <div><dt>SOBs / EM</dt><dd>Sulfur-oxidising bacteria and Effective Micro-organisms, used biologically to treat waste water.</dd></div>
+  </dl>
+</section>
+
+<!-- ======================================================= flashcards === -->
+<section id="t11" class="chapter card" style="--accent:#8A57BD; --soft:#F3ECFA;">
+  <header><span class="eyebrow">Self-test</span><h2><span class="emoji">🎴</span> Flashcards</h2></header>
+  <div class="cards">
+    <div class="qa"><p class="q">Give mitigation points 6 to 10 for global warming.</p><p class="a">6 sustainable industrialisation with pollution-control technology; 7 implementing commitments (UNFCCC 1992, Kyoto 1997, Paris 2015); 8 improving disaster management; 9 environmental governance; 10 international cooperation led by developed countries.</p></div>
+    <div class="qa"><p class="q">Name the pollution-control technologies listed.</p><p class="a">Absorption, adsorption, fabric filters, bio-filters, catalytic reactors, cyclone method and smog towers.</p></div>
+    <div class="qa"><p class="q">Define biodiversity in one line.</p><p class="a">The variety of life on Earth: the totality of genes, numbers and kinds of living organisms.</p></div>
+    <div class="qa"><p class="q">How does the CBD define it?</p><p class="a">Variation between living organisms, among living organisms, and within the species of living organisms.</p></div>
+    <div class="qa"><p class="q">Name the three levels of biodiversity.</p><p class="a">Genetic (within a species' make-up), species (numbers and kinds in an area), and ecosystem (variation between the habitats themselves).</p></div>
+    <div class="qa"><p class="q">Illustrate ecosystem diversity.</p><p class="a">What lives in a desert cannot be expected in the sea, and what lives in the sea cannot be expected in a forest. Each ecosystem has its own conditions and supports its own life.</p></div>
+    <div class="qa"><p class="q">Give the seven values of biodiversity.</p><p class="a">Food, timber products, treatment (medicine), energy, cultural uses, environmental services, and research.</p></div>
+    <div class="qa"><p class="q">What share of medicines comes from plants?</p><p class="a">Do not use the class's 70/30 split. Say about 25% of prescription drugs derive from plants, about half of new drugs since 1981 are natural-product derived, and WHO's 80% figure refers to reliance on traditional medicine in developing countries.</p></div>
+    <div class="qa"><p class="q">What environmental services does biodiversity provide?</p><p class="a">Pollution control by plants and microbes, temperature and climate stability from forests, and sustenance of the food chain.</p></div>
+    <div class="qa"><p class="q">Define biodiversity loss.</p><p class="a">The declining numbers and kinds of living organisms on earth.</p></div>
+    <div class="qa"><p class="q">List the leading causes of biodiversity loss.</p><p class="a">Population explosion, over-exploitation, air/water/land/noise pollution, global warming and climate change, invasion of non-native species, water logging, deforestation, urbanisation, and environmental crime.</p></div>
+    <div class="qa"><p class="q">Quote the IUCN threat figures (corrected).</p><p class="a">About 1 in 8 birds (~12%) and 1 in 4 mammals (~26%) are threatened; the class swapped these. Marine turtles were 6 of 7 threatened, now 5 of 7 after the green turtle's October 2025 downlisting. Crop genetic diversity: ~75% lost 1900-2000, and that is FAO, not IUCN.</p></div>
+    <div class="qa"><p class="q">What does the IPCC figure say?</p><p class="a">40 to 70% of species <em>assessed</em> face significant extinction risk as warming exceeds about 3.5°C (AR4, 2007); 20 to 30% above 1.5 to 2.5°C. Say "species assessed", not "all living organisms".</p></div>
+    <div class="qa"><p class="q">What fraction of global fisheries is over-exploited?</p><p class="a">37.7% are fished at biologically unsustainable levels (FAO, SOFIA 2024). The ~70 to 90% figure applies only to "fully exploited or overexploited" combined.</p></div>
+    <div class="qa"><p class="q">Distinguish in-situ from ex-situ conservation.</p><p class="a">In-situ protects a species in its natural habitat (national parks, protected areas); ex-situ protects it outside (botanical gardens, zoos, seed and gene banks).</p></div>
+    <div class="qa"><p class="q">Give the conservation measures for biodiversity.</p><p class="a">Control over-exploitation and env crime and population growth; promote sustainable use; legal means and institutions; control pollution; control climate change; develop parks and gardens; in-situ and ex-situ conservation; awareness; implement the CBD.</p></div>
+    <div class="qa"><p class="q">Define water pollution.</p><p class="a">Any physical, chemical <em>or biological</em> change in water quality that harms living organisms or makes the water unsuitable for its desirable use. Include all three.</p></div>
+    <div class="qa"><p class="q">Name the three types of water pollution with an example each.</p><p class="a">Physical (colour, taste, odour), chemical (nitrates, phosphorus, heavy metals like cadmium, arsenic, lead), biological (bacteria and algal growth, i.e. eutrophication).</p></div>
+    <div class="qa"><p class="q">Define eutrophication.</p><p class="a">Excessive plant and algal growth in water bodies due to increasing levels of growth factors, typical of shallow, stagnant water.</p></div>
+    <div class="qa"><p class="q">What are the growth factors and where do they come from?</p><p class="a">Carbon, nitrogen, phosphorus, magnesium, potassium, calcium; from agrochemical and fertiliser remains in agricultural run-off, and from organic, plant, animal and crop waste.</p></div>
+    <div class="qa"><p class="q">Run the eutrophication chain.</p><p class="a">Fertiliser run-off → nitrogen and phosphorus enrichment → algal bloom → blocks sunlight → submerged plants die → bloom collapses → aerobic bacteria decompose the dead mass → dissolved oxygen crashes → hypoxia and dead zones → fish kills. The killer is oxygen depletion, not CO₂.</p></div>
+    <div class="qa"><p class="q">Give the effects of water pollution.</p><p class="a">Harms water clarity, taste and odour; harms human health (cholera, typhoid, hepatitis from pathogens; cadmium causing kidney damage and itai-itai joint pain); causes biodiversity loss by killing fisheries; harms the aesthetic value of water bodies.</p></div>
+    <div class="qa"><p class="q">Give the main controlling measures for water pollution.</p><p class="a">Cut agrochemicals and promote bio-fertilisers; solid waste management; awareness; a separate system for agricultural run-off; waste water treatment plants; treating water with micro-organisms (SOBs, EM); screening solid waste; and implementing water commitments, legislation and the SDGs.</p></div>
+  </div>
+</section>
+
+<!-- ======================================================= exam focus === -->
+<section id="t12" class="chapter card" style="--accent:#2E9E6A; --soft:#E4F3EB;">
+  <header><span class="eyebrow" style="color:#2E9E6A">Before the paper</span><h2><span class="emoji">🎯</span> Exam focus</h2></header>
+  <div class="section-body">
+    <ul>
+      <li><strong>Use the same four-part skeleton for every topic here:</strong> definition, causes, effects, controls. Biodiversity and water pollution are both taught in exactly that shape, so one structure answers either question.</li>
+      <li><strong>Open with a formal definition, not your own words.</strong> For biodiversity use the CBD wording, because it already names the three levels and lets you move straight into them.</li>
+      <li><strong>Always give all three levels of biodiversity</strong>, and illustrate ecosystem diversity with the desert, sea and forest contrast. Most candidates give genetic and species and stop.</li>
+      <li><strong>Convert the values into the effects of loss.</strong> The lecturer says this outright: the seven values become seven consequences when biodiversity declines. It is the cheapest way to double the length of an answer without padding.</li>
+      <li><strong>Quantify with the named sources</strong>: the Millennium Ecosystem Assessment, the IPCC 3.5°C figure, the IUCN threat fractions and crop-genetic-diversity loss, and the fisheries figure. Attributing a number to a body is worth more than the number alone.</li>
+      <li><strong>Pair conservation measures to causes.</strong> Nine measures against twelve causes maps almost one for one, and showing the mapping is the difference between listing and analysing.</li>
+      <li><strong>Know in-situ against ex-situ cold.</strong> It is a standard short-question, and the parks-versus-gardens split makes it easy to remember.</li>
+      <li><strong>The eutrophication chain is the single highest-value thing in this class.</strong> Learn all nine steps in order with the causal arrows. It answers questions on water pollution, on agriculture and the environment, and on aquatic biodiversity loss.</li>
+      <li><strong>Keep type and source apart for water pollution.</strong> Three types (physical, chemical, biological) and separately the sources (industrial, municipal, commercial, agricultural). Candidates routinely blur them.</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="notefoot">Want the whole lecture? <a href="https://drive.google.com/file/d/1xZqXM7gnc4gh75PDaDKz7FjDRiSwM-7J/view" target="_blank" rel="noopener">▶ Watch the full recording</a><span class="sep">·</span><a href="https://drive.google.com/open?id=1TqQMrg9PxKorGmMJjx_G8tKN3ILb3132" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+</html>
