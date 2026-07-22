@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modern Law Enforcement, Vulnerable Groups and Pakistan's Specialized Agencies</title>
+<style>/* Lecture Notes ebook, "warm study" theme.
+   Inspired by Mehak's MarketCanvas app: soft cream ground, rounded white cards,
+   a different pastel accent per topic, serif display + friendly sans body,
+   gentle emoji + pill badges. Playful and pretty, but still a real study book.
+   Print-first (A4 PDF via headless Edge); reads well on screen too.
+
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
+   Everything themeable keys off --accent / --soft. Titles stay ink for
+   readability; accents colour eyebrows, numbers, pills, rules and callouts.
+*/
+
+:root {
+  --cream: #FCF6F0;          /* page ground (warm) */
+  --card: #FFFFFF;
+  --ink: #2C2630;            /* plum-black body/headings */
+  --ink-soft: #5A5360;
+  --slate: #8B8490;          /* captions, timestamps */
+  --hairline: #EEE6E4;
+
+  /* section default accent (overridden per section) */
+  --accent: #C0567E;
+  --soft: #FBECF1;
+
+  --shadow: 0 1px 2px rgba(60,30,45,.05), 0 10px 26px rgba(80,40,55,.07);
+  --radius: 20px;
+
+  --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: Consolas, "Cascadia Code", ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background:
+    radial-gradient(1100px 700px at 15% -5%, #FBEEF3 0%, transparent 55%),
+    radial-gradient(1000px 700px at 100% 0%, #EEF3FB 0%, transparent 50%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  font: 10.8pt/1.62 var(--sans);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+@media screen {
+  body { max-width: 51rem; margin: 0 auto; padding: 2.5rem 1.15rem 4rem; font-size: 1.0rem; }
+}
+
+/* ---------------------------------------------------------------- page --- */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm 14mm;
+  @bottom-center {
+    content: counter(page);
+    font: 8.5pt var(--sans);
+    color: #8B8490;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+/* --------------------------------------------------------------- cards --- */
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8mm 9mm 9mm;
+  margin: 0 0 6mm;
+  box-shadow: var(--shadow);
+  break-inside: auto;
+}
+@media screen { .card { margin-bottom: 1.4rem; } }
+
+/* a soft accent wash across the top of each section card (fades to white),
+   echoing the app's pastel cards without hurting readability */
+.chapter {
+  background:
+    linear-gradient(180deg, var(--soft) 0, rgba(255,255,255,0) 34mm),
+    var(--card);
+  border-top: 3px solid var(--accent);
+  break-inside: auto;
+  break-before: page;   /* each topic starts fresh: slide on top, notes below */
+}
+/* on screen (web/PWA) sections just stack; no forced page breaks */
+@media screen { .chapter { break-before: auto; } }
+
+h2, h3, .eyebrow { break-after: avoid; }
+p { orphans: 2; widows: 2; }
+
+/* keep the section header intact (eyebrow + title + time pill together) and
+   glued to its opening slide */
+.chapter > header { break-inside: avoid; break-after: avoid; }
+figure.slide { break-before: avoid; }
+
+/* --------------------------------------------------------------- cover --- */
+
+.cover {
+  page: cover;
+  break-after: page;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32mm 22mm 24mm;
+  background:
+    radial-gradient(700px 460px at 12% 8%, #FBE6EE 0%, transparent 60%),
+    radial-gradient(760px 520px at 96% 4%, #E7EEFB 0%, transparent 58%),
+    radial-gradient(620px 520px at 80% 96%, #E6F4EC 0%, transparent 60%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+@media screen {
+  .cover { min-height: 80vh; border-radius: 24px; padding: 3.2rem 2.6rem; margin-bottom: 1.4rem; }
+}
+
+.cover .avatar { font-size: 30pt; line-height: 1; margin-bottom: 7mm; }
+.cover .kicker {
+  font: 600 9pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 5mm;
+}
+.cover h1 {
+  font: 600 31pt/1.14 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 15em;
+}
+.cover .subtitle {
+  margin-top: 5mm;
+  font: 400 13.5pt/1.5 var(--sans);
+  color: var(--ink-soft);
+  max-width: 30em;
+}
+.cover .warm {
+  margin-top: 4mm;
+  font: italic 400 12pt/1.5 var(--serif);
+  color: var(--accent);
+}
+
+.cover .chips { display: flex; flex-wrap: wrap; gap: 3mm; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.4mm 4mm;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(60,30,45,.04);
+  font: 400 9pt var(--sans);
+  color: var(--slate);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chip b { font: 700 10.5pt var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ headings --- */
+
+.chapter header { margin-bottom: 5mm; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  font: 700 8.5pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--accent);
+  margin-bottom: 3mm;
+}
+.eyebrow .num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h2 {
+  font: 600 20pt/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .emoji { font-size: 17pt; }
+
+.timepill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.5mm 3.5mm;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font: 600 8pt var(--mono);
+  letter-spacing: 0.02em;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h3 {
+  font: 600 12.5pt/1.34 var(--serif);
+  color: var(--ink);
+  margin: 6mm 0 2.5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+.ts { font: 400 8.5pt var(--mono); color: var(--slate); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- body --- */
+
+.section-body > :last-child { margin-bottom: 0; }
+p { margin: 0 0 3mm; }
+.lead { font-size: 11.2pt; color: var(--ink); }
+
+ul, ol { margin: 0 0 3mm 5.5mm; }
+li { margin-bottom: 1.7mm; padding-left: 1mm; }
+li::marker { color: var(--accent); }
+
+.kt { font-weight: 700; color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
+
+code { font: 9.5pt var(--mono); background: #F3EFF4; padding: .4pt 3.5pt; border-radius: 4px; }
+
+/* ------------------------------------------------------------ callouts --- */
+
+.note {
+  --c: var(--accent);
+  --f: var(--soft);
+  background: var(--f);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  border-left: 3px solid var(--c);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.note .label {
+  display: inline-flex; align-items: center; gap: 1.6mm;
+  font: 700 8pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c);
+  margin-bottom: 1.8mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.warn { --c: #B4791F; --f: #FaF1DF; }
+.note.exam { --c: #3B8B78; --f: #E6F3EF; }
+.note.def  { --c: var(--accent); --f: var(--soft); }
+
+/* ------------------------------------------------------- summary card --- */
+
+.summary { --accent: #C0567E; --soft: #FBECF1; }
+.summary ul { list-style: none; margin: 0; }
+.summary li { position: relative; padding: 0 0 0 7mm; margin-bottom: 3.5mm; }
+.summary li::before {
+  content: "";
+  position: absolute; left: 0; top: 2.6mm;
+  width: 3.2mm; height: 3.2mm; border-radius: 50%;
+  background: var(--accent);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.summary li:last-child { margin-bottom: 0; }
+.summary li b, .summary li strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------- TOC --- */
+
+nav.toc { --accent: #8B8490; --soft: #F3EFF4; }
+nav.toc ol { list-style: none; margin: 0; }
+nav.toc li {
+  display: flex; align-items: baseline; gap: 4mm;
+  padding: 2.7mm 0;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11pt var(--sans);
+}
+nav.toc li:last-child { border-bottom: 0; }
+nav.toc .dot { width: 3.4mm; height: 3.4mm; border-radius: 50%; flex-shrink: 0;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+nav.toc .title { flex: 1; color: var(--ink); }
+nav.toc .rng { flex-shrink: 0; font: 600 8.5pt var(--mono); color: var(--slate); }
+
+/* -------------------------------------------------------------- slides --- */
+
+figure.slide { margin: 0 0 5mm; break-inside: avoid; }
+figure.slide img {
+  width: 100%; display: block;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 10px rgba(40,30,45,.10);
+}
+figure.slide figcaption {
+  font: 400 8.5pt var(--sans);
+  color: var(--slate);
+  margin-top: 2mm;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4mm;
+}
+figure.slide figcaption .ts { color: var(--accent); }
+
+/* ------------------------------------------------------------ glossary --- */
+
+dl.glossary { margin: 0; }
+dl.glossary div { padding: 3mm 0; border-bottom: 1px solid var(--hairline); break-inside: avoid; }
+dl.glossary div:last-child { border-bottom: 0; padding-bottom: 0; }
+dl.glossary dt { font: 700 10.5pt var(--sans); color: var(--accent); margin-bottom: 1.2mm; }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- flashcards --- */
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 0; }
+.qa {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  background: linear-gradient(180deg, var(--soft) 0, #fff 60%);
+  break-inside: avoid;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.qa .q { font: 700 10pt var(--sans); color: var(--ink); margin-bottom: 2mm; }
+.qa .a { color: var(--ink-soft); font-size: 10pt; }
+
+/* ------------------------------------------------------------- tables --- */
+
+.tables-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0; break-inside: avoid; }
+th {
+  font: 700 9pt var(--sans); text-align: left; color: var(--accent);
+  border-bottom: 2px solid var(--soft); padding: 2mm 3mm 2mm 0;
+}
+td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+
+/* --- mobile / on-the-go reading (screen only; never affects the print PDF).
+   Placed LAST so it wins the cascade over the wider @media screen rules above.
+   Requires <meta name="viewport" content="width=device-width, initial-scale=1">. */
+@media screen and (max-width: 640px) {
+  body { padding: 1rem 0.85rem 2.5rem; font-size: 1.02rem; }
+  .card { padding: 5mm 5mm 6mm; border-radius: 14px; margin-bottom: 0.9rem; }
+  .cover { min-height: auto; padding: 2rem 1.3rem 1.6rem; border-radius: 16px; }
+  .cover .avatar { font-size: 24pt; margin-bottom: 4mm; }
+  .cover h1 { font-size: 20pt; max-width: 100%; }
+  .cover .subtitle { font-size: 11.5pt; }
+  .cover .warm { font-size: 11pt; }
+  .cover .chips { gap: 2mm; margin-top: 5mm; }
+  h2 { font-size: 16pt; }
+  h2 .emoji { font-size: 13.5pt; }
+  h3 { font-size: 11.5pt; }
+  .cards { grid-template-columns: 1fr; }
+  nav.toc li { font-size: 10.5pt; gap: 2.5mm; padding: 2.5mm 0; }
+  nav.toc .rng { font-size: 8pt; }
+  .note { padding: 3.5mm 4mm; }
+  table { font-size: 9.5pt; }
+}
+</style>
+<meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
+align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
+border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
+<body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/file/d/1HEpKzubTMb4DxoB72sSNaia9Sj81HgKI/view?usp=drivesdk" target="_blank" rel="noopener">Download PDF ↓</a></div>
+
+<!-- ============================================================ cover === -->
+<section class="cover" style="background:radial-gradient(700px 460px at 12% 8%,#FBEBEF 0,transparent 60%),radial-gradient(760px 520px at 96% 4%,#E7F1FB 0,transparent 58%),radial-gradient(620px 520px at 80% 96%,#E4F1F0 0,transparent 60%),var(--cream)">
+  <div>
+    <div class="avatar">⚖️</div>
+    <div class="kicker" style="color:#C6506E">CSS Criminology · Contemporary Criminology</div>
+    <h1>Modern Law Enforcement, Vulnerable Groups and Pakistan's Specialized Agencies</h1>
+    <p class="subtitle">Intelligence-led policing, community policing and public-private cooperation, followed by the rights framework for vulnerable groups and an exam-ready study of FIA and NAB.</p>
+    <p class="warm" style="color:#A23E5B">Modern policing begins with better information, but it remains legitimate only when evidence, law and human dignity govern what follows. ⚖️</p>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>3</b> policing models</span>
+    <span class="chip"><b>2018</b> juvenile justice law</span>
+    <span class="chip"><b>FIA + NAB</b> agency studies</span>
+    <span class="chip"><b>Text-only</b> privacy safe</span>
+  </div>
+</section>
+
+<!-- ============================================================== toc === -->
+<nav class="toc card">
+  <header><span class="eyebrow">Contents</span><h2><span class="emoji">🗺️</span> In this chapter</h2></header>
+  <ol>
+    <li><span class="dot" style="background:#C6506E"></span><a class="title" href="#summary">The five-minute version</a><span class="rng">summary</span></li>
+    <li><span class="dot" style="background:#5866C4"></span><a class="title" href="#t1">01 · Intelligence-led policing</a><span class="rng">cycle, tools, safeguards</span></li>
+    <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t2">02 · Community policing</a><span class="rng">trust and participation</span></li>
+    <li><span class="dot" style="background:#B57A2A"></span><a class="title" href="#t3">03 · Community policing in Pakistan</a><span class="rng">institutions and limits</span></li>
+    <li><span class="dot" style="background:#46955C"></span><a class="title" href="#t4">04 · Public-private cooperation</a><span class="rng">capacity partnerships</span></li>
+    <li><span class="dot" style="background:#3A7CC0"></span><a class="title" href="#t5">05 · Human rights and vulnerable groups</a><span class="rng">children, women, minorities</span></li>
+    <li><span class="dot" style="background:#B44A8C"></span><a class="title" href="#t6">06 · FIA</a><span class="rng">law, mandate, wings</span></li>
+    <li><span class="dot" style="background:#7A5AA8"></span><a class="title" href="#t7">07 · NAB</a><span class="rng">law, process, critique</span></li>
+    <li><span class="dot" style="background:#A4553A"></span><a class="title" href="#t8">08 · How to study and answer</a><span class="rng">exam method</span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t9">Glossary · Flashcards · Exam focus</a><span class="rng"></span></li>
+  </ol>
+</nav>
+
+<!-- ============================================================= tldr === -->
+<section id="summary" class="summary card" style="--accent:#C6506E; --soft:#FBEBEF; border-top-color:#C6506E">
+  <header><span class="eyebrow" style="color:#C6506E">Start here</span><h2><span class="emoji">⭐</span> The five-minute version</h2></header>
+  <ul>
+    <li><strong>Modern law enforcement is preventive and evidence-led.</strong> The lecture asks police to supplement conventional investigation with intelligence, technology, partnerships and professional decision-making <span class="ts">00:04:08</span>.</li>
+    <li><strong>Intelligence-led policing is a cycle.</strong> Collect information from relevant sources, process and collate it, identify patterns, produce useful intelligence, and disseminate it to the agency able to act <span class="ts">00:07:35</span>. GIS, crime mapping, data analytics, databases and surveillance systems support the cycle.</li>
+    <li><strong>Prediction is an aid, never proof.</strong> The lecture describes person-level behavioural prediction and even suggests interrogation or harassment <span class="ts">00:14:56</span>. Correctly framed, analytical output is a lead or risk indicator. Any coercive step still needs lawful grounds, due process, human oversight and protection against bias.</li>
+    <li><strong>Community policing rests on trust.</strong> Police and citizens work together through local observation and reporting, consultation, problem-solving and crime-prevention education <span class="ts">00:24:15</span>. Its gains are legitimacy, information and prevention; its Pakistan-specific obstacles include distrust, resource gaps, political interference, weak specialist training, internal resistance and complex crime.</li>
+    <li><strong>Public-private cooperation fills capacity gaps.</strong> Businesses, technology firms, NGOs and academia can contribute finance, management, technology, victim support and rehabilitation capacity <span class="ts">01:11:04</span>. PSCA illustrates technology-enabled public safety, but a public procurement relationship is not automatically a formal PPP.</li>
+    <li><strong>Vulnerability changes the justice response.</strong> Age, gender, disability, socioeconomic status, minority status, ethnicity and displacement can increase exposure to discrimination, exploitation or victimisation <span class="ts">01:32:23</span>. Pakistan's constitutional and statutory framework includes dignity, equality, religious freedom, juvenile justice and women-protection laws.</li>
+    <li><strong>FIA and NAB are specialised federal bodies with distinct legal bases.</strong> FIA works under the Federal Investigation Agency Act, 1974 and investigates scheduled federal offences; NCCIA now has the PECA investigation mandate. NAB was established under the National Accountability Ordinance, 1999 to investigate and prosecute corruption and corrupt practices.</li>
+    <li><strong>Answer agency questions in a fixed sequence.</strong> Start with legal cover and formation, then mandate, functions or wings, operational process, problems, reforms and a reasoned conclusion. Use headings and Pakistan references, and reserve bullet lists for compact examples <span class="ts">02:29:33</span>.</li>
+  </ul>
+</section>
+
+<!-- ======================================================== section 1 === -->
+<section id="t1" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
+  <header>
+    <span class="eyebrow"><span class="num">1</span> Model one</span>
+    <h2><span class="emoji">🧭</span> Intelligence-led policing</h2>
+    <span class="timepill">00:04:08–00:23:33</span>
+  </header>
+  <div class="section-body">
+    <p class="lead"><span class="kt">Intelligence-led policing</span> uses analysed information to guide decisions, investigations, prevention and the allocation of police attention. It supplements conventional police work with a pre-emptive, evidence-led approach <span class="ts">00:05:30</span>.</p>
+
+    <p>The lecture begins with a broad proposition: the conventional system is insufficient on its own. Modern crime control calls for professional investigation, technology, partnerships and evidence-based strategies <span class="ts">00:04:08</span>. Intelligence is therefore a decision resource. It can help identify patterns, choose priorities, direct an investigation and intervene before a planned offence occurs.</p>
+
+    <h3>The intelligence cycle taught in class</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Stage</th><th>What happens</th><th>Lecture illustration</th></tr></thead>
+        <tbody>
+          <tr><td><strong>1. Collect</strong></td><td>Gather relevant information from human, signals, electronic and social sources.</td><td>A case may draw on people, communications, digital traces or online behaviour <span class="ts">00:07:35</span>.</td></tr>
+          <tr><td><strong>2. Process and collate</strong></td><td>Organise, combine and filter the material so that irrelevant volume does not obscure the problem.</td><td>A robbery inquiry may need a particular slice of digital surveillance rather than every available record <span class="ts">00:09:13</span>.</td></tr>
+          <tr><td><strong>3. Analyse</strong></td><td>Look for meaningful relationships, movement, plans and recurring patterns.</td><td>The lecturer proposes examining the movements and plans of potential robbery suspects <span class="ts">00:10:10</span>.</td></tr>
+          <tr><td><strong>4. Disseminate</strong></td><td>Send the resulting intelligence to the unit with the jurisdiction and capacity to act.</td><td>Counter-terrorism or another specialised force receives the relevant product <span class="ts">00:10:59</span>.</td></tr>
+          <tr><td><strong>5. Act and review</strong></td><td>Use the product for a lawful operational decision, then feed the result back into later collection and analysis.</td><td>The lecture presents the model as a repeating cycle rather than a one-time search <span class="ts">00:12:40</span>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <p><strong>The practical distinction.</strong> Raw information is material collected from sources. Intelligence is the assessed, filtered and analysed product that can support a decision. The cycle adds value between collection and action.</p>
+    </div>
+
+    <h3>Tools and data sources</h3>
+    <p>The lecture names <strong>GIS, crime mapping, data analytics, artificial intelligence, criminal and identity databases, CCTV, transaction patterns and social-media traces</strong> <span class="ts">00:13:42</span>. Used carefully, these tools can reveal geographical concentrations, recurring methods, temporal patterns and associations that a purely reactive inquiry might miss.</p>
+
+    <p>Its worked example follows a person previously connected with a terrorist network after release from prison. The proposed system combines travel, shopping, payment and social-media patterns to construct a behavioural model <span class="ts">00:14:56</span>. The example demonstrates the reach of modern data analysis, but it also exposes the model's central legal and ethical danger.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: prediction does not establish guilt or authorise harassment.</strong> The lecture says such systems can predict which person will offend, that police may take the person for interrogation or harassment, and that the tools are “very precise” <span class="ts">00:17:22</span>. A model can produce a lead or risk score, not proof that a named person will commit a crime. Historical data may reproduce earlier policing bias and create feedback loops. Any surveillance, stop, questioning, arrest or search still requires a lawful basis, proportionality, human review and due-process safeguards. Harassment is never a legitimate police technique. This correction follows the UN Committee on the Elimination of Racial Discrimination's guidance on algorithmic profiling and the constitutional protections of life and liberty, fair trial, dignity and privacy.</p>
+    </div>
+
+    <h3>Pakistan illustrations, gains and limits</h3>
+    <p>The lecture connects the model to <strong>Counter Terrorism Departments</strong>, inter-agency coordination and Safe City projects in Lahore and Islamabad <span class="ts">00:19:21</span>. Its red-alert illustration shows the preventive logic: intelligence about a possible threat may justify proportionate security measures while agencies locate and assess the suspected vehicles or persons <span class="ts">00:20:25</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Potential gain</th><th>Limit or safeguard</th></tr></thead>
+        <tbody>
+          <tr><td>Earlier recognition of patterns and threats</td><td>Intelligence can be incomplete, stale or wrong.</td></tr>
+          <tr><td>Better coordination across agencies</td><td>Sharing requires clear jurisdiction, security and accountability.</td></tr>
+          <tr><td>Focused deployment of scarce resources</td><td>Weak digital infrastructure, expertise and budgets constrain the model <span class="ts">00:22:30</span>.</td></tr>
+          <tr><td>Technology-supported prevention</td><td>Privacy, bias, proportionality and human oversight must shape every use.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Exam frame.</strong> Define the model, draw the cycle, name the tools, give CTD and Safe City as Pakistan illustrations, then evaluate infrastructure and rights constraints. A diagram earns clarity, but the safeguards earn analysis.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 2 === -->
+<section id="t2" class="chapter card" style="--accent:#2C8C86; --soft:#E4F1F0;">
+  <header>
+    <span class="eyebrow"><span class="num">2</span> Model two</span>
+    <h2><span class="emoji">🤝</span> Community policing</h2>
+    <span class="timepill">00:24:15–00:31:26</span>
+  </header>
+  <div class="section-body">
+    <p class="lead"><span class="kt">Community policing</span> is a collaborative approach in which police and community members identify local safety problems, exchange information and work on prevention. The lecture calls it “inviting help of the society” <span class="ts">00:24:15</span>.</p>
+
+    <p>The model does not turn citizens into police officers. Their role is civic and bounded: observe local conditions, report suspicious activity, join consultations and help address the social conditions linked to crime. Formal police powers remain with authorised officials <span class="ts">00:26:38</span>.</p>
+
+    <div class="note">
+      <p><strong>The governing principle is trust.</strong> Cooperation depends on citizens believing that information will be handled fairly and that the police will respond lawfully. Without trust, reporting, consultation and joint problem-solving all weaken <span class="ts">00:26:21</span>. The United States Department of Justice likewise describes community policing through community partnerships, problem-solving and organisational transformation.</p>
+    </div>
+
+    <h3>Three components from the lecture</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Component</th><th>Citizen role</th><th>Police or specialist role</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Local observation and patrolling</strong></td><td>Watch the neighbourhood, notice irregular activity and report it.</td><td>Assess the report and take any authorised operational action <span class="ts">00:27:21</span>.</td></tr>
+          <tr><td><strong>Advisory committees and consultation</strong></td><td>Raise recurring problems, give feedback and discuss local priorities.</td><td>Meet communities at regular intervals and convert concerns into plans <span class="ts">00:27:41</span>.</td></tr>
+          <tr><td><strong>Crime-prevention education</strong></td><td>Learn how risks arise and how collective behaviour can reduce them.</td><td>Police, criminologists, sociologists and behavioural specialists design credible education <span class="ts">00:28:46</span>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The lecture links prevention education to theories already studied, including strain, differential association, behavioural and labelling perspectives <span class="ts">00:29:16</span>. That link matters. Community policing is strongest when it responds to the social processes behind local offending rather than treating every problem as a matter for patrol and arrest.</p>
+
+    <h3>Why the model can help</h3>
+    <ul>
+      <li><strong>Local knowledge:</strong> residents can reveal patterns that central databases miss.</li>
+      <li><strong>Legitimacy:</strong> respectful participation can improve confidence in police action <span class="ts">00:37:08</span>.</li>
+      <li><strong>Prevention:</strong> communities can identify risks and address lower-level problems before they escalate.</li>
+      <li><strong>Problem-solving:</strong> recurring safety concerns can be tackled with agencies, schools, service providers and local groups.</li>
+    </ul>
+
+    <div class="note warn">
+      <p><strong>Editorial: do not romanticise the model.</strong> Participation can become informal surveillance, vigilantism or selective reporting if roles and safeguards are unclear. A sound answer should specify lawful reporting channels, confidentiality, inclusion, police accountability and protection against discriminatory targeting.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 3 === -->
+<section id="t3" class="chapter card" style="--accent:#B57A2A; --soft:#FBF1DE;">
+  <header>
+    <span class="eyebrow"><span class="num">3</span> Pakistan application</span>
+    <h2><span class="emoji">🏘️</span> Community policing in Pakistan</h2>
+    <span class="timepill">00:31:26–00:45:22</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Pakistan has official and local community-policing initiatives, but the lecture's central question is implementation: why do formal units and committees produce uneven results?</p>
+
+    <p>The lecture names the <strong>National Police Bureau</strong>, community-policing units, community liaison arrangements and what the transcript hears as “Salty Committees” <span class="ts">00:32:01</span>. It describes a local forum that can relay suspicious activity, discuss trends and, for suitable lower-level disputes, support diversion or alternative resolution <span class="ts">00:33:55</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: use the verified institutional wording.</strong> The National Police Bureau has introduced a <strong>Community Policing Unit (CPU)</strong> for policy, training, compliance, data analysis and community engagement. The official page does not establish that NPB created a CPU inside every local police station. Punjab Police pages separately document <strong>Masalhati Committees</strong> and Citizen Police Liaison Committees in local practice. Write these as related examples, not one uniform nationwide structure.</p>
+    </div>
+
+    <p>The lecture's street-level example is useful. Residents notice a group gathering at particular times and associate that pattern with rising petty crime. A formal liaison forum gives them a channel to report the pattern without claiming police powers or confronting the group themselves <span class="ts">00:35:30</span>. Police must still verify the information and avoid treating suspicion as guilt.</p>
+
+    <h3>Why implementation remains difficult</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Challenge</th><th>How it weakens the model</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Limited administrative and budget support</strong></td><td>Committees and outreach cannot become routine without staff, time and resources <span class="ts">00:38:47</span>.</td></tr>
+          <tr><td><strong>Public distrust</strong></td><td>Perceptions of corruption, abuse of power and weak accountability discourage cooperation <span class="ts">00:39:23</span>.</td></tr>
+          <tr><td><strong>Political interference</strong></td><td>Citizens doubt that information and cases will be handled impartially <span class="ts">00:41:01</span>.</td></tr>
+          <tr><td><strong>Inadequate specialist training</strong></td><td>Crime-prevention education needs criminological, sociological and behavioural expertise <span class="ts">00:41:38</span>.</td></tr>
+          <tr><td><strong>Internal resistance</strong></td><td>A reactive organisational culture may resist new roles and shared problem-solving <span class="ts">00:42:50</span>.</td></tr>
+          <tr><td><strong>Evolving and complex crime</strong></td><td>Terrorism, organised crime and technically advanced offences can exceed a neighbourhood forum's capacity <span class="ts">00:44:11</span>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: avoid the Canada and Switzerland generalisation.</strong> The lecture says community policing is smoother there because crimes are less serious <span class="ts">00:44:49</span>. Crime seriousness varies within every country, and no evidence is supplied for this comparison. Use it only as the lecturer's contrast between enabling and difficult environments. A stronger answer analyses trust, institutional capacity, accountability, local crime patterns and programme design.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>A balanced Pakistan answer.</strong> Move from concept and components to verified initiatives, then test implementation against trust, capacity, political neutrality, training and accountability. Finish with practical reforms: local needs assessments, trained liaison officers, protected reporting, published performance measures and independent complaint mechanisms.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 4 === -->
+<section id="t4" class="chapter card" style="--accent:#46955C; --soft:#E9F4EC;">
+  <header>
+    <span class="eyebrow"><span class="num">4</span> Model three</span>
+    <h2><span class="emoji">🏗️</span> Public-private cooperation in law enforcement</h2>
+    <span class="timepill">01:11:04–01:21:56</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecture defines a public-private partnership in this context as institutionalised cooperation between law-enforcement bodies and private actors. Unlike community policing, the partner is an organisation rather than an individual resident <span class="ts">01:11:04</span>.</p>
+
+    <p>Possible partners include <strong>businesses, technology firms, NGOs and academia</strong>. They may supply financial resources, managerial expertise, specialist training, technology or service-delivery capacity that a public agency lacks <span class="ts">01:13:40</span>.</p>
+
+    <h3>Areas of collaboration</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Area</th><th>Possible contribution</th><th>Control question</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Smart surveillance</strong></td><td>Sensors, CCTV integration, control-room systems and analytics <span class="ts">01:14:46</span></td><td>Who may collect, access, retain and audit the data?</td></tr>
+          <tr><td><strong>AI-assisted forecasting</strong></td><td>Pattern detection and analytical tools <span class="ts">01:16:23</span></td><td>How are bias, explainability and human review handled?</td></tr>
+          <tr><td><strong>Cybersecurity</strong></td><td>Networks, specialist tools and technical expertise</td><td>What security, secrecy and procurement standards apply?</td></tr>
+          <tr><td><strong>Victim support</strong></td><td>NGO-run counselling, shelter, legal referral and case support <span class="ts">01:16:56</span></td><td>Are confidentiality, safeguarding and service quality enforceable?</td></tr>
+          <tr><td><strong>Rehabilitation</strong></td><td>Facilities, education, treatment and reintegration programmes</td><td>Who is accountable for rights and outcomes?</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The lecture presents the <strong>Punjab Safe Cities Authority</strong> and Lahore's command-and-control, CCTV analytics and communication infrastructure as its main Pakistan example <span class="ts">01:18:25</span>. It also points students to the Public Private Partnership Authority, or P3A, to understand how formal PPP models are structured <span class="ts">01:20:18</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: separate a public authority, procurement and a formal PPP.</strong> PSCA is a statutory public body under the <strong>Punjab Safe Cities Authority Act, 2016</strong>. A private firm supplying technology through procurement or a joint technical arrangement does not, by that fact alone, prove that the project is a legally structured PPP. The federal <strong>Public Private Partnership Authority Act, 2017</strong> establishes P3A to facilitate federal PPP transactions. Cite PSCA as a technology-enabled public-safety example unless the particular project's formal PPP documents are available.</p>
+    </div>
+
+    <h3>Evaluation checklist</h3>
+    <ul>
+      <li><strong>Public purpose:</strong> the partnership must answer a defined safety or justice need.</li>
+      <li><strong>Legal authority:</strong> powers that belong to the state cannot be transferred casually.</li>
+      <li><strong>Value and capacity:</strong> test whether the partner adds finance, expertise or delivery capacity that the agency needs.</li>
+      <li><strong>Accountability:</strong> specify procurement, audit, complaint, data-protection and performance rules.</li>
+      <li><strong>Rights:</strong> privacy, equality, due process and access to remedy remain public responsibilities.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ======================================================== section 5 === -->
+<section id="t5" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+  <header>
+    <span class="eyebrow"><span class="num">5</span> Rights framework</span>
+    <h2><span class="emoji">🛡️</span> Human rights and vulnerable groups</h2>
+    <span class="timepill">01:23:47–01:48:48</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">A <span class="kt">vulnerable group</span> is a set of people whose circumstances expose them to a heightened risk of discrimination, exploitation or victimisation. The lecture names age, gender, disability, socioeconomic position, minority status, ethnicity and displacement as relevant factors <span class="ts">01:32:23</span>.</p>
+
+    <p>Modern criminology studies these risks because the same justice process can affect groups differently. The lecture uses displaced communities to show how ethnicity, religion and outsider status may increase exposure to hate crime or exploitation <span class="ts">01:34:38</span>. Protection therefore requires both equal legal status and procedures responsive to particular needs.</p>
+
+    <h3>Constitutional base</h3>
+    <p>The lecture identifies <strong>Articles 14 and 25</strong> as constitutional safeguards <span class="ts">01:37:14</span>. Article 14 protects dignity and, subject to law, privacy of the home. Article 25 establishes equality before law and equal protection of law and prohibits discrimination on the basis of sex, while allowing special provision for women and children.</p>
+
+    <div class="note warn">
+      <p><strong>Editorial: use precise provisions for minorities.</strong> The lecture correctly links minority protection to religious freedom and non-discrimination <span class="ts">01:44:22</span>. For an exact constitutional answer, add <strong>Article 20</strong> on professing, practising and propagating religion and managing religious institutions; <strong>Article 22</strong> on safeguards in educational institutions concerning religion; and <strong>Article 36</strong>, a Principle of Policy on protection of minorities. Do not describe every one of these provisions as an individually enforceable fundamental right.</p>
+    </div>
+
+    <h3>Children: Juvenile Justice System Act, 2018</h3>
+    <p>The lecture revises the juvenile framework rather than reteaching it in full <span class="ts">01:38:09</span>. The Act defines a child as a person who has not attained eighteen years, provides for legal assistance at state expense, creates juvenile courts, and establishes diversion as an alternative to formal judicial proceedings in eligible cases. Its stated orientation includes social reintegration.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Feature</th><th>Exam-ready meaning</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Child</strong></td><td>A person below eighteen for purposes of the Act.</td></tr>
+          <tr><td><strong>Juvenile court</strong></td><td>A specialised forum for juvenile cases rather than ordinary treatment without adjustment.</td></tr>
+          <tr><td><strong>Diversion</strong></td><td>An alternative process that determines responsibility and treatment without formal judicial proceedings, subject to the Act.</td></tr>
+          <tr><td><strong>Legal assistance</strong></td><td>The juvenile has a statutory entitlement to legal assistance at state expense.</td></tr>
+          <tr><td><strong>Reintegration</strong></td><td>The response should consider the child's development and return to society, not merely custody.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Women: exact legal and institutional references</h3>
+    <p>The lecture asks students to move beyond a generic claim that women have legal protection and name the framework accurately <span class="ts">01:39:44</span>.</p>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Instrument or institution</th><th>What to remember</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Protection against Harassment of Women at the Workplace Act, 2010</strong></td><td>The exact federal title behind the lecture's shortened “harassment at workplace” reference; amended in 2022.</td></tr>
+          <tr><td><strong>Punjab Protection of Women against Violence Act, 2016</strong></td><td>Punjab framework addressing violence against women and protective services.</td></tr>
+          <tr><td><strong>Criminal Law (Amendment) (Offences in the Name or on pretext of Honour) Act, 2016</strong></td><td>Act XLIII of 2016; amended the Pakistan Penal Code and Code of Criminal Procedure.</td></tr>
+          <tr><td><strong>Punjab Women Protection Authority Act, 2017</strong></td><td>Legal basis of the Punjab Women Protection Authority, which supports protection services.</td></tr>
+          <tr><td><strong>Services</strong></td><td>The lecture mentions helplines, shelters and the authority; official PWPA services include the Violence Against Women Center in Multan and helpline support <span class="ts">01:42:38</span>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: repair abbreviated or garbled law names.</strong> “Harassment of Women at Workplace Act 2010” is shorthand; use the full title above. The lecture's “pretext of Honor Act” is an amendment Act with the full title above. The student interjection transcribed as “Asset Control Act” is too unclear to identify reliably, so it is not asserted here.</p>
+    </div>
+
+    <h3>Law on paper and protection in practice</h3>
+    <p>The lecturer's analytical assignment is essential: after identifying legislation and institutions, assess their effectiveness using current evidence on gender-based violence and children's experience of the justice system <span class="ts">01:46:33</span>. Passing a law and creating an authority do not establish implementation. A critical answer tests awareness, accessibility, police response, investigation, prosecution, shelter capacity, geographic coverage, budgets, monitoring and outcomes.</p>
+
+    <div class="note exam">
+      <p><strong>Question plan.</strong> Define vulnerability, identify the constitutional base, organise the answer by children, women and minorities, name exact laws, then evaluate the implementation gap with current evidence. Keep the legal description separate from the empirical verdict.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 6 === -->
+<section id="t6" class="chapter card" style="--accent:#B44A8C; --soft:#F8EAF3;">
+  <header>
+    <span class="eyebrow"><span class="num">6</span> Specialized agency one</span>
+    <h2><span class="emoji">🔎</span> Federal Investigation Agency</h2>
+    <span class="timepill">01:48:50–02:06:53</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The <span class="kt">Federal Investigation Agency (FIA)</span> is a federal investigative body under the Ministry of Interior. The lecture treats it as the priority specialised-agency case because FIA questions recur and its legal structure supplies a model for studying other bodies <span class="ts">01:48:50</span>.</p>
+
+    <h3>Legal basis and command</h3>
+    <p>The legal foundation is the <strong>Federal Investigation Agency Act, 1974</strong>. The official text identifies it as Act VIII of 1975, published in the Gazette on 17 January 1975. Section 3 authorises the Federal Government to constitute the Agency for inquiry into and investigation of offences specified in the Schedule. A Director-General appointed by the Federal Government administers it under the Federal Government's superintendence <span class="ts">01:50:35</span>.</p>
+
+    <p>The lecture also names the <strong>Federal Investigation Agency (Inquiries and Investigations) Rules, 2002</strong>, which address procedures for inquiries and investigations <span class="ts">01:53:23</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: the Act does define FIA's core work and powers.</strong> The lecture says the Act creates the body and grants powers but “has not defined its work” <span class="ts">01:53:23</span>. Section 3 expressly ties FIA to inquiry and investigation of scheduled offences; section 5 grants officers specified police powers for those functions; and the Schedule identifies covered laws and offences. The 2002 Rules add procedural detail rather than supplying an otherwise absent mandate.</p>
+    </div>
+
+    <h3>Mandate and functional areas</h3>
+    <p>The lecture organises FIA by wings so that students can convert an organisational chart into functions <span class="ts">01:58:05</span>. The current official FIA site lists Anti-Corruption, Anti-Money Laundering, Technical, Anti-Human Trafficking and Smuggling, Integrated Border Management System, Intellectual Property Rights, Immigration, Interpol and FIA Academy. It separately lists counter-terrorism among matters investigated.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Area</th><th>Core work</th><th>Boundary to remember</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Anti-Corruption</strong></td><td>Federal corruption matters, especially involving federal public servants and federal funds.</td><td>Do not describe all private-sector corruption as FIA Anti-Corruption Wing jurisdiction merely because a private actor is involved <span class="ts">01:58:22</span>.</td></tr>
+          <tr><td><strong>Anti-Money Laundering</strong></td><td>Investigation within the federal statutory mandate relating to money laundering and linked financial offences.</td><td>State the enabling law or scheduled offence when analysing jurisdiction.</td></tr>
+          <tr><td><strong>Technical and digital forensics</strong></td><td>Technical support and forensic examination for investigations <span class="ts">02:01:40</span>.</td><td>Current PECA inquiry, investigation and prosecution authority belongs to NCCIA.</td></tr>
+          <tr><td><strong>Anti-Human Trafficking and Smuggling</strong></td><td>Human trafficking, migrant smuggling and unlawful migration networks.</td><td>“Smuggling” here does not turn the wing into the federal drug-enforcement agency.</td></tr>
+          <tr><td><strong>Immigration</strong></td><td>Border and immigration controls, including action on false travel documents and unlawful migration <span class="ts">02:03:03</span>.</td><td>Apply written law and procedure; suspicion alone is insufficient.</td></tr>
+          <tr><td><strong>INTERPOL / NCB</strong></td><td>Pakistan's national contact and coordination function with INTERPOL <span class="ts">02:04:16</span>.</td><td>International cooperation does not replace domestic legal process.</td></tr>
+          <tr><td><strong>Counter-terrorism</strong></td><td>Investigation of relevant federal and scheduled offences and terrorism-financing matters.</td><td>Coordinate with other competent federal and provincial bodies.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: three current jurisdiction points.</strong> First, FIA's official Anti-Corruption Wing focuses on corruption involving federal public servants and federal funds, so the lecture's broad “public and private sectors” phrasing needs a statutory link. Second, the lecture includes drug smuggling under the Anti-Human Trafficking and Smuggling Wing <span class="ts">02:02:17</span>; that wing addresses trafficking in persons and smuggling of migrants, while narcotics enforcement is associated with the Anti Narcotics Force. Third, under section 29 of the <strong>Prevention of Electronic Crimes Act, 2016 as amended in 2025</strong>, the <strong>National Cyber Crime Investigation Agency (NCCIA)</strong> is the authorised agency for PECA inquiries, investigations and prosecutions. FIA can retain technical-forensic capabilities without being described as the current general PECA investigation agency.</p>
+    </div>
+
+    <h3>Why FIA is specialised</h3>
+    <p>Ordinary territorial policing covers a broad range of local crime and order functions. FIA is specialised because federal legislation assigns it particular scheduled offences, cross-border and federal domains, and technical investigative roles <span class="ts">02:05:27</span>. The best answer therefore uses <strong>legal mandate and jurisdiction</strong>, not the mere existence of wings, to explain specialisation.</p>
+
+    <div class="note exam">
+      <p><strong>FIA answer sequence.</strong> Federal Investigation Agency Act, 1974; Ministry of Interior and DG; scheduled-offence mandate; 2002 Inquiry and Investigation Rules; functional areas; present jurisdictional updates such as NCCIA; then problems, coordination and reforms. A current answer must distinguish FIA's historical cybercrime role from the 2025 PECA position.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 7 === -->
+<section id="t7" class="chapter card" style="--accent:#7A5AA8; --soft:#F0EBF8;">
+  <header>
+    <span class="eyebrow"><span class="num">7</span> Specialized agency two</span>
+    <h2><span class="emoji">🏛️</span> National Accountability Bureau</h2>
+    <span class="timepill">02:07:13–02:18:10</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The <span class="kt">National Accountability Bureau (NAB)</span> was established in 1999 under the <strong>National Accountability Ordinance, 1999</strong>. Its core functions are investigation, prosecution and prevention of corruption and corrupt practices <span class="ts">02:07:47</span>.</p>
+
+    <h3>Offence areas highlighted in the lecture</h3>
+    <ul>
+      <li>Corruption and corrupt practices.</li>
+      <li>Misuse or abuse of authority.</li>
+      <li>Embezzlement and misappropriation.</li>
+      <li>Kickbacks and illegal gratification.</li>
+      <li>Assets beyond known means.</li>
+      <li>Cheating the public at large, money laundering and major financial misconduct where the current law gives NAB jurisdiction.</li>
+    </ul>
+    <p>The lecture groups these as large or “mega-corruption” matters affecting the public exchequer <span class="ts">02:11:21</span>. The current official NAB description also identifies government institutions, public-office holders, private schemes, housing schemes and public-at-large fraud within its statutory work.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: do not use a timeless FIA-versus-NAB monetary threshold.</strong> The lecture says FIA has no limit while NAB has one <span class="ts">02:00:08</span>. The National Accountability Ordinance has been amended repeatedly, including major changes in 2022 and 2023, and jurisdiction depends on the current statutory text, the alleged conduct, the persons and property involved, and exclusions in section 4. State the current legal basis for the case instead of memorising a threshold from an undated lecture.</p>
+    </div>
+
+    <h3>The operational sequence</h3>
+    <p>The lecture gives a simple cycle: inquiry, investigation, then a reference filed in an Accountability Court where the allegation must be proved <span class="ts">02:13:10</span>. This is useful as a study scaffold, but it needs one front-end qualification.</p>
+
+    <div class="note warn">
+      <p><strong>Editorial: treat the cycle as simplified.</strong> NAB's current public material describes complaint receipt, screening and complaint verification before a matter advances. Its 2023–24 report records a revised complaint-handling and verification framework, while the Ordinance governs inquiries, investigations, prosecution and Accountability Courts. A safe sequence for an exam is: <strong>complaint and screening → verification where applicable → inquiry → investigation → reference and prosecution before the Accountability Court</strong>. Each transition requires the competent authorisation under the current law and rules.</p>
+    </div>
+
+    <h3>Criticisms raised in class</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Lecture criticism</th><th>What a critical answer must ask</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Selective accountability</strong></td><td>Are comparable cases chosen and treated under consistent, published criteria? <span class="ts">02:14:56</span></td></tr>
+          <tr><td><strong>Delay</strong></td><td>How long do complaint verification, inquiry, investigation and trial take, and where does delay arise? <span class="ts">02:15:46</span></td></tr>
+          <tr><td><strong>Effectiveness</strong></td><td>Do recoveries and convictions reflect deterrence, due process and sustainable institutional performance? <span class="ts">02:16:31</span></td></tr>
+          <tr><td><strong>Changing law</strong></td><td>How have amendments altered jurisdiction, procedure, safeguards and pending cases? <span class="ts">02:17:08</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>These are the lecturer's analytical claims, not self-proving conclusions. A good answer must support them with current judicial decisions, official statistics, audit material or well-sourced empirical research. “Controversial” is not an argument unless the mechanism and evidence are explained.</p>
+
+    <div class="note">
+      <p><strong>ANF boundary.</strong> The lecturer assigns the Anti Narcotics Force for independent study and provides no substantive ANF content <span class="ts">02:18:39</span>. This note does not invent it. For a separate ANF question, research its legal cover, mandate, organisation, investigation and prosecution roles, coordination problems and current evidence afresh.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 8 === -->
+<section id="t8" class="chapter card" style="--accent:#A4553A; --soft:#F7EBE5;">
+  <header>
+    <span class="eyebrow"><span class="num">8</span> Course close</span>
+    <h2><span class="emoji">✍️</span> How to study and answer these topics</h2>
+    <span class="timepill">02:19:13–02:35:42</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The final discussion turns course content into answer technique. The key instruction is to read the command word, identify the dimensions demanded, and organise the response so an examiner can see the argument immediately.</p>
+
+    <h3>Build knowledge in layers</h3>
+    <p>The lecturer identifies three course sources: the spoken lectures, the supplied notes, and case studies or reading material <span class="ts">02:21:00</span>. Larry Siegel is suggested as optional foundation-building for earlier sections, rather than a substitute for the course package <span class="ts">02:22:00</span>.</p>
+
+    <p>Criminology answers need a <strong>theoretical perspective</strong> where relevant because the paper asks about crime, criminal behaviour and scientific explanation, not a lawyer's bare recital of statutes <span class="ts">02:24:19</span>. Pakistan references become essential when the question calls for a local application.</p>
+
+    <h3>Decode the command word</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Command</th><th>What to do</th><th>Common failure</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Describe / explain</strong></td><td>Set out the meaning, structure, mechanism and significance clearly.</td><td>Listing labels without explaining how they connect.</td></tr>
+          <tr><td><strong>Analyse</strong></td><td>Break the topic into parts and examine the relationship among them <span class="ts">02:27:24</span>.</td><td>Repeating a narrative without identifying components or causes.</td></tr>
+          <tr><td><strong>Evaluate</strong></td><td>Judge performance or worth against stated criteria, with merits and limitations <span class="ts">02:26:51</span>.</td><td>Giving balanced-looking lists but no reasoned judgment.</td></tr>
+          <tr><td><strong>Critically analyse</strong></td><td>Analyse through evidence, test competing explanations and reach a qualified conclusion <span class="ts">02:27:53</span>.</td><td>Using “criticism” as opinion without evidence.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Structure before detail</h3>
+    <p>Headings are essential because they let the examiner scan the answer's logic. For FIA, for example, use legal landscape, mandate, major wings or functions, operational issues and reforms <span class="ts">02:29:33</span>. Paragraphs should carry the explanation. Bullets are suitable for compact groups of examples, but an entire 20-mark answer should not become bullet fragments <span class="ts">02:33:39</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: avoid a universal claim about first-time offenders.</strong> The lecture says empirical evidence shows first-time offenders are rehabilitated <span class="ts">02:25:50</span>. Outcomes vary by person, offence, programme, supervision and social conditions. Use labelling and behavioural theories to justify considering diversion and rehabilitation, then cite specific evidence for the population and intervention being discussed.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Reusable specialised-agency outline.</strong> (1) definition and legal cover, (2) formation and administrative control, (3) mandate and jurisdiction, (4) functions or wings, (5) process, (6) contributions, (7) problems supported by evidence, (8) reforms tied to those problems, and (9) a judgment answering the exact command.</p>
+    </div>
+
+    <div class="note">
+      <p><strong>Course-map correction.</strong> The opening slide labels the material “Section 3,” but the lecturer immediately corrects it to <strong>Section 4</strong>, contemporary or modern criminology <span class="ts">00:03:08</span>. Use Section 4 in revision notes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================= glossary === -->
+<section id="t9" class="chapter card" style="--accent:#8B8490; --soft:#F0EEF2;">
+  <header>
+    <span class="eyebrow"><span class="num">G</span> Reference</span>
+    <h2><span class="emoji">📖</span> Glossary</h2>
+  </header>
+  <div class="section-body">
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Intelligence-led policing</strong></td><td>A decision model in which assessed intelligence guides prevention, investigation, priorities and deployment.</td></tr>
+          <tr><td><strong>Intelligence cycle</strong></td><td>Collection, processing and collation, analysis, dissemination, action and feedback.</td></tr>
+          <tr><td><strong>GIS</strong></td><td>Geographic information system, used to organise and analyse location-linked information.</td></tr>
+          <tr><td><strong>Crime mapping</strong></td><td>Visual and spatial analysis of crime incidents and related patterns.</td></tr>
+          <tr><td><strong>Predictive policing</strong></td><td>Use of data analysis to estimate places, times or risks associated with future crime; it produces leads or probabilities, not proof.</td></tr>
+          <tr><td><strong>Community policing</strong></td><td>A policing philosophy based on community partnerships, problem-solving and organisational support.</td></tr>
+          <tr><td><strong>Masalhati Committee</strong></td><td>A local conciliation or liaison committee documented in Punjab Police practice; spelling varies on official district pages.</td></tr>
+          <tr><td><strong>Diversion</strong></td><td>An alternative response that resolves an eligible matter outside full formal judicial proceedings under the applicable law.</td></tr>
+          <tr><td><strong>Public-private partnership</strong></td><td>A structured arrangement between a public implementing agency and a private party for a public project or service under an applicable legal framework.</td></tr>
+          <tr><td><strong>Vulnerable group</strong></td><td>People facing heightened risk of discrimination, exploitation or victimisation because of personal or social circumstances.</td></tr>
+          <tr><td><strong>JJSA 2018</strong></td><td>Juvenile Justice System Act, 2018, Pakistan's federal juvenile justice statute.</td></tr>
+          <tr><td><strong>FIA</strong></td><td>Federal Investigation Agency, constituted for inquiry and investigation of offences specified in the Schedule to its Act.</td></tr>
+          <tr><td><strong>Scheduled offence</strong></td><td>An offence or law listed in the Schedule that helps define FIA's federal jurisdiction.</td></tr>
+          <tr><td><strong>NCCIA</strong></td><td>National Cyber Crime Investigation Agency, the authorised PECA investigation agency under the 2025 amendment.</td></tr>
+          <tr><td><strong>NAB</strong></td><td>National Accountability Bureau, established under the National Accountability Ordinance, 1999.</td></tr>
+          <tr><td><strong>Reference</strong></td><td>In NAB procedure, the prosecution case placed before an Accountability Court after the authorised process.</td></tr>
+          <tr><td><strong>Jurisdiction</strong></td><td>The legal authority of a body over specified persons, conduct, territory or subject matter.</td></tr>
+          <tr><td><strong>Mandate</strong></td><td>The functions and objectives that law assigns to an institution.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================= flashcards === -->
+<section id="t10" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+  <header>
+    <span class="eyebrow"><span class="num">F</span> Recall</span>
+    <h2><span class="emoji">🎴</span> Flashcards</h2>
+  </header>
+  <div class="section-body">
+    <div class="cards">
+      <div class="qa"><p class="q">What is intelligence-led policing?</p><p class="a">A decision model in which collected and analysed intelligence guides investigation, prevention, priorities and resource allocation.</p></div>
+      <div class="qa"><p class="q">Name the stages of the intelligence cycle.</p><p class="a">Collect; process, collate and filter; analyse patterns; disseminate; act lawfully; review and feed results back.</p></div>
+      <div class="qa"><p class="q">Name five intelligence-led policing tools or sources.</p><p class="a">GIS, crime mapping, data analytics, CCTV, databases, financial transactions, social-media traces and human intelligence.</p></div>
+      <div class="qa"><p class="q">Why is a predictive score not proof?</p><p class="a">It estimates risk from data that can be incomplete or biased. Coercive action still needs lawful grounds, evidence, proportionality and human review.</p></div>
+      <div class="qa"><p class="q">What are the three core components of community policing in this lecture?</p><p class="a">Local observation and reporting, advisory consultation, and crime-prevention education.</p></div>
+      <div class="qa"><p class="q">What principle makes community policing possible?</p><p class="a">Trust between police and the community, reinforced by respectful, lawful and accountable conduct.</p></div>
+      <div class="qa"><p class="q">What is the verified NPB institution?</p><p class="a">The National Police Bureau's Community Policing Unit, which works on policy, training, compliance, data analysis and engagement. It is not proof of a CPU at every station.</p></div>
+      <div class="qa"><p class="q">What are Masalhati Committees?</p><p class="a">Local conciliation or liaison committees documented on Punjab Police district sites and linked to community policing and suitable non-cognisable disputes.</p></div>
+      <div class="qa"><p class="q">List six obstacles to community policing in Pakistan.</p><p class="a">Resource gaps, distrust, political interference, inadequate specialist training, internal resistance and complex or evolving crime.</p></div>
+      <div class="qa"><p class="q">Who can participate in public-private cooperation?</p><p class="a">Public law-enforcement bodies with businesses, technology firms, NGOs, academia and other capable private organisations.</p></div>
+      <div class="qa"><p class="q">Why is PSCA not automatically proof of a formal PPP?</p><p class="a">PSCA is a statutory public authority. Buying technology or using contractors does not by itself establish a legally structured PPP for a particular project.</p></div>
+      <div class="qa"><p class="q">What factors can create vulnerability?</p><p class="a">Age, gender, disability, socioeconomic status, minority status, ethnicity and displacement.</p></div>
+      <div class="qa"><p class="q">Which constitutional articles anchor this lecture's rights discussion?</p><p class="a">Articles 14 and 25 for dignity, privacy and equality; Articles 20 and 22 for religious and educational safeguards; Article 36 as a Principle of Policy on minorities.</p></div>
+      <div class="qa"><p class="q">How does JJSA 2018 define a child?</p><p class="a">A person who has not attained eighteen years.</p></div>
+      <div class="qa"><p class="q">What is diversion under JJSA 2018?</p><p class="a">An alternative process for responsibility and treatment without resort to formal judicial proceedings, subject to the Act.</p></div>
+      <div class="qa"><p class="q">Give the exact federal workplace-harassment law title.</p><p class="a">Protection against Harassment of Women at the Workplace Act, 2010, amended in 2022.</p></div>
+      <div class="qa"><p class="q">Give the exact 2016 honour-offences law title.</p><p class="a">Criminal Law (Amendment) (Offences in the Name or on pretext of Honour) Act, 2016, Act XLIII of 2016.</p></div>
+      <div class="qa"><p class="q">What is FIA's legal basis?</p><p class="a">Federal Investigation Agency Act, 1974, Act VIII of 1975, read with its Schedule and the 2002 Inquiry and Investigation Rules.</p></div>
+      <div class="qa"><p class="q">What does section 3 of the FIA Act do?</p><p class="a">It authorises the Federal Government to constitute FIA for inquiry into and investigation of offences specified in the Schedule.</p></div>
+      <div class="qa"><p class="q">Who appoints FIA's Director-General?</p><p class="a">The Federal Government.</p></div>
+      <div class="qa"><p class="q">What current cybercrime update must an FIA answer include?</p><p class="a">Under PECA as amended in 2025, NCCIA is the authorised agency for PECA inquiries, investigations and prosecutions.</p></div>
+      <div class="qa"><p class="q">Why is “drug smuggling” misplaced under FIA's AHTS Wing?</p><p class="a">That wing addresses human trafficking and smuggling of migrants. Federal narcotics enforcement belongs principally to ANF under its own legal framework.</p></div>
+      <div class="qa"><p class="q">What is NAB's legal basis?</p><p class="a">National Accountability Ordinance, 1999, as amended.</p></div>
+      <div class="qa"><p class="q">Give the simplified NAB case sequence.</p><p class="a">Complaint and screening, verification where applicable, inquiry, investigation, then an authorised reference and prosecution in the Accountability Court.</p></div>
+      <div class="qa"><p class="q">Name three critiques of NAB raised in class.</p><p class="a">Selective accountability, long delays and disputed effectiveness. Each requires current evidence in an exam answer.</p></div>
+      <div class="qa"><p class="q">What does “critically analyse” require?</p><p class="a">Break the topic into parts, test them through evidence, consider competing interpretations and reach a qualified judgment.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== exam focus === -->
+<section id="t11" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF; padding-bottom:4mm; margin-bottom:0;">
+  <header>
+    <span class="eyebrow"><span class="num">X</span> Strategy</span>
+    <h2><span class="emoji">🎯</span> Exam focus</h2>
+  </header>
+  <div class="section-body">
+    <h3>The comparison to memorise</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Model</th><th>Primary input</th><th>Main promise</th><th>Main risk</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Intelligence-led policing</strong></td><td>Collected and analysed information</td><td>Prioritisation and prevention</td><td>Bias, privacy intrusion and treating risk as guilt</td></tr>
+          <tr><td><strong>Community policing</strong></td><td>Community knowledge and participation</td><td>Trust, legitimacy and local problem-solving</td><td>Distrust, exclusion, informal surveillance and weak capacity</td></tr>
+          <tr><td><strong>Public-private cooperation</strong></td><td>External finance, expertise and service capacity</td><td>Technology and delivery capability</td><td>Opaque procurement, weak accountability and data misuse</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Likely questions and answer plans</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Question</th><th>Answer spine</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Explain intelligence-led policing and assess its utility in Pakistan.</strong></td><td>Definition → cycle → tools → CTD and Safe City illustrations → infrastructure limits → privacy, bias and due-process safeguards → judgment.</td></tr>
+          <tr><td><strong>Can community policing improve police legitimacy in Pakistan?</strong></td><td>Concept → trust → three components → NPB CPU and local committees → six implementation barriers → accountability-centred reforms.</td></tr>
+          <tr><td><strong>Discuss protection of vulnerable groups in Pakistan's criminal justice system.</strong></td><td>Definition → constitutional base → children/JJSA → women/exact laws → minorities → institutions and services → evidence-based implementation gap.</td></tr>
+          <tr><td><strong>Write a note on FIA as a specialised agency.</strong></td><td>Act and administration → scheduled offences → rules → functions → jurisdictional corrections on NCCIA, AHTS and federal corruption → coordination and reforms.</td></tr>
+          <tr><td><strong>Critically evaluate NAB.</strong></td><td>NAO 1999 → mandate and offence areas → current process → selection, delay and effectiveness claims tested with evidence → amendments → specific reforms and conclusion.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Common mistakes</h3>
+    <ul>
+      <li>Treating an algorithmic prediction as evidence that a person will offend.</li>
+      <li>Claiming NPB established a community-policing unit in every police station.</li>
+      <li>Calling any technology procurement a formal PPP.</li>
+      <li>Using inaccurate law titles or listing old FIA wings without NCCIA's current PECA mandate.</li>
+      <li>Putting drug smuggling under FIA's human-trafficking and migrant-smuggling wing.</li>
+      <li>Reciting a fixed NAB threshold without checking the current amended Ordinance.</li>
+      <li>Repeating critiques such as “selective accountability” without evidence or criteria.</li>
+    </ul>
+
+    <div class="note exam">
+      <p><strong>The synthesis line.</strong> Modern law enforcement gains reach from intelligence, communities and specialised partners, but legal authority, evidence, accountability and human dignity determine whether that reach becomes legitimate prevention or unchecked power.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="notefoot">Want the whole lecture? <a href="https://drive.google.com/file/d/1RTn-ewXDuO_etEHNc9EzIvRG1zTIw335/view?usp=drivesdk" target="_blank" rel="noopener">▶ Watch the full recording</a><span class="sep">·</span><a href="https://drive.google.com/file/d/1HEpKzubTMb4DxoB72sSNaia9Sj81HgKI/view?usp=drivesdk" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+</html>
