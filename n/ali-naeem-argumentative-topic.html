@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Argumentative Essays: Stance, Refutation and Rebuttal</title>
+<style>/* Lecture Notes ebook, "warm study" theme.
+   Inspired by Mehak's MarketCanvas app: soft cream ground, rounded white cards,
+   a different pastel accent per topic, serif display + friendly sans body,
+   gentle emoji + pill badges. Playful and pretty, but still a real study book.
+   Print-first (A4 PDF via headless Edge); reads well on screen too.
+
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
+   Everything themeable keys off --accent / --soft. Titles stay ink for
+   readability; accents colour eyebrows, numbers, pills, rules and callouts.
+*/
+
+:root {
+  --cream: #FCF6F0;          /* page ground (warm) */
+  --card: #FFFFFF;
+  --ink: #2C2630;            /* plum-black body/headings */
+  --ink-soft: #5A5360;
+  --slate: #8B8490;          /* captions, timestamps */
+  --hairline: #EEE6E4;
+
+  /* section default accent (overridden per section) */
+  --accent: #C0567E;
+  --soft: #FBECF1;
+
+  --shadow: 0 1px 2px rgba(60,30,45,.05), 0 10px 26px rgba(80,40,55,.07);
+  --radius: 20px;
+
+  --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: Consolas, "Cascadia Code", ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background:
+    radial-gradient(1100px 700px at 15% -5%, #FBEEF3 0%, transparent 55%),
+    radial-gradient(1000px 700px at 100% 0%, #EEF3FB 0%, transparent 50%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  font: 10.8pt/1.62 var(--sans);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+@media screen {
+  body { max-width: 51rem; margin: 0 auto; padding: 2.5rem 1.15rem 4rem; font-size: 1.0rem; }
+}
+
+/* ---------------------------------------------------------------- page --- */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm 14mm;
+  @bottom-center {
+    content: counter(page);
+    font: 8.5pt var(--sans);
+    color: #8B8490;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+/* --------------------------------------------------------------- cards --- */
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8mm 9mm 9mm;
+  margin: 0 0 6mm;
+  box-shadow: var(--shadow);
+  break-inside: auto;
+}
+@media screen { .card { margin-bottom: 1.4rem; } }
+
+/* a soft accent wash across the top of each section card (fades to white),
+   echoing the app's pastel cards without hurting readability */
+.chapter {
+  background:
+    linear-gradient(180deg, var(--soft) 0, rgba(255,255,255,0) 34mm),
+    var(--card);
+  border-top: 3px solid var(--accent);
+  break-inside: auto;
+  break-before: page;   /* each topic starts fresh: slide on top, notes below */
+}
+/* on screen (web/PWA) sections just stack; no forced page breaks */
+@media screen { .chapter { break-before: auto; } }
+
+h2, h3, .eyebrow { break-after: avoid; }
+p { orphans: 2; widows: 2; }
+
+/* keep the section header intact (eyebrow + title + time pill together) and
+   glued to its opening slide */
+.chapter > header { break-inside: avoid; break-after: avoid; }
+figure.slide { break-before: avoid; }
+
+/* --------------------------------------------------------------- cover --- */
+
+.cover {
+  page: cover;
+  break-after: page;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32mm 22mm 24mm;
+  background:
+    radial-gradient(700px 460px at 12% 8%, #FBE6EE 0%, transparent 60%),
+    radial-gradient(760px 520px at 96% 4%, #E7EEFB 0%, transparent 58%),
+    radial-gradient(620px 520px at 80% 96%, #E6F4EC 0%, transparent 60%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+@media screen {
+  .cover { min-height: 80vh; border-radius: 24px; padding: 3.2rem 2.6rem; margin-bottom: 1.4rem; }
+}
+
+.cover .avatar { font-size: 30pt; line-height: 1; margin-bottom: 7mm; }
+.cover .kicker {
+  font: 600 9pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 5mm;
+}
+.cover h1 {
+  font: 600 31pt/1.14 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 15em;
+}
+.cover .subtitle {
+  margin-top: 5mm;
+  font: 400 13.5pt/1.5 var(--sans);
+  color: var(--ink-soft);
+  max-width: 30em;
+}
+.cover .warm {
+  margin-top: 4mm;
+  font: italic 400 12pt/1.5 var(--serif);
+  color: var(--accent);
+}
+
+.cover .chips { display: flex; flex-wrap: wrap; gap: 3mm; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.4mm 4mm;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(60,30,45,.04);
+  font: 400 9pt var(--sans);
+  color: var(--slate);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chip b { font: 700 10.5pt var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ headings --- */
+
+.chapter header { margin-bottom: 5mm; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  font: 700 8.5pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--accent);
+  margin-bottom: 3mm;
+}
+.eyebrow .num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h2 {
+  font: 600 20pt/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .emoji { font-size: 17pt; }
+
+.timepill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.5mm 3.5mm;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font: 600 8pt var(--mono);
+  letter-spacing: 0.02em;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h3 {
+  font: 600 12.5pt/1.34 var(--serif);
+  color: var(--ink);
+  margin: 6mm 0 2.5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+.ts { font: 400 8.5pt var(--mono); color: var(--slate); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- body --- */
+
+.section-body > :last-child { margin-bottom: 0; }
+p { margin: 0 0 3mm; }
+.lead { font-size: 11.2pt; color: var(--ink); }
+
+ul, ol { margin: 0 0 3mm 5.5mm; }
+li { margin-bottom: 1.7mm; padding-left: 1mm; }
+li::marker { color: var(--accent); }
+
+.kt { font-weight: 700; color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
+
+code { font: 9.5pt var(--mono); background: #F3EFF4; padding: .4pt 3.5pt; border-radius: 4px; }
+
+/* ------------------------------------------------------------ callouts --- */
+
+.note {
+  --c: var(--accent);
+  --f: var(--soft);
+  background: var(--f);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  border-left: 3px solid var(--c);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.note .label {
+  display: inline-flex; align-items: center; gap: 1.6mm;
+  font: 700 8pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c);
+  margin-bottom: 1.8mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.warn { --c: #B4791F; --f: #FaF1DF; }
+.note.exam { --c: #3B8B78; --f: #E6F3EF; }
+.note.def  { --c: var(--accent); --f: var(--soft); }
+
+/* ------------------------------------------------------- summary card --- */
+
+.summary { --accent: #C0567E; --soft: #FBECF1; }
+.summary ul { list-style: none; margin: 0; }
+.summary li { position: relative; padding: 0 0 0 7mm; margin-bottom: 3.5mm; }
+.summary li::before {
+  content: "";
+  position: absolute; left: 0; top: 2.6mm;
+  width: 3.2mm; height: 3.2mm; border-radius: 50%;
+  background: var(--accent);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.summary li:last-child { margin-bottom: 0; }
+.summary li b, .summary li strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------- TOC --- */
+
+nav.toc { --accent: #8B8490; --soft: #F3EFF4; }
+nav.toc ol { list-style: none; margin: 0; }
+nav.toc li {
+  display: flex; align-items: baseline; gap: 4mm;
+  padding: 2.7mm 0;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11pt var(--sans);
+}
+nav.toc li:last-child { border-bottom: 0; }
+nav.toc .dot { width: 3.4mm; height: 3.4mm; border-radius: 50%; flex-shrink: 0;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+nav.toc .title { flex: 1; color: var(--ink); }
+nav.toc .rng { flex-shrink: 0; font: 600 8.5pt var(--mono); color: var(--slate); }
+
+/* -------------------------------------------------------------- slides --- */
+
+figure.slide { margin: 0 0 5mm; break-inside: avoid; }
+figure.slide img {
+  width: 100%; display: block;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 10px rgba(40,30,45,.10);
+}
+figure.slide figcaption {
+  font: 400 8.5pt var(--sans);
+  color: var(--slate);
+  margin-top: 2mm;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4mm;
+}
+figure.slide figcaption .ts { color: var(--accent); }
+
+/* ------------------------------------------------------------ glossary --- */
+
+dl.glossary { margin: 0; }
+dl.glossary div { padding: 3mm 0; border-bottom: 1px solid var(--hairline); break-inside: avoid; }
+dl.glossary div:last-child { border-bottom: 0; padding-bottom: 0; }
+dl.glossary dt { font: 700 10.5pt var(--sans); color: var(--accent); margin-bottom: 1.2mm; }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- flashcards --- */
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 0; }
+.qa {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  background: linear-gradient(180deg, var(--soft) 0, #fff 60%);
+  break-inside: avoid;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.qa .q { font: 700 10pt var(--sans); color: var(--ink); margin-bottom: 2mm; }
+.qa .a { color: var(--ink-soft); font-size: 10pt; }
+
+/* ------------------------------------------------------------- tables --- */
+
+.tables-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0; break-inside: avoid; }
+th {
+  font: 700 9pt var(--sans); text-align: left; color: var(--accent);
+  border-bottom: 2px solid var(--soft); padding: 2mm 3mm 2mm 0;
+}
+td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+
+/* --- mobile / on-the-go reading (screen only; never affects the print PDF).
+   Placed LAST so it wins the cascade over the wider @media screen rules above.
+   Requires <meta name="viewport" content="width=device-width, initial-scale=1">. */
+@media screen and (max-width: 640px) {
+  body { padding: 1rem 0.85rem 2.5rem; font-size: 1.02rem; }
+  .card { padding: 5mm 5mm 6mm; border-radius: 14px; margin-bottom: 0.9rem; }
+  .cover { min-height: auto; padding: 2rem 1.3rem 1.6rem; border-radius: 16px; }
+  .cover .avatar { font-size: 24pt; margin-bottom: 4mm; }
+  .cover h1 { font-size: 20pt; max-width: 100%; }
+  .cover .subtitle { font-size: 11.5pt; }
+  .cover .warm { font-size: 11pt; }
+  .cover .chips { gap: 2mm; margin-top: 5mm; }
+  h2 { font-size: 16pt; }
+  h2 .emoji { font-size: 13.5pt; }
+  h3 { font-size: 11.5pt; }
+  .cards { grid-template-columns: 1fr; }
+  nav.toc li { font-size: 10.5pt; gap: 2.5mm; padding: 2.5mm 0; }
+  nav.toc .rng { font-size: 8pt; }
+  .note { padding: 3.5mm 4mm; }
+  table { font-size: 9.5pt; }
+}
+</style>
+<meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
+align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
+border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
+<body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/file/d/1pUV0tTv0bys46TtGVgn1UWDSZz1KWpkF/view?usp=drivesdk" target="_blank" rel="noopener">Download PDF ↓</a></div>
+
+<!-- ============================================================ cover === -->
+<section class="cover" style="background:radial-gradient(700px 460px at 12% 8%,#F7EBE5 0,transparent 60%),radial-gradient(760px 520px at 96% 4%,#ECEEFA 0,transparent 58%),radial-gradient(620px 520px at 80% 96%,#E4F1F0 0,transparent 60%),var(--cream)">
+  <div>
+    <div class="avatar">&#9878;&#65039;</div>
+    <div class="kicker" style="color:#A4553A">CSS English Essay &middot; Ali Naeem</div>
+    <h1>Argumentative Essays: Stance, Refutation and Rebuttal</h1>
+    <p class="subtitle">How to recognise an argumentative demand, commit to one position, represent the opposing case fairly, rebut it with evidence, and keep every paragraph tied to the same stance.</p>
+    <p class="warm" style="color:#A4553A">A mature argument knows the other side and still leaves the reader in no doubt about its own. &#128172;</p>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>1h 33m</b> taught content</span>
+    <span class="chip"><b>1</b> unified stance</span>
+    <span class="chip"><b>5</b> rebuttal moves</span>
+    <span class="chip"><b>8</b> practical topics</span>
+  </div>
+</section>
+
+<!-- ============================================================== toc === -->
+<nav class="toc card">
+  <header><span class="eyebrow">Contents</span><h2><span class="emoji">&#128506;&#65039;</span> In this chapter</h2></header>
+  <ol>
+    <li><span class="dot" style="background:#A4553A"></span><a class="title" href="#summary">The five-minute version</a><span class="rng">summary</span></li>
+    <li><span class="dot" style="background:#5866C4"></span><a class="title" href="#t1">01 &middot; Recognise the demand</a><span class="rng">signals</span></li>
+    <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t2">02 &middot; Choose one stance</a><span class="rng">unity</span></li>
+    <li><span class="dot" style="background:#B57A2A"></span><a class="title" href="#t3">03 &middot; Architect the whole essay</a><span class="rng">outline</span></li>
+    <li><span class="dot" style="background:#46955C"></span><a class="title" href="#t4">04 &middot; Build the refutation section</a><span class="rng">opposing case</span></li>
+    <li><span class="dot" style="background:#B44A8C"></span><a class="title" href="#t5">05 &middot; Write one rebuttal paragraph</a><span class="rng">five moves</span></li>
+    <li><span class="dot" style="background:#3A7CC0"></span><a class="title" href="#t6">06 &middot; Learn from the live critique</a><span class="rng">drafting errors</span></li>
+    <li><span class="dot" style="background:#C0762C"></span><a class="title" href="#t7">07 &middot; Decide when to refute</a><span class="rng">judgment test</span></li>
+    <li><span class="dot" style="background:#7A5AA8"></span><a class="title" href="#t8">08 &middot; Apply the method to prompts</a><span class="rng">exam workflow</span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t9">Glossary &middot; Flashcards &middot; Exam focus</a><span class="rng"></span></li>
+  </ol>
+</nav>
+
+<!-- ============================================================= tldr === -->
+<section id="summary" class="summary card" style="--accent:#A4553A; --soft:#F7EBE5; border-top-color:#A4553A">
+  <header><span class="eyebrow" style="color:#A4553A">Start here</span><h2><span class="emoji">&#11088;</span> The five-minute version</h2></header>
+  <ul>
+    <li><strong>Read the command, not the punctuation alone.</strong> A question mark often signals an argumentative demand, but a "how" question may simply ask for mechanisms. Explicit alternatives such as "success or failure" or "X or Y" require a choice.</li>
+    <li><strong>Take a definite position.</strong> The argumentative essay defends one answer. Its arguments may come from several dimensions, but the stance must remain stable from introduction to conclusion.</li>
+    <li><strong>Address the entire phrasing.</strong> When the prompt names two alternatives, defend the chosen one and incorporate the other through refutation. Ignoring the second phrase leaves part of the question unanswered.</li>
+    <li><strong>Give your case first.</strong> After the introduction and any needed exposition, develop the main heading that proves your stance through several strong, varied arguments.</li>
+    <li><strong>Refute under a separate heading.</strong> State the opposing claim accurately, explain its rationale, answer it directly, justify the rebuttal with evidence, and close by reaffirming your original stance.</li>
+    <li><strong>Keep one refutation unit in one paragraph.</strong> The opponent's claim, its explanation, your rebuttal, evidence and concluding statement belong together so the reader can see the contest clearly.</li>
+    <li><strong>Do not manufacture a debate.</strong> Refutation is compulsory when the prompt itself presents alternatives. In a looser prompt, include it only when a genuine opposing side, a direct counter and supporting evidence exist.</li>
+    <li><strong>Finish every paragraph with a link back.</strong> The concluding sentence should use that paragraph's counterargument to strengthen the exact stance and wording of the topic.</li>
+  </ul>
+</section>
+
+<!-- ======================================================== section 1 === -->
+<section id="t1" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
+  <header>
+    <span class="eyebrow"><span class="num">1</span> Interpret the prompt</span>
+    <h2><span class="emoji">&#128269;</span> Recognise the argumentative demand</h2>
+    <span class="timepill">00:00-04:01</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The first task is classification. An argumentative topic asks the writer to take and defend a position. The wording may signal that demand through a direct question, an explicit pair of alternatives, or language that requires a choice <span class="ts">00:00:03</span> <span class="ts">00:00:31</span>.</p>
+
+    <h3>Signals and their limits</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Prompt feature</th><th>Likely demand</th><th>Question to ask</th></tr></thead>
+        <tbody>
+          <tr><td>A direct yes/no question</td><td>Usually argumentative</td><td>Which answer will I defend?</td></tr>
+          <tr><td>"X or Y", "success or failure", "neither"</td><td>Argumentative choice</td><td>Which option is my stance, and how will I address the other?</td></tr>
+          <tr><td>An open-ended issue</td><td>May allow descriptive or argumentative treatment</td><td>Does the wording ask for a position or for explanation?</td></tr>
+          <tr><td>"How does X shape Y?"</td><td>Often descriptive</td><td>Is it asking whether X does this, or asking for the ways in which it does?</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction from the lecture.</strong> The opening first says that a question mark makes a topic argumentative, then immediately narrows that claim to "most likely" <span class="ts">00:00:03</span> <span class="ts">00:00:31</span>. Later, a mass-media prompt confirms the exception: its question mark accompanies a "how" demand for mechanisms, so the class treats it as descriptive <span class="ts">01:00:42</span> <span class="ts">01:01:10</span>.</p>
+    </div>
+
+    <h3>The decisive test</h3>
+    <p>Rewrite the topic as a plain instruction. If it says "choose and defend", use argumentative architecture. If it says "explain the ways, causes or effects", use descriptive architecture. Punctuation is a clue; the intellectual task controls the structure.</p>
+
+    <div class="note exam">
+      <p><strong>Exam use.</strong> Circle the words that create alternatives or ask for judgment. Those exact words must reappear in the thesis, main heading and refutation heading.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 2 === -->
+<section id="t2" class="chapter card" style="--accent:#2C8C86; --soft:#E4F1F0;">
+  <header>
+    <span class="eyebrow"><span class="num">2</span> Commit without narrowing</span>
+    <h2><span class="emoji">&#127919;</span> Choose one stance</h2>
+    <span class="timepill">00:00-05:24</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">An argumentative essay needs a definitive position and a defence of that position <span class="ts">00:00:57</span>. Unity of stance means the answer stays the same throughout the paper, even while the essay draws arguments from political, economic, social, technological and other dimensions <span class="ts">00:01:26</span>.</p>
+
+    <div class="grid-2">
+      <div class="mini-card"><h4>Unity of stance</h4><p>One answer controls the thesis, main arguments, rebuttals, paragraph conclusions and final conclusion.</p></div>
+      <div class="mini-card"><h4>Diversity of arguments</h4><p>Different domains supply independent reasons for the same answer, avoiding a one-dimensional case.</p></div>
+    </div>
+
+    <h3>Unity does not mean silence about the other side</h3>
+    <p>If the topic names both sides, the writer must incorporate both while protecting one stance <span class="ts">00:04:01</span>. The opposing side appears as a claim to be tested and rebutted, rather than as a second conclusion. This is how the essay answers the whole prompt without becoming a neutral list.</p>
+
+    <h3>Use the prompt's exact degree</h3>
+    <p>The live critique warns against replacing a word such as <em>blunder</em> with a stronger word such as <em>disaster</em> <span class="ts">00:34:41</span>. A different label can alter the proposition being defended. Stay close to the question's nouns, alternatives and level of certainty.</p>
+
+    <div class="note">
+      <p><strong>One-line test.</strong> Complete "This essay argues that..." in one unambiguous sentence. If two incompatible conclusions appear, the stance has not been chosen.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 3 === -->
+<section id="t3" class="chapter card" style="--accent:#B57A2A; --soft:#FBF1DE;">
+  <header>
+    <span class="eyebrow"><span class="num">3</span> Design the argument</span>
+    <h2><span class="emoji">&#128506;&#65039;</span> Architect the whole essay</h2>
+    <span class="timepill">04:01-08:19</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The argumentative structure adds one distinctive element to the familiar essay: a deliberate refutation section after the writer's main case. The exact headings change with the stance, but the logic stays stable.</p>
+
+    <h3>Course outline pattern</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Section</th><th>Purpose</th><th>Illustrative phrasing from the class prompt</th></tr></thead>
+        <tbody>
+          <tr><td>1. Introduction</td><td>Frame the debate and declare the chosen stance.</td><td>Thesis answers which option the essay defends.</td></tr>
+          <tr><td>2. Exposition, if needed</td><td>Clarify the issue or key term before arguing.</td><td>Short context only; it does not replace the case.</td></tr>
+          <tr><td>3. Main case</td><td>Prove the chosen position through diversified arguments.</td><td>"How the Single National Curriculum is a blunder" <span class="ts">00:05:57</span>.</td></tr>
+          <tr><td>4. Refutation</td><td>Address the alternative named by the prompt.</td><td>"Refuting the claim that the Single National Curriculum is a step in the right direction" <span class="ts">00:05:57</span>.</td></tr>
+          <tr><td>5. Conclusion</td><td>Synthesise the case and reaffirm the same position.</td><td>No new side or altered stance.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The teacher's worked plan places several strong arguments under the main heading, followed by two or three refutations under the opposing-side heading <span class="ts">00:07:55</span>. One argument should not sit alone beneath a heading because it suggests the section lacks development; the later discussion sets two as the practical minimum <span class="ts">01:14:49</span>.</p>
+
+    <div class="note tip">
+      <p><strong>Balance by purpose.</strong> Refutation is usually shorter than the main case. The aim is to remove the strongest doubt from the reader's mind, not to give both positions equal argumentative weight.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ======================================================== section 4 === -->
+<section id="t4" class="chapter card" style="--accent:#46955C; --soft:#E9F4EC;">
+  <header>
+    <span class="eyebrow"><span class="num">4</span> Meet the opposition</span>
+    <h2><span class="emoji">&#9878;&#65039;</span> Build the refutation section</h2>
+    <span class="timepill">04:56-09:20</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">When a prompt explicitly supplies two alternatives, writing only the chosen side does not fully address the topic <span class="ts">00:04:56</span>. The refutation section incorporates the other side, demonstrates that the writer understands its best case, and explains why the chosen stance remains stronger.</p>
+
+    <h3>One subheading, one contested claim</h3>
+    <ol>
+      <li><strong>Name the proponent's argument.</strong> State what supporters of the other side actually claim.</li>
+      <li><strong>Give the counterargument.</strong> Identify the precise flaw, limit or missing condition.</li>
+      <li><strong>Supply justification.</strong> Use a verified example, case, comparison or statistic that supports the counterargument.</li>
+      <li><strong>Close the unit.</strong> Show how defeating this claim strengthens the original stance.</li>
+    </ol>
+
+    <p>In the Single National Curriculum demonstration, the opposing claim is that one curriculum advances educational equality. The counterargument says that a curriculum alone cannot erase the public-private divide without financial and human resources <span class="ts">00:06:58</span> <span class="ts">00:07:27</span>. The writing lesson is the relationship among claim, answer and evidence; the note does not adopt the classroom example as a policy verdict.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: do not reuse the lecture's statistic.</strong> At <span class="ts">00:07:55</span>, the teacher cites a 35% teacher-deficit figure for Islamabad without a source or clear denominator. Fresh checks of official Pakistan Education Statistics and Pakistan Bureau of Statistics material did not verify that exact claim. It is excluded as evidence; replace it with a current, attributable figure in an actual essay.</p>
+    </div>
+
+    <h3>Refutation is not description</h3>
+    <p>A pair of headings titled "why it is a success" and "why it is a failure" merely describes both sides. Argumentative structure chooses one side as the main case and places the other inside a refutation heading, where each opposing reason receives a rebuttal <span class="ts">00:48:33</span> <span class="ts">00:50:32</span>.</p>
+  </div>
+</section>
+
+<!-- ======================================================== section 5 === -->
+<section id="t5" class="chapter card" style="--accent:#B44A8C; --soft:#F8EAF3;">
+  <header>
+    <span class="eyebrow"><span class="num">5</span> Control the paragraph</span>
+    <h2><span class="emoji">&#129513;</span> Write one rebuttal paragraph</h2>
+    <span class="timepill">08:19-14:24</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Each numbered refutation point becomes one paragraph, not a series of separate paragraphs for the opponent, rebuttal and evidence <span class="ts">00:08:19</span> <span class="ts">00:09:20</span>. Keeping the contest together reduces repetition and lets the reader follow the answer.</p>
+
+    <h3>The five moves</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Move</th><th>Function</th><th>Course direction</th></tr></thead>
+        <tbody>
+          <tr><td>1. Opposing claim</td><td>Introduce what proponents believe.</td><td>Use a formal signal such as "Supporters contend..." or "Some hold the view..." <span class="ts">00:09:48</span>.</td></tr>
+          <tr><td>2. Explanation</td><td>Show the rationale behind that belief.</td><td>Give it one or two fair sentences before answering <span class="ts">00:09:48</span>.</td></tr>
+          <tr><td>3. Rebuttal</td><td>State the direct counterargument.</td><td>Shift clearly: "However, this claim overlooks..."</td></tr>
+          <tr><td>4. Evidence</td><td>Justify the counterargument.</td><td>The evidence supports your rebuttal, not the opposing claim <span class="ts">00:10:18</span>.</td></tr>
+          <tr><td>5. Concluding statement</td><td>Reconnect the proven point to the essay's stance.</td><td>Use the counterargument to reaffirm the exact position <span class="ts">00:10:47</span>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Paragraph logic in compact form</h3>
+    <ol>
+      <li><em>They argue X because Y.</em></li>
+      <li><em>However, X fails to account for Z.</em></li>
+      <li><em>Verified evidence demonstrates Z.</em></li>
+      <li><em>Therefore, Z reinforces this essay's position that...</em></li>
+    </ol>
+
+    <div class="note">
+      <p><strong>Fairness before force.</strong> Explain the opposing rationale before rebutting it. Opening immediately with "although" and the writer's answer can collapse the opponent's claim, explanation and rebuttal into one confused sentence <span class="ts">00:28:45</span> <span class="ts">00:29:28</span>.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ======================================================== section 6 === -->
+<section id="t6" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+  <header>
+    <span class="eyebrow"><span class="num">6</span> Repair the draft</span>
+    <h2><span class="emoji">&#128736;&#65039;</span> Learn from the live critique</h2>
+    <span class="timepill">14:24-40:49</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Most of the class is a live writing clinic. The teacher repeatedly diagnoses the same structural errors, turning them into a practical checklist for an argumentative body paragraph.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Drafting error</th><th>Why it weakens the paragraph</th><th>Repair</th></tr></thead>
+        <tbody>
+          <tr><td>The topic sentence contains claim, answer and evidence at once.</td><td>The argumentative sequence becomes unreadable.</td><td>Introduce the opposing claim briefly, then explain it before shifting to rebuttal <span class="ts">00:36:04</span>.</td></tr>
+          <tr><td>The opposing claim is introduced but not explained.</td><td>The rebuttal attacks a position the reader has not understood.</td><td>Add one or two sentences explaining the proponents' rationale <span class="ts">00:16:16</span>.</td></tr>
+          <tr><td>The conclusion repeats only the stance.</td><td>It does not show what this paragraph proved.</td><td>Name the counterargument and link its result to the stance <span class="ts">00:37:07</span>.</td></tr>
+          <tr><td>The conclusion offers a suggestion.</td><td>A recommendation replaces argumentative closure.</td><td>Conclude the contest in this paragraph; save remedies for a relevant section <span class="ts">00:31:09</span>.</td></tr>
+          <tr><td>The conclusion uses a different idea from the paragraph.</td><td>The link back becomes non sequitur.</td><td>Reuse the paragraph's own rebuttal, not a new challenge or claim <span class="ts">00:39:00</span>.</td></tr>
+          <tr><td>The wording changes "blunder" to "disaster".</td><td>The writer begins answering a stronger, different proposition.</td><td>Stick to the prompt's phrasing <span class="ts">00:34:41</span>.</td></tr>
+          <tr><td>Arguments are written in future tense.</td><td>In this course method, "will" weakens the certainty of the defended claim.</td><td>State analytical claims in present tense where the meaning permits <span class="ts">00:35:29</span>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><strong>Conclusion formula:</strong> state the limitation, contradiction or missing condition proved by this rebuttal, then reconnect that result to the exact alternative the essay defends <span class="ts">00:28:45</span>. If the final sentence could follow any paragraph in the essay, it is too generic.</p>
+  </div>
+</section>
+
+<!-- ======================================================== section 7 === -->
+<section id="t7" class="chapter card" style="--accent:#C0762C; --soft:#FAF0E2;">
+  <header>
+    <span class="eyebrow"><span class="num">7</span> Use mature judgment</span>
+    <h2><span class="emoji">&#129300;</span> Decide when to refute</h2>
+    <span class="timepill">41:28-01:21:52</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecture distinguishes mandatory refutation from optional refutation. The decision begins with the wording of the prompt, then tests whether a real and supportable opposing case exists.</p>
+
+    <h3>When refutation is compulsory</h3>
+    <ul>
+      <li>The prompt explicitly writes both alternatives, such as "success or failure" or "a route to stability or a recipe for disaster" <span class="ts">00:53:20</span> <span class="ts">01:11:32</span>.</li>
+      <li>The writer must choose one alternative while visibly addressing the other.</li>
+      <li>Omitting the second phrase would leave the question only partially answered <span class="ts">01:12:17</span>.</li>
+    </ul>
+
+    <h3>When it is a judgment call</h3>
+    <p>A prompt may ask a direct question without naming the alternative. Then the writer asks whether the issue contains a strong debate and whether the opposing side can be represented honestly. The teacher warns that a forced, weak refutation can reduce the impression created by an otherwise strong essay <span class="ts">01:06:36</span> <span class="ts">01:07:30</span>.</p>
+
+    <h3>The three-part evidence test</h3>
+    <div class="grid-3">
+      <div class="mini-card"><h4>1. Real claim</h4><p>Can you state an argument the opposing side genuinely makes, rather than one invented for convenience?</p></div>
+      <div class="mini-card"><h4>2. Direct counter</h4><p>Do you have an answer that meets that specific claim instead of drifting to a neighbouring issue?</p></div>
+      <div class="mini-card"><h4>3. Evidence</h4><p>Can a verified example, case or statistic support the counterargument <span class="ts">01:20:56</span> <span class="ts">01:21:24</span>?</p></div>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Do not create symmetry that the topic lacks.</strong> The class treats a populism-and-democracy prompt as an example where the teacher considers the opposing case too weak to require a forced refutation <span class="ts">01:05:44</span> <span class="ts">01:06:10</span>. This is a course judgment about that prompt, not a verified scholarly conclusion about all theories of populism.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ======================================================== section 8 === -->
+<section id="t8" class="chapter card" style="--accent:#7A5AA8; --soft:#F0EBF8;">
+  <header>
+    <span class="eyebrow"><span class="num">8</span> Practise interpretation</span>
+    <h2><span class="emoji">&#128221;</span> Apply the method to prompts</h2>
+    <span class="timepill">45:10-01:33:10</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The later discussion applies the decision rules to several sample topics. These are structuring exercises. The note records how the wording changes the essay plan without endorsing the substantive policy claims raised during brainstorming.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Prompt pattern used in class</th><th>Course classification</th><th>Structural consequence</th></tr></thead>
+        <tbody>
+          <tr><td>"Single National Curriculum: step in the right direction or blunder?"</td><td>Explicit alternatives</td><td>Choose one; main case first; refute the other under a named heading.</td></tr>
+          <tr><td>"UN: success or failure?"</td><td>Explicit alternatives</td><td>A neutral success/failure inventory is insufficient; select and defend one while rebutting the other <span class="ts">00:48:33</span>.</td></tr>
+          <tr><td>"Do IMF bailouts help achieve economic stability...?" with a competing phrase</td><td>Prompt supplies a contest</td><td>Address both phrases; refutation is necessary <span class="ts">01:11:32</span>.</td></tr>
+          <tr><td>"How does mass media shape terrorism and its perception?"</td><td>Mechanism question</td><td>Treat as descriptive despite the question mark <span class="ts">01:00:42</span>.</td></tr>
+          <tr><td>"Is populism a threat to democracy?"</td><td>Argumentative question</td><td>Take a stance; add refutation only if a credible opposing case can be built.</td></tr>
+          <tr><td>"Is Pakistan ready for a digital revolution?"</td><td>Yes/no debate</td><td>Choose an answer; the two sides may use different argument families, so refutation need not repeat the main case <span class="ts">01:24:05</span>.</td></tr>
+          <tr><td>"Digital economy: a leveller or source of inequality?"</td><td>Explicit "or"</td><td>Choose one alternative and necessarily address the other <span class="ts">01:30:43</span> <span class="ts">01:31:18</span>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Avoid repetition during brainstorming</h3>
+    <p>Brainstorm the main side and the refutation separately. Select the strongest six or seven reasons for the main case, then test the remaining material for direct use against opposing claims <span class="ts">01:26:54</span> <span class="ts">01:27:41</span>. An argument that fits both sides should be assigned to the place where it performs the clearest job.</p>
+
+    <h3>End-to-end exam workflow</h3>
+    <ol>
+      <li><strong>Translate the prompt</strong> into a plain instruction.</li>
+      <li><strong>Choose the stance</strong> and repeat the exact degree of the topic in a one-line thesis.</li>
+      <li><strong>Brainstorm the main case</strong> across several dimensions.</li>
+      <li><strong>Decide whether refutation is mandatory</strong> from the phrasing or justified by a genuine debate.</li>
+      <li><strong>Brainstorm opposing claims separately</strong> and pair each with a direct counter and verified evidence.</li>
+      <li><strong>Write visible headings</strong> for the main case and the opposing claim.</li>
+      <li><strong>Draft one five-move paragraph per refutation point.</strong></li>
+      <li><strong>Audit every conclusion</strong> for a paragraph-specific link to the same stance.</li>
+    </ol>
+
+    <div class="note exam">
+      <p><strong>Final test.</strong> Cover the title and read the concluding sentence of every body paragraph. Together, they should reveal one consistent answer to the original wording.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== glossary === -->
+<section id="t9" class="chapter card" style="--accent:#8B8490; --soft:#F0EEF2;">
+  <header>
+    <span class="eyebrow">Reference</span>
+    <h2><span class="emoji">&#128214;</span> Glossary</h2>
+  </header>
+  <div class="section-body">
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Term</th><th>Meaning in this lecture</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Argumentative essay</strong></td><td>An essay that takes a definite position and defends it through reasons, evidence and engagement with the opposing case.</td></tr>
+          <tr><td><strong>Stance</strong></td><td>The writer's chosen answer to the contested question.</td></tr>
+          <tr><td><strong>Unity of stance</strong></td><td>Keeping the same position throughout the thesis, arguments, rebuttals and conclusions.</td></tr>
+          <tr><td><strong>Diversified arguments</strong></td><td>Reasons drawn from different relevant dimensions while supporting one stance.</td></tr>
+          <tr><td><strong>Proponent</strong></td><td>A person or position supporting the side that the writer is about to refute.</td></tr>
+          <tr><td><strong>Opposing claim</strong></td><td>The specific argument presented by the other side.</td></tr>
+          <tr><td><strong>Counterargument</strong></td><td>The writer's direct answer to an opposing claim.</td></tr>
+          <tr><td><strong>Refutation</strong></td><td>The section or act of showing why opposing claims do not overturn the chosen stance.</td></tr>
+          <tr><td><strong>Rebuttal</strong></td><td>The direct response to one opposing claim inside a refutation paragraph.</td></tr>
+          <tr><td><strong>Justification</strong></td><td>Reasoning and evidence used to support the rebuttal.</td></tr>
+          <tr><td><strong>Link back</strong></td><td>A concluding move that connects the paragraph's proven point to the essay's stance.</td></tr>
+          <tr><td><strong>Prompt degree</strong></td><td>The exact strength of the proposition, such as "blunder", "threat" or "failure".</td></tr>
+          <tr><td><strong>Manufactured debate</strong></td><td>An opposing case invented or stretched despite lacking a genuine claim, direct counter or credible evidence.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== flashcards === -->
+<section id="t10" class="chapter card" style="--accent:#A4553A; --soft:#F7EBE5;">
+  <header>
+    <span class="eyebrow">Active recall</span>
+    <h2><span class="emoji">&#127183;</span> Flashcards</h2>
+  </header>
+  <div class="section-body">
+    <div class="cards">
+      <div class="qa"><p class="q">What is the defining task of an argumentative essay?</p><p class="a">Choose a definite position and defend it.</p></div>
+      <div class="qa"><p class="q">Does a question mark always make a prompt argumentative?</p><p class="a">No. It is a clue; a "how" question may ask only for description of mechanisms.</p></div>
+      <div class="qa"><p class="q">Which wording strongly signals an argumentative choice?</p><p class="a">Explicit alternatives such as "X or Y", "success or failure", or yes/no phrasing.</p></div>
+      <div class="qa"><p class="q">What is unity of stance?</p><p class="a">Maintaining the same answer across the thesis, body, refutation and conclusion.</p></div>
+      <div class="qa"><p class="q">Why diversify arguments?</p><p class="a">To prove one stance through several independent, relevant dimensions.</p></div>
+      <div class="qa"><p class="q">When is refutation compulsory?</p><p class="a">When the prompt explicitly presents both alternatives or otherwise requires both to be addressed.</p></div>
+      <div class="qa"><p class="q">Where does the refutation section appear?</p><p class="a">After the main case in the course outline.</p></div>
+      <div class="qa"><p class="q">How many refutation points does the lecture usually suggest?</p><p class="a">Two or three, with two as a practical minimum beneath a heading.</p></div>
+      <div class="qa"><p class="q">What are the five moves in a rebuttal paragraph?</p><p class="a">Opposing claim, explanation, rebuttal, evidence and concluding link back.</p></div>
+      <div class="qa"><p class="q">Whose claim appears in the topic sentence of a refutation paragraph?</p><p class="a">The opposing side's claim, formally signalled as a view to be tested.</p></div>
+      <div class="qa"><p class="q">Which claim should the evidence support?</p><p class="a">The writer's rebuttal or counterargument.</p></div>
+      <div class="qa"><p class="q">What should the concluding sentence do?</p><p class="a">Use the paragraph's counterargument to reaffirm the exact essay stance.</p></div>
+      <div class="qa"><p class="q">Why keep one refutation point in one paragraph?</p><p class="a">It keeps claim, answer and proof together and avoids repetition.</p></div>
+      <div class="qa"><p class="q">What three tests justify optional refutation?</p><p class="a">A real opposing claim, a direct counter and credible evidence.</p></div>
+      <div class="qa"><p class="q">Why avoid a manufactured debate?</p><p class="a">Weak or invented opposition can reduce the credibility of an otherwise strong essay.</p></div>
+      <div class="qa"><p class="q">How does argumentative structure differ from a neutral two-sided description?</p><p class="a">It privileges one side as the main case and treats the other as claims to rebut.</p></div>
+      <div class="qa"><p class="q">Why preserve a word such as "blunder" exactly?</p><p class="a">Changing its degree may turn the essay into an answer to a different proposition.</p></div>
+      <div class="qa"><p class="q">How can brainstorming prevent repetition?</p><p class="a">Generate the main case and refutation separately, then assign each argument to its clearest role.</p></div>
+      <div class="qa"><p class="q">What is the final stance audit?</p><p class="a">Read every body conclusion and confirm that all point to one consistent answer.</p></div>
+      <div class="qa"><p class="q">May the lecture's 35% teacher-deficit statistic be reused?</p><p class="a">No. It was not independently verified and needs a current attributable source.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== exam focus === -->
+<section id="t11" class="chapter card" style="--accent:#A4553A; --soft:#F7EBE5;">
+  <header>
+    <span class="eyebrow">Revision sheet</span>
+    <h2><span class="emoji">&#127919;</span> Exam focus</h2>
+  </header>
+  <div class="section-body">
+    <h3>The complete architecture</h3>
+    <ol>
+      <li><strong>Interpret:</strong> identify whether the prompt asks for judgment, choice or explanation.</li>
+      <li><strong>Commit:</strong> state one position in the topic's exact terms.</li>
+      <li><strong>Prove:</strong> develop the main case through diversified arguments and verified evidence.</li>
+      <li><strong>Refute:</strong> when required, answer two or three genuine opposing claims.</li>
+      <li><strong>Reaffirm:</strong> make every paragraph conclusion strengthen the same stance.</li>
+    </ol>
+
+    <h3>Refutation paragraph template</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Sentence job</th><th>Starter</th></tr></thead>
+        <tbody>
+          <tr><td>Opposing claim</td><td>"Supporters of X contend that..."</td></tr>
+          <tr><td>Rationale</td><td>"Their position rests on..."</td></tr>
+          <tr><td>Rebuttal</td><td>"However, this argument overlooks..."</td></tr>
+          <tr><td>Evidence</td><td>"This limitation is demonstrated by..."</td></tr>
+          <tr><td>Link back</td><td>"Therefore, [proven counter] reinforces the view that [exact stance]."</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Common mistakes</h3>
+    <ul>
+      <li>Treating every question mark as an argumentative command.</li>
+      <li>Writing both alternatives descriptively without choosing a position.</li>
+      <li>Ignoring the second alternative named in the prompt.</li>
+      <li>Changing the prompt's degree or key word while drafting.</li>
+      <li>Inventing a weak opposing claim merely to fill a refutation heading.</li>
+      <li>Placing the opposing claim, explanation and rebuttal in separate paragraphs.</li>
+      <li>Giving evidence for the opponent rather than for the counterargument.</li>
+      <li>Ending with a suggestion, generic summary or bare repetition of the stance.</li>
+      <li>Reusing an unsourced classroom statistic.</li>
+    </ul>
+
+  </div>
+</section>
+
+<footer class="notefoot">Want the whole lecture? <a href="https://drive.google.com/file/d/16S5wNSi8b-_jrCHShSGDE2BCGkFDyRD5/view?usp=drivesdk" target="_blank" rel="noopener">▶ Watch the full recording</a><span class="sep">·</span><a href="https://drive.google.com/file/d/1pUV0tTv0bys46TtGVgn1UWDSZz1KWpkF/view?usp=drivesdk" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+</html>
