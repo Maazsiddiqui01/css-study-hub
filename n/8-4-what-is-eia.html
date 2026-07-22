@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Environmental Assessment: EIA Process and SEA Comparison</title>
+<style>/* Lecture Notes ebook, "warm study" theme.
+   Inspired by Mehak's MarketCanvas app: soft cream ground, rounded white cards,
+   a different pastel accent per topic, serif display + friendly sans body,
+   gentle emoji + pill badges. Playful and pretty, but still a real study book.
+   Print-first (A4 PDF via headless Edge); reads well on screen too.
+
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
+   Everything themeable keys off --accent / --soft. Titles stay ink for
+   readability; accents colour eyebrows, numbers, pills, rules and callouts.
+*/
+
+:root {
+  --cream: #FCF6F0;          /* page ground (warm) */
+  --card: #FFFFFF;
+  --ink: #2C2630;            /* plum-black body/headings */
+  --ink-soft: #5A5360;
+  --slate: #8B8490;          /* captions, timestamps */
+  --hairline: #EEE6E4;
+
+  /* section default accent (overridden per section) */
+  --accent: #C0567E;
+  --soft: #FBECF1;
+
+  --shadow: 0 1px 2px rgba(60,30,45,.05), 0 10px 26px rgba(80,40,55,.07);
+  --radius: 20px;
+
+  --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: Consolas, "Cascadia Code", ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background:
+    radial-gradient(1100px 700px at 15% -5%, #FBEEF3 0%, transparent 55%),
+    radial-gradient(1000px 700px at 100% 0%, #EEF3FB 0%, transparent 50%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  font: 10.8pt/1.62 var(--sans);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+@media screen {
+  body { max-width: 51rem; margin: 0 auto; padding: 2.5rem 1.15rem 4rem; font-size: 1.0rem; }
+}
+
+/* ---------------------------------------------------------------- page --- */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm 14mm;
+  @bottom-center {
+    content: counter(page);
+    font: 8.5pt var(--sans);
+    color: #8B8490;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+/* --------------------------------------------------------------- cards --- */
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8mm 9mm 9mm;
+  margin: 0 0 6mm;
+  box-shadow: var(--shadow);
+  break-inside: auto;
+}
+@media screen { .card { margin-bottom: 1.4rem; } }
+
+/* a soft accent wash across the top of each section card (fades to white),
+   echoing the app's pastel cards without hurting readability */
+.chapter {
+  background:
+    linear-gradient(180deg, var(--soft) 0, rgba(255,255,255,0) 34mm),
+    var(--card);
+  border-top: 3px solid var(--accent);
+  break-inside: auto;
+  break-before: page;   /* each topic starts fresh: slide on top, notes below */
+}
+/* on screen (web/PWA) sections just stack; no forced page breaks */
+@media screen { .chapter { break-before: auto; } }
+
+h2, h3, .eyebrow { break-after: avoid; }
+p { orphans: 2; widows: 2; }
+
+/* keep the section header intact (eyebrow + title + time pill together) and
+   glued to its opening slide */
+.chapter > header { break-inside: avoid; break-after: avoid; }
+figure.slide { break-before: avoid; }
+
+/* --------------------------------------------------------------- cover --- */
+
+.cover {
+  page: cover;
+  break-after: page;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32mm 22mm 24mm;
+  background:
+    radial-gradient(700px 460px at 12% 8%, #FBE6EE 0%, transparent 60%),
+    radial-gradient(760px 520px at 96% 4%, #E7EEFB 0%, transparent 58%),
+    radial-gradient(620px 520px at 80% 96%, #E6F4EC 0%, transparent 60%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+@media screen {
+  .cover { min-height: 80vh; border-radius: 24px; padding: 3.2rem 2.6rem; margin-bottom: 1.4rem; }
+}
+
+.cover .avatar { font-size: 30pt; line-height: 1; margin-bottom: 7mm; }
+.cover .kicker {
+  font: 600 9pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 5mm;
+}
+.cover h1 {
+  font: 600 31pt/1.14 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 15em;
+}
+.cover .subtitle {
+  margin-top: 5mm;
+  font: 400 13.5pt/1.5 var(--sans);
+  color: var(--ink-soft);
+  max-width: 30em;
+}
+.cover .warm {
+  margin-top: 4mm;
+  font: italic 400 12pt/1.5 var(--serif);
+  color: var(--accent);
+}
+
+.cover .chips { display: flex; flex-wrap: wrap; gap: 3mm; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.4mm 4mm;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(60,30,45,.04);
+  font: 400 9pt var(--sans);
+  color: var(--slate);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chip b { font: 700 10.5pt var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ headings --- */
+
+.chapter header { margin-bottom: 5mm; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  font: 700 8.5pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--accent);
+  margin-bottom: 3mm;
+}
+.eyebrow .num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h2 {
+  font: 600 20pt/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .emoji { font-size: 17pt; }
+
+.timepill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.5mm 3.5mm;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font: 600 8pt var(--mono);
+  letter-spacing: 0.02em;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h3 {
+  font: 600 12.5pt/1.34 var(--serif);
+  color: var(--ink);
+  margin: 6mm 0 2.5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+.ts { font: 400 8.5pt var(--mono); color: var(--slate); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- body --- */
+
+.section-body > :last-child { margin-bottom: 0; }
+p { margin: 0 0 3mm; }
+.lead { font-size: 11.2pt; color: var(--ink); }
+
+ul, ol { margin: 0 0 3mm 5.5mm; }
+li { margin-bottom: 1.7mm; padding-left: 1mm; }
+li::marker { color: var(--accent); }
+
+.kt { font-weight: 700; color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
+
+code { font: 9.5pt var(--mono); background: #F3EFF4; padding: .4pt 3.5pt; border-radius: 4px; }
+
+/* ------------------------------------------------------------ callouts --- */
+
+.note {
+  --c: var(--accent);
+  --f: var(--soft);
+  background: var(--f);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  border-left: 3px solid var(--c);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.note .label {
+  display: inline-flex; align-items: center; gap: 1.6mm;
+  font: 700 8pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c);
+  margin-bottom: 1.8mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.warn { --c: #B4791F; --f: #FaF1DF; }
+.note.exam { --c: #3B8B78; --f: #E6F3EF; }
+.note.def  { --c: var(--accent); --f: var(--soft); }
+
+/* ------------------------------------------------------- summary card --- */
+
+.summary { --accent: #C0567E; --soft: #FBECF1; }
+.summary ul { list-style: none; margin: 0; }
+.summary li { position: relative; padding: 0 0 0 7mm; margin-bottom: 3.5mm; }
+.summary li::before {
+  content: "";
+  position: absolute; left: 0; top: 2.6mm;
+  width: 3.2mm; height: 3.2mm; border-radius: 50%;
+  background: var(--accent);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.summary li:last-child { margin-bottom: 0; }
+.summary li b, .summary li strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------- TOC --- */
+
+nav.toc { --accent: #8B8490; --soft: #F3EFF4; }
+nav.toc ol { list-style: none; margin: 0; }
+nav.toc li {
+  display: flex; align-items: baseline; gap: 4mm;
+  padding: 2.7mm 0;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11pt var(--sans);
+}
+nav.toc li:last-child { border-bottom: 0; }
+nav.toc .dot { width: 3.4mm; height: 3.4mm; border-radius: 50%; flex-shrink: 0;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+nav.toc .title { flex: 1; color: var(--ink); }
+nav.toc .rng { flex-shrink: 0; font: 600 8.5pt var(--mono); color: var(--slate); }
+
+/* -------------------------------------------------------------- slides --- */
+
+figure.slide { margin: 0 0 5mm; break-inside: avoid; }
+figure.slide img {
+  width: 100%; display: block;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 10px rgba(40,30,45,.10);
+}
+figure.slide figcaption {
+  font: 400 8.5pt var(--sans);
+  color: var(--slate);
+  margin-top: 2mm;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4mm;
+}
+figure.slide figcaption .ts { color: var(--accent); }
+
+/* ------------------------------------------------------------ glossary --- */
+
+dl.glossary { margin: 0; }
+dl.glossary div { padding: 3mm 0; border-bottom: 1px solid var(--hairline); break-inside: avoid; }
+dl.glossary div:last-child { border-bottom: 0; padding-bottom: 0; }
+dl.glossary dt { font: 700 10.5pt var(--sans); color: var(--accent); margin-bottom: 1.2mm; }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- flashcards --- */
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 0; }
+.qa {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  background: linear-gradient(180deg, var(--soft) 0, #fff 60%);
+  break-inside: avoid;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.qa .q { font: 700 10pt var(--sans); color: var(--ink); margin-bottom: 2mm; }
+.qa .a { color: var(--ink-soft); font-size: 10pt; }
+
+/* ------------------------------------------------------------- tables --- */
+
+.tables-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0; break-inside: avoid; }
+th {
+  font: 700 9pt var(--sans); text-align: left; color: var(--accent);
+  border-bottom: 2px solid var(--soft); padding: 2mm 3mm 2mm 0;
+}
+td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+
+/* --- mobile / on-the-go reading (screen only; never affects the print PDF).
+   Placed LAST so it wins the cascade over the wider @media screen rules above.
+   Requires <meta name="viewport" content="width=device-width, initial-scale=1">. */
+@media screen and (max-width: 640px) {
+  body { padding: 1rem 0.85rem 2.5rem; font-size: 1.02rem; }
+  .card { padding: 5mm 5mm 6mm; border-radius: 14px; margin-bottom: 0.9rem; }
+  .cover { min-height: auto; padding: 2rem 1.3rem 1.6rem; border-radius: 16px; }
+  .cover .avatar { font-size: 24pt; margin-bottom: 4mm; }
+  .cover h1 { font-size: 20pt; max-width: 100%; }
+  .cover .subtitle { font-size: 11.5pt; }
+  .cover .warm { font-size: 11pt; }
+  .cover .chips { gap: 2mm; margin-top: 5mm; }
+  h2 { font-size: 16pt; }
+  h2 .emoji { font-size: 13.5pt; }
+  h3 { font-size: 11.5pt; }
+  .cards { grid-template-columns: 1fr; }
+  nav.toc li { font-size: 10.5pt; gap: 2.5mm; padding: 2.5mm 0; }
+  nav.toc .rng { font-size: 8pt; }
+  .note { padding: 3.5mm 4mm; }
+  table { font-size: 9.5pt; }
+}
+</style>
+<meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
+align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
+border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
+<body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/file/d/15C0_82esfQQHId1p-fUNS8wS3yJcjAA5/view?usp=drivesdk" target="_blank" rel="noopener">Download PDF ↓</a></div>
+
+<!-- ============================================================ cover === -->
+<section class="cover" style="background:radial-gradient(700px 460px at 12% 8%,#E4F3EB 0,transparent 60%),radial-gradient(760px 520px at 96% 4%,#E7F1FB 0,transparent 58%),radial-gradient(620px 520px at 80% 96%,#FAF0E2 0,transparent 60%),var(--cream)">
+  <div>
+    <div class="avatar">&#127807;</div>
+    <div class="kicker" style="color:#2E9E6A">CSS Environmental Science &middot; Modules 8.4, 8.5 and 8.7</div>
+    <h1>Environmental Assessment: EIA Process and SEA Comparison</h1>
+    <p class="subtitle">How an environmental impact assessment moves from screening and scoping to prediction, alternatives, management, reporting and decision, then how strategic environmental assessment shifts the lens to policies, plans and programmes.</p>
+    <p class="warm" style="color:#2C8A5E">Assess before commitment, compare real alternatives, manage residual harm, and keep the decision-maker visible. &#127793;</p>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>40m</b> combined</span>
+    <span class="chip"><b>3</b> modules</span>
+    <span class="chip"><b>8</b> core topics</span>
+    <span class="chip"><b>11</b> correction boxes</span>
+  </div>
+</section>
+
+<!-- ============================================================== toc === -->
+<nav class="toc card">
+  <header><span class="eyebrow">Contents</span><h2><span class="emoji">&#128506;&#65039;</span> In this chapter</h2></header>
+  <ol>
+    <li><span class="dot" style="background:#2E9E6A"></span><a class="title" href="#summary">The five-minute version</a><span class="rng">summary</span></li>
+    <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t1">01 &middot; Define EIA and place it early</a><span class="rng">purpose</span></li>
+    <li><span class="dot" style="background:#3A7CC0"></span><a class="title" href="#t2">02 &middot; Turn objectives into a hierarchy</a><span class="rng">avoid to offset</span></li>
+    <li><span class="dot" style="background:#C0762C"></span><a class="title" href="#t3">03 &middot; Screen the proposal</a><span class="rng">EIA and IEE</span></li>
+    <li><span class="dot" style="background:#46955C"></span><a class="title" href="#t4">04 &middot; Scope and build the baseline</a><span class="rng">TOR and evidence</span></li>
+    <li><span class="dot" style="background:#A4553A"></span><a class="title" href="#t5">05 &middot; Predict impacts and test alternatives</a><span class="rng">analysis</span></li>
+    <li><span class="dot" style="background:#7A5AA8"></span><a class="title" href="#t6">06 &middot; Manage, report and decide</a><span class="rng">EMP and follow-up</span></li>
+    <li><span class="dot" style="background:#B44A8C"></span><a class="title" href="#t7">07 &middot; Move upstream with SEA</a><span class="rng">strategic tier</span></li>
+    <li><span class="dot" style="background:#557E9B"></span><a class="title" href="#t8">08 &middot; Compare EIA and SEA</a><span class="rng">exam table</span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t9">Glossary &middot; Flashcards &middot; Exam focus</a><span class="rng"></span></li>
+  </ol>
+</nav>
+
+<!-- ============================================================= tldr === -->
+<section id="summary" class="summary card" style="--accent:#2E9E6A; --soft:#E4F3EB; border-top-color:#2E9E6A">
+  <header><span class="eyebrow" style="color:#2E9E6A">Start here</span><h2><span class="emoji">&#11088;</span> The five-minute version</h2></header>
+  <ul>
+    <li><strong>EIA informs a project decision before commitment.</strong> Screening, scoping, baseline, prediction and alternatives lead to mitigation, an EMP, reporting and follow-up.</li>
+    <li><strong>Mitigation has an order and the authority decides.</strong> Avoid first, then minimize or restore, and address residual effects. The assessment supplies evidence; the authority grants, refuses or conditions approval.</li>
+    <li><strong>SEA works at a strategic tier.</strong> It examines policies, plans or programmes and broader alternatives, while EIA usually examines a defined project.</li>
+  </ul>
+</section>
+
+<!-- ======================================================== section 1 === -->
+<section id="t1" class="chapter card" style="--accent:#2C8C86; --soft:#E4F1F0;">
+  <header>
+    <span class="eyebrow"><span class="num">1</span> Purpose and timing</span>
+    <h2><span class="emoji">&#128270;</span> Define EIA and place it early</h2>
+    <span class="timepill">8.4 &middot; 00:00:27-08:29</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecturer describes environmental impact assessment as an advance analysis of a proposed project or development <span class="ts">8.4 &middot; 00:01:26</span>. The assessment asks what the proposal could do to the environment and to connected socio-economic, cultural and human-health conditions.</p>
+
+    <div class="grid-2">
+      <div class="mini-card"><h4>Object of assessment</h4><p>A proposed project or development, including realistic design, location and no-project alternatives.</p></div>
+      <div class="mini-card"><h4>Direction of effect</h4><p>Both beneficial and adverse effects belong in the analysis <span class="ts">8.4 &middot; 00:02:51</span>.</p></div>
+      <div class="mini-card"><h4>Decision point</h4><p>Assessment begins while avoidance, mitigation and alternative choices remain available <span class="ts">8.4 &middot; 00:06:04</span>.</p></div>
+      <div class="mini-card"><h4>Decision use</h4><p>The proponent and approving agencies should consider environmental consequences before permission <span class="ts">8.4 &middot; 00:07:30</span>.</p></div>
+    </div>
+
+    <figure class="slide" style="max-width:40%; margin-left:auto; margin-right:auto">
+      <img src="data:image/webp;base64,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" alt="Lecture definition of environmental impact assessment as evaluation of likely impacts of a proposed project or development, including interrelated socio-economic, cultural and human-health impacts, both beneficial and adverse.">
+      <figcaption>The one privacy-approved frame from the three-module batch. All frames containing QR codes or the lecturer portrait were excluded.</figcaption>
+    </figure>
+
+    <div class="note warn">
+      <p><strong>Correction: EIA neither began at a single 1960 moment nor belongs after commitment.</strong> The lecture gives both claims <span class="ts">8.4 &middot; 00:04:42</span> <span class="ts">8.4 &middot; 00:01:26</span>. A major US formal milestone was NEPA, enacted in 1969 and signed on 1 January 1970. Assessment should occur before approval and major design choices are locked.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 2 === -->
+<section id="t2" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+  <header>
+    <span class="eyebrow"><span class="num">2</span> What the process must achieve</span>
+    <h2><span class="emoji">&#127919;</span> Turn objectives into a hierarchy</h2>
+    <span class="timepill">8.5 &middot; 00:00:00-03:46</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The objective slide links assessment to decision quality, impact management, ecological function, sustainable development and environmental awareness. Read the five objectives as a connected chain rather than five slogans.</p>
+
+    <ul>
+      <li><strong>Integrate:</strong> put environmental evidence into decision-making <span class="ts">8.5 &middot; 00:00:00</span> <span class="ts">8.5 &middot; 00:00:57</span>.</li>
+      <li><strong>Manage harm:</strong> identify significant biophysical, social and other effects, then respond in order.</li>
+      <li><strong>Protect function:</strong> safeguard natural-system productivity and ecological processes <span class="ts">8.5 &middot; 00:01:54</span>.</li>
+      <li><strong>Support sustainable choices:</strong> improve resource use and management opportunities <span class="ts">8.5 &middot; 00:02:48</span>.</li>
+      <li><strong>Build awareness:</strong> communicate environmental values to stakeholders <span class="ts">8.5 &middot; 00:03:17</span> <span class="ts">8.5 &middot; 00:03:46</span>.</li>
+    </ul>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Priority</th><th>Question</th><th>Typical response</th></tr></thead>
+        <tbody>
+          <tr><td>Avoid</td><td>Can location, design or no-project prevent it?</td><td>Remove the cause.</td></tr>
+          <tr><td>Minimize</td><td>What cannot be avoided?</td><td>Reduce magnitude, duration or extent.</td></tr>
+          <tr><td>Restore</td><td>Can affected function be repaired?</td><td>Rehabilitate or reinstate.</td></tr>
+          <tr><td>Compensate or offset</td><td>What significant residual remains?</td><td>Address it after earlier options.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: adverse effects are not simply "balanced" against benefits.</strong> The slide says avoid, minimize or balance <span class="ts">8.5 &middot; 00:00:57</span>. Good practice uses a mitigation hierarchy: anticipate and avoid, minimize, restore or mitigate, then compensate or offset significant residual effects where feasible. Financial benefit does not erase an unmanaged environmental cost.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 3 === -->
+<section id="t3" class="chapter card" style="--accent:#C0762C; --soft:#FAF0E2;">
+  <header>
+    <span class="eyebrow"><span class="num">3</span> Choose the assessment level</span>
+    <h2><span class="emoji">&#128682;</span> Screen the proposal</h2>
+    <span class="timepill">8.5 &middot; 00:04:15-07:20</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Screening asks whether assessment is required and what level of study fits the proposal. The answer depends on the applicable law or safeguard system, the project type, scale, location and likely significance of effects.</p>
+
+    <div class="note tip">
+      <p><strong>Editorial screening framework.</strong> The class names screening and the EIA-IEE choice. The checklist below expands that step using verified assessment practice so the classroom label can be applied in an answer.</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="mini-card"><h4>Proposal characteristics</h4><p>Type, size, technology, resource use, wastes and accident risk.</p></div>
+      <div class="mini-card"><h4>Location sensitivity</h4><p>Protected areas, settlements, water bodies, cultural sites and other vulnerable receptors.</p></div>
+      <div class="mini-card"><h4>Likely effects</h4><p>Magnitude, extent, duration, reversibility and cumulative setting.</p></div>
+      <div class="mini-card"><h4>Screening outcome</h4><p>No further study, an initial examination, a full EIA, or another assessment route defined by the governing system.</p></div>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: an IEE is not chosen because damage is already visible.</strong> The lecture describes an initial environmental examination as the route where repercussions are visually present and details already exist <span class="ts">8.5 &middot; 00:05:43</span>. An IEE is a preliminary assessment used in some systems for a lower-risk or category-based proposal. Exact IEE and EIA thresholds are jurisdiction-specific.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: six to eighteen months is not a universal EIA duration.</strong> The lecturer offers that range as a general rule <span class="ts">8.5 &middot; 00:04:15</span>. Duration depends on legal timelines, project complexity, seasonal baseline needs, data gaps, consultation, redesign and review. Use a stated range only when a named system or project source supports it.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ======================================================== section 4 === -->
+<section id="t4" class="chapter card" style="--accent:#46955C; --soft:#E9F4EC;">
+  <header>
+    <span class="eyebrow"><span class="num">4</span> Frame the study</span>
+    <h2><span class="emoji">&#128506;&#65039;</span> Scope and build the baseline</h2>
+    <span class="timepill">8.5 &middot; 00:07:20-07:42</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Once screening selects the assessment route, scoping defines what the study must cover. The lecturer equates this with identifying key issues and setting terms of reference <span class="ts">8.5 &middot; 00:07:20</span>.</p>
+
+    <p><strong>Editorial scoping framework:</strong> the table expands the lecture's key-issues and TOR shorthand into a verified study template.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Scoping choice</th><th>What it fixes</th><th>Why it matters</th></tr></thead>
+        <tbody>
+          <tr><td>Issues and boundaries</td><td>Significant effects; spatial, temporal and phase limits</td><td>Keeps the study focused.</td></tr>
+          <tr><td>Alternatives</td><td>Location, design, technology, scale and no-project</td><td>Keeps choices open.</td></tr>
+          <tr><td>Methods</td><td>Surveys, models, expertise and significance criteria</td><td>Makes findings reviewable.</td></tr>
+          <tr><td>Stakeholders</td><td>Affected people, agencies and interested groups</td><td>Adds concerns and local knowledge.</td></tr>
+          <tr><td>TORs</td><td>Tasks, outputs, responsibilities and schedule</td><td>Creates an accountable work plan.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Baseline means the before-project condition</h3>
+    <p>The lecturer moves from TORs and literature review to background information and data collection <span class="ts">8.5 &middot; 00:07:42</span>. A useful baseline describes the environmental and social conditions against which predicted change will be measured. It should match the scoped issues, not collect every available fact.</p>
+
+    <p><strong>Editorial baseline checklist:</strong> organise relevant physical conditions; habitats, species and seasons; health, livelihoods, land use and heritage; then label every dataset by source, date, method, coverage, season and limitation.</p>
+  </div>
+</section>
+
+<!-- ======================================================== section 5 === -->
+<section id="t5" class="chapter card" style="--accent:#A4553A; --soft:#F7EBE5;">
+  <header>
+    <span class="eyebrow"><span class="num">5</span> From evidence to choice</span>
+    <h2><span class="emoji">&#129504;</span> Predict impacts and test alternatives</h2>
+    <span class="timepill">8.5 &middot; 00:08:11-11:59</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Impact analysis connects a project action with a changed receptor, predicts the character of that change and evaluates its significance. The lecture then places alternatives beside the prediction so design can respond before the report is final.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Impact test from class</th><th>Question</th><th>Decision use</th></tr></thead>
+        <tbody>
+          <tr><td>Beneficial or adverse</td><td>Improve or degrade?</td><td>Record both directions <span class="ts">8.5 &middot; 00:08:11</span>.</td></tr>
+          <tr><td>Reversible or irreversible</td><td>Can function recover?</td><td>Irreversibility favours avoidance <span class="ts">8.5 &middot; 00:09:08</span>.</td></tr>
+          <tr><td>Temporary or permanent</td><td>How long?</td><td>Duration shapes significance.</td></tr>
+          <tr><td>Magnitude and feasibility</td><td>How large, and can controls work?</td><td>Test technical and financial credibility <span class="ts">8.5 &middot; 00:10:09</span>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Alternatives are the heart of prevention</h3>
+    <p>The lecture moves to alternatives after impact prediction <span class="ts">8.5 &middot; 00:09:45</span>. Compare options with the same criteria so a preferred design is not protected by unequal evidence.</p>
+
+    <p><strong>Editorial checklist:</strong> make the class's sound-and-feasible comparison concrete through these option types.</p>
+
+    <ul>
+      <li><strong>Location:</strong> can another site or route avoid a receptor?</li>
+      <li><strong>Design and technology:</strong> can layout or controls reduce impact?</li>
+      <li><strong>Scale and timing:</strong> would a smaller footprint or another season change risk?</li>
+      <li><strong>No-project:</strong> what happens if the proposal does not proceed?</li>
+    </ul>
+
+    <div class="note warn">
+      <p><strong>Correction: financial feasibility does not replace environmental acceptability.</strong> The lecture tests mitigation cost <span class="ts">8.5 &middot; 00:10:09</span>. Law, residual harm and enforceable controls remain separate decision tests.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 6 === -->
+<section id="t6" class="chapter card" style="--accent:#7A5AA8; --soft:#F0EBF8;">
+  <header>
+    <span class="eyebrow"><span class="num">6</span> Convert analysis into action</span>
+    <h2><span class="emoji">&#128203;</span> Manage, report and decide</h2>
+    <span class="timepill">8.5 &middot; 00:11:02-15:33</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The final EIA stages package the preferred option, mitigation commitments and monitoring into a form that can be reviewed, decided and enforced.</p>
+
+    <p><strong>Editorial implementation detail:</strong> the slide names mitigation, EMP and monitoring, report and decision. The table expands those labels into enforceable outputs.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Stage</th><th>Output</th></tr></thead>
+        <tbody>
+          <tr><td>Mitigation</td><td>Avoid, redesign, reduce, restore and address residuals <span class="ts">8.5 &middot; 00:11:02</span> <span class="ts">8.5 &middot; 00:11:31</span></td></tr>
+          <tr><td>EMP</td><td>Action, place, timing, owner, indicator, budget and reporting <span class="ts">8.5 &middot; 00:11:59</span></td></tr>
+          <tr><td>Report and review</td><td>Proposal, baseline, impacts, alternatives, consultation, mitigation and uncertainty</td></tr>
+          <tr><td>Decision</td><td>Approval, refusal, redesign or enforceable conditions</td></tr>
+          <tr><td>Follow-up</td><td>Monitor actual effects, report compliance and correct performance</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the EIA does not approve the project.</strong> The lecturer says the EIA will approve it <span class="ts">8.5 &middot; 00:12:52</span>. The assessment process and report inform a competent authority. That authority issues approval, refusal or conditions under the applicable legal system.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: public participation is not universally confined to two stages.</strong> The class names scoping and a later point <span class="ts">8.5 &middot; 00:14:29</span>. Many process diagrams place participation at scoping, report review and other points, while UNEP treats it as cross-cutting. Exact mandatory opportunities depend on the governing rules.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ======================================================== section 7 === -->
+<section id="t7" class="chapter card" style="--accent:#B44A8C; --soft:#F8EAF3;">
+  <header>
+    <span class="eyebrow"><span class="num">7</span> The strategic tier</span>
+    <h2><span class="emoji">&#127760;</span> Move upstream with SEA</h2>
+    <span class="timepill">8.7 &middot; 00:00:31-05:45</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Strategic environmental assessment asks environmental questions while a policy, plan or programme is being prepared. Its broader tier can influence the framework within which later projects are selected and assessed.</p>
+
+    <div class="steps">
+      <div class="step"><span>1</span><div><h4>Screen the strategic proposal</h4><p>Identify whether the subject is sectoral, regional or national and whether SEA applies <span class="ts">8.7 &middot; 00:00:31</span> <span class="ts">8.7 &middot; 00:01:00</span>.</p></div></div>
+      <div class="step"><span>2</span><div><h4>Scope the assessment</h4><p>Set physical and strategic limits, key issues, reasonable alternatives and the decision context.</p></div></div>
+      <div class="step"><span>3</span><div><h4>Build the strategic baseline</h4><p>Describe current conditions and trends relevant to the plan or programme <span class="ts">8.7 &middot; 00:01:59</span>.</p></div></div>
+      <div class="step"><span>4</span><div><h4>Compare options and measures</h4><p>Test broad scenarios and define measures for sustainability and environmental compliance <span class="ts">8.7 &middot; 00:02:28</span>.</p></div></div>
+      <div class="step"><span>5</span><div><h4>Consult stakeholders</h4><p>Use agency and public input before the strategic decision is settled.</p></div></div>
+      <div class="step"><span>6</span><div><h4>Decide, implement and follow up</h4><p>Carry recommendations into the policy, plan or programme and its later course of action <span class="ts">8.7 &middot; 00:02:57</span> <span class="ts">8.7 &middot; 00:03:24</span>.</p></div></div>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: SEA is an upstream tier, not a guaranteed chronological predecessor.</strong> The lecturer says SEA precedes EIA <span class="ts">8.7 &middot; 00:04:49</span>. Ideally, SEA shapes policies, plans or programmes before project choices are fixed, and later EIAs assess specific projects. Whether both exist and how they connect depends on the legal and planning system.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 8 === -->
+<section id="t8" class="chapter card" style="--accent:#557E9B; --soft:#E8F0F5;">
+  <header>
+    <span class="eyebrow"><span class="num">8</span> Same family, different tier</span>
+    <h2><span class="emoji">&#9878;&#65039;</span> Compare EIA and SEA</h2>
+    <span class="timepill">8.7 &middot; 00:05:45-12:32</span>
+  </header>
+  <div class="section-body">
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Dimension</th><th>EIA</th><th>SEA</th></tr></thead>
+        <tbody>
+          <tr><td>Tier</td><td>Project or development</td><td>Policy, plan or programme <span class="ts">8.7 &middot; 00:06:47</span></td></tr>
+          <tr><td>Timing</td><td>Early project planning</td><td>Early strategic planning <span class="ts">8.7 &middot; 00:07:16</span></td></tr>
+          <tr><td>Alternatives</td><td>Site, design, technology, scale and no-project</td><td>Broader scenarios and directions <span class="ts">8.7 &middot; 00:07:45</span></td></tr>
+          <tr><td>Decision</td><td>Authorisation and conditions</td><td>Strategic choice and later-decision framework <span class="ts">8.7 &middot; 00:09:11</span></td></tr>
+          <tr><td>Process</td><td>Bounded around a proposal</td><td>Often iterative as strategy evolves</td></tr>
+          <tr><td>Effects</td><td>Project effects and management</td><td>Strategic, cumulative and long-term patterns <span class="ts">8.7 &middot; 00:11:08</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: funding and independence are not universal dividing lines.</strong> The slide contrasts proponent-funded EIA with independent SEA <span class="ts">8.7 &middot; 00:08:42</span>. Responsibility, funding and review safeguards vary by jurisdiction. The durable distinction is the decision tier.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: SEA may require a formal environmental report.</strong> The lecture says otherwise <span class="ts">8.7 &middot; 00:10:09</span>. Some systems require a report, consultation, decision information and monitoring. The applicable framework controls.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: EIA can assess cumulative effects.</strong> The slide excludes them <span class="ts">8.7 &middot; 00:11:36</span>. SEA suits broad cumulative patterns, but many EIA systems also require project-level cumulative analysis.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== glossary === -->
+<section id="t9" class="chapter card" style="--accent:#8B8490; --soft:#F0EEF2;">
+  <header>
+    <span class="eyebrow">Reference</span>
+    <h2><span class="emoji">&#128214;</span> Glossary</h2>
+  </header>
+  <div class="section-body">
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Term</th><th>Meaning in these modules</th></tr></thead>
+        <tbody>
+          <tr><td><strong>EIA</strong></td><td>Environmental impact assessment of a proposed project or development before a competent decision.</td></tr>
+          <tr><td><strong>SEA</strong></td><td>Strategic environmental assessment of a policy, plan or programme.</td></tr>
+          <tr><td><strong>IEE</strong></td><td>Initial environmental examination, a preliminary assessment used by some legal or safeguard systems.</td></tr>
+          <tr><td><strong>Screening</strong></td><td>Determining whether assessment is required and at what level.</td></tr>
+          <tr><td><strong>Scoping</strong></td><td>Defining key issues, boundaries, alternatives, methods, stakeholders and terms of reference.</td></tr>
+          <tr><td><strong>TOR</strong></td><td>Terms of reference that specify the assessment's tasks, methods, outputs and responsibilities.</td></tr>
+          <tr><td><strong>Baseline</strong></td><td>Relevant pre-project environmental and social conditions and trends.</td></tr>
+          <tr><td><strong>Impact</strong></td><td>A predicted beneficial or adverse change caused by or associated with a proposal.</td></tr>
+          <tr><td><strong>Alternative</strong></td><td>A different location, design, technology, scale, timing or no-project option.</td></tr>
+          <tr><td><strong>Mitigation hierarchy</strong></td><td>Ordered management that prioritises avoidance, then minimisation, restoration and residual compensation or offset.</td></tr>
+          <tr><td><strong>Residual impact</strong></td><td>Effect remaining after feasible avoidance and mitigation measures.</td></tr>
+          <tr><td><strong>EMP</strong></td><td>Environmental management plan assigning measures, responsibilities, indicators, resources and monitoring.</td></tr>
+          <tr><td><strong>Cumulative effect</strong></td><td>Combined change from the proposal together with other past, present or reasonably foreseeable actions.</td></tr>
+          <tr><td><strong>Competent authority</strong></td><td>Public body empowered by the applicable system to make or issue the environmental decision.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== flashcards === -->
+<section id="t10" class="chapter card" style="--accent:#2E9E6A; --soft:#E4F3EB;">
+  <header>
+    <span class="eyebrow">Active recall</span>
+    <h2><span class="emoji">&#127183;</span> Flashcards</h2>
+  </header>
+  <div class="section-body">
+    <div class="cards">
+      <div class="qa"><p class="q">What does EIA assess?</p><p class="a">Likely beneficial and adverse effects of a proposed project or development before a competent decision.</p></div>
+      <div class="qa"><p class="q">Why must EIA start early?</p><p class="a">So alternatives, avoidance, mitigation and the no-project option can still influence design and approval.</p></div>
+      <div class="qa"><p class="q">What is screening?</p><p class="a">Determining whether assessment is required and which level or instrument applies.</p></div>
+      <div class="qa"><p class="q">Is an IEE triggered because damage is already visible?</p><p class="a">No. It is a preliminary assessment route whose thresholds depend on the governing system.</p></div>
+      <div class="qa"><p class="q">What is scoping?</p><p class="a">Defining significant issues, boundaries, alternatives, methods, stakeholders and TORs.</p></div>
+      <div class="qa"><p class="q">What is a baseline?</p><p class="a">The relevant environmental and social condition before the proposal, used as the reference for prediction.</p></div>
+      <div class="qa"><p class="q">Which impact pairs does the lecture stress?</p><p class="a">Beneficial or adverse, reversible or irreversible, and temporary or permanent.</p></div>
+      <div class="qa"><p class="q">What alternatives should EIA compare?</p><p class="a">Location, design, technology, scale, timing and the no-project option.</p></div>
+      <div class="qa"><p class="q">What comes first in the mitigation hierarchy?</p><p class="a">Avoidance.</p></div>
+      <div class="qa"><p class="q">When are compensation or offsets considered?</p><p class="a">For significant residual effects after feasible avoidance, minimisation and restoration.</p></div>
+      <div class="qa"><p class="q">What makes an EMP enforceable?</p><p class="a">Specific actions, locations, timing, responsibility, indicators, thresholds, budget, monitoring and corrective action.</p></div>
+      <div class="qa"><p class="q">Does an EIA approve a project?</p><p class="a">No. It informs the competent authority, which approves, refuses or sets conditions.</p></div>
+      <div class="qa"><p class="q">Is six to eighteen months a universal EIA duration?</p><p class="a">No. Timing depends on the project, rules, data needs, seasons, consultation and review.</p></div>
+      <div class="qa"><p class="q">Where can public participation occur?</p><p class="a">At scoping, report review and other stages required by the applicable process; it is a cross-cutting function.</p></div>
+      <div class="qa"><p class="q">What does SEA assess?</p><p class="a">Policies, plans or programmes at a strategic tier.</p></div>
+      <div class="qa"><p class="q">How do SEA alternatives differ?</p><p class="a">They can compare broader scenarios and development directions before individual projects are fixed.</p></div>
+      <div class="qa"><p class="q">Does SEA always occur before EIA?</p><p class="a">It is ideally upstream, but the legal system determines whether and how the tiers connect.</p></div>
+      <div class="qa"><p class="q">May SEA require a formal report?</p><p class="a">Yes. Some legal SEA systems require an environmental report, consultation, decision information and monitoring.</p></div>
+      <div class="qa"><p class="q">Can project EIA assess cumulative effects?</p><p class="a">Yes. SEA is well suited to the strategic scale, but many EIA systems also require cumulative analysis.</p></div>
+      <div class="qa"><p class="q">What is the safest EIA-SEA distinction?</p><p class="a">EIA usually addresses a project; SEA addresses a policy, plan or programme.</p></div>
+      <div class="qa"><p class="q">Who can prepare or fund assessments?</p><p class="a">Arrangements vary by jurisdiction; responsibility alone is not the durable distinction between EIA and SEA.</p></div>
+      <div class="qa"><p class="q">What is the assessment chain?</p><p class="a">Screen, scope, baseline, predict, compare alternatives, mitigate, plan, report, review, decide and follow up.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== exam focus === -->
+<section id="t11" class="chapter card" style="--accent:#2E9E6A; --soft:#E4F3EB;">
+  <header>
+    <span class="eyebrow">Revision sheet</span>
+    <h2><span class="emoji">&#127919;</span> Exam focus</h2>
+  </header>
+  <div class="section-body">
+    <h3>The end-to-end process</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Stage</th><th>Output</th><th>Exam verb</th></tr></thead>
+        <tbody>
+          <tr><td>Screening</td><td>Assessment route and level</td><td>Classify</td></tr>
+          <tr><td>Scoping and TOR</td><td>Issues, boundaries, alternatives and method</td><td>Frame</td></tr>
+          <tr><td>Baseline</td><td>Reference condition and trends</td><td>Describe</td></tr>
+          <tr><td>Impact assessment</td><td>Predicted effects, significance and uncertainty</td><td>Predict and evaluate</td></tr>
+          <tr><td>Alternatives</td><td>Comparative basis for preferred option</td><td>Compare</td></tr>
+          <tr><td>Mitigation and EMP</td><td>Commitments, owners, indicators and resources</td><td>Manage</td></tr>
+          <tr><td>Report, review and decision</td><td>Reasoned approval, refusal, redesign or conditions</td><td>Decide</td></tr>
+          <tr><td>Follow-up</td><td>Monitoring, compliance and correction</td><td>Verify</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Corrections to remember</h3>
+    <ul>
+      <li>Use NEPA 1969, signed 1 January 1970, as a major formal milestone; avoid a single 1960 launch claim.</li>
+      <li>IEE thresholds are system-specific, and an EIA report informs rather than grants approval.</li>
+      <li>Replace "balance" with the mitigation hierarchy and exclude the universal six-to-eighteen-month claim.</li>
+      <li>Treat participation as cross-cutting, with exact legal stages set by the governing framework.</li>
+      <li>SEA is upstream by decision tier; documentation, funding and independence vary by jurisdiction.</li>
+      <li>Both project EIA and SEA can examine cumulative effects at their appropriate scales.</li>
+    </ul>
+
+  </div>
+</section>
+
+<footer class="notefoot">Source recordings: <a href="https://drive.google.com/file/d/1e8F-BsXsIQqWawprM85pT9MKt7d-WF-v/view?usp=drivesdk" target="_blank" rel="noopener">▶ 8.4 What is EIA</a><span class="sep">·</span><a href="https://drive.google.com/file/d/1sFU3XfGuIwMXRSU_ftB4-lhMJKKbg4p5/view?usp=drivesdk" target="_blank" rel="noopener">▶ 8.5 EIA objectives and plan of action</a><span class="sep">·</span><a href="https://drive.google.com/file/d/1nSwXoqMLMlPWKcBgpB0Q54_r86xiCR-H/view?usp=drivesdk" target="_blank" rel="noopener">▶ 8.7 SEA vs EIA</a><span class="sep">·</span><a href="https://drive.google.com/file/d/15C0_82esfQQHId1p-fUNS8wS3yJcjAA5/view?usp=drivesdk" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+</html>
