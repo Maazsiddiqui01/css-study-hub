@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Environmental Economics: Growth, Limits and Green Policy</title>
+<style>/* Lecture Notes ebook, "warm study" theme.
+   Inspired by Mehak's MarketCanvas app: soft cream ground, rounded white cards,
+   a different pastel accent per topic, serif display + friendly sans body,
+   gentle emoji + pill badges. Playful and pretty, but still a real study book.
+   Print-first (A4 PDF via headless Edge); reads well on screen too.
+
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
+   Everything themeable keys off --accent / --soft. Titles stay ink for
+   readability; accents colour eyebrows, numbers, pills, rules and callouts.
+*/
+
+:root {
+  --cream: #FCF6F0;          /* page ground (warm) */
+  --card: #FFFFFF;
+  --ink: #2C2630;            /* plum-black body/headings */
+  --ink-soft: #5A5360;
+  --slate: #8B8490;          /* captions, timestamps */
+  --hairline: #EEE6E4;
+
+  /* section default accent (overridden per section) */
+  --accent: #C0567E;
+  --soft: #FBECF1;
+
+  --shadow: 0 1px 2px rgba(60,30,45,.05), 0 10px 26px rgba(80,40,55,.07);
+  --radius: 20px;
+
+  --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: Consolas, "Cascadia Code", ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background:
+    radial-gradient(1100px 700px at 15% -5%, #FBEEF3 0%, transparent 55%),
+    radial-gradient(1000px 700px at 100% 0%, #EEF3FB 0%, transparent 50%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  font: 10.8pt/1.62 var(--sans);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+@media screen {
+  body { max-width: 51rem; margin: 0 auto; padding: 2.5rem 1.15rem 4rem; font-size: 1.0rem; }
+}
+
+/* ---------------------------------------------------------------- page --- */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm 14mm;
+  @bottom-center {
+    content: counter(page);
+    font: 8.5pt var(--sans);
+    color: #8B8490;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+/* --------------------------------------------------------------- cards --- */
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8mm 9mm 9mm;
+  margin: 0 0 6mm;
+  box-shadow: var(--shadow);
+  break-inside: auto;
+}
+@media screen { .card { margin-bottom: 1.4rem; } }
+
+/* a soft accent wash across the top of each section card (fades to white),
+   echoing the app's pastel cards without hurting readability */
+.chapter {
+  background:
+    linear-gradient(180deg, var(--soft) 0, rgba(255,255,255,0) 34mm),
+    var(--card);
+  border-top: 3px solid var(--accent);
+  break-inside: auto;
+  break-before: page;   /* each topic starts fresh: slide on top, notes below */
+}
+/* on screen (web/PWA) sections just stack; no forced page breaks */
+@media screen { .chapter { break-before: auto; } }
+
+h2, h3, .eyebrow { break-after: avoid; }
+p { orphans: 2; widows: 2; }
+
+/* keep the section header intact (eyebrow + title + time pill together) and
+   glued to its opening slide */
+.chapter > header { break-inside: avoid; break-after: avoid; }
+figure.slide { break-before: avoid; }
+
+/* --------------------------------------------------------------- cover --- */
+
+.cover {
+  page: cover;
+  break-after: page;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32mm 22mm 24mm;
+  background:
+    radial-gradient(700px 460px at 12% 8%, #FBE6EE 0%, transparent 60%),
+    radial-gradient(760px 520px at 96% 4%, #E7EEFB 0%, transparent 58%),
+    radial-gradient(620px 520px at 80% 96%, #E6F4EC 0%, transparent 60%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+@media screen {
+  .cover { min-height: 80vh; border-radius: 24px; padding: 3.2rem 2.6rem; margin-bottom: 1.4rem; }
+}
+
+.cover .avatar { font-size: 30pt; line-height: 1; margin-bottom: 7mm; }
+.cover .kicker {
+  font: 600 9pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 5mm;
+}
+.cover h1 {
+  font: 600 31pt/1.14 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 15em;
+}
+.cover .subtitle {
+  margin-top: 5mm;
+  font: 400 13.5pt/1.5 var(--sans);
+  color: var(--ink-soft);
+  max-width: 30em;
+}
+.cover .warm {
+  margin-top: 4mm;
+  font: italic 400 12pt/1.5 var(--serif);
+  color: var(--accent);
+}
+
+.cover .chips { display: flex; flex-wrap: wrap; gap: 3mm; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.4mm 4mm;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(60,30,45,.04);
+  font: 400 9pt var(--sans);
+  color: var(--slate);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chip b { font: 700 10.5pt var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ headings --- */
+
+.chapter header { margin-bottom: 5mm; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  font: 700 8.5pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--accent);
+  margin-bottom: 3mm;
+}
+.eyebrow .num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h2 {
+  font: 600 20pt/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .emoji { font-size: 17pt; }
+
+.timepill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.5mm 3.5mm;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font: 600 8pt var(--mono);
+  letter-spacing: 0.02em;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h3 {
+  font: 600 12.5pt/1.34 var(--serif);
+  color: var(--ink);
+  margin: 6mm 0 2.5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+.ts { font: 400 8.5pt var(--mono); color: var(--slate); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- body --- */
+
+.section-body > :last-child { margin-bottom: 0; }
+p { margin: 0 0 3mm; }
+.lead { font-size: 11.2pt; color: var(--ink); }
+
+ul, ol { margin: 0 0 3mm 5.5mm; }
+li { margin-bottom: 1.7mm; padding-left: 1mm; }
+li::marker { color: var(--accent); }
+
+.kt { font-weight: 700; color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
+
+code { font: 9.5pt var(--mono); background: #F3EFF4; padding: .4pt 3.5pt; border-radius: 4px; }
+
+/* ------------------------------------------------------------ callouts --- */
+
+.note {
+  --c: var(--accent);
+  --f: var(--soft);
+  background: var(--f);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  border-left: 3px solid var(--c);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.note .label {
+  display: inline-flex; align-items: center; gap: 1.6mm;
+  font: 700 8pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c);
+  margin-bottom: 1.8mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.warn { --c: #B4791F; --f: #FaF1DF; }
+.note.exam { --c: #3B8B78; --f: #E6F3EF; }
+.note.def  { --c: var(--accent); --f: var(--soft); }
+
+/* ------------------------------------------------------- summary card --- */
+
+.summary { --accent: #C0567E; --soft: #FBECF1; }
+.summary ul { list-style: none; margin: 0; }
+.summary li { position: relative; padding: 0 0 0 7mm; margin-bottom: 3.5mm; }
+.summary li::before {
+  content: "";
+  position: absolute; left: 0; top: 2.6mm;
+  width: 3.2mm; height: 3.2mm; border-radius: 50%;
+  background: var(--accent);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.summary li:last-child { margin-bottom: 0; }
+.summary li b, .summary li strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------- TOC --- */
+
+nav.toc { --accent: #8B8490; --soft: #F3EFF4; }
+nav.toc ol { list-style: none; margin: 0; }
+nav.toc li {
+  display: flex; align-items: baseline; gap: 4mm;
+  padding: 2.7mm 0;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11pt var(--sans);
+}
+nav.toc li:last-child { border-bottom: 0; }
+nav.toc .dot { width: 3.4mm; height: 3.4mm; border-radius: 50%; flex-shrink: 0;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+nav.toc .title { flex: 1; color: var(--ink); }
+nav.toc .rng { flex-shrink: 0; font: 600 8.5pt var(--mono); color: var(--slate); }
+
+/* -------------------------------------------------------------- slides --- */
+
+figure.slide { margin: 0 0 5mm; break-inside: avoid; }
+figure.slide img {
+  width: 100%; display: block;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 10px rgba(40,30,45,.10);
+}
+figure.slide figcaption {
+  font: 400 8.5pt var(--sans);
+  color: var(--slate);
+  margin-top: 2mm;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4mm;
+}
+figure.slide figcaption .ts { color: var(--accent); }
+
+/* ------------------------------------------------------------ glossary --- */
+
+dl.glossary { margin: 0; }
+dl.glossary div { padding: 3mm 0; border-bottom: 1px solid var(--hairline); break-inside: avoid; }
+dl.glossary div:last-child { border-bottom: 0; padding-bottom: 0; }
+dl.glossary dt { font: 700 10.5pt var(--sans); color: var(--accent); margin-bottom: 1.2mm; }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- flashcards --- */
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 0; }
+.qa {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  background: linear-gradient(180deg, var(--soft) 0, #fff 60%);
+  break-inside: avoid;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.qa .q { font: 700 10pt var(--sans); color: var(--ink); margin-bottom: 2mm; }
+.qa .a { color: var(--ink-soft); font-size: 10pt; }
+
+/* ------------------------------------------------------------- tables --- */
+
+.tables-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0; break-inside: avoid; }
+th {
+  font: 700 9pt var(--sans); text-align: left; color: var(--accent);
+  border-bottom: 2px solid var(--soft); padding: 2mm 3mm 2mm 0;
+}
+td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+
+/* --- mobile / on-the-go reading (screen only; never affects the print PDF).
+   Placed LAST so it wins the cascade over the wider @media screen rules above.
+   Requires <meta name="viewport" content="width=device-width, initial-scale=1">. */
+@media screen and (max-width: 640px) {
+  body { padding: 1rem 0.85rem 2.5rem; font-size: 1.02rem; }
+  .card { padding: 5mm 5mm 6mm; border-radius: 14px; margin-bottom: 0.9rem; }
+  .cover { min-height: auto; padding: 2rem 1.3rem 1.6rem; border-radius: 16px; }
+  .cover .avatar { font-size: 24pt; margin-bottom: 4mm; }
+  .cover h1 { font-size: 20pt; max-width: 100%; }
+  .cover .subtitle { font-size: 11.5pt; }
+  .cover .warm { font-size: 11pt; }
+  .cover .chips { gap: 2mm; margin-top: 5mm; }
+  h2 { font-size: 16pt; }
+  h2 .emoji { font-size: 13.5pt; }
+  h3 { font-size: 11.5pt; }
+  .cards { grid-template-columns: 1fr; }
+  nav.toc li { font-size: 10.5pt; gap: 2.5mm; padding: 2.5mm 0; }
+  nav.toc .rng { font-size: 8pt; }
+  .note { padding: 3.5mm 4mm; }
+  table { font-size: 9.5pt; }
+}
+</style>
+<style>
+@media print {
+  body { font-size: 9.5pt; line-height: 1.43; }
+  .card { padding: 6.5mm 7.5mm 7mm; }
+  .chapter header { margin-bottom: 3mm; }
+  p { margin-bottom: 2mm; }
+  .lead { font-size: 10pt; }
+  ul, ol { margin-bottom: 2mm; }
+  li { margin-bottom: 1mm; }
+  .summary li { margin-bottom: 2mm; }
+  .note { padding: 3mm 4mm; margin: 2.5mm 0; }
+  table { font-size: 8.6pt; margin: 2mm 0; }
+  th { padding: 1.4mm 2mm 1.4mm 0; }
+  td { padding: 1.4mm 2mm; }
+  .cards { gap: 1.5mm 2mm; }
+  .qa { padding: 2mm 3mm; line-height: 1.25; }
+  .qa .q { font-size: 8.6pt; margin-bottom: .6mm; }
+  .qa .a { font-size: 8.5pt; }
+}
+</style>
+<meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
+align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
+border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
+<body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/file/d/1NqC9VEosF8XpV-oEV08Mr2HtIcm8OkQx/view?usp=drivesdk" target="_blank" rel="noopener">Download PDF ↓</a></div>
+
+<!-- ============================================================ cover === -->
+<section class="cover" style="background:radial-gradient(700px 460px at 12% 8%,#E4F3EB 0,transparent 60%),radial-gradient(760px 520px at 96% 4%,#E7F1FB 0,transparent 58%),radial-gradient(620px 520px at 80% 96%,#FAF0E2 0,transparent 60%),var(--cream)">
+  <div>
+    <div class="avatar">&#128200;</div>
+    <div class="kicker" style="color:#2E9E6A">CSS Environmental Science &middot; Economy and sustainability</div>
+    <h1>Environmental Economics: Growth, Limits and Green Policy</h1>
+    <p class="subtitle">Two connected recordings on the Brundtland idea, environmental limits, unmet development needs, the limits of "grow now, clean up later," pollution and income, economic damage, institutions and environmentally harmful subsidies.</p>
+    <p class="warm" style="color:#2C8A5E">Growth is a means. The test is whether it meets needs without eroding the assets and systems that future welfare requires. &#127793;</p>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>12m</b> combined</span>
+    <span class="chip"><b>2</b> recordings</span>
+    <span class="chip"><b>7</b> core topics</span>
+    <span class="chip"><b>12</b> correction boxes</span>
+  </div>
+</section>
+
+<!-- ============================================================== toc === -->
+<nav class="toc card">
+  <header><span class="eyebrow">Contents</span><h2><span class="emoji">&#128506;&#65039;</span> In this chapter</h2></header>
+  <ol>
+    <li><span class="dot" style="background:#2E9E6A"></span><a class="title" href="#summary">The five-minute version</a><span class="rng">summary</span></li>
+    <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t1">01 &middot; Define sustainable development and limits</a><span class="rng">foundation</span></li>
+    <li><span class="dot" style="background:#3A7CC0"></span><a class="title" href="#t2">02 &middot; Start from unmet human needs</a><span class="rng">development case</span></li>
+    <li><span class="dot" style="background:#C0762C"></span><a class="title" href="#t3">03 &middot; Test "grow now, clean up later"</a><span class="rng">growth path</span></li>
+    <li><span class="dot" style="background:#557E9B"></span><a class="title" href="#t4">04 &middot; Separate local pollution from carbon</a><span class="rng">pollutant paths</span></li>
+    <li><span class="dot" style="background:#7A5AA8"></span><a class="title" href="#t5">05 &middot; Count damage and irreversibility</a><span class="rng">economic cost</span></li>
+    <li><span class="dot" style="background:#B44A8C"></span><a class="title" href="#t6">06 &middot; Diagnose institutions and incentives</a><span class="rng">policy failure</span></li>
+    <li><span class="dot" style="background:#46955C"></span><a class="title" href="#t7">07 &middot; Design an integrated policy response</a><span class="rng">application</span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t8">Glossary &middot; Flashcards &middot; Exam focus</a><span class="rng"></span></li>
+  </ol>
+</nav>
+
+<!-- ============================================================= tldr === -->
+<section id="summary" class="summary card" style="--accent:#2E9E6A; --soft:#E4F3EB; border-top-color:#2E9E6A">
+  <header><span class="eyebrow" style="color:#2E9E6A">Start here</span><h2><span class="emoji">&#11088;</span> The five-minute version</h2></header>
+  <ul>
+    <li><strong>Sustainable development joins needs with limits.</strong> The 1987 Brundtland formulation protects present needs and future capability, with special attention to essential needs and limits shaped by technology and social organisation.</li>
+    <li><strong>Economic growth can relieve deprivation and create environmental pressure at the same time.</strong> The policy task is to choose the quality, location and resource intensity of growth, not to treat growth or environmental protection as an automatic cure.</li>
+    <li><strong>Pollutants follow different paths.</strong> Some local and visible pollutants have declined with income where institutions and controls improved; carbon dioxide and other global pressures do not automatically follow that pattern.</li>
+    <li><strong>Delay carries costs.</strong> Pollution can reduce health and productivity, while ecosystem loss, contaminated land and long-lived infrastructure can be costly or impossible to reverse.</li>
+    <li><strong>Prices and rules can reward environmental harm.</strong> Weak institutions and poorly designed subsidies can encourage excessive fossil-fuel, water, fishery and agricultural use.</li>
+  </ul>
+</section>
+
+<!-- ======================================================== section 1 === -->
+<section id="t1" class="chapter card" style="--accent:#2C8C86; --soft:#E4F1F0;">
+  <header>
+    <span class="eyebrow"><span class="num">1</span> Intergenerational frame</span>
+    <h2><span class="emoji">&#127807;</span> Define sustainable development and limits</h2>
+    <span class="timepill">Limits &middot; 00:00:01-04:41</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The primer begins with daily dependence on air, food and water, then argues that rapid extraction, pollution and ecosystem destruction can push the natural environment beyond its capacity to keep providing <span class="ts">Limits &middot; 00:00:01</span> <span class="ts">Limits &middot; 00:00:27</span>.</p>
+
+    <div class="formula"><strong>Sustainable development test</strong> = present needs + future capability + ecological limits + technology and institutions + distribution</div>
+
+    <p>The recording attributes the central definition to the World Commission on Environment and Development's 1987 report, <em>Our Common Future</em>: development should meet present needs without compromising future generations' ability to meet their own needs <span class="ts">Limits &middot; 00:00:27</span> <span class="ts">Limits &middot; 00:00:56</span>. The report itself adds two ideas that strengthen the definition: priority for the essential needs of the poor and limits imposed by technology and social organisation.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: <em>Our Common Future</em> established the canonical definition but should not be described as the first use of the term.</strong> The lecture says the report coined sustainable development <span class="ts">Limits &middot; 00:00:27</span>. International conservation policy used the concept before 1987. In an exam, write that the Brundtland Commission defined and popularised it.</p>
+    </div>
+
+    <div class="grid-3">
+      <div><h3>Economy</h3><p>Produces and exchanges goods and services, using labour, infrastructure and natural inputs.</p></div>
+      <div><h3>Society</h3><p>Supplies labour and demand while setting institutions, rights, distribution and collective priorities.</p></div>
+      <div><h3>Environment</h3><p>Supplies materials and ecological functions and receives residual pollution within finite capacities.</p></div>
+    </div>
+
+    <p>The class places economy and society in dependence on environmental inputs such as food, clean air, fresh water, timber and fossil fuels <span class="ts">Limits &middot; 00:01:25</span> <span class="ts">Limits &middot; 00:01:54</span>. It then defines an environmental limit as the point beyond which the environment cannot continue to provide essential resources <span class="ts">Limits &middot; 00:02:19</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: renewable resources do not replenish merely because people take "only what they need."</strong> The opening uses that simple rule <span class="ts">Limits &middot; 00:00:01</span>. Sustainability depends on extraction relative to regeneration, ecosystem condition and spatial scale. Fossil fuels are finite stocks on a human time scale, so their management requires efficiency, substitution and transition rather than replenishment.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: environmental limits include more than resource supply.</strong> The course definition is useful but narrow. Limits may concern regeneration, waste assimilation, habitat integrity, resilience and thresholds after which change becomes difficult to reverse.</p>
+    </div>
+
+    <p>Population growth is presented as a source of demand for goods, services, living space and farmland, with consequences for resource depletion, pollution, forests and wetlands <span class="ts">Limits &middot; 00:02:47</span> <span class="ts">Limits &middot; 00:03:13</span>. The review restates the goal: economy and society should operate within environmental limits across generations <span class="ts">Limits &middot; 00:03:54</span> <span class="ts">Limits &middot; 00:04:17</span> <span class="ts">Limits &middot; 00:04:41</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: population alone does not determine environmental pressure.</strong> The lecture gives a direct chain from more people to depletion and pollution <span class="ts">Limits &middot; 00:02:47</span>. Total pressure also depends on consumption per person, production technology, trade, land-use choices, infrastructure and distribution. State the mechanism rather than treating headcount as destiny.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: wetlands can improve water quality, but they do not universally provide ready-to-use fresh water.</strong> The recording calls them natural filtration systems that provide fresh water <span class="ts">Limits &middot; 00:03:13</span>. Wetland functions vary by type and condition, and drinking-water safety still depends on source protection and treatment.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 2 === -->
+<section id="t2" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+  <header>
+    <span class="eyebrow"><span class="num">2</span> Development case</span>
+    <h2><span class="emoji">&#128161;</span> Start from unmet human needs</h2>
+    <span class="timepill">Econ &middot; 00:00:01-01:31</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The environmental-economics lecture opens with a practical warning: broad principles become useful only when applied to concrete sectors with enough economic and scientific detail <span class="ts">Econ &middot; 00:00:01</span>. It uses electricity, road access and nutrition to show why development needs remain urgent <span class="ts">Econ &middot; 00:00:32</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Question</th><th>Development concern</th><th>Environmental-economics concern</th></tr></thead>
+        <tbody>
+          <tr><td>Access</td><td>Who lacks energy, transport, food, water or sanitation?</td><td>Which service level, technology and financing path meet the need?</td></tr>
+          <tr><td>Pressure</td><td>How much new production and infrastructure are required?</td><td>What emissions, land conversion and resource demand follow?</td></tr>
+          <tr><td>Distribution</td><td>Who gains from growth?</td><td>Who bears pollution, displacement, price and transition costs?</td></tr>
+          <tr><td>Time</td><td>How quickly must deprivation be reduced?</td><td>Which environmental harms create lock-in or irreversible loss?</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the recording's "1.3 million" electricity figure is a thousand-fold transcription or lecture error.</strong> The World Bank's 2012 <em>Inclusive Green Growth</em> report stated that 1.3 <em>billion</em> people lacked electricity and around 800 million rural residents lacked an all-weather road. Both were historical estimates. The 2026 Tracking SDG7 release reports 655 million people without electricity using 2024 data, so none of the older figures should be presented as current <span class="ts">Econ &middot; 00:00:32</span>.</p>
+    </div>
+
+    <p>The lecture argues that meeting urgent needs requires economic growth, while growth can place further pressure on the environment <span class="ts">Econ &middot; 00:00:32</span>. That is the central tension of the chapter: a development strategy must improve welfare without treating environmental assets as free or infinitely replaceable.</p>
+
+    <div class="note"><p><strong>Editorial diagnostic:</strong> for any sector, state the unmet need, affected population, required service, resource input, pollution pathway, distributional effect, institution responsible and measurable outcome.</p></div>
+  </div>
+</section>
+
+<!-- ======================================================== section 3 === -->
+<section id="t3" class="chapter card" style="--accent:#C0762C; --soft:#FAF0E2;">
+  <header>
+    <span class="eyebrow"><span class="num">3</span> Growth path</span>
+    <h2><span class="emoji">&#127981;</span> Test "grow now, clean up later"</h2>
+    <span class="timepill">Econ &middot; 00:01:00-02:01</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecture describes a common attitude: become wealthy first and address environmental damage later. It associates this path with Western industrialisation and with the priorities of several developing economies <span class="ts">Econ &middot; 00:01:00</span> <span class="ts">Econ &middot; 00:01:31</span>.</p>
+
+    <div class="grid-2">
+      <div>
+        <h3>Why the argument appeals</h3>
+        <ul>
+          <li>Poverty and missing basic services create immediate political pressure.</li>
+          <li>Higher income can finance infrastructure, monitoring and cleaner technology.</li>
+          <li>Citizens may demand better environmental quality as income and information rise.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Why it can fail</h3>
+        <ul>
+          <li>Some damage is irreversible or prohibitively costly to reverse.</li>
+          <li>Polluting infrastructure can lock in technology and settlement patterns.</li>
+          <li>Cleanup requires institutions and policy; income alone does not deliver it.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: "first get wealthy, then go green" is a hypothesis, not a development law.</strong> The lecture presents the historical sequence as a defensible attitude <span class="ts">Econ &middot; 00:01:00</span> <span class="ts">Econ &middot; 00:01:31</span>. The World Bank report used by the lecture explicitly identifies serious flaws: pollutant paths differ, damage can be irreversible, and improvement depends on collective action, regulation, technology and investment.</p>
+    </div>
+
+    <div class="formula"><strong>Green-growth choice</strong> = welfare gain now - environmental and health damage - lock-in cost + future resilience</div>
+
+    <p>A strong answer therefore avoids a false choice between stopping growth and tolerating damage. It asks which forms of growth meet essential needs with lower material, pollution and risk intensity.</p>
+  </div>
+</section>
+
+<!-- ======================================================== section 4 === -->
+<section id="t4" class="chapter card" style="--accent:#557E9B; --soft:#E8F0F5;">
+  <header>
+    <span class="eyebrow"><span class="num">4</span> Pollutant-specific evidence</span>
+    <h2><span class="emoji">&#127788;&#65039;</span> Separate local pollution from carbon</h2>
+    <span class="timepill">Econ &middot; 00:02:01-03:21</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecture contrasts local and visible pollutants with carbon dioxide. Its cross-country pictures suggest that some local pollution measures are lower at higher incomes, while per-person carbon dioxide emissions tend to rise with income <span class="ts">Econ &middot; 00:02:01</span> <span class="ts">Econ &middot; 00:02:28</span> <span class="ts">Econ &middot; 00:02:54</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Dimension</th><th>Local or visible pollution</th><th>Carbon dioxide and global pressure</th></tr></thead>
+        <tbody>
+          <tr><td>Where harm is felt</td><td>Often near the source, though transport can occur.</td><td>Climate effects accumulate globally and over time.</td></tr>
+          <tr><td>Public visibility</td><td>Smoke, dirty water and indoor exposure can be immediate.</td><td>Emissions are less visible and impacts are dispersed.</td></tr>
+          <tr><td>Income pattern in the lecture</td><td>Some measures decline at higher income.</td><td>Per-person emissions tend to rise with output and fossil energy.</td></tr>
+          <tr><td>Policy implication</td><td>Standards, monitoring, clean fuels and services can reduce exposure.</td><td>Energy, industry, transport and land systems require deliberate decarbonisation.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: a cross-country pattern does not prove that most air pollution automatically improves with income.</strong> The lecture uses an average chart <span class="ts">Econ &middot; 00:02:01</span> <span class="ts">Econ &middot; 00:02:28</span>. Results depend on pollutant, exposure measure, energy mix, regulation, technology, urban form and whether dirty production is displaced elsewhere. Name the pollutant, place, period and policy.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the income-carbon relationship is a documented tendency in the lecture's 2008 comparison, not an unavoidable rule for every country and year.</strong> The class links wealth, output, fossil-fuel use and carbon dioxide <span class="ts">Econ &middot; 00:02:54</span>. Technology, energy mix, efficiency and policy can change emissions intensity, while absolute emissions still require measurement.</p>
+    </div>
+
+    <p>The lecturer itself supplies the key safeguard: even pollutants that improve do not necessarily improve automatically; economies act through specific cleanup measures and institutions <span class="ts">Econ &middot; 00:02:54</span>.</p>
+
+    <div class="note"><p><strong>Editorial evidence rule:</strong> never write "pollution falls with growth" without specifying the pollutant, indicator, unit, geography, period, income measure and intervention that may explain the change.</p></div>
+  </div>
+</section>
+
+<!-- ======================================================== section 5 === -->
+<section id="t5" class="chapter card" style="--accent:#7A5AA8; --soft:#F0EBF8;">
+  <header>
+    <span class="eyebrow"><span class="num">5</span> Cost of delay</span>
+    <h2><span class="emoji">&#128176;</span> Count damage and irreversibility</h2>
+    <span class="timepill">Econ &middot; 00:03:21-04:37</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Pollution can slow development rather than merely accompany it. The lecture links dirty air with illness, lower labour productivity and reduced output, then warns that resource damage can be costly or impossible to reverse <span class="ts">Econ &middot; 00:03:21</span> <span class="ts">Econ &middot; 00:03:44</span> <span class="ts">Econ &middot; 00:04:12</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Damage channel</th><th>Economic effect taught</th><th>What evidence is needed</th></tr></thead>
+        <tbody>
+          <tr><td>Health</td><td>Illness, lost work and treatment costs</td><td>Exposure, dose-response, affected population and valuation method</td></tr>
+          <tr><td>Productivity</td><td>Lower worker performance and output</td><td>Sector, baseline, confounders and time period</td></tr>
+          <tr><td>Natural assets</td><td>Loss of services and future productive capacity</td><td>Asset condition, service flow, substitutes and recovery time</td></tr>
+          <tr><td>Lock-in</td><td>High cost of replacing polluting infrastructure later</td><td>Asset life, alternatives, transition path and avoided damage</td></tr>
+          <tr><td>Irreversibility</td><td>Some losses cannot be restored</td><td>Threshold, uncertainty and precautionary case</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the 8% and 9% of GDP figures are historical estimates from a defined World Bank sample, not universal annual constants.</strong> The lecture names Ghana, Tajikistan and China and says the surveyed average was about 8% <span class="ts">Econ &middot; 00:03:21</span>. The 2012 report described environmental-degradation costs equivalent to 8% of GDP across a sample representing 40% of the developing world's population, assembled from country studies with differing years and methods.</p>
+    </div>
+
+    <p>The conclusion is conditional rather than ideological: address early the harms that threaten health, natural capital or long-lived infrastructure, especially where delay raises future cost <span class="ts">Econ &middot; 00:04:12</span>.</p>
+
+    <div class="formula"><strong>Early-action priority</strong> = severity &times; exposure &times; irreversibility &times; lock-in risk, adjusted for uncertainty and distribution</div>
+  </div>
+</section>
+
+<!-- ======================================================== section 6 === -->
+<section id="t6" class="chapter card" style="--accent:#B44A8C; --soft:#F8EAF3;">
+  <header>
+    <span class="eyebrow"><span class="num">6</span> Policy and institutional failure</span>
+    <h2><span class="emoji">&#127963;&#65039;</span> Diagnose institutions and incentives</h2>
+    <span class="timepill">Econ &middot; 00:04:37-06:19</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecture identifies poorly defined property rights, weak regulation, governance gaps and corruption as barriers to pollution control <span class="ts">Econ &middot; 00:04:37</span>. It then turns to subsidies that lower the private cost of fossil fuel, water, fisheries and agriculture while shifting environmental costs onto others <span class="ts">Econ &middot; 00:05:05</span> <span class="ts">Econ &middot; 00:05:29</span>.</p>
+
+    <div class="grid-2">
+      <div>
+        <h3>Institutional questions</h3>
+        <ul>
+          <li>Who owns, uses and monitors the resource?</li>
+          <li>Who may pollute, and under which standard or permit?</li>
+          <li>Can the regulator measure, enforce and sanction?</li>
+          <li>Can affected communities obtain information and remedy?</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Incentive questions</h3>
+        <ul>
+          <li>Does a price omit depletion, pollution or health costs?</li>
+          <li>Does public support reward output or environmental performance?</li>
+          <li>Who captures the subsidy, and who bears reform costs?</li>
+          <li>Can support be redirected toward access and transition?</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: institutional weakness is a diagnostic, not a universal description of developing countries.</strong> The lecture generalises across these economies <span class="ts">Econ &middot; 00:04:37</span>. Capacity, rights, enforcement and corruption vary by country, sector and level of government. A defensible answer names the specific institution and evidence.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the subsidy figures belong to the World Bank's 2012 compilation and are neither current nor fully comparable.</strong> The report gave $455-485 billion for fossil fuels, $200-300 billion for water, $10-30 billion for fisheries and $370 billion in OECD agricultural transfers <span class="ts">Econ &middot; 00:05:05</span> <span class="ts">Econ &middot; 00:05:29</span>. It warned that the estimates were not precise or exhaustive and that the agricultural total included support that was not environmentally harmful.</p>
+    </div>
+
+    <p>The lecturer broadens the point beyond developing economies, then argues that environmental policy may require reversing established incentives rather than adding a single pollution-control rule <span class="ts">Econ &middot; 00:05:52</span> <span class="ts">Econ &middot; 00:06:19</span>.</p>
+
+    <div class="note"><p><strong>Editorial reform sequence:</strong> identify the harmful incentive, measure beneficiaries and environmental effects, design a phased replacement, protect vulnerable users through targeted support, monitor behaviour and revise.</p></div>
+  </div>
+</section>
+
+<!-- ======================================================== section 7 === -->
+<section id="t7" class="chapter card" style="--accent:#46955C; --soft:#E7F3EA;">
+  <header>
+    <span class="eyebrow"><span class="num">7</span> Integrated application</span>
+    <h2><span class="emoji">&#129504;</span> Design an integrated policy response</h2>
+    <span class="timepill">Both recordings &middot; synthesis</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The two recordings converge on one method: connect human needs to environmental constraints, then test actual sectors rather than relying on slogans <span class="ts">Econ &middot; 00:00:01</span> <span class="ts">Econ &middot; 00:06:19</span> <span class="ts">Limits &middot; 00:03:54</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>Question</th><th>Useful evidence</th></tr></thead>
+        <tbody>
+          <tr><td>1. Define the need</td><td>Which essential service or welfare gap must close?</td><td>Access, affordability, quality and distribution</td></tr>
+          <tr><td>2. Map dependence</td><td>Which energy, water, land, material and ecosystem inputs are required?</td><td>Stocks, flows, regeneration and supply chain</td></tr>
+          <tr><td>3. Trace pressure</td><td>Which emissions, wastes, habitat changes and health exposures follow?</td><td>Pollutant-specific baseline and pathway</td></tr>
+          <tr><td>4. Count full cost</td><td>Which private costs are shifted to workers, communities or the future?</td><td>Health, productivity, natural capital and lock-in</td></tr>
+          <tr><td>5. Diagnose failure</td><td>Which market, policy or institutional failure sustains the harm?</td><td>Prices, rights, subsidies, standards and enforcement</td></tr>
+          <tr><td>6. Compare options</td><td>Can the same need be met with lower pressure and fairer distribution?</td><td>Alternatives, lifecycle effects and transition costs</td></tr>
+          <tr><td>7. Govern delivery</td><td>Who acts, pays, monitors, discloses and corrects?</td><td>Mandate, finance, indicator, deadline and remedy</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note"><p><strong>Editorial policy rule:</strong> do not assume every environmental measure is pro-poor or every subsidy reform is fair. Pair environmental effectiveness with distributional analysis and targeted transition support.</p></div>
+
+    <h3>Short applied example</h3>
+    <p>For electricity access, begin with households and services without reliable supply. Compare grid, mini-grid and stand-alone options; estimate cost and reliability; map fuel and emissions; protect affordability; specify interconnection and regulatory responsibilities; then monitor access, outage time, cost and emissions. This follows the lecture's sector-specific method without pretending one technology fits every place.</p>
+  </div>
+</section>
+
+<!-- ========================================================= glossary === -->
+<section id="t8" class="chapter card" style="--accent:#8B8490; --soft:#F0EEF2;">
+  <header>
+    <span class="eyebrow">Reference</span>
+    <h2><span class="emoji">&#128214;</span> Glossary</h2>
+  </header>
+  <div class="section-body">
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Term</th><th>Meaning in these recordings</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Sustainable development</strong></td><td>Development that meets present needs without compromising future generations' ability to meet theirs.</td></tr>
+          <tr><td><strong>Environmental limit</strong></td><td>Constraint related to resource regeneration, waste assimilation, ecosystem integrity, resilience or thresholds.</td></tr>
+          <tr><td><strong>Natural capital</strong></td><td>Natural assets and systems that support resource flows and ecological functions.</td></tr>
+          <tr><td><strong>Green growth</strong></td><td>Growth strategy that seeks welfare and poverty reduction while protecting natural assets and reducing environmental harm.</td></tr>
+          <tr><td><strong>Environmental Kuznets curve</strong></td><td>Hypothesis that some environmental pressures rise and later fall with income; it is pollutant-specific and not automatic.</td></tr>
+          <tr><td><strong>Local pollutant</strong></td><td>Pollutant whose exposure and damage are often concentrated near sources, though transport may occur.</td></tr>
+          <tr><td><strong>Global pollutant</strong></td><td>Pollutant such as carbon dioxide whose accumulated effects extend across borders and time.</td></tr>
+          <tr><td><strong>External cost</strong></td><td>Cost imposed on others that is not fully borne in the decision-maker's private price.</td></tr>
+          <tr><td><strong>Lock-in</strong></td><td>Persistence created by long-lived infrastructure, technology or institutions that makes later change costly.</td></tr>
+          <tr><td><strong>Irreversibility</strong></td><td>Loss that cannot be restored, or can be restored only slowly and incompletely.</td></tr>
+          <tr><td><strong>Property rights</strong></td><td>Rules specifying access, use, exclusion, transfer and responsibility for an asset or resource.</td></tr>
+          <tr><td><strong>Environmentally harmful subsidy</strong></td><td>Public support that encourages activity linked to resource overuse, pollution or ecosystem damage.</td></tr>
+          <tr><td><strong>Distributional effect</strong></td><td>How costs and benefits differ across income groups, places, generations or affected communities.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== flashcards === -->
+<section id="t9" class="chapter card" style="--accent:#2E9E6A; --soft:#E4F3EB;">
+  <header>
+    <span class="eyebrow">Active recall</span>
+    <h2><span class="emoji">&#127183;</span> Flashcards</h2>
+  </header>
+  <div class="section-body">
+    <div class="cards">
+      <div class="qa"><p class="q">What is the Brundtland definition?</p><p class="a">Development that meets present needs without compromising future generations' ability to meet theirs.</p></div>
+      <div class="qa"><p class="q">What two ideas accompany that definition?</p><p class="a">Priority for essential needs, especially of the poor, and limits shaped by technology and social organisation.</p></div>
+      <div class="qa"><p class="q">Did the 1987 report necessarily coin the term?</p><p class="a">No. It established the canonical definition and popularised the concept.</p></div>
+      <div class="qa"><p class="q">What makes a renewable flow sustainable?</p><p class="a">Use compatible with regeneration, ecosystem condition and spatial scale.</p></div>
+      <div class="qa"><p class="q">What else can an environmental limit concern?</p><p class="a">Waste assimilation, habitat integrity, resilience and ecological thresholds.</p></div>
+      <div class="qa"><p class="q">What was wrong with the 1.3 million electricity figure?</p><p class="a">The 2012 source said 1.3 billion; it was also historical, not current.</p></div>
+      <div class="qa"><p class="q">What did the 2026 SDG7 release report?</p><p class="a">655 million people lacked electricity using 2024 data.</p></div>
+      <div class="qa"><p class="q">Why is growth still part of the problem?</p><p class="a">It can meet urgent needs while increasing output, resource use, emissions and land pressure.</p></div>
+      <div class="qa"><p class="q">Is "grow now, clean up later" a law?</p><p class="a">No. Damage, pollutant paths, institutions and lock-in differ.</p></div>
+      <div class="qa"><p class="q">Why might some local pollution fall with income?</p><p class="a">Cleaner technology, services, regulation, monitoring and public demand may improve.</p></div>
+      <div class="qa"><p class="q">Why is the pattern not automatic?</p><p class="a">It depends on pollutant, institutions, energy mix, technology and policy.</p></div>
+      <div class="qa"><p class="q">What carbon pattern did the lecture show?</p><p class="a">Per-person carbon dioxide emissions tended to rise with income in its 2008 comparison.</p></div>
+      <div class="qa"><p class="q">Can that pattern change?</p><p class="a">Yes. Energy mix, technology, efficiency and policy can reduce emissions intensity and absolute emissions.</p></div>
+      <div class="qa"><p class="q">How can pollution reduce growth?</p><p class="a">Through illness, lower productivity, treatment costs, damaged assets and service losses.</p></div>
+      <div class="qa"><p class="q">What was the 8% GDP figure?</p><p class="a">A historical World Bank estimate across a defined sample, not a universal constant.</p></div>
+      <div class="qa"><p class="q">Why act early?</p><p class="a">To avoid severe exposure, irreversible loss and costly infrastructure or technology lock-in.</p></div>
+      <div class="qa"><p class="q">Which institutions matter?</p><p class="a">Rights, regulators, monitoring, enforcement, disclosure and access to remedy.</p></div>
+      <div class="qa"><p class="q">Why can a subsidy be harmful?</p><p class="a">It may lower private cost while encouraging depletion, pollution or habitat damage.</p></div>
+      <div class="qa"><p class="q">Were all $370 billion of agricultural transfers harmful?</p><p class="a">No. The source warned that the total included support not classified as environmentally harmful.</p></div>
+      <div class="qa"><p class="q">What is the seven-step policy sequence?</p><p class="a">Need, dependence, pressure, full cost, failure, options and governance.</p></div>
+      <div class="qa"><p class="q">What makes an environmental claim exam-safe?</p><p class="a">A named indicator, unit, place, period, source, causal mechanism and policy context.</p></div>
+      <div class="qa"><p class="q">What distribution question belongs in every answer?</p><p class="a">Who gains, who pays, who is exposed and who receives transition support?</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== exam focus === -->
+<section id="t10" class="chapter card" style="--accent:#2E9E6A; --soft:#E4F3EB;">
+  <header>
+    <span class="eyebrow">Revision sheet</span>
+    <h2><span class="emoji">&#127919;</span> Exam focus</h2>
+  </header>
+  <div class="section-body">
+    <h3>Environmental-economics answer architecture</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Move</th><th>What to write</th><th>Exam verb</th></tr></thead>
+        <tbody>
+          <tr><td>Frame</td><td>Present need, future capability and environmental limit</td><td>Define</td></tr>
+          <tr><td>Specify the gap</td><td>Access, affordability, quality and affected population</td><td>Diagnose</td></tr>
+          <tr><td>Trace the pathway</td><td>Resource input, pollutant, exposure and ecosystem effect</td><td>Explain</td></tr>
+          <tr><td>Count full cost</td><td>Health, productivity, natural capital, lock-in and distribution</td><td>Evaluate</td></tr>
+          <tr><td>Identify failure</td><td>External cost, rights, information, subsidy, regulation or corruption</td><td>Classify</td></tr>
+          <tr><td>Compare responses</td><td>Standard, price, investment, information, rights and targeted support</td><td>Design</td></tr>
+          <tr><td>Govern</td><td>Institution, finance, indicator, deadline, disclosure and remedy</td><td>Operationalise</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Corrections to remember</h3>
+    <ul>
+      <li>Write that the Brundtland Commission defined and popularised sustainable development.</li>
+      <li>Separate renewable regeneration, finite stocks, waste sinks, resilience and thresholds.</li>
+      <li>The electricity figure was 1.3 billion in the 2012 source, not 1.3 million; current figures need a current report.</li>
+      <li>Treat the environmental Kuznets curve as a pollutant-specific hypothesis, not automatic cleanup.</li>
+      <li>Attach the World Bank's 8% GDP estimate to its historical sample and method.</li>
+      <li>Attach subsidy figures to 2012 and distinguish total agricultural support from the harmful portion.</li>
+      <li>Name the country, sector and institution before making a governance claim.</li>
+    </ul>
+
+    <div class="note"><p><strong>One-line conclusion:</strong> inclusive green policy does not postpone human needs; it meets them through choices that recognise full costs, protect critical natural assets and avoid locking tomorrow into today's damage.</p></div>
+  </div>
+</section>
+
+<footer class="notefoot">Source recordings: <a href="https://drive.google.com/file/d/19LaQnY8h0oI_oWb514ss7no7KTjiFYf4/view?usp=drivesdk" target="_blank" rel="noopener">▶ Environmental Economics</a><span class="sep">·</span><a href="https://drive.google.com/file/d/1s9E9zNKdNntIosPA07XHDn9phPvPaKKu/view?usp=drivesdk" target="_blank" rel="noopener">▶ Sustainable Development and Environmental Limits</a><span class="sep">·</span><a href="https://drive.google.com/file/d/1NqC9VEosF8XpV-oEV08Mr2HtIcm8OkQx/view?usp=drivesdk" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+</html>

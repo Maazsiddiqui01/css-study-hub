@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Integrated Waste Management: Prevention, Recovery and Safe Residuals</title>
+<style>/* Lecture Notes ebook, "warm study" theme.
+   Inspired by Mehak's MarketCanvas app: soft cream ground, rounded white cards,
+   a different pastel accent per topic, serif display + friendly sans body,
+   gentle emoji + pill badges. Playful and pretty, but still a real study book.
+   Print-first (A4 PDF via headless Edge); reads well on screen too.
+
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
+   Everything themeable keys off --accent / --soft. Titles stay ink for
+   readability; accents colour eyebrows, numbers, pills, rules and callouts.
+*/
+
+:root {
+  --cream: #FCF6F0;          /* page ground (warm) */
+  --card: #FFFFFF;
+  --ink: #2C2630;            /* plum-black body/headings */
+  --ink-soft: #5A5360;
+  --slate: #8B8490;          /* captions, timestamps */
+  --hairline: #EEE6E4;
+
+  /* section default accent (overridden per section) */
+  --accent: #C0567E;
+  --soft: #FBECF1;
+
+  --shadow: 0 1px 2px rgba(60,30,45,.05), 0 10px 26px rgba(80,40,55,.07);
+  --radius: 20px;
+
+  --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: Consolas, "Cascadia Code", ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background:
+    radial-gradient(1100px 700px at 15% -5%, #FBEEF3 0%, transparent 55%),
+    radial-gradient(1000px 700px at 100% 0%, #EEF3FB 0%, transparent 50%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  font: 10.8pt/1.62 var(--sans);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+@media screen {
+  body { max-width: 51rem; margin: 0 auto; padding: 2.5rem 1.15rem 4rem; font-size: 1.0rem; }
+}
+
+/* ---------------------------------------------------------------- page --- */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm 14mm;
+  @bottom-center {
+    content: counter(page);
+    font: 8.5pt var(--sans);
+    color: #8B8490;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+/* --------------------------------------------------------------- cards --- */
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8mm 9mm 9mm;
+  margin: 0 0 6mm;
+  box-shadow: var(--shadow);
+  break-inside: auto;
+}
+@media screen { .card { margin-bottom: 1.4rem; } }
+
+/* a soft accent wash across the top of each section card (fades to white),
+   echoing the app's pastel cards without hurting readability */
+.chapter {
+  background:
+    linear-gradient(180deg, var(--soft) 0, rgba(255,255,255,0) 34mm),
+    var(--card);
+  border-top: 3px solid var(--accent);
+  break-inside: auto;
+  break-before: page;   /* each topic starts fresh: slide on top, notes below */
+}
+/* on screen (web/PWA) sections just stack; no forced page breaks */
+@media screen { .chapter { break-before: auto; } }
+
+h2, h3, .eyebrow { break-after: avoid; }
+p { orphans: 2; widows: 2; }
+
+/* keep the section header intact (eyebrow + title + time pill together) and
+   glued to its opening slide */
+.chapter > header { break-inside: avoid; break-after: avoid; }
+figure.slide { break-before: avoid; }
+
+/* --------------------------------------------------------------- cover --- */
+
+.cover {
+  page: cover;
+  break-after: page;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32mm 22mm 24mm;
+  background:
+    radial-gradient(700px 460px at 12% 8%, #FBE6EE 0%, transparent 60%),
+    radial-gradient(760px 520px at 96% 4%, #E7EEFB 0%, transparent 58%),
+    radial-gradient(620px 520px at 80% 96%, #E6F4EC 0%, transparent 60%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+@media screen {
+  .cover { min-height: 80vh; border-radius: 24px; padding: 3.2rem 2.6rem; margin-bottom: 1.4rem; }
+}
+
+.cover .avatar { font-size: 30pt; line-height: 1; margin-bottom: 7mm; }
+.cover .kicker {
+  font: 600 9pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 5mm;
+}
+.cover h1 {
+  font: 600 31pt/1.14 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 15em;
+}
+.cover .subtitle {
+  margin-top: 5mm;
+  font: 400 13.5pt/1.5 var(--sans);
+  color: var(--ink-soft);
+  max-width: 30em;
+}
+.cover .warm {
+  margin-top: 4mm;
+  font: italic 400 12pt/1.5 var(--serif);
+  color: var(--accent);
+}
+
+.cover .chips { display: flex; flex-wrap: wrap; gap: 3mm; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.4mm 4mm;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(60,30,45,.04);
+  font: 400 9pt var(--sans);
+  color: var(--slate);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chip b { font: 700 10.5pt var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ headings --- */
+
+.chapter header { margin-bottom: 5mm; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  font: 700 8.5pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--accent);
+  margin-bottom: 3mm;
+}
+.eyebrow .num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h2 {
+  font: 600 20pt/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .emoji { font-size: 17pt; }
+
+.timepill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.5mm 3.5mm;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font: 600 8pt var(--mono);
+  letter-spacing: 0.02em;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h3 {
+  font: 600 12.5pt/1.34 var(--serif);
+  color: var(--ink);
+  margin: 6mm 0 2.5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+.ts { font: 400 8.5pt var(--mono); color: var(--slate); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- body --- */
+
+.section-body > :last-child { margin-bottom: 0; }
+p { margin: 0 0 3mm; }
+.lead { font-size: 11.2pt; color: var(--ink); }
+
+ul, ol { margin: 0 0 3mm 5.5mm; }
+li { margin-bottom: 1.7mm; padding-left: 1mm; }
+li::marker { color: var(--accent); }
+
+.kt { font-weight: 700; color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
+
+code { font: 9.5pt var(--mono); background: #F3EFF4; padding: .4pt 3.5pt; border-radius: 4px; }
+
+/* ------------------------------------------------------------ callouts --- */
+
+.note {
+  --c: var(--accent);
+  --f: var(--soft);
+  background: var(--f);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  border-left: 3px solid var(--c);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.note .label {
+  display: inline-flex; align-items: center; gap: 1.6mm;
+  font: 700 8pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c);
+  margin-bottom: 1.8mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.warn { --c: #B4791F; --f: #FaF1DF; }
+.note.exam { --c: #3B8B78; --f: #E6F3EF; }
+.note.def  { --c: var(--accent); --f: var(--soft); }
+
+/* ------------------------------------------------------- summary card --- */
+
+.summary { --accent: #C0567E; --soft: #FBECF1; }
+.summary ul { list-style: none; margin: 0; }
+.summary li { position: relative; padding: 0 0 0 7mm; margin-bottom: 3.5mm; }
+.summary li::before {
+  content: "";
+  position: absolute; left: 0; top: 2.6mm;
+  width: 3.2mm; height: 3.2mm; border-radius: 50%;
+  background: var(--accent);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.summary li:last-child { margin-bottom: 0; }
+.summary li b, .summary li strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------- TOC --- */
+
+nav.toc { --accent: #8B8490; --soft: #F3EFF4; }
+nav.toc ol { list-style: none; margin: 0; }
+nav.toc li {
+  display: flex; align-items: baseline; gap: 4mm;
+  padding: 2.7mm 0;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11pt var(--sans);
+}
+nav.toc li:last-child { border-bottom: 0; }
+nav.toc .dot { width: 3.4mm; height: 3.4mm; border-radius: 50%; flex-shrink: 0;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+nav.toc .title { flex: 1; color: var(--ink); }
+nav.toc .rng { flex-shrink: 0; font: 600 8.5pt var(--mono); color: var(--slate); }
+
+/* -------------------------------------------------------------- slides --- */
+
+figure.slide { margin: 0 0 5mm; break-inside: avoid; }
+figure.slide img {
+  width: 100%; display: block;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 10px rgba(40,30,45,.10);
+}
+figure.slide figcaption {
+  font: 400 8.5pt var(--sans);
+  color: var(--slate);
+  margin-top: 2mm;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4mm;
+}
+figure.slide figcaption .ts { color: var(--accent); }
+
+/* ------------------------------------------------------------ glossary --- */
+
+dl.glossary { margin: 0; }
+dl.glossary div { padding: 3mm 0; border-bottom: 1px solid var(--hairline); break-inside: avoid; }
+dl.glossary div:last-child { border-bottom: 0; padding-bottom: 0; }
+dl.glossary dt { font: 700 10.5pt var(--sans); color: var(--accent); margin-bottom: 1.2mm; }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- flashcards --- */
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 0; }
+.qa {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  background: linear-gradient(180deg, var(--soft) 0, #fff 60%);
+  break-inside: avoid;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.qa .q { font: 700 10pt var(--sans); color: var(--ink); margin-bottom: 2mm; }
+.qa .a { color: var(--ink-soft); font-size: 10pt; }
+
+/* ------------------------------------------------------------- tables --- */
+
+.tables-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0; break-inside: avoid; }
+th {
+  font: 700 9pt var(--sans); text-align: left; color: var(--accent);
+  border-bottom: 2px solid var(--soft); padding: 2mm 3mm 2mm 0;
+}
+td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+
+/* --- mobile / on-the-go reading (screen only; never affects the print PDF).
+   Placed LAST so it wins the cascade over the wider @media screen rules above.
+   Requires <meta name="viewport" content="width=device-width, initial-scale=1">. */
+@media screen and (max-width: 640px) {
+  body { padding: 1rem 0.85rem 2.5rem; font-size: 1.02rem; }
+  .card { padding: 5mm 5mm 6mm; border-radius: 14px; margin-bottom: 0.9rem; }
+  .cover { min-height: auto; padding: 2rem 1.3rem 1.6rem; border-radius: 16px; }
+  .cover .avatar { font-size: 24pt; margin-bottom: 4mm; }
+  .cover h1 { font-size: 20pt; max-width: 100%; }
+  .cover .subtitle { font-size: 11.5pt; }
+  .cover .warm { font-size: 11pt; }
+  .cover .chips { gap: 2mm; margin-top: 5mm; }
+  h2 { font-size: 16pt; }
+  h2 .emoji { font-size: 13.5pt; }
+  h3 { font-size: 11.5pt; }
+  .cards { grid-template-columns: 1fr; }
+  nav.toc li { font-size: 10.5pt; gap: 2.5mm; padding: 2.5mm 0; }
+  nav.toc .rng { font-size: 8pt; }
+  .note { padding: 3.5mm 4mm; }
+  table { font-size: 9.5pt; }
+}
+</style>
+<style>
+@media print {
+  body { font-size: 9.5pt; line-height: 1.43; }
+  .card { padding: 6.5mm 7.5mm 7mm; }
+  .chapter header { margin-bottom: 3mm; }
+  p { margin-bottom: 2mm; }
+  .lead { font-size: 10pt; }
+  ul, ol { margin-bottom: 2mm; }
+  li { margin-bottom: 1mm; }
+  .summary li { margin-bottom: 2mm; }
+  .note { padding: 3mm 4mm; margin: 2.5mm 0; }
+  table { font-size: 8.6pt; margin: 2mm 0; }
+  th { padding: 1.4mm 2mm 1.4mm 0; }
+  td { padding: 1.4mm 2mm; }
+  .cards { gap: 1.5mm 2mm; }
+  .qa { padding: 2mm 3mm; line-height: 1.25; }
+  .qa .q { font-size: 8.6pt; margin-bottom: .6mm; }
+  .qa .a { font-size: 8.5pt; }
+}
+</style>
+<meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
+align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
+border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
+<body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/file/d/1GjM1iKcTiA7zsAZ6ZR9T5l7udeFlEf_x/view?usp=drivesdk" target="_blank" rel="noopener">Download PDF ↓</a></div>
+
+<!-- ============================================================ cover === -->
+<section class="cover" style="background:radial-gradient(700px 460px at 12% 8%,#E4F3EB 0,transparent 60%),radial-gradient(760px 520px at 96% 4%,#E7F1FB 0,transparent 58%),radial-gradient(620px 520px at 80% 96%,#FAF0E2 0,transparent 60%),var(--cream)">
+  <div>
+    <div class="avatar">&#9851;&#65039;</div>
+    <div class="kicker" style="color:#2E9E6A">CSS Environmental Science &middot; Integrated waste systems</div>
+    <h1>Integrated Waste Management: Prevention, Recovery and Safe Residuals</h1>
+    <p class="subtitle">A complete guide to combining prevention, reuse, recycling, composting, energy recovery, treatment and engineered disposal while matching each material to local rules and measurable system performance.</p>
+    <p class="warm" style="color:#2C8A5E">Begin before waste exists, preserve value where possible, and control what remains. &#128230;</p>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>6m</b> recording</span>
+    <span class="chip"><b>6</b> core topics</span>
+          <span class="chip"><b>13</b> correction boxes</span>
+    <span class="chip"><b>20</b> flashcards</span>
+  </div>
+</section>
+
+<!-- ============================================================== toc === -->
+<nav class="toc card">
+  <header><span class="eyebrow">Contents</span><h2><span class="emoji">&#128506;&#65039;</span> In this chapter</h2></header>
+  <ol>
+    <li><span class="dot" style="background:#2E9E6A"></span><a class="title" href="#summary">The five-minute version</a><span class="rng">summary</span></li>
+    <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t1">01 &middot; Build one integrated system</a><span class="rng">definition</span></li>
+    <li><span class="dot" style="background:#3A7CC0"></span><a class="title" href="#t2">02 &middot; Apply the management hierarchy</a><span class="rng">priority</span></li>
+    <li><span class="dot" style="background:#C0762C"></span><a class="title" href="#t3">03 &middot; Prevent waste at source</a><span class="rng">upstream</span></li>
+    <li><span class="dot" style="background:#557E9B"></span><a class="title" href="#t4">04 &middot; Separate reuse, recycling and compost</a><span class="rng">recovery</span></li>
+    <li><span class="dot" style="background:#7A5AA8"></span><a class="title" href="#t5">05 &middot; Manage energy and residuals safely</a><span class="rng">downstream</span></li>
+    <li><span class="dot" style="background:#B44A8C"></span><a class="title" href="#t6">06 &middot; Govern the system and measure results</a><span class="rng">delivery</span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t7">Glossary &middot; Flashcards &middot; Exam focus</a><span class="rng"></span></li>
+  </ol>
+</nav>
+
+<!-- ============================================================= tldr === -->
+<section id="summary" class="summary card" style="--accent:#2E9E6A; --soft:#E4F3EB; border-top-color:#2E9E6A">
+  <header><span class="eyebrow" style="color:#2E9E6A">Start here</span><h2><span class="emoji">&#11088;</span> The five-minute version</h2></header>
+  <ul>
+    <li><strong>Integrated waste management combines methods rather than choosing one.</strong> Prevention, reuse, recycling, composting, energy recovery, treatment and disposal perform different jobs for different materials.</li>
+    <li><strong>The hierarchy begins upstream.</strong> Source reduction and reuse are preferred, followed by recycling and composting, then energy recovery, with treatment and engineered disposal for residuals.</li>
+    <li><strong>Waste reduction needs product and system design.</strong> Durable, repairable and less toxic products matter alongside household separation.</li>
+    <li><strong>Local rules determine the correct bin and route.</strong> Accepted materials, contamination thresholds, compost feedstocks and special-waste pathways differ by programme.</li>
+    <li><strong>Performance is more than diversion.</strong> Measure prevention, capture, contamination, recovery yield, emissions, cost, worker safety and safe residual disposal.</li>
+  </ul>
+</section>
+
+<!-- ======================================================== section 1 === -->
+<section id="t1" class="chapter card" style="--accent:#2C8C86; --soft:#E4F1F0;">
+  <header>
+    <span class="eyebrow"><span class="num">1</span> System boundary</span>
+    <h2><span class="emoji">&#128260;</span> Build one integrated system</h2>
+    <span class="timepill">00:00:01-01:01</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lesson starts with an apparent divide. Waste management handles material after it is created, while waste reduction seeks to avoid generation or find another use <span class="ts">00:00:01</span>. Integrated waste management combines both sides <span class="ts">00:00:31</span>.</p>
+
+    <div class="formula"><strong>Integrated waste system</strong> = prevention + separate collection + recovery + treatment + safe residual disposal + feedback to design</div>
+
+    <div class="note warn">
+      <p><strong>Correction: management and reduction are not opposing strategies.</strong> The lecture presents a divide before combining them <span class="ts">00:00:01</span>. A functioning system uses a hierarchy: prevent first where feasible, recover value from generated material, and safely manage what remains.</p>
+    </div>
+
+    <div class="grid-2">
+      <div><h3>Reduction side</h3><ul><li>Avoid unnecessary products, packaging and toxic inputs.</li><li>Extend life through durability, maintenance, repair and reuse.</li><li>Recover materials and nutrients through recycling and composting.</li></ul></div>
+      <div><h3>Management side</h3><ul><li>Collect and sort generated materials safely.</li><li>Recover energy from suitable non-recyclable material where justified.</li><li>Treat and dispose of residuals in controlled facilities.</li></ul></div>
+    </div>
+
+    <p>The lecture names sanitary landfills and mass-burn incinerators as management options, then adds reuse, recycling and composting on the reduction side <span class="ts">00:00:31</span> <span class="ts">00:01:01</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: one combination does not suit every material and place.</strong> EPA's hierarchy states that no single management approach is suitable for all waste streams or circumstances. Composition, contamination, infrastructure, law, cost and environmental performance determine the mix.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 2 === -->
+<section id="t2" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+  <header>
+    <span class="eyebrow"><span class="num">2</span> Priority order</span>
+    <h2><span class="emoji">&#128202;</span> Apply the management hierarchy</h2>
+    <span class="timepill">00:01:01-02:53</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lesson describes three priorities: reduce industrial waste and toxicity at source; encourage reuse, recycling and composting by businesses and households; then manage residual waste through treatment, burial or combustion <span class="ts">00:01:27</span> <span class="ts">00:01:54</span> <span class="ts">00:02:24</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Current hierarchy</th><th>Purpose</th><th>Examples</th></tr></thead>
+        <tbody>
+          <tr><td>1. Source reduction and reuse</td><td>Avoid quantity, toxicity and unnecessary throughput.</td><td>Redesign, less packaging, durable goods, repair, donation</td></tr>
+          <tr><td>2. Recycling and composting</td><td>Return suitable materials or organics to productive use.</td><td>Material recovery, remanufacture, managed aerobic composting</td></tr>
+          <tr><td>3. Energy recovery</td><td>Recover usable energy from suitable non-recyclable material.</td><td>Combustion, digestion, landfill-gas recovery where applicable</td></tr>
+          <tr><td>4. Treatment and disposal</td><td>Reduce risk and isolate residuals.</td><td>Physical, chemical or biological treatment; engineered landfill</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the 75-90% "elimination" estimate is unsupported as a general US outcome.</strong> The lecture attributes this potential to scientists and economists <span class="ts">00:01:01</span>. EPA's latest national municipal-waste fact sheet still uses 2018 data and reports 32.1% recycled or composted. That observed rate does not set a ceiling, but it shows why the lecture's range must not be presented as an established result.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the three priorities should not be attributed to a "United States Academy of Science."</strong> The recording uses that name <span class="ts">00:01:27</span>. The recognised institution is the US National Academy of Sciences, and no primary source was found for this exact attribution. Use the verified EPA hierarchy instead.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the lesson's three-tier scheme is not the current EPA hierarchy.</strong> The verified order separates energy recovery from treatment and disposal. It also places source reduction and reuse together, then recycling and composting.</p>
+    </div>
+
+    <p>The class correctly makes reduction the greater priority and observes that many systems still focus attention downstream after waste has been created <span class="ts">00:02:53</span>.</p>
+  </div>
+</section>
+
+<!-- ======================================================== section 3 === -->
+<section id="t3" class="chapter card" style="--accent:#C0762C; --soft:#FAF0E2;">
+  <header>
+    <span class="eyebrow"><span class="num">3</span> Upstream intervention</span>
+    <h2><span class="emoji">&#128736;&#65039;</span> Prevent waste at source</h2>
+    <span class="timepill">00:01:27-02:24</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The first priority targets design and production: reduce harmful chemicals, reduce packaging and make products last longer and become easier to repair, reuse or recycle <span class="ts">00:01:27</span> <span class="ts">00:01:54</span>.</p>
+
+    <div class="grid-3">
+      <div><h3>Quantity</h3><p>Use less material and remove unnecessary packaging or components.</p></div>
+      <div><h3>Toxicity</h3><p>Eliminate or substitute hazardous inputs where technically feasible.</p></div>
+      <div><h3>Service life</h3><p>Design for durability, maintenance, repair, reuse and disassembly.</p></div>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: source reduction is a strategy, not a universal requirement imposed on all industries by one plan.</strong> The lecture says industries are required to eliminate harmful chemicals and packaging <span class="ts">00:01:27</span>. Duties depend on applicable law, permits and product rules; other prevention measures may be voluntary, contractual or incentive-based.</p>
+    </div>
+
+    <p>The second priority shifts attention to purchasing, repair, reuse, recycling and composting <span class="ts">00:01:54</span> <span class="ts">00:02:24</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: source prevention is not limited to large industry, and "secondary prevention" is not limited to households and small firms.</strong> Product designers, procurers, retailers, institutions, governments and consumers can all prevent waste before discard.</p>
+    </div>
+
+    <div class="note"><p><strong>Editorial prevention checklist:</strong> function needed, material mass, toxicity, recycled content, packaging, repair access, expected life, reuse route, separability and end-of-life responsibility.</p></div>
+  </div>
+</section>
+
+<!-- ======================================================== section 4 === -->
+<section id="t4" class="chapter card" style="--accent:#557E9B; --soft:#E8F0F5;">
+  <header>
+    <span class="eyebrow"><span class="num">4</span> Household and community recovery</span>
+    <h2><span class="emoji">&#129529;</span> Separate reuse, recycling and compost</h2>
+    <span class="timepill">00:03:19-04:12</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The household example uses separate containers for recyclables, compostable food material, reusable bags and residual trash <span class="ts">00:03:19</span> <span class="ts">00:03:48</span>. Its value is the source-separation principle, not a universal bin list.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Stream</th><th>Decision rule</th><th>Common failure</th></tr></thead>
+        <tbody>
+          <tr><td>Reuse</td><td>Item remains safe and useful without major reprocessing.</td><td>Storing unusable material without a user or route</td></tr>
+          <tr><td>Recycling</td><td>Local programme accepts the clean material and has a processing market.</td><td>Wish-cycling and contamination</td></tr>
+          <tr><td>Composting</td><td>Feedstock is accepted and can be managed aerobically at the relevant scale.</td><td>Non-compostable packaging, poor balance, odour or pests</td></tr>
+          <tr><td>Special waste</td><td>Battery, chemical, electronic, medical or other rules require a separate route.</td><td>Mixing hazards into recycling or residual waste</td></tr>
+          <tr><td>Residual</td><td>No feasible prevention or recovery route remains.</td><td>Sending recoverable material downstream</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: bin rules are local.</strong> The lecture notes that some cities mix recyclables and others separate glass, metal, paper and plastic <span class="ts">00:03:19</span>. EPA likewise instructs residents to check the local provider. A recycling symbol or resin code does not prove curbside acceptance.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: plastic bags and film usually do not belong in a household recycling bin.</strong> Reuse can reduce single use, as the lecture suggests <span class="ts">00:03:48</span>, but EPA directs recyclable film to participating retail or drop-off collection and advises checking local rules.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: not every food scrap or product belongs in every compost system.</strong> Accepted feedstocks vary by facility. Managed composting needs suitable carbon and nitrogen material, moisture, oxygen and contamination control.</p>
+    </div>
+
+    <p>The lesson sends material that cannot be reused, recycled, composted or repaired to residual waste <span class="ts">00:03:48</span> <span class="ts">00:04:12</span>. That sequence is sound when special and hazardous items are removed first.</p>
+  </div>
+</section>
+
+<!-- ======================================================== section 5 === -->
+<section id="t5" class="chapter card" style="--accent:#7A5AA8; --soft:#F0EBF8;">
+  <header>
+    <span class="eyebrow"><span class="num">5</span> Downstream control</span>
+    <h2><span class="emoji">&#127959;&#65039;</span> Manage energy and residuals safely</h2>
+    <span class="timepill">00:02:24-05:12</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">For generated waste that remains, the lecture names toxicity reduction, burial, incineration and, in its broadest wording, release for dispersal or dilution <span class="ts">00:02:24</span>. Its review returns to sanitary landfill and mass-burn incineration <span class="ts">00:04:12</span> <span class="ts">00:04:41</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Option</th><th>Role</th><th>Control questions</th></tr></thead>
+        <tbody>
+          <tr><td>Energy recovery</td><td>Convert suitable non-recyclable material into usable heat, electricity or fuel.</td><td>Feedstock, efficiency, air controls, ash and lifecycle result</td></tr>
+          <tr><td>Treatment</td><td>Reduce volume, mobility or toxicity before the next step.</td><td>Hazard, treatment standard, residue and monitoring</td></tr>
+          <tr><td>Engineered landfill</td><td>Contain residual waste under design, operation, closure and monitoring requirements.</td><td>Liner, leachate, gas, daily cover, siting and aftercare</td></tr>
+          <tr><td>Permitted release</td><td>Discharge only where law and science establish a controlled route and limit.</td><td>Permit, standard, receiving environment and cumulative load</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: mass-burn incineration and energy recovery are not interchangeable labels.</strong> Combustion may recover energy or may be treatment. Even with energy recovery, ash remains and usually requires landfill management.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: dilution or dispersal is not a general licence to release waste into the environment.</strong> The lecture places release in its third priority <span class="ts">00:02:24</span>. Any discharge requires an applicable legal pathway, permit or standard, treatment where required, and protection of the receiving environment.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: residual household trash is not the route for every non-recyclable item.</strong> The lecture sends remaining material to landfill or incineration <span class="ts">00:04:12</span>. Batteries, chemicals, electronics, medical waste and other regulated streams may require separate collection and treatment.</p>
+    </div>
+
+    <p>The summary correctly returns to prevention, reuse, recycling and composting before residual management <span class="ts">00:04:41</span> <span class="ts">00:05:12</span>.</p>
+  </div>
+</section>
+
+<!-- ======================================================== section 6 === -->
+<section id="t6" class="chapter card" style="--accent:#B44A8C; --soft:#F8EAF3;">
+  <header>
+    <span class="eyebrow"><span class="num">6</span> Delivery and feedback</span>
+    <h2><span class="emoji">&#128203;</span> Govern the system and measure results</h2>
+    <span class="timepill">00:02:53-05:40</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The recording argues that countries often devote more attention to downstream management than to reduction <span class="ts">00:02:53</span>. It closes by linking household separation with advocacy for wider waste-reduction policy <span class="ts">00:05:40</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>System function</th><th>Responsible actors</th><th>Indicator</th></tr></thead>
+        <tbody>
+          <tr><td>Prevention</td><td>Producer, designer, procurer, regulator, consumer</td><td>Waste generated per service or person; toxicity avoided</td></tr>
+          <tr><td>Collection</td><td>Municipality, contractor, community</td><td>Coverage, reliability, leakage and worker safety</td></tr>
+          <tr><td>Separation</td><td>Household, business, institution, collector</td><td>Capture and contamination by stream</td></tr>
+          <tr><td>Recovery</td><td>Sorter, recycler, composter, market</td><td>Processing yield and verified end use</td></tr>
+          <tr><td>Residual control</td><td>Operator, regulator, local authority</td><td>Emissions, leachate, ash, permit compliance and aftercare</td></tr>
+          <tr><td>Feedback</td><td>All actors</td><td>Design changes, procurement shifts and falling residual volume</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note"><p><strong>Editorial performance rule:</strong> a high collection or diversion percentage can hide contamination, rejected loads, unsafe work or poor final disposal. Track the whole chain and publish mass balance.</p></div>
+
+    <h3>Household action without wish-cycling</h3>
+    <ol>
+      <li>Prevent a purchase or choose a durable and refillable option.</li>
+      <li>Repair, donate or reuse safe items.</li>
+      <li>Check the local list before sorting recycling and compost.</li>
+      <li>Keep hazardous and special waste in the required separate route.</li>
+      <li>Place only true residuals in the residual bin.</li>
+      <li>Support producer, municipal and regulatory changes that make prevention easier.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ========================================================= glossary === -->
+<section id="t7" class="chapter card" style="--accent:#8B8490; --soft:#F0EEF2;">
+  <header><span class="eyebrow">Reference</span><h2><span class="emoji">&#128214;</span> Glossary</h2></header>
+  <div class="section-body">
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Term</th><th>Meaning in this lesson</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Integrated waste management</strong></td><td>Coordinated use of prevention, recovery, treatment and disposal methods across the material chain.</td></tr>
+          <tr><td><strong>Waste hierarchy</strong></td><td>Priority order from source reduction and reuse to recycling and composting, energy recovery, treatment and disposal.</td></tr>
+          <tr><td><strong>Source reduction</strong></td><td>Preventing quantity or toxicity before material becomes waste.</td></tr>
+          <tr><td><strong>Reuse</strong></td><td>Using an item again for the same or another safe purpose without remanufacture.</td></tr>
+          <tr><td><strong>Recycling</strong></td><td>Collection, sorting and processing of accepted material into feedstock for new products.</td></tr>
+          <tr><td><strong>Composting</strong></td><td>Managed aerobic biological decomposition of suitable organic material into stable compost.</td></tr>
+          <tr><td><strong>Contamination</strong></td><td>Wrong or dirty material that reduces the safety, quality or yield of a recovery stream.</td></tr>
+          <tr><td><strong>Energy recovery</strong></td><td>Conversion of suitable non-recyclable waste into usable heat, electricity or fuel.</td></tr>
+          <tr><td><strong>Treatment</strong></td><td>Physical, chemical or biological process that changes volume, mobility or toxicity.</td></tr>
+          <tr><td><strong>Sanitary landfill</strong></td><td>Engineered disposal facility with regulated design, operation, closure and monitoring.</td></tr>
+          <tr><td><strong>Residual waste</strong></td><td>Material remaining after feasible prevention, reuse and recovery routes.</td></tr>
+          <tr><td><strong>Mass balance</strong></td><td>Accounting of material entering, leaving, being recovered, rejected, emitted or disposed.</td></tr>
+          <tr><td><strong>Special waste</strong></td><td>Material requiring a distinct collection or treatment route because of risk or regulation.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== flashcards === -->
+<section id="t8" class="chapter card" style="--accent:#2E9E6A; --soft:#E4F3EB;">
+  <header><span class="eyebrow">Active recall</span><h2><span class="emoji">&#127183;</span> Flashcards</h2></header>
+  <div class="section-body">
+    <div class="cards">
+      <div class="qa"><p class="q">What does integrated waste management combine?</p><p class="a">Prevention, recovery, treatment and safe disposal methods.</p></div>
+      <div class="qa"><p class="q">What is the first hierarchy tier?</p><p class="a">Source reduction and reuse.</p></div>
+      <div class="qa"><p class="q">What is the second tier?</p><p class="a">Recycling and composting.</p></div>
+      <div class="qa"><p class="q">What follows recycling?</p><p class="a">Energy recovery, then treatment and disposal.</p></div>
+      <div class="qa"><p class="q">Is one approach suitable for all waste?</p><p class="a">No. Material, contamination, infrastructure, law and performance differ.</p></div>
+      <div class="qa"><p class="q">Was 75-90% elimination verified?</p><p class="a">No. It is unsupported as a general US outcome.</p></div>
+      <div class="qa"><p class="q">What was the 2018 US recycling and composting rate?</p><p class="a">32.1%, according to EPA's last national MSW fact sheet.</p></div>
+      <div class="qa"><p class="q">Who authored the current verified hierarchy?</p><p class="a">The cited framework is the US EPA non-hazardous materials and waste hierarchy.</p></div>
+      <div class="qa"><p class="q">What three upstream design tests matter?</p><p class="a">Quantity, toxicity and useful life.</p></div>
+      <div class="qa"><p class="q">Who can prevent waste?</p><p class="a">Designers, producers, procurers, retailers, governments and consumers.</p></div>
+      <div class="qa"><p class="q">Does a recycling symbol guarantee acceptance?</p><p class="a">No. Check the local programme.</p></div>
+      <div class="qa"><p class="q">Where do plastic bags often go?</p><p class="a">A participating retail or drop-off film collection, not the curbside bin.</p></div>
+      <div class="qa"><p class="q">What does composting require?</p><p class="a">Accepted organics, carbon-nitrogen balance, moisture, oxygen and contamination control.</p></div>
+      <div class="qa"><p class="q">Is combustion always energy recovery?</p><p class="a">No. It may be treatment, and ash still needs management.</p></div>
+      <div class="qa"><p class="q">Can waste simply be diluted and released?</p><p class="a">No. Discharge requires a lawful, controlled route and receiving-environment protection.</p></div>
+      <div class="qa"><p class="q">What is residual waste?</p><p class="a">Material left after feasible prevention, reuse and recovery.</p></div>
+      <div class="qa"><p class="q">Do all residual household items share one route?</p><p class="a">No. Special and hazardous waste may require separate collection.</p></div>
+      <div class="qa"><p class="q">Why measure contamination?</p><p class="a">It affects processing safety, recovery yield and final disposal.</p></div>
+      <div class="qa"><p class="q">What does mass balance reveal?</p><p class="a">Where material is recovered, rejected, emitted or disposed.</p></div>
+      <div class="qa"><p class="q">What makes household sorting effective?</p><p class="a">Prevention first, local instructions, clean streams and separate special waste.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== exam focus === -->
+<section id="t9" class="chapter card" style="--accent:#2E9E6A; --soft:#E4F3EB;">
+  <header><span class="eyebrow">Revision sheet</span><h2><span class="emoji">&#127919;</span> Exam focus</h2></header>
+  <div class="section-body">
+    <h3>Integrated-waste answer architecture</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Move</th><th>What to write</th><th>Exam verb</th></tr></thead>
+        <tbody>
+          <tr><td>Define</td><td>One coordinated system across prevention, recovery and residual control</td><td>Frame</td></tr>
+          <tr><td>Characterise</td><td>Generation, composition, source, hazard and existing route</td><td>Diagnose</td></tr>
+          <tr><td>Apply hierarchy</td><td>Prevent, reuse, recycle/compost, recover energy, treat/dispose</td><td>Prioritise</td></tr>
+          <tr><td>Assign roles</td><td>Producer, consumer, municipality, operator, market and regulator</td><td>Govern</td></tr>
+          <tr><td>Protect</td><td>Workers, communities, receiving environment and special streams</td><td>Safeguard</td></tr>
+          <tr><td>Measure</td><td>Generation, capture, contamination, yield, emissions, cost and mass balance</td><td>Verify</td></tr>
+          <tr><td>Improve</td><td>Feed downstream evidence back into product and service design</td><td>Adapt</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Corrections to remember</h3>
+    <ul>
+      <li>Use the four-tier EPA hierarchy, not an unverified academy attribution.</li>
+      <li>Do not assert that integrated management eliminates 75-90% of US municipal waste.</li>
+      <li>Distinguish source reduction duties in law from voluntary or incentive-based action.</li>
+      <li>Check local rules for recycling, film plastic and compost feedstocks.</li>
+      <li>Separate energy recovery, treatment, permitted discharge and engineered disposal.</li>
+      <li>Remove hazardous and special waste before defining the residual stream.</li>
+    </ul>
+
+    <div class="note"><p><strong>One-line conclusion:</strong> integrated waste management succeeds when upstream prevention reduces the burden, source separation preserves value, and controlled facilities safely manage the unavoidable residual.</p></div>
+  </div>
+</section>
+
+<footer class="notefoot">Want the whole lecture? <a href="https://drive.google.com/file/d/1m1237qzqR4NJ6rvQub7d7OTxsoNI02iC/view?usp=drivesdk" target="_blank" rel="noopener">▶ Watch the full recording</a><span class="sep">·</span><a href="https://drive.google.com/file/d/1GjM1iKcTiA7zsAZ6ZR9T5l7udeFlEf_x/view?usp=drivesdk" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+</html>

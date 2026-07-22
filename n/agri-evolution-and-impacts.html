@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agricultural Revolution: Productivity, Urban Change and Environmental Cost</title>
+<style>/* Lecture Notes ebook, "warm study" theme.
+   Inspired by Mehak's MarketCanvas app: soft cream ground, rounded white cards,
+   a different pastel accent per topic, serif display + friendly sans body,
+   gentle emoji + pill badges. Playful and pretty, but still a real study book.
+   Print-first (A4 PDF via headless Edge); reads well on screen too.
+
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
+   Everything themeable keys off --accent / --soft. Titles stay ink for
+   readability; accents colour eyebrows, numbers, pills, rules and callouts.
+*/
+
+:root {
+  --cream: #FCF6F0;          /* page ground (warm) */
+  --card: #FFFFFF;
+  --ink: #2C2630;            /* plum-black body/headings */
+  --ink-soft: #5A5360;
+  --slate: #8B8490;          /* captions, timestamps */
+  --hairline: #EEE6E4;
+
+  /* section default accent (overridden per section) */
+  --accent: #C0567E;
+  --soft: #FBECF1;
+
+  --shadow: 0 1px 2px rgba(60,30,45,.05), 0 10px 26px rgba(80,40,55,.07);
+  --radius: 20px;
+
+  --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: Consolas, "Cascadia Code", ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background:
+    radial-gradient(1100px 700px at 15% -5%, #FBEEF3 0%, transparent 55%),
+    radial-gradient(1000px 700px at 100% 0%, #EEF3FB 0%, transparent 50%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  font: 10.8pt/1.62 var(--sans);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+@media screen {
+  body { max-width: 51rem; margin: 0 auto; padding: 2.5rem 1.15rem 4rem; font-size: 1.0rem; }
+}
+
+/* ---------------------------------------------------------------- page --- */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm 14mm;
+  @bottom-center {
+    content: counter(page);
+    font: 8.5pt var(--sans);
+    color: #8B8490;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+/* --------------------------------------------------------------- cards --- */
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8mm 9mm 9mm;
+  margin: 0 0 6mm;
+  box-shadow: var(--shadow);
+  break-inside: auto;
+}
+@media screen { .card { margin-bottom: 1.4rem; } }
+
+/* a soft accent wash across the top of each section card (fades to white),
+   echoing the app's pastel cards without hurting readability */
+.chapter {
+  background:
+    linear-gradient(180deg, var(--soft) 0, rgba(255,255,255,0) 34mm),
+    var(--card);
+  border-top: 3px solid var(--accent);
+  break-inside: auto;
+  break-before: page;   /* each topic starts fresh: slide on top, notes below */
+}
+/* on screen (web/PWA) sections just stack; no forced page breaks */
+@media screen { .chapter { break-before: auto; } }
+
+h2, h3, .eyebrow { break-after: avoid; }
+p { orphans: 2; widows: 2; }
+
+/* keep the section header intact (eyebrow + title + time pill together) and
+   glued to its opening slide */
+.chapter > header { break-inside: avoid; break-after: avoid; }
+figure.slide { break-before: avoid; }
+
+/* --------------------------------------------------------------- cover --- */
+
+.cover {
+  page: cover;
+  break-after: page;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32mm 22mm 24mm;
+  background:
+    radial-gradient(700px 460px at 12% 8%, #FBE6EE 0%, transparent 60%),
+    radial-gradient(760px 520px at 96% 4%, #E7EEFB 0%, transparent 58%),
+    radial-gradient(620px 520px at 80% 96%, #E6F4EC 0%, transparent 60%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+@media screen {
+  .cover { min-height: 80vh; border-radius: 24px; padding: 3.2rem 2.6rem; margin-bottom: 1.4rem; }
+}
+
+.cover .avatar { font-size: 30pt; line-height: 1; margin-bottom: 7mm; }
+.cover .kicker {
+  font: 600 9pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 5mm;
+}
+.cover h1 {
+  font: 600 31pt/1.14 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 15em;
+}
+.cover .subtitle {
+  margin-top: 5mm;
+  font: 400 13.5pt/1.5 var(--sans);
+  color: var(--ink-soft);
+  max-width: 30em;
+}
+.cover .warm {
+  margin-top: 4mm;
+  font: italic 400 12pt/1.5 var(--serif);
+  color: var(--accent);
+}
+
+.cover .chips { display: flex; flex-wrap: wrap; gap: 3mm; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.4mm 4mm;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(60,30,45,.04);
+  font: 400 9pt var(--sans);
+  color: var(--slate);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chip b { font: 700 10.5pt var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ headings --- */
+
+.chapter header { margin-bottom: 5mm; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  font: 700 8.5pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--accent);
+  margin-bottom: 3mm;
+}
+.eyebrow .num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h2 {
+  font: 600 20pt/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .emoji { font-size: 17pt; }
+
+.timepill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.5mm 3.5mm;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font: 600 8pt var(--mono);
+  letter-spacing: 0.02em;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h3 {
+  font: 600 12.5pt/1.34 var(--serif);
+  color: var(--ink);
+  margin: 6mm 0 2.5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+.ts { font: 400 8.5pt var(--mono); color: var(--slate); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- body --- */
+
+.section-body > :last-child { margin-bottom: 0; }
+p { margin: 0 0 3mm; }
+.lead { font-size: 11.2pt; color: var(--ink); }
+
+ul, ol { margin: 0 0 3mm 5.5mm; }
+li { margin-bottom: 1.7mm; padding-left: 1mm; }
+li::marker { color: var(--accent); }
+
+.kt { font-weight: 700; color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
+
+code { font: 9.5pt var(--mono); background: #F3EFF4; padding: .4pt 3.5pt; border-radius: 4px; }
+
+/* ------------------------------------------------------------ callouts --- */
+
+.note {
+  --c: var(--accent);
+  --f: var(--soft);
+  background: var(--f);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  border-left: 3px solid var(--c);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.note .label {
+  display: inline-flex; align-items: center; gap: 1.6mm;
+  font: 700 8pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c);
+  margin-bottom: 1.8mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.warn { --c: #B4791F; --f: #FaF1DF; }
+.note.exam { --c: #3B8B78; --f: #E6F3EF; }
+.note.def  { --c: var(--accent); --f: var(--soft); }
+
+/* ------------------------------------------------------- summary card --- */
+
+.summary { --accent: #C0567E; --soft: #FBECF1; }
+.summary ul { list-style: none; margin: 0; }
+.summary li { position: relative; padding: 0 0 0 7mm; margin-bottom: 3.5mm; }
+.summary li::before {
+  content: "";
+  position: absolute; left: 0; top: 2.6mm;
+  width: 3.2mm; height: 3.2mm; border-radius: 50%;
+  background: var(--accent);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.summary li:last-child { margin-bottom: 0; }
+.summary li b, .summary li strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------- TOC --- */
+
+nav.toc { --accent: #8B8490; --soft: #F3EFF4; }
+nav.toc ol { list-style: none; margin: 0; }
+nav.toc li {
+  display: flex; align-items: baseline; gap: 4mm;
+  padding: 2.7mm 0;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11pt var(--sans);
+}
+nav.toc li:last-child { border-bottom: 0; }
+nav.toc .dot { width: 3.4mm; height: 3.4mm; border-radius: 50%; flex-shrink: 0;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+nav.toc .title { flex: 1; color: var(--ink); }
+nav.toc .rng { flex-shrink: 0; font: 600 8.5pt var(--mono); color: var(--slate); }
+
+/* -------------------------------------------------------------- slides --- */
+
+figure.slide { margin: 0 0 5mm; break-inside: avoid; }
+figure.slide img {
+  width: 100%; display: block;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 10px rgba(40,30,45,.10);
+}
+figure.slide figcaption {
+  font: 400 8.5pt var(--sans);
+  color: var(--slate);
+  margin-top: 2mm;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4mm;
+}
+figure.slide figcaption .ts { color: var(--accent); }
+
+/* ------------------------------------------------------------ glossary --- */
+
+dl.glossary { margin: 0; }
+dl.glossary div { padding: 3mm 0; border-bottom: 1px solid var(--hairline); break-inside: avoid; }
+dl.glossary div:last-child { border-bottom: 0; padding-bottom: 0; }
+dl.glossary dt { font: 700 10.5pt var(--sans); color: var(--accent); margin-bottom: 1.2mm; }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- flashcards --- */
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 0; }
+.qa {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  background: linear-gradient(180deg, var(--soft) 0, #fff 60%);
+  break-inside: avoid;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.qa .q { font: 700 10pt var(--sans); color: var(--ink); margin-bottom: 2mm; }
+.qa .a { color: var(--ink-soft); font-size: 10pt; }
+
+/* ------------------------------------------------------------- tables --- */
+
+.tables-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0; break-inside: avoid; }
+th {
+  font: 700 9pt var(--sans); text-align: left; color: var(--accent);
+  border-bottom: 2px solid var(--soft); padding: 2mm 3mm 2mm 0;
+}
+td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+
+/* --- mobile / on-the-go reading (screen only; never affects the print PDF).
+   Placed LAST so it wins the cascade over the wider @media screen rules above.
+   Requires <meta name="viewport" content="width=device-width, initial-scale=1">. */
+@media screen and (max-width: 640px) {
+  body { padding: 1rem 0.85rem 2.5rem; font-size: 1.02rem; }
+  .card { padding: 5mm 5mm 6mm; border-radius: 14px; margin-bottom: 0.9rem; }
+  .cover { min-height: auto; padding: 2rem 1.3rem 1.6rem; border-radius: 16px; }
+  .cover .avatar { font-size: 24pt; margin-bottom: 4mm; }
+  .cover h1 { font-size: 20pt; max-width: 100%; }
+  .cover .subtitle { font-size: 11.5pt; }
+  .cover .warm { font-size: 11pt; }
+  .cover .chips { gap: 2mm; margin-top: 5mm; }
+  h2 { font-size: 16pt; }
+  h2 .emoji { font-size: 13.5pt; }
+  h3 { font-size: 11.5pt; }
+  .cards { grid-template-columns: 1fr; }
+  nav.toc li { font-size: 10.5pt; gap: 2.5mm; padding: 2.5mm 0; }
+  nav.toc .rng { font-size: 8pt; }
+  .note { padding: 3.5mm 4mm; }
+  table { font-size: 9.5pt; }
+}
+</style>
+<style>
+@media print {
+  body { font-size: 9.5pt; line-height: 1.43; }
+  .card { padding: 6.5mm 7.5mm 7mm; }
+  .chapter header { margin-bottom: 3mm; }
+  p { margin-bottom: 2mm; }
+  .lead { font-size: 10pt; }
+  ul, ol { margin-bottom: 2mm; }
+  li { margin-bottom: 1mm; }
+  .summary li { margin-bottom: 2mm; }
+  .note { padding: 3mm 4mm; margin: 2.5mm 0; }
+  table { font-size: 8.6pt; margin: 2mm 0; }
+  th { padding: 1.4mm 2mm 1.4mm 0; }
+  td { padding: 1.4mm 2mm; }
+  .cards { gap: 1.5mm 2mm; }
+  .qa { padding: 2mm 3mm; line-height: 1.25; }
+  .qa .q { font-size: 8.6pt; margin-bottom: .6mm; }
+  .qa .a { font-size: 8.5pt; }
+}
+</style>
+<meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
+align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
+border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
+<body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/file/d/1YWgrk3ZyAgqSzjHywGB7Rth-PgJEMp3V/view?usp=drivesdk" target="_blank" rel="noopener">Download PDF ↓</a></div>
+
+<!-- ============================================================ cover === -->
+<section class="cover" style="background:radial-gradient(700px 460px at 12% 8%,#E4F3EB 0,transparent 60%),radial-gradient(760px 520px at 96% 4%,#FAF0E2 0,transparent 58%),radial-gradient(620px 520px at 80% 96%,#E7F1FB 0,transparent 60%),var(--cream)">
+  <div>
+    <div class="avatar">&#127806;</div>
+    <div class="kicker" style="color:#2E9E6A">CSS Environmental Science &middot; Agriculture and environment</div>
+    <h1>Agricultural Revolution: Productivity, Urban Change and Environmental Cost</h1>
+    <p class="subtitle">A complete guide to the lecture's chain from crop rotation, water control and machinery to higher output, labour change and urban growth, followed by the costs of land conversion, intensive tillage and polluted runoff.</p>
+    <p class="warm" style="color:#2C8A5E">Read agricultural change as a linked social and ecological system. &#127793;</p>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>7m</b> recording</span>
+    <span class="chip"><b>6</b> core topics</span>
+    <span class="chip"><b>13</b> correction boxes</span>
+    <span class="chip"><b>20</b> flashcards</span>
+  </div>
+</section>
+
+<!-- ============================================================== toc === -->
+<nav class="toc card">
+  <header><span class="eyebrow">Contents</span><h2><span class="emoji">&#128506;&#65039;</span> In this chapter</h2></header>
+  <ol>
+    <li><span class="dot" style="background:#2E9E6A"></span><a class="title" href="#summary">The five-minute version</a><span class="rng">summary</span></li>
+    <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t1">01 &middot; Place the revolution in time</a><span class="rng">scope</span></li>
+    <li><span class="dot" style="background:#3A7CC0"></span><a class="title" href="#t2">02 &middot; Change crops, rotations and water control</a><span class="rng">practice</span></li>
+    <li><span class="dot" style="background:#C0762C"></span><a class="title" href="#t3">03 &middot; Mechanise sowing and harvesting</a><span class="rng">tools</span></li>
+    <li><span class="dot" style="background:#557E9B"></span><a class="title" href="#t4">04 &middot; Follow the social ripple effect</a><span class="rng">society</span></li>
+    <li><span class="dot" style="background:#7A5AA8"></span><a class="title" href="#t5">05 &middot; Convert land and lose ecological value</a><span class="rng">land</span></li>
+    <li><span class="dot" style="background:#B44A8C"></span><a class="title" href="#t6">06 &middot; Trace soil and water damage</a><span class="rng">pollution</span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t7">Glossary &middot; Flashcards &middot; Exam focus</a><span class="rng"></span></li>
+  </ol>
+</nav>
+
+<!-- ============================================================= tldr === -->
+<section id="summary" class="summary card" style="--accent:#2E9E6A; --soft:#E4F3EB; border-top-color:#2E9E6A">
+  <header><span class="eyebrow" style="color:#2E9E6A">Start here</span><h2><span class="emoji">&#11088;</span> The five-minute version</h2></header>
+  <ul>
+    <li><strong>The British agricultural transformation was a long process.</strong> The lecture begins in the early eighteenth century, but verified accounts place connected changes from the seventeenth through the nineteenth centuries.</li>
+    <li><strong>Practice and machinery changed output.</strong> New rotations, crop choices, drainage, irrigation and more efficient sowing and harvesting could raise productivity, with results depending on soil, water and management.</li>
+    <li><strong>The famous tools need careful attribution.</strong> Ploughs were ancient; Jethro Tull developed a British seed drill around 1701; Cyrus McCormick patented a reaper in 1834 and later organised factory production.</li>
+    <li><strong>Farm change interacted with wider social change.</strong> Output, labour demand, enclosure, population, trade, industry and urban employment influenced one another. Agriculture was important, but not a single cause of cities or factories.</li>
+    <li><strong>Environmental costs follow specific pathways.</strong> Habitat conversion can reduce biodiversity and carbon storage; intensive tillage can expose soil; excess nutrients can drive algal blooms; pesticides can harm non-target organisms; poorly managed irrigation can cause waterlogging and salinity.</li>
+  </ul>
+</section>
+
+<!-- ======================================================== section 1 === -->
+<section id="t1" class="chapter card" style="--accent:#2C8C86; --soft:#E4F1F0;">
+  <header>
+    <span class="eyebrow"><span class="num">1</span> Historical scope</span>
+    <h2><span class="emoji">&#128336;</span> Place the revolution in time</h2>
+    <span class="timepill">00:00:02-01:21</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The recording opens with the variety and convenience of modern food retail, then traces that abundance back to changes in farming techniques and equipment <span class="ts">00:00:02</span> <span class="ts">00:00:31</span>. It calls this transformation the Agricultural Revolution.</p>
+
+    <p>The lecture locates the start in Great Britain in the early eighteenth century and says the changes spread through Europe and America by the nineteenth century <span class="ts">00:00:52</span>. It defines the period through new crops, crop rotation, water management and machinery that increased food production.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: the British agricultural transformation was not a single event with one uncontested start date.</strong> The lecture's early-eighteenth-century marker is useful for orientation <span class="ts">00:00:52</span>, but UK official accounts describe a process extending from the seventeenth through the nineteenth centuries. Timing, adoption and effects varied by region.</p>
+    </div>
+
+    <div class="formula"><strong>Lecture's main chain</strong> = changed practices + changed tools &rarr; more output and less labour per task &rarr; population and urban change &rarr; greater pressure on land, soil and water</div>
+
+    <div class="note"><p><strong>Editorial reading rule:</strong> treat the chain as a map of interactions. Each arrow needs a mechanism, a time and a place; none should be written as an automatic universal law.</p></div>
+
+    <div class="grid-2">
+      <div><h3>Production changes</h3><ul><li>Experiment with crops and rotations.</li><li>Control water through irrigation and drainage.</li><li>Sow, cultivate and harvest with improved equipment.</li></ul></div>
+      <div><h3>Downstream changes</h3><ul><li>Alter labour requirements and farm scale.</li><li>Support more non-farm consumption and employment.</li><li>Intensify land conversion and material inputs.</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 2 === -->
+<section id="t2" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+  <header>
+    <span class="eyebrow"><span class="num">2</span> Farming practice</span>
+    <h2><span class="emoji">&#127807;</span> Change crops, rotations and water control</h2>
+    <span class="timepill">00:00:52-01:51</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">New crops and crop rotations form the lecture's first technical pathway <span class="ts">00:00:52</span>. The lesson says rotations allowed soil nutrients to replenish, strengthened crops and improved output <span class="ts">00:01:21</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Change in the lecture</th><th>Productivity pathway</th><th>Required boundary</th></tr></thead>
+        <tbody>
+          <tr><td>Crop rotation</td><td>Changes crop sequence, rooting pattern and pest or disease pressure.</td><td>Benefits depend on the crops, soil, nutrients and management.</td></tr>
+          <tr><td>New crops</td><td>Can extend the rotation, supply food or fodder and spread risk.</td><td>A new crop is not automatically suitable for every climate or soil.</td></tr>
+          <tr><td>Irrigation</td><td>Supplies water where rainfall is insufficient or badly timed.</td><td>Efficiency, water source, drainage and salt balance matter.</td></tr>
+          <tr><td>Drainage</td><td>Removes excess water and improves root-zone aeration.</td><td>Outflow quality, receiving waters and wetland effects matter.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: rotation does not simply give all soil nutrients time to replenish.</strong> The recording uses that shorthand <span class="ts">00:01:21</span>. Diverse rotations can improve nutrient cycling and reduce pest pressure. Legumes can add nitrogen through biological fixation, but other nutrients may still require replenishment and outcomes depend on soil, residue and management.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: irrigation and drainage are productivity tools with conditional effects.</strong> The lecture presents both as straightforward gains <span class="ts">00:01:21</span>. Poorly designed irrigation, excessive application and inadequate drainage can instead produce waterlogging, salinity, erosion or polluted return flows.</p>
+    </div>
+
+    <p>The core insight remains valid: planned crop sequences and controlled water can change how efficiently land, nutrients and labour produce food. The environmental verdict depends on how those systems are designed and maintained.</p>
+  </div>
+</section>
+
+<!-- ======================================================== section 3 === -->
+<section id="t3" class="chapter card" style="--accent:#C0762C; --soft:#FAF0E2;">
+  <header>
+    <span class="eyebrow"><span class="num">3</span> Agricultural machinery</span>
+    <h2><span class="emoji">&#9881;&#65039;</span> Mechanise sowing and harvesting</h2>
+    <span class="timepill">00:01:21-03:15</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecture links ploughing, row sowing and mechanical reaping to faster work, fewer failed seeds and larger-scale production <span class="ts">00:01:21</span> <span class="ts">00:01:51</span> <span class="ts">00:02:47</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Tool</th><th>Function taught</th><th>Verified historical boundary</th></tr></thead>
+        <tbody>
+          <tr><td>Plough</td><td>Breaks and turns soil and prepares a furrow for seed.</td><td>Ancient tool with many later improvements; not invented in the eighteenth-century revolution.</td></tr>
+          <tr><td>Seed drill</td><td>Places seed at regular spacing and depth and covers it.</td><td>Jethro Tull's British horse-drawn design dates to about 1701; spelling is Tull.</td></tr>
+          <tr><td>Mechanical reaper</td><td>Cuts standing grain and reduces hand-harvest labour.</td><td>Cyrus McCormick patented a reaper in 1834; factory production developed later.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the Agricultural Revolution did not invent the plough.</strong> The recording says it did <span class="ts">00:01:21</span> and repeats the point later <span class="ts">00:05:11</span>. Ploughs existed in antiquity; verified British Museum objects include Iron Age and Roman examples. The relevant change was improvement and wider use of particular plough designs.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the agriculturist was Jethro Tull, not "Jethro Tall."</strong> The lecture names him as the inventor <span class="ts">00:01:51</span> and repeats the spelling error <span class="ts">00:05:41</span>. The Science Museum dates Tull's horse-drawn seed-drill design to about 1701 and describes it as a major step in mechanised cultivation. Phrase this as his British design, not the first seed-sowing device anywhere.</p>
+    </div>
+
+    <p>The lesson briefly explains that the later rock band Jethro Tull borrowed the name through a booking agent's staff member <span class="ts">00:02:19</span>. That cultural aside is part of the recording but has no role in the agricultural mechanism.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: Cyrus McCormick should not receive sole credit for inventing or mass-producing every reaper.</strong> The recording credits him with mass production <span class="ts">00:02:47</span>. Smithsonian evidence records his 1834 patent, his use of his father's incomplete model, assistance from Jo Anderson, and the opening of a Chicago-area factory in 1847. Other reaper designs also existed.</p>
+    </div>
+
+    <div class="note"><p><strong>Editorial mechanism test:</strong> for any machine, state the task changed, labour or input saved, new capacity created and new environmental pressure that may follow.</p></div>
+  </div>
+</section>
+
+<!-- ======================================================== section 4 === -->
+<section id="t4" class="chapter card" style="--accent:#557E9B; --soft:#E8F0F5;">
+  <header>
+    <span class="eyebrow"><span class="num">4</span> Social transformation</span>
+    <h2><span class="emoji">&#127961;&#65039;</span> Follow the social ripple effect</h2>
+    <span class="timepill">00:02:47-04:15</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecture moves from easier, faster and larger-scale production to population growth <span class="ts">00:02:47</span>. It then links reduced farm-labour demand and food surplus to movement into cities <span class="ts">00:03:15</span>.</p>
+
+    <div class="formula"><strong>Lecture's ripple effect</strong> = higher farm productivity &rarr; food support and labour release &rarr; urban population &rarr; demand for non-food goods &rarr; technology and factories</div>
+
+    <p>In the next step, urban consumers demand clothing and comfort goods. The lesson says technologies developed to meet this demand and helped produce the first industrial factories <span class="ts">00:03:15</span> <span class="ts">00:03:43</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: agriculture was one part of a multi-directional historical change, not the sole cause of population growth, cities or factories.</strong> The lecture presents a clean one-way chain <span class="ts">00:03:15</span> <span class="ts">00:03:43</span>. Official UK histories show agricultural improvement, enclosure, trade, demographic change, industrial technology and urban employment interacting across time.</p>
+    </div>
+
+    <div class="grid-3">
+      <div><h3>Farm-side change</h3><p>Output, labour demand, landholding and market supply change.</p></div>
+      <div><h3>Urban pull</h3><p>Factories, wages, services and markets attract or require workers.</p></div>
+      <div><h3>Feedback</h3><p>Urban demand, trade and industry reshape farm investment and production.</p></div>
+    </div>
+
+    <div class="note"><p><strong>Editorial exam boundary:</strong> use "contributed to," "interacted with" and "created conditions for" unless the evidence supports a narrower causal claim.</p></div>
+
+    <p>The lecture's central social point is still useful: changes in food production can alter where people work, how markets expand and what infrastructure a society demands.</p>
+  </div>
+</section>
+
+<!-- ======================================================== section 5 === -->
+<section id="t5" class="chapter card" style="--accent:#7A5AA8; --soft:#F0EBF8;">
+  <header>
+    <span class="eyebrow"><span class="num">5</span> Land-use change</span>
+    <h2><span class="emoji">&#127795;</span> Convert land and lose ecological value</h2>
+    <span class="timepill">00:03:43-04:44</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The recording turns from social benefits to environmental cost. Converting previously undisturbed land into farmland can remove or fragment wildlife habitat and reduce biodiversity <span class="ts">00:03:43</span> <span class="ts">00:04:15</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: biodiversity is broader than "the variety of life forms within an ecosystem."</strong> That is the lecture's definition <span class="ts">00:04:15</span>. The Convention on Biological Diversity includes variability within species, between species and among ecosystems.</p>
+    </div>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Conversion step</th><th>Immediate change</th><th>Possible ecological consequence</th></tr></thead>
+        <tbody>
+          <tr><td>Clear native vegetation</td><td>Remove biomass and habitat structure.</td><td>Population decline, displacement, fragmentation and lost carbon storage.</td></tr>
+          <tr><td>Replace diverse cover</td><td>Create a simplified managed field.</td><td>Lower habitat diversity and changed food webs.</td></tr>
+          <tr><td>Plough and expose soil</td><td>Disturb soil structure and remove surface protection.</td><td>Greater erosion risk where intensity, slope and cover allow it.</td></tr>
+          <tr><td>Add roads and drainage</td><td>Alter movement of organisms and water.</td><td>Fragmentation, changed runoff and downstream effects.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: clearing trees does not mean every removed tree instantly releases all its carbon dioxide.</strong> The lecture uses that shorthand <span class="ts">00:04:44</span>. Land conversion can emit carbon when biomass and soils are burned, decomposed or disturbed, and it reduces future uptake and stored carbon. The timing and amount depend on what happens to vegetation, soil and replacement land cover.</p>
+    </div>
+
+    <p>The lesson correctly identifies forests as important biodiversity reservoirs <span class="ts">00:04:15</span>. The stronger exam answer explains which habitat is converted, which level of biodiversity changes, and which ecological process is lost.</p>
+  </div>
+</section>
+
+<!-- ======================================================== section 6 === -->
+<section id="t6" class="chapter card" style="--accent:#B44A8C; --soft:#F8EAF3;">
+  <header>
+    <span class="eyebrow"><span class="num">6</span> Soil and water pathways</span>
+    <h2><span class="emoji">&#128167;</span> Trace soil and water damage</h2>
+    <span class="timepill">00:04:44-06:10</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecture groups extensive ploughing, pesticides, fertilisers and irrigation as pressures that can increase erosion, degrade soil and move pollutants into waterways <span class="ts">00:04:44</span>. It then links algal growth to oxygen loss and harm to aquatic organisms <span class="ts">00:05:11</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Pressure</th><th>Movement or change</th><th>Endpoint</th></tr></thead>
+        <tbody>
+          <tr><td>Intensive tillage on vulnerable soil</td><td>Reduced cover, disturbed structure and sediment movement.</td><td>Erosion, nutrient loss and sediment in water.</td></tr>
+          <tr><td>Excess nitrogen and phosphorus</td><td>Runoff or leaching carries nutrients from fields.</td><td>Algal growth, decomposition, hypoxia and possible fish kills.</td></tr>
+          <tr><td>Pesticide loss</td><td>Runoff, eroded particles, leaching or spray drift moves active ingredients.</td><td>Exposure and possible toxicity to non-target organisms.</td></tr>
+          <tr><td>Poorly managed irrigation</td><td>Excess application and inadequate drainage raise water tables or leave salts.</td><td>Waterlogging, salinity, polluted return flow and lower yields.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: ploughing, pesticides, fertilisers and irrigation do not have one identical or automatic effect.</strong> The recording bundles them together <span class="ts">00:04:44</span> and repeats the bundle in review <span class="ts">00:06:10</span>. Risk depends on intensity, timing, product, soil, slope, weather, drainage and conservation practice.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: excess nutrients, not pesticides as a class, are the direct fertilising driver of algal blooms.</strong> The lecture says pesticides and fertilisers washed into water promote algae <span class="ts">00:04:44</span>. Excess nitrogen and phosphorus can cause eutrophication. Pesticides follow chemical-specific toxicity and exposure pathways and can harm aquatic or other non-target organisms.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: oxygen loss needs the full mechanism.</strong> Nutrient enrichment can accelerate algal growth; dense growth blocks light, and respiration plus microbial decomposition consume dissolved oxygen. Low oxygen can injure or kill aquatic life <span class="ts">00:05:11</span>. Blooms, toxins and oxygen effects vary by water body and organism.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: water pollution does not automatically make every freshwater source unusable.</strong> The recording says pollution can compromise freshwater used by people <span class="ts">00:05:11</span>. Actual risk depends on contaminant, concentration, exposure route, source-water protection and treatment; harmful blooms and nitrates can create serious drinking-water hazards.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ========================================================= glossary === -->
+<section id="t7" class="chapter card" style="--accent:#8B8490; --soft:#F0EEF2;">
+  <header><span class="eyebrow">Reference</span><h2><span class="emoji">&#128214;</span> Glossary</h2></header>
+  <div class="section-body">
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Term</th><th>Meaning in this lesson</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Agricultural Revolution</strong></td><td>Long British agricultural transformation involving land, crops, livestock, water, tools, labour and markets.</td></tr>
+          <tr><td><strong>Crop rotation</strong></td><td>Planned sequence of different crops on the same land over time.</td></tr>
+          <tr><td><strong>Biological nitrogen fixation</strong></td><td>Conversion of atmospheric nitrogen into usable compounds by microorganisms, often associated with legumes.</td></tr>
+          <tr><td><strong>Drainage</strong></td><td>Removal or control of excess surface or soil water.</td></tr>
+          <tr><td><strong>Irrigation</strong></td><td>Managed application of water to support crop production.</td></tr>
+          <tr><td><strong>Plough</strong></td><td>Ancient soil-working implement whose designs changed over time.</td></tr>
+          <tr><td><strong>Seed drill</strong></td><td>Machine that places seed in controlled rows, spacing or depth and covers it.</td></tr>
+          <tr><td><strong>Reaper</strong></td><td>Machine for cutting standing grain during harvest.</td></tr>
+          <tr><td><strong>Mechanisation</strong></td><td>Substitution or assistance of human and animal tasks by machines.</td></tr>
+          <tr><td><strong>Land-use change</strong></td><td>Conversion of land cover or function, such as forest or grassland to cropland.</td></tr>
+          <tr><td><strong>Biodiversity</strong></td><td>Variability within species, between species and among ecosystems.</td></tr>
+          <tr><td><strong>Habitat fragmentation</strong></td><td>Division of a continuous habitat into smaller, more isolated parts.</td></tr>
+          <tr><td><strong>Eutrophication</strong></td><td>Excess nutrient enrichment that can drive algal growth and oxygen stress.</td></tr>
+          <tr><td><strong>Hypoxia</strong></td><td>Dissolved-oxygen concentration too low to support many aquatic organisms.</td></tr>
+          <tr><td><strong>Non-target organism</strong></td><td>Species exposed to a pesticide even though it was not the intended pest.</td></tr>
+          <tr><td><strong>Waterlogging</strong></td><td>Excess water in the root zone that restricts aeration and plant function.</td></tr>
+          <tr><td><strong>Salinity</strong></td><td>Accumulation of soluble salts at levels that impair soil or crop performance.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== flashcards === -->
+<section id="t8" class="chapter card" style="--accent:#2E9E6A; --soft:#E4F3EB;">
+  <header><span class="eyebrow">Active recall</span><h2><span class="emoji">&#127183;</span> Flashcards</h2></header>
+  <div class="section-body">
+    <div class="cards">
+      <div class="qa"><p class="q">Was the British Agricultural Revolution one event?</p><p class="a">No. It was a regional, uneven process extending from the seventeenth through the nineteenth centuries.</p></div>
+      <div class="qa"><p class="q">What practice begins the lecture's technical story?</p><p class="a">New crops and crop rotation.</p></div>
+      <div class="qa"><p class="q">Does rotation replenish every nutrient automatically?</p><p class="a">No. Benefits depend on crop sequence, soil and management; legumes can add nitrogen.</p></div>
+      <div class="qa"><p class="q">How can water control raise output?</p><p class="a">Irrigation supplies water and drainage removes damaging excess water.</p></div>
+      <div class="qa"><p class="q">What risks follow poor irrigation management?</p><p class="a">Waterlogging, salinity, erosion or polluted return flows.</p></div>
+      <div class="qa"><p class="q">Was the plough invented in the eighteenth century?</p><p class="a">No. Ploughs are ancient; later designs were improved and adopted.</p></div>
+      <div class="qa"><p class="q">What is the correct name of the seed-drill innovator?</p><p class="a">Jethro Tull.</p></div>
+      <div class="qa"><p class="q">When did Tull's British seed-drill design appear?</p><p class="a">Around 1701.</p></div>
+      <div class="qa"><p class="q">What did a seed drill change?</p><p class="a">It placed seed at controlled spacing and depth and covered it.</p></div>
+      <div class="qa"><p class="q">What date belongs to McCormick's reaper patent?</p><p class="a">1834.</p></div>
+      <div class="qa"><p class="q">Why is sole-inventor language risky for McCormick?</p><p class="a">His father, Jo Anderson and other reaper designers also contributed to the history.</p></div>
+      <div class="qa"><p class="q">What social chain does the lecture propose?</p><p class="a">Productivity and labour change, then urbanisation, non-food demand, technology and factories.</p></div>
+      <div class="qa"><p class="q">How should that social chain be qualified?</p><p class="a">Agriculture interacted with enclosure, trade, demography, industry and urban employment.</p></div>
+      <div class="qa"><p class="q">What three levels are included in biodiversity?</p><p class="a">Within species, between species and ecosystems.</p></div>
+      <div class="qa"><p class="q">How can land clearing affect carbon?</p><p class="a">It can emit stored carbon and reduce future uptake, depending on biomass, soil and land use.</p></div>
+      <div class="qa"><p class="q">When does tillage raise erosion risk?</p><p class="a">When intensity, bare soil, slope, weather and weak controls allow soil loss.</p></div>
+      <div class="qa"><p class="q">Which runoff components directly fertilise algal growth?</p><p class="a">Excess nitrogen and phosphorus.</p></div>
+      <div class="qa"><p class="q">What pathway applies to pesticides?</p><p class="a">Chemical-specific transport, exposure and toxicity to non-target organisms.</p></div>
+      <div class="qa"><p class="q">How can a bloom reduce oxygen?</p><p class="a">Respiration and microbial decomposition consume dissolved oxygen.</p></div>
+      <div class="qa"><p class="q">What is the six-link diagnostic chain?</p><p class="a">Pressure, transport, receiving environment, exposure, effect and control.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== exam focus === -->
+<section id="t9" class="chapter card" style="--accent:#2E9E6A; --soft:#E4F3EB;">
+  <header><span class="eyebrow">Revision sheet</span><h2><span class="emoji">&#127919;</span> Exam focus</h2></header>
+  <div class="section-body">
+    <h3>Agricultural-change answer architecture</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Move</th><th>What to write</th><th>Exam verb</th></tr></thead>
+        <tbody>
+          <tr><td>Define period</td><td>Long, uneven British transformation from the seventeenth to nineteenth centuries</td><td>Frame</td></tr>
+          <tr><td>Classify changes</td><td>Crops, rotation, livestock, water, tools, landholding, labour and markets</td><td>Organise</td></tr>
+          <tr><td>Explain tools</td><td>Task changed by plough, seed drill and reaper, with corrected dates and attribution</td><td>Explain</td></tr>
+          <tr><td>Trace society</td><td>Productivity and labour interacted with population, urban jobs, trade and factories</td><td>Analyse</td></tr>
+          <tr><td>Trace land effects</td><td>Conversion, habitat loss, fragmentation, biodiversity and carbon pathways</td><td>Diagnose</td></tr>
+          <tr><td>Trace pollution</td><td>Tillage and sediment; nutrients and blooms; pesticides and toxicity; irrigation and salts</td><td>Differentiate</td></tr>
+          <tr><td>Propose controls</td><td>Cover, rotation, nutrient precision, runoff buffers, pesticide safeguards and drainage</td><td>Recommend</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Corrections to remember</h3>
+    <ul>
+      <li>Do not reduce the Agricultural Revolution to one early-eighteenth-century start date.</li>
+      <li>The plough was ancient; the relevant story is improvement and adoption.</li>
+      <li>Write Jethro Tull and date his British seed-drill design to about 1701.</li>
+      <li>McCormick's reaper patent was 1834; avoid sole-inventor and sole-producer language.</li>
+      <li>Define biodiversity at genetic, species and ecosystem levels.</li>
+      <li>Separate nutrient-driven eutrophication from pesticide toxicity pathways.</li>
+      <li>Qualify tillage and irrigation harm by design, intensity, soil, drainage and management.</li>
+    </ul>
+
+    <div class="note"><p><strong>One-line conclusion:</strong> agricultural innovation expanded productive capacity and reshaped society, while its environmental outcome depended on which land was converted and how soil, water, nutrients and chemicals were managed.</p></div>
+  </div>
+</section>
+
+<footer class="notefoot">Want the whole lecture? <a href="https://drive.google.com/file/d/1_GiyfI-qag_axrAs3Z0yP0LWhcmoMp4N/view?usp=drivesdk" target="_blank" rel="noopener">▶ Watch the full recording</a><span class="sep">·</span><a href="https://drive.google.com/file/d/1YWgrk3ZyAgqSzjHywGB7Rth-PgJEMp3V/view?usp=drivesdk" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+</html>
