@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Philosophical Essays: Interpretation, Abstraction and Thesis Questions</title>
+<style>/* Lecture Notes ebook, "warm study" theme.
+   Inspired by Mehak's MarketCanvas app: soft cream ground, rounded white cards,
+   a different pastel accent per topic, serif display + friendly sans body,
+   gentle emoji + pill badges. Playful and pretty, but still a real study book.
+   Print-first (A4 PDF via headless Edge); reads well on screen too.
+
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
+   Everything themeable keys off --accent / --soft. Titles stay ink for
+   readability; accents colour eyebrows, numbers, pills, rules and callouts.
+*/
+
+:root {
+  --cream: #FCF6F0;          /* page ground (warm) */
+  --card: #FFFFFF;
+  --ink: #2C2630;            /* plum-black body/headings */
+  --ink-soft: #5A5360;
+  --slate: #8B8490;          /* captions, timestamps */
+  --hairline: #EEE6E4;
+
+  /* section default accent (overridden per section) */
+  --accent: #C0567E;
+  --soft: #FBECF1;
+
+  --shadow: 0 1px 2px rgba(60,30,45,.05), 0 10px 26px rgba(80,40,55,.07);
+  --radius: 20px;
+
+  --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: Consolas, "Cascadia Code", ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background:
+    radial-gradient(1100px 700px at 15% -5%, #FBEEF3 0%, transparent 55%),
+    radial-gradient(1000px 700px at 100% 0%, #EEF3FB 0%, transparent 50%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  font: 10.8pt/1.62 var(--sans);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+@media screen {
+  body { max-width: 51rem; margin: 0 auto; padding: 2.5rem 1.15rem 4rem; font-size: 1.0rem; }
+}
+
+/* ---------------------------------------------------------------- page --- */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm 14mm;
+  @bottom-center {
+    content: counter(page);
+    font: 8.5pt var(--sans);
+    color: #8B8490;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+/* --------------------------------------------------------------- cards --- */
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8mm 9mm 9mm;
+  margin: 0 0 6mm;
+  box-shadow: var(--shadow);
+  break-inside: auto;
+}
+@media screen { .card { margin-bottom: 1.4rem; } }
+
+/* a soft accent wash across the top of each section card (fades to white),
+   echoing the app's pastel cards without hurting readability */
+.chapter {
+  background:
+    linear-gradient(180deg, var(--soft) 0, rgba(255,255,255,0) 34mm),
+    var(--card);
+  border-top: 3px solid var(--accent);
+  break-inside: auto;
+  break-before: page;   /* each topic starts fresh: slide on top, notes below */
+}
+/* on screen (web/PWA) sections just stack; no forced page breaks */
+@media screen { .chapter { break-before: auto; } }
+
+h2, h3, .eyebrow { break-after: avoid; }
+p { orphans: 2; widows: 2; }
+
+/* keep the section header intact (eyebrow + title + time pill together) and
+   glued to its opening slide */
+.chapter > header { break-inside: avoid; break-after: avoid; }
+figure.slide { break-before: avoid; }
+
+/* --------------------------------------------------------------- cover --- */
+
+.cover {
+  page: cover;
+  break-after: page;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32mm 22mm 24mm;
+  background:
+    radial-gradient(700px 460px at 12% 8%, #FBE6EE 0%, transparent 60%),
+    radial-gradient(760px 520px at 96% 4%, #E7EEFB 0%, transparent 58%),
+    radial-gradient(620px 520px at 80% 96%, #E6F4EC 0%, transparent 60%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+@media screen {
+  .cover { min-height: 80vh; border-radius: 24px; padding: 3.2rem 2.6rem; margin-bottom: 1.4rem; }
+}
+
+.cover .avatar { font-size: 30pt; line-height: 1; margin-bottom: 7mm; }
+.cover .kicker {
+  font: 600 9pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 5mm;
+}
+.cover h1 {
+  font: 600 31pt/1.14 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 15em;
+}
+.cover .subtitle {
+  margin-top: 5mm;
+  font: 400 13.5pt/1.5 var(--sans);
+  color: var(--ink-soft);
+  max-width: 30em;
+}
+.cover .warm {
+  margin-top: 4mm;
+  font: italic 400 12pt/1.5 var(--serif);
+  color: var(--accent);
+}
+
+.cover .chips { display: flex; flex-wrap: wrap; gap: 3mm; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.4mm 4mm;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(60,30,45,.04);
+  font: 400 9pt var(--sans);
+  color: var(--slate);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chip b { font: 700 10.5pt var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ headings --- */
+
+.chapter header { margin-bottom: 5mm; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  font: 700 8.5pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--accent);
+  margin-bottom: 3mm;
+}
+.eyebrow .num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h2 {
+  font: 600 20pt/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .emoji { font-size: 17pt; }
+
+.timepill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.5mm 3.5mm;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font: 600 8pt var(--mono);
+  letter-spacing: 0.02em;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h3 {
+  font: 600 12.5pt/1.34 var(--serif);
+  color: var(--ink);
+  margin: 6mm 0 2.5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+.ts { font: 400 8.5pt var(--mono); color: var(--slate); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- body --- */
+
+.section-body > :last-child { margin-bottom: 0; }
+p { margin: 0 0 3mm; }
+.lead { font-size: 11.2pt; color: var(--ink); }
+
+ul, ol { margin: 0 0 3mm 5.5mm; }
+li { margin-bottom: 1.7mm; padding-left: 1mm; }
+li::marker { color: var(--accent); }
+
+.kt { font-weight: 700; color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
+
+code { font: 9.5pt var(--mono); background: #F3EFF4; padding: .4pt 3.5pt; border-radius: 4px; }
+
+/* ------------------------------------------------------------ callouts --- */
+
+.note {
+  --c: var(--accent);
+  --f: var(--soft);
+  background: var(--f);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  border-left: 3px solid var(--c);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.note .label {
+  display: inline-flex; align-items: center; gap: 1.6mm;
+  font: 700 8pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c);
+  margin-bottom: 1.8mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.warn { --c: #B4791F; --f: #FaF1DF; }
+.note.exam { --c: #3B8B78; --f: #E6F3EF; }
+.note.def  { --c: var(--accent); --f: var(--soft); }
+
+/* ------------------------------------------------------- summary card --- */
+
+.summary { --accent: #C0567E; --soft: #FBECF1; }
+.summary ul { list-style: none; margin: 0; }
+.summary li { position: relative; padding: 0 0 0 7mm; margin-bottom: 3.5mm; }
+.summary li::before {
+  content: "";
+  position: absolute; left: 0; top: 2.6mm;
+  width: 3.2mm; height: 3.2mm; border-radius: 50%;
+  background: var(--accent);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.summary li:last-child { margin-bottom: 0; }
+.summary li b, .summary li strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------- TOC --- */
+
+nav.toc { --accent: #8B8490; --soft: #F3EFF4; }
+nav.toc ol { list-style: none; margin: 0; }
+nav.toc li {
+  display: flex; align-items: baseline; gap: 4mm;
+  padding: 2.7mm 0;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11pt var(--sans);
+}
+nav.toc li:last-child { border-bottom: 0; }
+nav.toc .dot { width: 3.4mm; height: 3.4mm; border-radius: 50%; flex-shrink: 0;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+nav.toc .title { flex: 1; color: var(--ink); }
+nav.toc .rng { flex-shrink: 0; font: 600 8.5pt var(--mono); color: var(--slate); }
+
+/* -------------------------------------------------------------- slides --- */
+
+figure.slide { margin: 0 0 5mm; break-inside: avoid; }
+figure.slide img {
+  width: 100%; display: block;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 10px rgba(40,30,45,.10);
+}
+figure.slide figcaption {
+  font: 400 8.5pt var(--sans);
+  color: var(--slate);
+  margin-top: 2mm;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4mm;
+}
+figure.slide figcaption .ts { color: var(--accent); }
+
+/* ------------------------------------------------------------ glossary --- */
+
+dl.glossary { margin: 0; }
+dl.glossary div { padding: 3mm 0; border-bottom: 1px solid var(--hairline); break-inside: avoid; }
+dl.glossary div:last-child { border-bottom: 0; padding-bottom: 0; }
+dl.glossary dt { font: 700 10.5pt var(--sans); color: var(--accent); margin-bottom: 1.2mm; }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- flashcards --- */
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 0; }
+.qa {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  background: linear-gradient(180deg, var(--soft) 0, #fff 60%);
+  break-inside: avoid;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.qa .q { font: 700 10pt var(--sans); color: var(--ink); margin-bottom: 2mm; }
+.qa .a { color: var(--ink-soft); font-size: 10pt; }
+
+/* ------------------------------------------------------------- tables --- */
+
+.tables-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0; break-inside: avoid; }
+th {
+  font: 700 9pt var(--sans); text-align: left; color: var(--accent);
+  border-bottom: 2px solid var(--soft); padding: 2mm 3mm 2mm 0;
+}
+td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+
+/* --- mobile / on-the-go reading (screen only; never affects the print PDF).
+   Placed LAST so it wins the cascade over the wider @media screen rules above.
+   Requires <meta name="viewport" content="width=device-width, initial-scale=1">. */
+@media screen and (max-width: 640px) {
+  body { padding: 1rem 0.85rem 2.5rem; font-size: 1.02rem; }
+  .card { padding: 5mm 5mm 6mm; border-radius: 14px; margin-bottom: 0.9rem; }
+  .cover { min-height: auto; padding: 2rem 1.3rem 1.6rem; border-radius: 16px; }
+  .cover .avatar { font-size: 24pt; margin-bottom: 4mm; }
+  .cover h1 { font-size: 20pt; max-width: 100%; }
+  .cover .subtitle { font-size: 11.5pt; }
+  .cover .warm { font-size: 11pt; }
+  .cover .chips { gap: 2mm; margin-top: 5mm; }
+  h2 { font-size: 16pt; }
+  h2 .emoji { font-size: 13.5pt; }
+  h3 { font-size: 11.5pt; }
+  .cards { grid-template-columns: 1fr; }
+  nav.toc li { font-size: 10.5pt; gap: 2.5mm; padding: 2.5mm 0; }
+  nav.toc .rng { font-size: 8pt; }
+  .note { padding: 3.5mm 4mm; }
+  table { font-size: 9.5pt; }
+}
+</style>
+<meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
+align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
+border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
+<body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/file/d/1RO3OHCO4WxSn4wWLrgSQL1PchD3rJSpK/view?usp=drivesdk" target="_blank" rel="noopener">Download PDF ↓</a></div>
+
+<!-- ============================================================ cover === -->
+<section class="cover" style="background:radial-gradient(700px 460px at 12% 8%,#F7EBE5 0,transparent 60%),radial-gradient(760px 520px at 96% 4%,#ECEEFA 0,transparent 58%),radial-gradient(620px 520px at 80% 96%,#E4F1F0 0,transparent 60%),var(--cream)">
+  <div>
+    <div class="avatar">&#128161;</div>
+    <div class="kicker" style="color:#A4553A">CSS English Essay &middot; Ali Naeem</div>
+    <h1>Philosophical Essays: Interpretation, Abstraction and Thesis Questions</h1>
+    <p class="subtitle">A two-part workshop on decoding an abstract prompt, discovering its governing idea, converting that idea into connected thesis questions, and carrying each answer through a reasoned paragraph.</p>
+    <p class="warm" style="color:#A4553A">A philosophical essay begins when the words of the prompt open into a larger question. &#128270;</p>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>2</b> linked classes</span>
+    <span class="chip"><b>4</b> worked prompts</span>
+    <span class="chip"><b>9</b> practical topics</span>
+    <span class="chip"><b>1</b> coherent discourse</span>
+  </div>
+</section>
+
+<!-- ============================================================== toc === -->
+<nav class="toc card">
+  <header><span class="eyebrow">Contents</span><h2><span class="emoji">&#128506;&#65039;</span> In this chapter</h2></header>
+  <ol>
+    <li><span class="dot" style="background:#A4553A"></span><a class="title" href="#summary">The five-minute version</a><span class="rng">summary</span></li>
+    <li><span class="dot" style="background:#5866C4"></span><a class="title" href="#t1">01 &middot; Recognise the task</a><span class="rng">safe choice</span></li>
+    <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t2">02 &middot; Read the prompt in layers</a><span class="rng">keywords</span></li>
+    <li><span class="dot" style="background:#B57A2A"></span><a class="title" href="#t3">03 &middot; Find the governing abstraction</a><span class="rng">collective reading</span></li>
+    <li><span class="dot" style="background:#46955C"></span><a class="title" href="#t4">04 &middot; Build thesis-question headings</a><span class="rng">dimensions</span></li>
+    <li><span class="dot" style="background:#B44A8C"></span><a class="title" href="#t5">05 &middot; Reason through the paragraph</a><span class="rng">premises</span></li>
+    <li><span class="dot" style="background:#3A7CC0"></span><a class="title" href="#t6">06 &middot; Shape outline, introduction and conclusion</a><span class="rng">architecture</span></li>
+    <li><span class="dot" style="background:#C0762C"></span><a class="title" href="#t7">07 &middot; Work “If youth knew, if age could”</a><span class="rng">full pipeline</span></li>
+    <li><span class="dot" style="background:#7A5AA8"></span><a class="title" href="#t8">08 &middot; Work “Life is a long journey...”</a><span class="rng">moral becoming</span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t9">09 &middot; Learn from the introduction clinic</a><span class="rng">relevance</span></li>
+    <li><span class="dot" style="background:#A4553A"></span><a class="title" href="#t10">Glossary &middot; Flashcards &middot; Exam focus</a><span class="rng"></span></li>
+  </ol>
+</nav>
+
+<!-- ============================================================= tldr === -->
+<section id="summary" class="summary card" style="--accent:#A4553A; --soft:#F7EBE5; border-top-color:#A4553A">
+  <header><span class="eyebrow" style="color:#A4553A">Start here</span><h2><span class="emoji">&#11088;</span> The five-minute version</h2></header>
+  <ul>
+    <li><strong>Interpret before researching.</strong> Define each keyword, divide the prompt into components, question each part, and then read the parts together.</li>
+    <li><strong>Move from words to abstraction.</strong> The essay needs a broad principle, debate or concept that explains what the complete prompt is really asking.</li>
+    <li><strong>Do not force one formula onto every prompt.</strong> Some topics yield to questions, some to a contrast, and some to a debate such as reality versus an ideal.</li>
+    <li><strong>Brainstorm twice.</strong> First collect ideas freely. Then organise them through parts, categories, opposing views and a collective reading.</li>
+    <li><strong>Turn the governing idea into thesis questions.</strong> Each main heading should open a substantial inquiry and remain visibly connected to the prompt.</li>
+    <li><strong>Develop fewer claims more deeply.</strong> A heading can contain several paragraphs, with reasons, examples, counterviews and a concluding principle.</li>
+    <li><strong>Build the introduction towards the thesis.</strong> The class recommends a relevant anecdote, question, current event or verified fact, followed by a final thesis that states topic, stance and reasons.</li>
+    <li><strong>Keep every worked example provisional.</strong> The classroom outlines demonstrate interpretation and structure. Their substantive claims still need evidence before use in an exam.</li>
+    <li><strong>Audit unity at the end.</strong> The abstraction, headings, paragraphs, thesis and conclusion should form one connected discourse rather than separate lists.</li>
+  </ul>
+</section>
+
+<!-- ======================================================== section 1 === -->
+<section id="t1" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
+  <header>
+    <span class="eyebrow"><span class="num">1</span> Prepare without gambling</span>
+    <h2><span class="emoji">&#127919;</span> Recognise the task</h2>
+    <span class="timepill">Part 1 &middot; 00:00-02:57</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The course introduces philosophical and literary essays after descriptive and argumentative forms. Its practical advice is to prepare the interpretive method in advance, then choose the topic in the examination that best matches the candidate's knowledge and comfort <span class="ts">Part 1 &middot; 00:00:00</span> <span class="ts">Part 1 &middot; 00:37:32</span>.</p>
+
+    <h3>What makes this form difficult?</h3>
+    <p>The central difficulty is interpretation. A familiar descriptive term can often be defined directly, while a philosophical prompt may contain hidden relationships, several layers of meaning and a broader ethical or conceptual debate <span class="ts">Part 1 &middot; 00:02:25</span> <span class="ts">Part 1 &middot; 00:02:57</span>.</p>
+
+    <div class="grid-3">
+      <div class="mini-card"><h4>Literal layer</h4><p>What do the words ordinarily mean?</p></div>
+      <div class="mini-card"><h4>Relational layer</h4><p>What changes when the words are read together?</p></div>
+      <div class="mini-card"><h4>Abstract layer</h4><p>Which larger principle or debate governs the whole prompt?</p></div>
+    </div>
+
+    <h3>A safe decision rule</h3>
+    <ol>
+      <li>Prepare interpretation and structure for every broad essay form covered by the course.</li>
+      <li>In the exam, scan all available topics.</li>
+      <li>Prefer the topic whose demand is clear and for which relevant content is available <span class="ts">Part 1 &middot; 00:38:15</span> <span class="ts">Part 1 &middot; 00:39:00</span>.</li>
+    </ol>
+
+    <div class="note warn">
+      <p><strong>Correction: there is no official one-third probability.</strong> The lecturer describes a “33% chance” among descriptive, argumentative and philosophical types <span class="ts">Part 1 &middot; 00:38:15</span>. The FPSC syllabus does not prescribe that taxonomy or a fixed distribution. It says candidates write one or more essays from a wide choice and are assessed for comprehensive, research-based knowledge, articulation, expression and technical treatment. Treat equal preparation as a risk-management strategy, not a probability claim.</p>
+    </div>
+
+    <div class="note tip">
+      <p><strong>Course boundary.</strong> “Philosophical essay” is the teacher's working category. The official syllabus states the assessed capacities but does not mandate the chapter architecture taught here.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 2 === -->
+<section id="t2" class="chapter card" style="--accent:#2C8C86; --soft:#E4F1F0;">
+  <header>
+    <span class="eyebrow"><span class="num">2</span> Decode before outlining</span>
+    <h2><span class="emoji">&#128270;</span> Read the prompt in layers</h2>
+    <span class="timepill">Part 1 &middot; 02:57-17:42</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecture explains abstraction by zooming outward from a local place to a city, province and still larger setting. The physical analogy represents an intellectual move from a concrete phrase towards the wider idea that can organise the essay <span class="ts">Part 1 &middot; 00:03:25</span> <span class="ts">Part 1 &middot; 00:04:26</span>.</p>
+
+    <h3>The interpretation sequence</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Move</th><th>Question</th><th>Output</th></tr></thead>
+        <tbody>
+          <tr><td>Define</td><td>What does every keyword mean in this prompt?</td><td>A controlled vocabulary for the essay <span class="ts">Part 1 &middot; 00:05:58</span>.</td></tr>
+          <tr><td>Divide</td><td>Which components or clauses can be read separately?</td><td>A map of the prompt's parts <span class="ts">Part 1 &middot; 00:07:22</span>.</td></tr>
+          <tr><td>Interrogate</td><td>What is each concept, how does it operate, and what does it imply?</td><td>Questions that expose possible meanings.</td></tr>
+          <tr><td>Recombine</td><td>What do the parts mean in relation to one another?</td><td>A collective reading <span class="ts">Part 1 &middot; 00:08:02</span>.</td></tr>
+          <tr><td>Test</td><td>What counterview or contemporary context complicates the first reading?</td><td>A deeper and less one-sided interpretation <span class="ts">Part 1 &middot; 00:11:24</span> <span class="ts">Part 1 &middot; 00:12:22</span>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Three miniature readings</h3>
+    <div class="grid-3">
+      <div class="mini-card"><h4>“Wisdom finds truth”</h4><p>Separate wisdom from truth. Ask how each is acquired, whether wisdom differs from knowledge, how truth is found, and whether the relationship can be challenged <span class="ts">Part 1 &middot; 00:08:50</span> <span class="ts">Part 1 &middot; 00:10:44</span>.</p></div>
+      <div class="mini-card"><h4>“Society gets the values it rewards”</h4><p>The individual words are simple, so the useful move is collective reading: what system of rewards produces a society's working value system <span class="ts">Part 1 &middot; 00:13:22</span> <span class="ts">Part 1 &middot; 00:14:45</span>?</p></div>
+      <div class="mini-card"><h4>“Values are not what humanity is...”</h4><p>Split the real condition from what humanity ought to be. The course reading locates a debate about actual conduct, ideals and a standard of goodness <span class="ts">Part 1 &middot; 00:15:15</span> <span class="ts">Part 1 &middot; 00:16:11</span>.</p></div>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Interpretive boundary.</strong> The claim that an ideal is always unattainable and becomes “real” once achieved is presented as one classroom framing <span class="ts">Part 1 &middot; 00:16:39</span>. It is not a settled definition of ideals. An essay may test that premise, qualify it, or adopt a different defensible account.</p>
+    </div>
+
+    <p>The practical lesson is flexibility. The teacher says there is no single “pet formula”: one prompt may invite component questions, another a collective reading, and another a real-versus-ideal debate <span class="ts">Part 1 &middot; 00:16:39</span> <span class="ts">Part 1 &middot; 00:17:12</span>.</p>
+  </div>
+</section>
+
+<!-- ======================================================== section 3 === -->
+<section id="t3" class="chapter card" style="--accent:#B57A2A; --soft:#FBF1DE;">
+  <header>
+    <span class="eyebrow"><span class="num">3</span> Make the parts mean something together</span>
+    <h2><span class="emoji">&#129513;</span> Find the governing abstraction</h2>
+    <span class="timepill">Part 2 &middot; 03:35-57:37</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Part 2 turns interpretation into an exam workflow. First, write down whatever the prompt activates. Next, structure that material by analysing the parts. Finally, seek the broader concept that lets those parts participate in one argument <span class="ts">Part 2 &middot; 00:03:35</span> <span class="ts">Part 2 &middot; 00:06:10</span>.</p>
+
+    <h3>Two kinds of brainstorming</h3>
+    <div class="grid-2">
+      <div class="mini-card"><h4>Unstructured thinking</h4><p>Capture ideas, examples, quotations, current events, contrary views and positive or negative implications without deciding the final order <span class="ts">Part 2 &middot; 00:04:36</span> <span class="ts">Part 2 &middot; 00:05:51</span>.</p></div>
+      <div class="mini-card"><h4>Structured thinking</h4><p>Divide the wording into parts, examine each part, compare their strengths and limits, and then combine them into a collective reading <span class="ts">Part 2 &middot; 00:06:10</span> <span class="ts">Part 2 &middot; 00:06:41</span>.</p></div>
+    </div>
+
+    <h3>Use categories only as idea prompts</h3>
+    <p>When content stalls, the class suggests category pairs such as short term and long term, individual and societal, or political, technological and social <span class="ts">Part 2 &middot; 00:16:48</span> <span class="ts">Part 2 &middot; 00:19:38</span>. These categories generate possibilities; they do not become the essay's final structure unless they serve the governing abstraction.</p>
+
+    <h3>The abstraction test</h3>
+    <ol>
+      <li>Can the idea explain why the prompt's parts belong together?</li>
+      <li>Can it produce several connected questions rather than two isolated lists?</li>
+      <li>Can it appear briefly in exposition as context for the body?</li>
+      <li>Can every main heading be phrased so the reader sees its connection to the original prompt?</li>
+    </ol>
+
+    <p>The teacher rejects headings that sound interesting in isolation but do not reveal their relation to the given topic <span class="ts">Part 2 &middot; 00:43:49</span> <span class="ts">Part 2 &middot; 00:46:47</span>. The abstraction can frame the exposition, while the later headings connect directly to the essay topic rather than mechanically to the first heading <span class="ts">Part 2 &middot; 00:51:17</span> <span class="ts">Part 2 &middot; 00:51:43</span>.</p>
+
+    <div class="note exam">
+      <p><strong>One-sentence checkpoint.</strong> Write: “This prompt is ultimately an inquiry into...” If the completion merely repeats one keyword, the collective reading is still incomplete.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 4 === -->
+<section id="t4" class="chapter card" style="--accent:#46955C; --soft:#E9F4EC;">
+  <header>
+    <span class="eyebrow"><span class="num">4</span> Divide by inquiry</span>
+    <h2><span class="emoji">&#10067;</span> Build thesis-question headings</h2>
+    <span class="timepill">Part 1 &middot; 18:09-23:22 &middot; Part 2 &middot; 01:23-01:36</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The chief organisational problem is finding dimensions. In this course framework, those dimensions are main headings framed as thesis questions: substantial questions the essay raises and answers through several arguments or paragraphs <span class="ts">Part 1 &middot; 00:18:09</span> <span class="ts">Part 1 &middot; 00:21:01</span>.</p>
+
+    <h3>What qualifies as a thesis question?</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Weak heading</th><th>Problem</th><th>Stronger direction</th></tr></thead>
+        <tbody>
+          <tr><td>One abstract word</td><td>It names a theme but does not announce an inquiry.</td><td>Turn the theme into a question tied to the prompt.</td></tr>
+          <tr><td>A five-line statement</td><td>It tries to write the paragraph inside the outline.</td><td>Compress it into a concise question <span class="ts">Part 2 &middot; 01:27:45</span>.</td></tr>
+          <tr><td>A generic social question</td><td>Its relevance to the prompt is invisible.</td><td>Reuse the prompt's relationship, contrast or destination.</td></tr>
+          <tr><td>A question with only one point beneath it</td><td>It lacks the depth expected of a major dimension.</td><td>Merge it, deepen it, or find a more productive question.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The lecture expects a thesis question to sustain several arguments or paragraphs <span class="ts">Part 1 &middot; 00:21:31</span>. In the second class, the teacher reiterates that all main body headings perform this role; there is no need to mark one separate heading as “the thesis question” <span class="ts">Part 2 &middot; 01:24:04</span>.</p>
+
+    <h3>A coherence chain</h3>
+    <div class="grid-3">
+      <div class="mini-card"><h4>Prompt</h4><p>Supplies the exact words and relationship that must be answered.</p></div>
+      <div class="mini-card"><h4>Abstraction</h4><p>Provides the principle that makes a whole essay possible.</p></div>
+      <div class="mini-card"><h4>Thesis questions</h4><p>Divide that principle into connected, answerable dimensions.</p></div>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Course technique, not an FPSC rule.</strong> The lecture says that three headings are insufficient and recommends increasing the number for depth and length <span class="ts">Part 2 &middot; 01:23:36</span> <span class="ts">Part 2 &middot; 01:36:23</span>. FPSC does not prescribe a fixed heading count. Use enough dimensions to answer the prompt fully, and give each one meaningful development.</p>
+    </div>
+
+    <p>Counterviews can be woven into these inquiries without creating the formal refutation section used in the course's argumentative-essay model <span class="ts">Part 1 &middot; 00:21:53</span> <span class="ts">Part 1 &middot; 00:22:24</span>.</p>
+  </div>
+</section>
+
+<!-- ======================================================== section 5 === -->
+<section id="t5" class="chapter card" style="--accent:#B44A8C; --soft:#F8EAF3;">
+  <header>
+    <span class="eyebrow"><span class="num">5</span> Make each answer earn its conclusion</span>
+    <h2><span class="emoji">&#128279;</span> Reason through the paragraph</h2>
+    <span class="timepill">Part 1 &middot; 22:24-37:32</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Within each dimension, the paragraph begins with an argument, explains why it should be accepted, uses examples where useful, and closes with a conclusion that advances the essay <span class="ts">Part 1 &middot; 00:36:38</span> <span class="ts">Part 1 &middot; 00:37:05</span>.</p>
+
+    <h3>The paragraph sequence taught in class</h3>
+    <ol>
+      <li><strong>Argument:</strong> make the claim in the topic sentence.</li>
+      <li><strong>Reasons:</strong> state the connected premises that explain why the claim follows.</li>
+      <li><strong>Example or explanation:</strong> clarify and support the reasoning.</li>
+      <li><strong>Counterview, where useful:</strong> recognise a relevant complication without forcing a formal rebuttal block.</li>
+      <li><strong>Conclusion:</strong> draw out the result without repeating the topic sentence.</li>
+    </ol>
+
+    <h3>From paragraph result to principle</h3>
+    <p>The teacher encourages a philosophical paragraph to generalise its conclusion into a principle or maxim where the material genuinely permits it <span class="ts">Part 1 &middot; 00:24:16</span> <span class="ts">Part 1 &middot; 00:26:45</span>. This is not a licence for a grand slogan after every example. The generalisation must be earned by the paragraph's reasoning.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: reasons alone do not make a deduction.</strong> The lecture calls a sequence of supporting reasons “deductive reasoning” <span class="ts">Part 1 &middot; 00:35:40</span> <span class="ts">Part 1 &middot; 00:36:12</span>. Formally, a deductive inference is valid only when its structure makes the conclusion necessarily follow if the premises are true. A paragraph can be reasoned and persuasive without being deductive. Use “premise” and “deduction” precisely.</p>
+    </div>
+
+    <h3>Depth over accumulation</h3>
+    <p>The course allows several examples to support one argument and recommends fewer, deeper arguments rather than a long list with thin explanation <span class="ts">Part 1 &middot; 00:27:16</span> <span class="ts">Part 1 &middot; 00:28:15</span>. The working standard is quality of support, not a numerical quota.</p>
+
+    <div class="note tip">
+      <p><strong>Paragraph audit.</strong> Underline the conclusion and point back to the premises that justify it. If that route cannot be traced, the paragraph has asserted more than it proved.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 6 === -->
+<section id="t6" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+  <header>
+    <span class="eyebrow"><span class="num">6</span> Control the whole paper</span>
+    <h2><span class="emoji">&#127959;&#65039;</span> Shape outline, introduction and conclusion</h2>
+    <span class="timepill">Part 1 &middot; 27:16-33:58</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Because each thesis-question heading may contain several developed paragraphs, the course allows the outline to look shorter than a descriptive or argumentative outline <span class="ts">Part 1 &middot; 00:27:16</span> <span class="ts">Part 1 &middot; 00:29:05</span>. Shorter means fewer substantial dimensions, not less intellectual coverage.</p>
+
+    <h3>Course architecture</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Section</th><th>Job</th><th>Control question</th></tr></thead>
+        <tbody>
+          <tr><td>Introduction</td><td>Open engagingly and move towards the exact prompt.</td><td>Does every sentence prepare the final thesis?</td></tr>
+          <tr><td>Exposition</td><td>Clarify the abstraction or context that governs the reading.</td><td>Does it explain how the essay understands the prompt?</td></tr>
+          <tr><td>Thesis-question headings</td><td>Investigate the prompt through several connected dimensions.</td><td>Can each question sustain multiple developed answers?</td></tr>
+          <tr><td>Conclusion</td><td>Summarise the argument and close broadly, futuristically and optimistically in the course model.</td><td>Does it synthesise rather than add a new thesis <span class="ts">Part 1 &middot; 00:33:29</span>?</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>The introduction funnel</h3>
+    <p>The lecturer proposes flexible openings: a story, anecdote, rhetorical question, current event, philosophical view, or accurate fact or statistic <span class="ts">Part 1 &middot; 00:30:31</span> <span class="ts">Part 1 &middot; 01:35:49</span>. Whatever the device, the introduction must build towards the final thesis rather than wander through attractive but unrelated material <span class="ts">Part 1 &middot; 00:31:01</span>.</p>
+
+    <h3>The thesis triad</h3>
+    <div class="grid-3">
+      <div class="mini-card"><h4>Topic</h4><p>Reflect the prompt clearly, often through its own key wording.</p></div>
+      <div class="mini-card"><h4>Stance</h4><p>State the interpretation or answer the essay will defend.</p></div>
+      <div class="mini-card"><h4>Reasons</h4><p>Signal the arguments that make the stance defensible <span class="ts">Part 1 &middot; 01:14:24</span> <span class="ts">Part 1 &middot; 01:16:51</span>.</p></div>
+    </div>
+
+    <div class="note tip">
+      <p><strong>Course-safe technique.</strong> The class keeps the explicit argumentative thesis in the final sentence and avoids previewing every body point throughout the introduction <span class="ts">Part 1 &middot; 00:30:02</span> <span class="ts">Part 1 &middot; 01:36:30</span>. This is a disciplined exam method, not a universal rule for every form of academic introduction.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 7 === -->
+<section id="t7" class="chapter card" style="--accent:#C0762C; --soft:#FAF0E2;">
+  <header>
+    <span class="eyebrow"><span class="num">7</span> Worked prompt one</span>
+    <h2><span class="emoji">&#128101;</span> “If youth knew, if age could”</h2>
+    <span class="timepill">Part 2 &middot; 03:35-57:37</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The second lecture demonstrates the complete movement from raw associations to a coherent plan. Its value lies in the method, not in treating every brainstormed generalisation about age or youth as established fact.</p>
+
+    <h3>Step 1: inventory each clause</h3>
+    <div class="grid-2">
+      <div class="mini-card"><h4>If youth knew</h4><p>Ask what youth already possesses, what it may lack, and what positive or negative consequences would follow if those gaps disappeared <span class="ts">Part 2 &middot; 00:07:16</span> <span class="ts">Part 2 &middot; 00:14:12</span>.</p></div>
+      <div class="mini-card"><h4>If age could</h4><p>Ask what age is assumed to know, what capacities it may lack, and how renewed ability might affect individuals and society <span class="ts">Part 2 &middot; 00:14:40</span> <span class="ts">Part 2 &middot; 00:16:21</span>.</p></div>
+    </div>
+
+    <h3>Step 2: resist the two-list outline</h3>
+    <p>A plan that lists advantages and disadvantages of each clause can be extensive yet still lack a meaningful whole. The teacher asks the class to combine the two sides and locate the principle that makes them mutually relevant <span class="ts">Part 2 &middot; 00:22:43</span> <span class="ts">Part 2 &middot; 00:25:02</span>.</p>
+
+    <h3>Step 3: choose one governing route</h3>
+    <p>The lecture offers generation gap and intergenerational complementarity as one possible decoding. It asks whether youth can deliver without older experience, whether age can sustain society without younger enthusiasm and creativity, and how the two can be brought into productive relation <span class="ts">Part 2 &middot; 00:54:25</span> <span class="ts">Part 2 &middot; 00:55:53</span>.</p>
+
+    <h3>Illustrative thesis-question sequence</h3>
+    <ol>
+      <li>What does the conditional contrast reveal about the generation gap?</li>
+      <li>Can youthful capacity fulfil its promise without inherited experience?</li>
+      <li>Can accumulated experience remain socially productive without youthful energy?</li>
+      <li>When do the strengths of one generation reproduce the limits of the other?</li>
+      <li>How can intergenerational cooperation convert difference into continuity and change?</li>
+    </ol>
+
+    <div class="note warn">
+      <p><strong>Editorial reconstruction.</strong> The sequence above organises questions raised across the workshop; it is not a verbatim outline supplied by the lecturer. The lecture explicitly allows several valid abstractions and warns that ten writers need not choose the same one <span class="ts">Part 2 &middot; 00:56:17</span>.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Transferable lesson.</strong> If the draft can be cut into two independent mini-essays, the collective reading has not yet done its work.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 8 === -->
+<section id="t8" class="chapter card" style="--accent:#7A5AA8; --soft:#F0EBF8;">
+  <header>
+    <span class="eyebrow"><span class="num">8</span> Worked prompt two</span>
+    <h2><span class="emoji">&#128694;</span> “Life is a long journey between human being and being human”</h2>
+    <span class="timepill">Part 2 &middot; 57:37-01:36:51</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">This exercise begins by distinguishing biological existence from humane or moral becoming, then asks what makes the movement between them a long journey <span class="ts">Part 2 &middot; 00:57:37</span> <span class="ts">Part 2 &middot; 00:59:11</span>.</p>
+
+    <h3>Brainstorming map</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Prompt element</th><th>Questions generated in class</th><th>Possible structural use</th></tr></thead>
+        <tbody>
+          <tr><td>Human being</td><td>What belongs to biological existence?</td><td>Clarify the starting point.</td></tr>
+          <tr><td>Being human</td><td>Which values or moral capacities define humane conduct?</td><td>Clarify the destination.</td></tr>
+          <tr><td>Long journey</td><td>Why is the transition difficult, incomplete or conscious?</td><td>Explain obstacles and transformation.</td></tr>
+          <tr><td>Missing values</td><td>How do failures of humane conduct damage society?</td><td>Build the problem dimension <span class="ts">Part 2 &middot; 01:00:38</span> <span class="ts">Part 2 &middot; 01:01:36</span>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Questions that create a journey</h3>
+    <ol>
+      <li>Why might being human be treated as a purpose rather than an automatic condition?</li>
+      <li>Why does biological membership fail to guarantee humane conduct?</li>
+      <li>Which obstacles widen the distance between existence and moral becoming?</li>
+      <li>How can a person or society close that distance?</li>
+      <li>How does life change when humane values guide conduct?</li>
+    </ol>
+
+    <p>These questions reflect the sample progression discussed near the end of the class: purpose, failure to arrive, process of becoming and the consequences of transformation <span class="ts">Part 2 &middot; 01:28:30</span> <span class="ts">Part 2 &middot; 01:30:31</span>. They are linked by movement from a starting condition towards a proposed end.</p>
+
+    <h3>Lessons from rejected headings</h3>
+    <ul>
+      <li>A broad question about society can still be irrelevant if its connection to the journey is hidden <span class="ts">Part 2 &middot; 00:43:49</span>.</li>
+      <li>A heading that merely describes two stages may fail to raise an inquiry <span class="ts">Part 2 &middot; 01:23:05</span>.</li>
+      <li>A phrase such as “our biological nature” breaks the course's preferred third-person stance <span class="ts">Part 2 &middot; 01:20:33</span>.</li>
+      <li>A heading should be concise enough to guide the argument rather than contain the argument itself <span class="ts">Part 2 &middot; 01:27:45</span>.</li>
+    </ul>
+
+    <div class="note tip">
+      <p><strong>Keep claims provisional.</strong> The prompt invites moral argument. Examples such as jingoism, sexism, communalism or mob violence appear during brainstorming <span class="ts">Part 2 &middot; 01:01:09</span>, but any causal or empirical claim built around them needs evidence in the final essay.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 9 === -->
+<section id="t9" class="chapter card" style="--accent:#8B8490; --soft:#F0EEF2;">
+  <header>
+    <span class="eyebrow"><span class="num">9</span> Learn from live drafting</span>
+    <h2><span class="emoji">&#9997;&#65039;</span> The introduction clinic</h2>
+    <span class="timepill">Part 1 &middot; 57:28-01:38:20</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The live exercises show that an engaging opening is valuable only when it remains relevant to the exact concept and builds naturally towards the thesis.</p>
+
+    <h3>“Truth is lived, not taught”</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Drafting issue</th><th>Teacher's diagnosis</th><th>Repair</th></tr></thead>
+        <tbody>
+          <tr><td>The introduction develops morality and values.</td><td>Truth and morality are distinct concepts; the opening has drifted <span class="ts">Part 1 &middot; 00:58:30</span> <span class="ts">Part 1 &middot; 00:58:59</span>.</td><td>Build around truth, lived experience and teaching.</td></tr>
+          <tr><td>A historical or current example is inaccurate.</td><td>The method of opening through an example is sound, but the example itself cannot be retained <span class="ts">Part 1 &middot; 01:03:27</span> <span class="ts">Part 1 &middot; 01:05:06</span>.</td><td>Verify the example before using it.</td></tr>
+          <tr><td>The thesis omits part of the topic.</td><td>It must reflect both living and teaching while stating the essay's reasons <span class="ts">Part 1 &middot; 01:14:24</span> <span class="ts">Part 1 &middot; 01:15:54</span>.</td><td>Include topic, stance and reasons in the final sentence.</td></tr>
+          <tr><td>The draft addresses “you”.</td><td>The course prefers an impersonal third-person register <span class="ts">Part 1 &middot; 01:18:18</span>.</td><td>Replace first- and second-person phrasing with precise third-person wording.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>“Beware the barrenness of a busy life”</h3>
+    <p>The teacher accepts an image of constant movement as a possible opening, then asks the writer to build it towards a life crowded with activity but deprived of meaning and growth <span class="ts">Part 1 &middot; 01:30:59</span> <span class="ts">Part 1 &middot; 01:33:22</span>. Career is only one dimension, so restricting the entire introduction to career makes the prompt smaller than it is <span class="ts">Part 1 &middot; 01:33:55</span> <span class="ts">Part 1 &middot; 01:35:00</span>.</p>
+
+    <h3>Reusable introduction audit</h3>
+    <ol>
+      <li>Does the opening focus on the prompt's actual concept?</li>
+      <li>Is every anecdote, date, person or statistic accurate and attributable?</li>
+      <li>Does the middle narrow the discussion rather than open unrelated themes?</li>
+      <li>Does the final sentence contain the topic, the interpretation or stance, and the reasons?</li>
+      <li>Does the diction remain appropriately formal and controlled?</li>
+    </ol>
+
+    <div class="note warn">
+      <p><strong>Correction: first person is not universally forbidden.</strong> The lecturer categorically excludes first person from academic writing <span class="ts">Part 1 &middot; 01:16:51</span>. Academic conventions vary by discipline and task. For this course's CSS essay method, third person is the safe default; treat that as register guidance rather than a universal law.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== glossary === -->
+<section id="t10" class="chapter card" style="--accent:#8B8490; --soft:#F0EEF2;">
+  <header>
+    <span class="eyebrow">Reference</span>
+    <h2><span class="emoji">&#128214;</span> Glossary</h2>
+  </header>
+  <div class="section-body">
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Term</th><th>Meaning in this chapter</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Abstraction</strong></td><td>A broader concept, principle or debate that organises the prompt beyond its literal words.</td></tr>
+          <tr><td><strong>Collective reading</strong></td><td>Interpreting the prompt's components in relation to one another to discover their combined meaning.</td></tr>
+          <tr><td><strong>Component reading</strong></td><td>Separating a prompt into key words or clauses so each can be questioned and defined.</td></tr>
+          <tr><td><strong>Counterview</strong></td><td>A plausible opposing or qualifying perspective used to deepen analysis.</td></tr>
+          <tr><td><strong>Dimension</strong></td><td>A major line of inquiry represented by a main heading in the outline.</td></tr>
+          <tr><td><strong>Exposition</strong></td><td>The context-setting section that clarifies the essay's governing abstraction.</td></tr>
+          <tr><td><strong>Governing abstraction</strong></td><td>The central idea that makes the essay's separate questions part of one discourse.</td></tr>
+          <tr><td><strong>Hidden meaning</strong></td><td>An implication or wider relationship that is not exhausted by the literal wording.</td></tr>
+          <tr><td><strong>Premise</strong></td><td>A reason offered in support of a conclusion.</td></tr>
+          <tr><td><strong>Deductive validity</strong></td><td>A property of an inference whose conclusion must be true if its premises are true.</td></tr>
+          <tr><td><strong>Thesis question</strong></td><td>In the course method, a substantial main-heading inquiry that the body answers through several arguments.</td></tr>
+          <tr><td><strong>Thesis triad</strong></td><td>The course checklist of topic, stance and reasons in the thesis statement.</td></tr>
+          <tr><td><strong>Unstructured thinking</strong></td><td>Free collection of any relevant ideas before deciding their order or governing logic.</td></tr>
+          <tr><td><strong>Structured thinking</strong></td><td>Organising the brainstorm through components, categories, relationships and a collective reading.</td></tr>
+          <tr><td><strong>Maxim</strong></td><td>A concise general principle drawn from a paragraph when its reasoning justifies that generalisation.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== flashcards === -->
+<section id="t11" class="chapter card" style="--accent:#A4553A; --soft:#F7EBE5;">
+  <header>
+    <span class="eyebrow">Active recall</span>
+    <h2><span class="emoji">&#127183;</span> Flashcards</h2>
+  </header>
+  <div class="section-body">
+    <div class="cards">
+      <div class="qa"><p class="q">What is the chief challenge in the course's philosophical essay?</p><p class="a">Interpreting the prompt's layers, hidden relationships and governing abstraction.</p></div>
+      <div class="qa"><p class="q">What is the first interpretation task?</p><p class="a">Define every keyword in the context of the complete prompt.</p></div>
+      <div class="qa"><p class="q">What follows component reading?</p><p class="a">A collective reading that asks what the components mean together.</p></div>
+      <div class="qa"><p class="q">Why ask questions of each component?</p><p class="a">To uncover meanings, relationships, implications and possible counterviews.</p></div>
+      <div class="qa"><p class="q">Does every philosophical prompt use one fixed formula?</p><p class="a">No. The method must be adapted to the merits and wording of each prompt.</p></div>
+      <div class="qa"><p class="q">What is unstructured thinking?</p><p class="a">Capturing relevant ideas, examples, quotations, current events and opposing views before organising them.</p></div>
+      <div class="qa"><p class="q">What is structured thinking?</p><p class="a">Sorting the brainstorm through the prompt's parts, categories and combined meaning.</p></div>
+      <div class="qa"><p class="q">What does a governing abstraction do?</p><p class="a">It turns separate ideas into one connected inquiry.</p></div>
+      <div class="qa"><p class="q">Where can the abstraction appear in the essay?</p><p class="a">In exposition, where it establishes context for the later headings.</p></div>
+      <div class="qa"><p class="q">What is a thesis question in this course?</p><p class="a">A main-heading question the essay raises and answers through several arguments or paragraphs.</p></div>
+      <div class="qa"><p class="q">What makes a thesis question strong?</p><p class="a">Visible relevance to the prompt, enough depth for development, and a clear role in the whole discourse.</p></div>
+      <div class="qa"><p class="q">Must one heading be labelled “the thesis question”?</p><p class="a">No. In the course model, all substantive body headings function as thesis questions.</p></div>
+      <div class="qa"><p class="q">Is a fixed number of headings an FPSC rule?</p><p class="a">No. Heading counts in the lecture are course recommendations.</p></div>
+      <div class="qa"><p class="q">How are counterviews handled?</p><p class="a">They can be integrated within the inquiry without a formal argumentative-essay refutation block.</p></div>
+      <div class="qa"><p class="q">What begins a body paragraph?</p><p class="a">A topic-sentence argument.</p></div>
+      <div class="qa"><p class="q">What must come before the evidence?</p><p class="a">The reasons or premises that explain why the argument should be accepted.</p></div>
+      <div class="qa"><p class="q">When is reasoning deductively valid?</p><p class="a">When the conclusion necessarily follows if the premises are true.</p></div>
+      <div class="qa"><p class="q">Should a paragraph conclusion repeat its topic sentence?</p><p class="a">No. It should draw out the paragraph's result and link it to the larger inquiry.</p></div>
+      <div class="qa"><p class="q">When may a conclusion become a maxim?</p><p class="a">When the paragraph's reasoning genuinely supports a wider principle.</p></div>
+      <div class="qa"><p class="q">What are the three thesis ingredients taught in class?</p><p class="a">The topic, the stance or interpretation, and the supporting reasons.</p></div>
+      <div class="qa"><p class="q">What opening devices does the course allow?</p><p class="a">A relevant story, anecdote, rhetorical question, current event, philosophical view, or verified fact or statistic.</p></div>
+      <div class="qa"><p class="q">What invalidates an attractive opening?</p><p class="a">Conceptual drift or an inaccurate example.</p></div>
+      <div class="qa"><p class="q">What is the key lesson from “If youth knew, if age could”?</p><p class="a">Do not stop at two lists; find the principle that explains the relationship between the clauses.</p></div>
+      <div class="qa"><p class="q">What is the key lesson from “Life is a long journey...”?</p><p class="a">Build connected questions around starting condition, destination, obstacles, transformation and consequences.</p></div>
+      <div class="qa"><p class="q">Is first person universally banned from academic writing?</p><p class="a">No. Third person is the safe default for this course's CSS essay method.</p></div>
+      <div class="qa"><p class="q">What does FPSC officially assess in the essay paper?</p><p class="a">Comprehensive and research-based knowledge, articulation, expression and technical treatment of English essay writing.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== exam focus === -->
+<section id="t12" class="chapter card" style="--accent:#A4553A; --soft:#F7EBE5;">
+  <header>
+    <span class="eyebrow">Revision sheet</span>
+    <h2><span class="emoji">&#127919;</span> Exam focus</h2>
+  </header>
+  <div class="section-body">
+    <h3>The twelve-minute planning route</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Phase</th><th>Action</th><th>Output</th></tr></thead>
+        <tbody>
+          <tr><td>Minutes 1-2</td><td>Define keywords and divide the prompt into components.</td><td>Literal map</td></tr>
+          <tr><td>Minutes 3-5</td><td>Write unstructured ideas, examples, questions and counterviews.</td><td>Raw material</td></tr>
+          <tr><td>Minutes 6-7</td><td>Read the components together and state the governing abstraction.</td><td>One controlling principle</td></tr>
+          <tr><td>Minutes 8-10</td><td>Turn that principle into connected thesis questions.</td><td>Main headings</td></tr>
+          <tr><td>Minute 11</td><td>Place reasons, examples and counterviews under each question.</td><td>Paragraph plan</td></tr>
+          <tr><td>Minute 12</td><td>Write a one-sentence thesis containing topic, stance and reasons.</td><td>Direction for the paper</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>One-line architecture</h3>
+    <p><strong>Prompt words &rarr; component questions &rarr; collective reading &rarr; governing abstraction &rarr; thesis-question headings &rarr; reasoned paragraphs &rarr; synthesising conclusion.</strong></p>
+
+    <h3>Final checks before writing</h3>
+    <div class="tables-wrap">
+      <table>
+        <tbody>
+          <tr><td>&#10003; Every key term has a working definition.</td><td>&#10003; The abstraction explains the whole prompt.</td></tr>
+          <tr><td>&#10003; The headings form one connected inquiry.</td><td>&#10003; Each heading has material for real development.</td></tr>
+          <tr><td>&#10003; Counterviews are relevant and fairly represented.</td><td>&#10003; Every factual example is verified and attributable.</td></tr>
+          <tr><td>&#10003; The thesis previews the actual reasons.</td><td>&#10003; The introduction stays on its promised concept.</td></tr>
+          <tr><td>&#10003; Conclusions are earned by their premises.</td><td>&#10003; Course heuristics are not presented as FPSC rules.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><strong>Last-page audit.</strong> Read only the thesis, main headings and paragraph conclusions. They should reveal the same governing abstraction from three levels of detail.</p>
+  </div>
+</section>
+
+<footer class="notefoot">Source recordings: <a href="https://drive.google.com/file/d/1FypvHSlWS8ocM4zKrv1rHZOOrzVUVJ9J/view?usp=drivesdk" target="_blank" rel="noopener">▶ Philosophical Essays, Part 1</a><span class="sep">·</span><a href="https://drive.google.com/file/d/1zN5fC2fnIQVfipyiWhbPfRpGYARNLLMy/view?usp=drivesdk" target="_blank" rel="noopener">▶ Philosophical Essays, Part 2</a><span class="sep">·</span><a href="https://drive.google.com/file/d/1RO3OHCO4WxSn4wWLrgSQL1PchD3rJSpK/view?usp=drivesdk" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+</html>
