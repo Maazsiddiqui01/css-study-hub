@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GPEST: Structured Brainstorming and Coherent Sequencing</title>
+<style>/* Lecture Notes ebook, "warm study" theme.
+   Inspired by Mehak's MarketCanvas app: soft cream ground, rounded white cards,
+   a different pastel accent per topic, serif display + friendly sans body,
+   gentle emoji + pill badges. Playful and pretty, but still a real study book.
+   Print-first (A4 PDF via headless Edge); reads well on screen too.
+
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
+   Everything themeable keys off --accent / --soft. Titles stay ink for
+   readability; accents colour eyebrows, numbers, pills, rules and callouts.
+*/
+
+:root {
+  --cream: #FCF6F0;          /* page ground (warm) */
+  --card: #FFFFFF;
+  --ink: #2C2630;            /* plum-black body/headings */
+  --ink-soft: #5A5360;
+  --slate: #8B8490;          /* captions, timestamps */
+  --hairline: #EEE6E4;
+
+  /* section default accent (overridden per section) */
+  --accent: #C0567E;
+  --soft: #FBECF1;
+
+  --shadow: 0 1px 2px rgba(60,30,45,.05), 0 10px 26px rgba(80,40,55,.07);
+  --radius: 20px;
+
+  --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: Consolas, "Cascadia Code", ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background:
+    radial-gradient(1100px 700px at 15% -5%, #FBEEF3 0%, transparent 55%),
+    radial-gradient(1000px 700px at 100% 0%, #EEF3FB 0%, transparent 50%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  font: 10.8pt/1.62 var(--sans);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+@media screen {
+  body { max-width: 51rem; margin: 0 auto; padding: 2.5rem 1.15rem 4rem; font-size: 1.0rem; }
+}
+
+/* ---------------------------------------------------------------- page --- */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm 14mm;
+  @bottom-center {
+    content: counter(page);
+    font: 8.5pt var(--sans);
+    color: #8B8490;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+/* --------------------------------------------------------------- cards --- */
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8mm 9mm 9mm;
+  margin: 0 0 6mm;
+  box-shadow: var(--shadow);
+  break-inside: auto;
+}
+@media screen { .card { margin-bottom: 1.4rem; } }
+
+/* a soft accent wash across the top of each section card (fades to white),
+   echoing the app's pastel cards without hurting readability */
+.chapter {
+  background:
+    linear-gradient(180deg, var(--soft) 0, rgba(255,255,255,0) 34mm),
+    var(--card);
+  border-top: 3px solid var(--accent);
+  break-inside: auto;
+  break-before: page;   /* each topic starts fresh: slide on top, notes below */
+}
+/* on screen (web/PWA) sections just stack; no forced page breaks */
+@media screen { .chapter { break-before: auto; } }
+
+h2, h3, .eyebrow { break-after: avoid; }
+p { orphans: 2; widows: 2; }
+
+/* keep the section header intact (eyebrow + title + time pill together) and
+   glued to its opening slide */
+.chapter > header { break-inside: avoid; break-after: avoid; }
+figure.slide { break-before: avoid; }
+
+/* --------------------------------------------------------------- cover --- */
+
+.cover {
+  page: cover;
+  break-after: page;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32mm 22mm 24mm;
+  background:
+    radial-gradient(700px 460px at 12% 8%, #FBE6EE 0%, transparent 60%),
+    radial-gradient(760px 520px at 96% 4%, #E7EEFB 0%, transparent 58%),
+    radial-gradient(620px 520px at 80% 96%, #E6F4EC 0%, transparent 60%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+@media screen {
+  .cover { min-height: 80vh; border-radius: 24px; padding: 3.2rem 2.6rem; margin-bottom: 1.4rem; }
+}
+
+.cover .avatar { font-size: 30pt; line-height: 1; margin-bottom: 7mm; }
+.cover .kicker {
+  font: 600 9pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 5mm;
+}
+.cover h1 {
+  font: 600 31pt/1.14 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 15em;
+}
+.cover .subtitle {
+  margin-top: 5mm;
+  font: 400 13.5pt/1.5 var(--sans);
+  color: var(--ink-soft);
+  max-width: 30em;
+}
+.cover .warm {
+  margin-top: 4mm;
+  font: italic 400 12pt/1.5 var(--serif);
+  color: var(--accent);
+}
+
+.cover .chips { display: flex; flex-wrap: wrap; gap: 3mm; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.4mm 4mm;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(60,30,45,.04);
+  font: 400 9pt var(--sans);
+  color: var(--slate);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chip b { font: 700 10.5pt var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ headings --- */
+
+.chapter header { margin-bottom: 5mm; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  font: 700 8.5pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--accent);
+  margin-bottom: 3mm;
+}
+.eyebrow .num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h2 {
+  font: 600 20pt/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .emoji { font-size: 17pt; }
+
+.timepill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.5mm 3.5mm;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font: 600 8pt var(--mono);
+  letter-spacing: 0.02em;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h3 {
+  font: 600 12.5pt/1.34 var(--serif);
+  color: var(--ink);
+  margin: 6mm 0 2.5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+.ts { font: 400 8.5pt var(--mono); color: var(--slate); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- body --- */
+
+.section-body > :last-child { margin-bottom: 0; }
+p { margin: 0 0 3mm; }
+.lead { font-size: 11.2pt; color: var(--ink); }
+
+ul, ol { margin: 0 0 3mm 5.5mm; }
+li { margin-bottom: 1.7mm; padding-left: 1mm; }
+li::marker { color: var(--accent); }
+
+.kt { font-weight: 700; color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
+
+code { font: 9.5pt var(--mono); background: #F3EFF4; padding: .4pt 3.5pt; border-radius: 4px; }
+
+/* ------------------------------------------------------------ callouts --- */
+
+.note {
+  --c: var(--accent);
+  --f: var(--soft);
+  background: var(--f);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  border-left: 3px solid var(--c);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.note .label {
+  display: inline-flex; align-items: center; gap: 1.6mm;
+  font: 700 8pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c);
+  margin-bottom: 1.8mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.warn { --c: #B4791F; --f: #FaF1DF; }
+.note.exam { --c: #3B8B78; --f: #E6F3EF; }
+.note.def  { --c: var(--accent); --f: var(--soft); }
+
+/* ------------------------------------------------------- summary card --- */
+
+.summary { --accent: #C0567E; --soft: #FBECF1; }
+.summary ul { list-style: none; margin: 0; }
+.summary li { position: relative; padding: 0 0 0 7mm; margin-bottom: 3.5mm; }
+.summary li::before {
+  content: "";
+  position: absolute; left: 0; top: 2.6mm;
+  width: 3.2mm; height: 3.2mm; border-radius: 50%;
+  background: var(--accent);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.summary li:last-child { margin-bottom: 0; }
+.summary li b, .summary li strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------- TOC --- */
+
+nav.toc { --accent: #8B8490; --soft: #F3EFF4; }
+nav.toc ol { list-style: none; margin: 0; }
+nav.toc li {
+  display: flex; align-items: baseline; gap: 4mm;
+  padding: 2.7mm 0;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11pt var(--sans);
+}
+nav.toc li:last-child { border-bottom: 0; }
+nav.toc .dot { width: 3.4mm; height: 3.4mm; border-radius: 50%; flex-shrink: 0;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+nav.toc .title { flex: 1; color: var(--ink); }
+nav.toc .rng { flex-shrink: 0; font: 600 8.5pt var(--mono); color: var(--slate); }
+
+/* -------------------------------------------------------------- slides --- */
+
+figure.slide { margin: 0 0 5mm; break-inside: avoid; }
+figure.slide img {
+  width: 100%; display: block;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 10px rgba(40,30,45,.10);
+}
+figure.slide figcaption {
+  font: 400 8.5pt var(--sans);
+  color: var(--slate);
+  margin-top: 2mm;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4mm;
+}
+figure.slide figcaption .ts { color: var(--accent); }
+
+/* ------------------------------------------------------------ glossary --- */
+
+dl.glossary { margin: 0; }
+dl.glossary div { padding: 3mm 0; border-bottom: 1px solid var(--hairline); break-inside: avoid; }
+dl.glossary div:last-child { border-bottom: 0; padding-bottom: 0; }
+dl.glossary dt { font: 700 10.5pt var(--sans); color: var(--accent); margin-bottom: 1.2mm; }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- flashcards --- */
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 0; }
+.qa {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  background: linear-gradient(180deg, var(--soft) 0, #fff 60%);
+  break-inside: avoid;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.qa .q { font: 700 10pt var(--sans); color: var(--ink); margin-bottom: 2mm; }
+.qa .a { color: var(--ink-soft); font-size: 10pt; }
+
+/* ------------------------------------------------------------- tables --- */
+
+.tables-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0; break-inside: avoid; }
+th {
+  font: 700 9pt var(--sans); text-align: left; color: var(--accent);
+  border-bottom: 2px solid var(--soft); padding: 2mm 3mm 2mm 0;
+}
+td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+
+/* --- mobile / on-the-go reading (screen only; never affects the print PDF).
+   Placed LAST so it wins the cascade over the wider @media screen rules above.
+   Requires <meta name="viewport" content="width=device-width, initial-scale=1">. */
+@media screen and (max-width: 640px) {
+  body { padding: 1rem 0.85rem 2.5rem; font-size: 1.02rem; }
+  .card { padding: 5mm 5mm 6mm; border-radius: 14px; margin-bottom: 0.9rem; }
+  .cover { min-height: auto; padding: 2rem 1.3rem 1.6rem; border-radius: 16px; }
+  .cover .avatar { font-size: 24pt; margin-bottom: 4mm; }
+  .cover h1 { font-size: 20pt; max-width: 100%; }
+  .cover .subtitle { font-size: 11.5pt; }
+  .cover .warm { font-size: 11pt; }
+  .cover .chips { gap: 2mm; margin-top: 5mm; }
+  h2 { font-size: 16pt; }
+  h2 .emoji { font-size: 13.5pt; }
+  h3 { font-size: 11.5pt; }
+  .cards { grid-template-columns: 1fr; }
+  nav.toc li { font-size: 10.5pt; gap: 2.5mm; padding: 2.5mm 0; }
+  nav.toc .rng { font-size: 8pt; }
+  .note { padding: 3.5mm 4mm; }
+  table { font-size: 9.5pt; }
+}
+</style>
+<meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
+align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
+border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
+<body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/file/d/1AEAg_FkJ9lpTZRp2Z3kG5h6xNf4lGIGg/view?usp=drivesdk" target="_blank" rel="noopener">Download PDF ↓</a></div>
+
+<!-- ============================================================ cover === -->
+<section class="cover" style="background:radial-gradient(700px 460px at 12% 8%,#F7EBE5 0,transparent 60%),radial-gradient(760px 520px at 96% 4%,#ECEEFA 0,transparent 58%),radial-gradient(620px 520px at 80% 96%,#E4F1F0 0,transparent 60%),var(--cream)">
+  <div>
+    <div class="avatar">G</div>
+    <div class="kicker" style="color:#A4553A">CSS English Essay &middot; Dr Arif</div>
+    <h1>GPEST: Structured Brainstorming and Coherent Sequencing</h1>
+    <p class="subtitle">A practical method for generating essay points through governance, politics, economy, society and technology, then rearranging those points into a causal chain that reads as one coherent case.</p>
+    <p class="warm" style="color:#A4553A">Use the framework to open possibilities. Use judgment to build the final sequence. &#129504;</p>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>42m</b> taught content</span>
+    <span class="chip"><b>5</b> core lenses</span>
+    <span class="chip"><b>12</b> extended indicators</span>
+    <span class="chip"><b>8</b> practical topics</span>
+  </div>
+</section>
+
+<!-- ============================================================== toc === -->
+<nav class="toc card">
+  <header><span class="eyebrow">Contents</span><h2><span class="emoji">&#128506;&#65039;</span> In this chapter</h2></header>
+  <ol>
+    <li><span class="dot" style="background:#A4553A"></span><a class="title" href="#summary">The five-minute version</a><span class="rng">summary</span></li>
+    <li><span class="dot" style="background:#5866C4"></span><a class="title" href="#t1">01 &middot; What the GPEST model is</a><span class="rng">adaptation</span></li>
+    <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t2">02 &middot; Read the five lenses</a><span class="rng">G to T</span></li>
+    <li><span class="dot" style="background:#B57A2A"></span><a class="title" href="#t3">03 &middot; Classify an indicator</a><span class="rng">diagnosis</span></li>
+    <li><span class="dot" style="background:#46955C"></span><a class="title" href="#t4">04 &middot; Rearrange the buckets</a><span class="rng">manual judgment</span></li>
+    <li><span class="dot" style="background:#B44A8C"></span><a class="title" href="#t5">05 &middot; Higher education worked chain</a><span class="rng">coherence</span></li>
+    <li><span class="dot" style="background:#3A7CC0"></span><a class="title" href="#t6">06 &middot; Brainstorm with a table</a><span class="rng">prism method</span></li>
+    <li><span class="dot" style="background:#C0762C"></span><a class="title" href="#t7">07 &middot; Extend to twelve indicators</a><span class="rng">coverage</span></li>
+    <li><span class="dot" style="background:#7A5AA8"></span><a class="title" href="#t8">08 &middot; Convert analysis into an outline</a><span class="rng">workflow</span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t9">Glossary &middot; Flashcards &middot; Exam focus</a><span class="rng"></span></li>
+  </ol>
+</nav>
+
+<!-- ============================================================= tldr === -->
+<section id="summary" class="summary card" style="--accent:#A4553A; --soft:#F7EBE5; border-top-color:#A4553A">
+  <header><span class="eyebrow" style="color:#A4553A">Start here</span><h2><span class="emoji">&#11088;</span> The five-minute version</h2></header>
+  <ul>
+    <li><strong>GPEST is the lecturer's essay-planning adaptation.</strong> It begins with governance, then examines politics, economy, society and technology or technical matters. Its purpose is to help a writer generate and sort points.</li>
+    <li><strong>Governance means decisions and their execution.</strong> In this class it covers policy direction, policy making and implementation. The teacher treats it as wider than the elected government alone.</li>
+    <li><strong>The lenses can suggest a chain.</strong> Governance can shape political conditions; politics can affect the economy; economic conditions reach society; and social conditions interact with technology or a topic's technical features.</li>
+    <li><strong>Classify by the substance of the point.</strong> Money usually signals economy; effects on people often signal society; a decision, policy or implementation failure points toward governance; and subject-specific operations belong under technical.</li>
+    <li><strong>Words can mislead.</strong> "Research culture" sounds social because it contains "culture", yet within a university problem the lecture classifies it as technical because it concerns research and teaching practice.</li>
+    <li><strong>The framework does not write the outline for you.</strong> Several points may land in one category. Rearrange them manually so each point prepares the ground for the next.</li>
+    <li><strong>Coherence comes from relationships.</strong> The worked example links policy direction, implementation, merit, interference, fees, teaching methods and research culture as a progressive chain instead of seven isolated complaints.</li>
+    <li><strong>Apply the table to each major heading.</strong> Scan one heading through the available indicators, keep only productive lenses, then select, merge and order the resulting points.</li>
+  </ul>
+</section>
+
+<!-- ======================================================== section 1 === -->
+<section id="t1" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
+  <header>
+    <span class="eyebrow"><span class="num">1</span> Build the lens</span>
+    <h2><span class="emoji">&#129504;</span> What the GPEST model is</h2>
+    <span class="timepill">00:00-05:23</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecturer presents GPEST as his adaptation of the familiar PEST or PESTEL family of planning frameworks. His change is to place <strong>governance</strong> at the front so that essay planning begins with policy direction, decision making and implementation <span class="ts">00:00:01</span>.</p>
+
+    <h3>Governance in the course model</h3>
+    <div class="grid-3">
+      <div class="mini-card"><h4>Policy direction</h4><p>What the responsible authority intends to achieve and where it wants the sector to go.</p></div>
+      <div class="mini-card"><h4>Policy making</h4><p>How rules, choices and institutional priorities are formed.</p></div>
+      <div class="mini-card"><h4>Implementation</h4><p>Whether the chosen policy is carried through in practice <span class="ts">00:00:46</span>.</p></div>
+    </div>
+
+    <p>The teacher separates governance from the narrow idea of "government". The lens asks who makes a decision, how it is institutionalised, and why execution succeeds or fails. It can therefore reveal governance points inside organisations as well as the state <span class="ts">00:00:01</span>.</p>
+
+    <h3>Why governance comes first here</h3>
+    <p>The lecture says governance should ideally follow political direction. The teacher reverses that order for Pakistan-oriented essays, arguing that interruptions of elected politics strengthened administrative and establishment structures relative to political institutions <span class="ts">00:00:46</span> <span class="ts">00:04:14</span>. This is the course rationale, not a universal rule.</p>
+
+    <div class="note warn">
+      <p><strong>Correction and exam caution.</strong> The lecture states that Pakistan experienced "governance but no politics" for 34 of 79 years <span class="ts">00:02:53</span>. Treat both the count and the absolute wording as a rounded classroom formulation. Official parliamentary histories identify constitutional interruptions beginning on 7 October 1958, 5 July 1977 and 12 October 1999, but a total varies with the chosen end points and with whether military-led civilian phases are included. In an exam, define the period and evidence it instead of quoting 34/79 as a self-explanatory statistic.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ======================================================== section 2 === -->
+<section id="t2" class="chapter card" style="--accent:#2C8C86; --soft:#E4F1F0;">
+  <header>
+    <span class="eyebrow"><span class="num">2</span> Learn the categories</span>
+    <h2><span class="emoji">&#128269;</span> Read the five lenses</h2>
+    <span class="timepill">05:23-08:39</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The five headings give the brain a fixed set of directions in which to search. The teacher also proposes a broad influence chain: governance shapes politics, politics affects the economy, the economy reaches society, and society interacts with technology or the technical conditions of the topic <span class="ts">00:07:47</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Lens</th><th>Question to ask</th><th>Typical point in this lecture</th></tr></thead>
+        <tbody>
+          <tr><td><strong>G: Governance</strong></td><td>What decision, policy, institution or implementation problem shapes the issue?</td><td>Direction and implementation of education policy</td></tr>
+          <tr><td><strong>P: Politics</strong></td><td>How do political actors, power or interference affect the issue?</td><td>Political interference in public universities</td></tr>
+          <tr><td><strong>E: Economy</strong></td><td>Where do money, cost, income, funding or incentives enter?</td><td>High fees in private universities</td></tr>
+          <tr><td><strong>S: Society</strong></td><td>Which people, groups, behaviours or social outcomes are involved?</td><td>Effects on students and access</td></tr>
+          <tr><td><strong>T: Technology / technical</strong></td><td>What technology or topic-specific operating feature matters?</td><td>Teaching method, curriculum and research practice</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Technical means topic-specific</h3>
+    <p>The T bucket is deliberately wider than devices or digital systems. "Technical" means points specific to the subject being analysed <span class="ts">00:06:27</span>. In a university essay, teacher training, curriculum and research are technical. In an agriculture essay, seeds, fertilisers and agricultural research can play the same role <span class="ts">00:07:02</span>.</p>
+
+    <div class="note">
+      <p><strong>The chain is a prompt, not a compulsory order.</strong> The teacher uses G &#8594; P &#8594; E &#8594; S &#8594; T to reveal connections. Later he explicitly says the framework will not fit every topic or every point <span class="ts">00:17:35</span> <span class="ts">00:32:38</span>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 3 === -->
+<section id="t3" class="chapter card" style="--accent:#B57A2A; --soft:#FBF1DE;">
+  <header>
+    <span class="eyebrow"><span class="num">3</span> Diagnose the point</span>
+    <h2><span class="emoji">&#127991;&#65039;</span> Classify an indicator</h2>
+    <span class="timepill">08:39-14:28</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The classroom drill takes problems already gathered for higher education and asks which GPEST indicator best describes each one. The skill lies in identifying what the statement is actually about, rather than reacting to one visible word <span class="ts">00:09:04</span>.</p>
+
+    <h3>Fast diagnostic cues</h3>
+    <ul>
+      <li><strong>Follow money:</strong> a fee, cost or funding point usually belongs under economy <span class="ts">00:12:03</span>.</li>
+      <li><strong>Follow decisions:</strong> policy direction and implementation call for a governance test.</li>
+      <li><strong>Follow people:</strong> groups and social outcomes may signal society, but the people affected do not automatically determine the category.</li>
+      <li><strong>Follow the mechanism:</strong> teaching, research and curriculum belong under technical when that operation is the centre of the claim.</li>
+    </ul>
+
+    <h3>Why labels can deceive</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Point</th><th>Tempting mistake</th><th>Course classification</th><th>Reason</th></tr></thead>
+        <tbody>
+          <tr><td>Lack of research culture</td><td>Social, because it says "culture"</td><td>Technical</td><td>The issue concerns research practice inside universities <span class="ts">00:10:01</span>.</td></tr>
+          <tr><td>Lack of policy implementation</td><td>Politics, because politicians are visible</td><td>Governance</td><td>The core issue is implementation by decision-making institutions <span class="ts">00:10:26</span>.</td></tr>
+          <tr><td>Outdated teaching methods</td><td>Governance, because universities oversee teachers</td><td>Technical</td><td>The method of teaching is the topic-specific operating mechanism <span class="ts">00:11:46</span>.</td></tr>
+          <tr><td>High private-university fees</td><td>Social, because students suffer</td><td>Economy</td><td>The claim itself concerns price and payment <span class="ts">00:12:03</span>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</section>
+
+<!-- ======================================================== section 4 === -->
+<section id="t4" class="chapter card" style="--accent:#46955C; --soft:#E9F4EC;">
+  <header>
+    <span class="eyebrow"><span class="num">4</span> Add judgment</span>
+    <h2><span class="emoji">&#128260;</span> Rearrange the buckets</h2>
+    <span class="timepill">14:28-18:19</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Classification is an intermediate step. Once the points sit under G, P, E, S and T, the writer must inspect several points inside the same bucket and decide which order gives the strongest logical progression <span class="ts">00:14:57</span>.</p>
+
+    <h3>What "manually tweak" means</h3>
+    <ol>
+      <li><strong>Collect first.</strong> Let several points land in the same indicator without forcing a sequence too early.</li>
+      <li><strong>Find dependency.</strong> Ask whether one point is a cause, an implementation failure, evidence, a consequence or a condition for another.</li>
+      <li><strong>Test both directions.</strong> Compare A &#8594; B &#8594; C with C &#8594; B &#8594; A and keep the order that explains rather than merely lists.</li>
+      <li><strong>Write the link aloud.</strong> If a sentence cannot explain why B follows A, the connection may be artificial.</li>
+    </ol>
+
+    <div class="note">
+      <p><strong>Important boundary.</strong> The lecture says GPEST is not to be applied mechanically to every point in the final outline <span class="ts">00:17:35</span>. It produces categories and possibilities. Selection and sequence remain the writer's responsibility.</p>
+    </div>
+
+    <h3>From bucket to topic sentence</h3>
+    <p>The demonstration starts with a broad entry into the governance cluster: "There are several problems in higher education in Pakistan, chief among which is the lack of direction in educational policies" <span class="ts">00:18:19</span>. The sentence opens a chain, but the value of that chain comes from the relationships added after it.</p>
+
+    <div class="note exam">
+      <p><strong>Exam use.</strong> Never reproduce G, P, E, S and T as empty headings. Turn the useful material inside them into specific argumentative headings and paragraphs.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 5 === -->
+<section id="t5" class="chapter card" style="--accent:#B44A8C; --soft:#F8EAF3;">
+  <header>
+    <span class="eyebrow"><span class="num">5</span> Watch coherence form</span>
+    <h2><span class="emoji">&#128279;</span> Higher education worked chain</h2>
+    <span class="timepill">18:19-28:11</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The central worked example rearranges seven complaints about higher education so that each paragraph strengthens the next. The note preserves this as a writing demonstration, not as an independently established diagnosis of every Pakistani university.</p>
+
+    <h3>The chain reconstructed</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Move</th><th>Point</th><th>Link to the next move</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Lack of direction in education policy</td><td>Without direction, implementation becomes weak or inconsistent <span class="ts">00:18:30</span>.</td></tr>
+          <tr><td>2</td><td>Lack of policy implementation</td><td>Non-merit admissions are offered as evidence of failed implementation <span class="ts">00:19:13</span>.</td></tr>
+          <tr><td>3</td><td>Admissions not based on merit</td><td>The example links the admission failure to political interference <span class="ts">00:20:22</span>.</td></tr>
+          <tr><td>4</td><td>Political interference in public universities</td><td>Students excluded from affordable public options may turn to private institutions <span class="ts">00:21:40</span>.</td></tr>
+          <tr><td>5</td><td>High fees in private universities</td><td>The next paragraph contrasts price with the quality of teaching received <span class="ts">00:22:03</span>.</td></tr>
+          <tr><td>6</td><td>Outdated teaching methods</td><td>Rote and pre-defined methods are then connected to weak research habits <span class="ts">00:23:15</span>.</td></tr>
+          <tr><td>7</td><td>Lack of research culture</td><td>The chain ends with the topic-specific academic consequence <span class="ts">00:23:41</span>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Three relationship types</h3>
+    <p><strong>Evidence:</strong> non-merit admissions support the implementation claim. <strong>Cause and effect:</strong> political interference explains the admission problem, which affects students' options. <strong>Concession:</strong> "despite" links high fees with outdated teaching without claiming that fees cause those methods <span class="ts">00:26:21</span>.</p>
+
+  </div>
+</section>
+
+<!-- ======================================================== section 6 === -->
+<section id="t6" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+  <header>
+    <span class="eyebrow"><span class="num">6</span> Generate material</span>
+    <h2><span class="emoji">&#128203;</span> Brainstorm with a table</h2>
+    <span class="timepill">28:11-33:15</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The method moves upstream from outlining to brainstorming. Draw a table, place the indicators across it, and record points under the lens that best explains each one <span class="ts">00:28:11</span>.</p>
+
+    <h3>The prism method</h3>
+    <p>The teacher compares the framework to a prism: send one main heading into it and receive a spectrum of possible angles <span class="ts">00:30:30</span>. The analogy captures the right use of the model. One heading is scanned through several lenses, producing candidate material that can later be filtered.</p>
+
+    <ol>
+      <li><strong>Write one main heading</strong> at the top of the page.</li>
+      <li><strong>Draw the indicator columns</strong> beneath it: governance, politics, economy, society and technology or technical.</li>
+      <li><strong>Ask one question per lens</strong> and record whatever relevant point appears.</li>
+      <li><strong>Leave a lens blank</strong> when it yields nothing useful. The model is not applicable in full to every topic <span class="ts">00:32:38</span>.</li>
+      <li><strong>Repeat for the next major heading</strong> on a separate table rather than mixing different sections together.</li>
+    </ol>
+
+    <div class="note tip">
+      <p><strong>When the mind feels blank.</strong> Replace the vague instruction "brainstorm" with five small prompts: what is the policy issue, the power issue, the money issue, the people issue, and the technical issue? This is the practical relief the lecture offers at <span class="ts">00:29:00</span>.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Keep the worksheet off the final page.</strong> The table is a private planning device. The examiner should see selected arguments in a logical outline, not the scaffolding that generated them.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 7 === -->
+<section id="t7" class="chapter card" style="--accent:#C0762C; --soft:#FAF0E2;">
+  <header>
+    <span class="eyebrow"><span class="num">7</span> Widen the scan</span>
+    <h2><span class="emoji">&#127775;</span> Extend to twelve indicators</h2>
+    <span class="timepill">33:15-38:23</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Five lenses may leave important material hidden, so the second half of the class widens the brainstorming template to twelve indicators for expository and argumentative essays <span class="ts">00:33:37</span>.</p>
+
+    <h3>The recoverable indicator set</h3>
+    <div class="grid-2">
+      <div class="mini-card"><h4>Core GPEST</h4><p>Governance; politics; economy; society; technology or technical.</p></div>
+      <div class="mini-card"><h4>Additional scan</h4><p>Environment; legal; religion; history; media; emotional; moral or ethical.</p></div>
+    </div>
+    <p>The added lenses can reveal ecological conditions, legal gaps, historical roots, religious dimensions, media framing, emotional responses and ethical tensions that the five core categories may miss.</p>
+
+    <div class="note warn">
+      <p><strong>Correction.</strong> At <span class="ts">00:34:26</span>, the recording renders the L in PESTEL as "illegal". The standard expansion is <strong>Legal</strong>; PESTEL or PESTLE covers political, economic, social or sociocultural, technological, environmental and legal factors. The added governance, religion, history, media, emotional and moral or ethical lenses belong to this lecturer's extended essay template.</p>
+    </div>
+
+    <p>The order of the last few labels is partly obscured by mixed-language ASR. The note therefore preserves the categories clearly named in the audio without inventing a numbered order that the recording cannot support <span class="ts">00:35:13</span>.</p>
+
+    <div class="note">
+      <p><strong>One table per main heading.</strong> The teacher asks students to scan each major outline section separately <span class="ts">00:36:17</span> <span class="ts">00:37:49</span>. Causes, effects and remedies may yield different points. Twelve prompts widen the search; relevance and connection decide what enters the outline.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 8 === -->
+<section id="t8" class="chapter card" style="--accent:#7A5AA8; --soft:#F0EBF8;">
+  <header>
+    <span class="eyebrow"><span class="num">8</span> Finish the plan</span>
+    <h2><span class="emoji">&#128736;&#65039;</span> Convert analysis into an outline</h2>
+    <span class="timepill">38:23-42:17</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Structured planning makes the first version easier to sequence, but the table still has to be turned into an essay plan. The last stage removes weak material, strengthens links and phrases the survivors as meaningful headings and topic-sentence claims.</p>
+
+    <h3>End-to-end workflow</h3>
+    <ol>
+      <li><strong>Read the exact demand.</strong> Identify the major sections the topic requires.</li>
+      <li><strong>Create one indicator table per section.</strong> Causes, effects and remedies are scanned separately.</li>
+      <li><strong>Generate without forcing.</strong> Keep productive lenses and leave irrelevant ones blank.</li>
+      <li><strong>Classify by substance.</strong> Look at the mechanism behind each point, not one misleading word.</li>
+      <li><strong>Remove duplicates and weak points.</strong> Similar ideas may need merging; peripheral ones should go.</li>
+      <li><strong>Sequence within each category.</strong> Use cause, evidence, contrast and consequence to build progression.</li>
+      <li><strong>Sequence across categories.</strong> Use GPEST order when it clarifies the case, and change it when another order is stronger.</li>
+      <li><strong>Draft topic sentences.</strong> Each paragraph should state a specific claim and make its relation to the previous paragraph visible.</li>
+    </ol>
+
+    <h3>Quality-control questions</h3>
+    <div class="grid-2">
+      <div class="mini-card"><h4>Relevance</h4><p>Does this point answer the exact heading being brainstormed?</p></div>
+      <div class="mini-card"><h4>Classification</h4><p>What is the point mainly about: a decision, power, money, people or a technical mechanism?</p></div>
+      <div class="mini-card"><h4>Relationship</h4><p>Is the link causal, evidential, concessive, sequential or merely superficial?</p></div>
+      <div class="mini-card"><h4>Coherence</h4><p>Can one sentence explain why the next paragraph follows the previous one?</p></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ======================================================== glossary === -->
+<section id="t9" class="chapter card" style="--accent:#8B8490; --soft:#F0EEF2;">
+  <header>
+    <span class="eyebrow">Reference</span>
+    <h2><span class="emoji">&#128214;</span> Glossary</h2>
+  </header>
+  <div class="section-body">
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Term</th><th>Meaning in this lecture</th></tr></thead>
+        <tbody>
+          <tr><td><strong>GPEST</strong></td><td>The lecturer's brainstorming framework: governance, politics, economy, society, and technology or technical.</td></tr>
+          <tr><td><strong>Governance</strong></td><td>Policy direction, decision making and implementation by the relevant authorities and institutions.</td></tr>
+          <tr><td><strong>Politics</strong></td><td>Political actors, interests, power relations and interference relevant to the issue.</td></tr>
+          <tr><td><strong>Economy</strong></td><td>Money, fees, costs, resources, incentives and other financial dimensions.</td></tr>
+          <tr><td><strong>Society</strong></td><td>People, groups, behaviour, culture and social effects when those are the substance of the point.</td></tr>
+          <tr><td><strong>Technology</strong></td><td>Tools, systems and technological change connected to the topic.</td></tr>
+          <tr><td><strong>Technical</strong></td><td>Topic-specific mechanisms such as curriculum and teaching in education or seeds and fertiliser in agriculture.</td></tr>
+          <tr><td><strong>Indicator</strong></td><td>A lens used to identify and classify a possible essay point.</td></tr>
+          <tr><td><strong>Manual tweaking</strong></td><td>Reordering points after classification so their relationships produce a logical sequence.</td></tr>
+          <tr><td><strong>Coherence</strong></td><td>The sense that paragraphs form a connected, developing case.</td></tr>
+          <tr><td><strong>PESTEL / PESTLE</strong></td><td>A standard environment-scanning family covering political, economic, social, technological, environmental and legal factors.</td></tr>
+          <tr><td><strong>Prism</strong></td><td>The lecturer's analogy for scanning one heading through several indicators to generate a spectrum of points.</td></tr>
+          <tr><td><strong>Concessive link</strong></td><td>A relationship such as "despite": one condition exists although another might lead the reader to expect otherwise.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== flashcards === -->
+<section id="t10" class="chapter card" style="--accent:#A4553A; --soft:#F7EBE5;">
+  <header>
+    <span class="eyebrow">Active recall</span>
+    <h2><span class="emoji">&#127183;</span> Flashcards</h2>
+  </header>
+  <div class="section-body">
+    <div class="cards">
+      <div class="qa"><p class="q">What does GPEST stand for in this course?</p><p class="a">Governance, politics, economy, society, and technology or technical.</p></div>
+      <div class="qa"><p class="q">What did the lecturer add to the familiar PEST family?</p><p class="a">Governance at the beginning, plus a topic-specific technical reading of T.</p></div>
+      <div class="qa"><p class="q">How does the course define governance?</p><p class="a">Through policy direction, policy making and implementation by relevant institutions.</p></div>
+      <div class="qa"><p class="q">What is the suggested influence chain?</p><p class="a">Governance to politics to economy to society to technology or technical.</p></div>
+      <div class="qa"><p class="q">Is that order compulsory?</p><p class="a">No. It is a planning prompt and can be changed when another sequence is more logical.</p></div>
+      <div class="qa"><p class="q">What usually signals an economic point?</p><p class="a">Money, cost, fees, funding or financial incentives.</p></div>
+      <div class="qa"><p class="q">Why is "research culture" technical in the worked example?</p><p class="a">Because the claim concerns research practice inside universities, despite the word "culture".</p></div>
+      <div class="qa"><p class="q">Why is outdated teaching classified as technical?</p><p class="a">Teaching method is a topic-specific operating feature of education.</p></div>
+      <div class="qa"><p class="q">What should happen when three points land under one indicator?</p><p class="a">Rearrange them manually according to their logical relationships.</p></div>
+      <div class="qa"><p class="q">Name four useful relationships for sequencing.</p><p class="a">Cause and effect, evidence, contrast or concession, and consequence.</p></div>
+      <div class="qa"><p class="q">What does the higher-education example use as evidence of weak implementation?</p><p class="a">Admissions not being awarded on merit.</p></div>
+      <div class="qa"><p class="q">Do high fees cause outdated teaching in the demonstration?</p><p class="a">No. The lecturer uses a concessive link: students may pay high fees yet receive outdated teaching.</p></div>
+      <div class="qa"><p class="q">What is the prism method?</p><p class="a">Scan one major heading through several indicators to generate a spectrum of possible points.</p></div>
+      <div class="qa"><p class="q">Should every indicator produce a point?</p><p class="a">No. Leave unproductive lenses blank and keep only relevant material.</p></div>
+      <div class="qa"><p class="q">Why use a separate table for each major heading?</p><p class="a">Each section, such as causes or remedies, generates a different set of points.</p></div>
+      <div class="qa"><p class="q">What does L mean in PESTEL or PESTLE?</p><p class="a">Legal.</p></div>
+      <div class="qa"><p class="q">What are the two jobs in the complete method?</p><p class="a">Systematic generation, followed by argumentative selection and sequence.</p></div>
+      <div class="qa"><p class="q">What final test checks coherence?</p><p class="a">Explain in one sentence why each paragraph follows the paragraph before it.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== exam focus === -->
+<section id="t11" class="chapter card" style="--accent:#A4553A; --soft:#F7EBE5;">
+  <header>
+    <span class="eyebrow">Revision sheet</span>
+    <h2><span class="emoji">&#127919;</span> Exam focus</h2>
+  </header>
+  <div class="section-body">
+    <h3>GPEST on one page</h3>
+    <ol>
+      <li><strong>Frame and scan:</strong> break the topic into major headings, then run each heading through the useful indicators.</li>
+      <li><strong>Classify:</strong> identify the substance and mechanism of each candidate point.</li>
+      <li><strong>Filter and relate:</strong> remove repetition and weak relevance; mark cause, evidence, contrast, concession and consequence.</li>
+      <li><strong>Sequence:</strong> choose the strongest order within and across the surviving clusters.</li>
+      <li><strong>Phrase:</strong> turn the chosen points into meaningful headings and topic sentences.</li>
+    </ol>
+
+    <h3>Five rapid prompts</h3>
+    <ul>
+      <li><strong>G:</strong> What policy, institution, decision or implementation issue matters?</li>
+      <li><strong>P:</strong> What power, interest, actor or interference matters?</li>
+      <li><strong>E:</strong> What cost, resource, funding or incentive matters?</li>
+      <li><strong>S:</strong> Which people, behaviours, groups or social effects matter?</li>
+      <li><strong>T:</strong> What technology or topic-specific mechanism matters?</li>
+    </ul>
+
+    <h3>Common mistakes</h3>
+    <ul>
+      <li>Using GPEST labels as final essay headings.</li>
+      <li>Forcing every indicator into every topic.</li>
+      <li>Classifying by a visible word instead of the point's substance.</li>
+      <li>Leaving points in brainstorm order or assuming proximity creates causation.</li>
+      <li>Turning a contrast such as high fees and outdated teaching into a causal claim.</li>
+      <li>Scanning causes, effects and remedies in one mixed table.</li>
+      <li>Quoting the rounded military-rule total without definitions or evidence.</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="notefoot">Want the whole lecture? <a href="https://drive.google.com/file/d/19M84fImek71piSj48NqRPdnkXOLEEtjD/view?usp=drivesdk" target="_blank" rel="noopener">▶ Watch the full recording</a><span class="sep">·</span><a href="https://drive.google.com/file/d/1AEAg_FkJ9lpTZRp2Z3kG5h6xNf4lGIGg/view?usp=drivesdk" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+</html>
