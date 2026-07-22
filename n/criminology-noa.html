@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Criminal Investigation: Intelligence, Evidence, Interviews and Interrogation</title>
+<style>/* Lecture Notes ebook, "warm study" theme.
+   Inspired by Mehak's MarketCanvas app: soft cream ground, rounded white cards,
+   a different pastel accent per topic, serif display + friendly sans body,
+   gentle emoji + pill badges. Playful and pretty, but still a real study book.
+   Print-first (A4 PDF via headless Edge); reads well on screen too.
+
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
+   Everything themeable keys off --accent / --soft. Titles stay ink for
+   readability; accents colour eyebrows, numbers, pills, rules and callouts.
+*/
+
+:root {
+  --cream: #FCF6F0;          /* page ground (warm) */
+  --card: #FFFFFF;
+  --ink: #2C2630;            /* plum-black body/headings */
+  --ink-soft: #5A5360;
+  --slate: #8B8490;          /* captions, timestamps */
+  --hairline: #EEE6E4;
+
+  /* section default accent (overridden per section) */
+  --accent: #C0567E;
+  --soft: #FBECF1;
+
+  --shadow: 0 1px 2px rgba(60,30,45,.05), 0 10px 26px rgba(80,40,55,.07);
+  --radius: 20px;
+
+  --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: Consolas, "Cascadia Code", ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background:
+    radial-gradient(1100px 700px at 15% -5%, #FBEEF3 0%, transparent 55%),
+    radial-gradient(1000px 700px at 100% 0%, #EEF3FB 0%, transparent 50%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  font: 10.8pt/1.62 var(--sans);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+@media screen {
+  body { max-width: 51rem; margin: 0 auto; padding: 2.5rem 1.15rem 4rem; font-size: 1.0rem; }
+}
+
+/* ---------------------------------------------------------------- page --- */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm 14mm;
+  @bottom-center {
+    content: counter(page);
+    font: 8.5pt var(--sans);
+    color: #8B8490;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+/* --------------------------------------------------------------- cards --- */
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8mm 9mm 9mm;
+  margin: 0 0 6mm;
+  box-shadow: var(--shadow);
+  break-inside: auto;
+}
+@media screen { .card { margin-bottom: 1.4rem; } }
+
+/* a soft accent wash across the top of each section card (fades to white),
+   echoing the app's pastel cards without hurting readability */
+.chapter {
+  background:
+    linear-gradient(180deg, var(--soft) 0, rgba(255,255,255,0) 34mm),
+    var(--card);
+  border-top: 3px solid var(--accent);
+  break-inside: auto;
+  break-before: page;   /* each topic starts fresh: slide on top, notes below */
+}
+/* on screen (web/PWA) sections just stack; no forced page breaks */
+@media screen { .chapter { break-before: auto; } }
+
+h2, h3, .eyebrow { break-after: avoid; }
+p { orphans: 2; widows: 2; }
+
+/* keep the section header intact (eyebrow + title + time pill together) and
+   glued to its opening slide */
+.chapter > header { break-inside: avoid; break-after: avoid; }
+figure.slide { break-before: avoid; }
+
+/* --------------------------------------------------------------- cover --- */
+
+.cover {
+  page: cover;
+  break-after: page;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32mm 22mm 24mm;
+  background:
+    radial-gradient(700px 460px at 12% 8%, #FBE6EE 0%, transparent 60%),
+    radial-gradient(760px 520px at 96% 4%, #E7EEFB 0%, transparent 58%),
+    radial-gradient(620px 520px at 80% 96%, #E6F4EC 0%, transparent 60%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+@media screen {
+  .cover { min-height: 80vh; border-radius: 24px; padding: 3.2rem 2.6rem; margin-bottom: 1.4rem; }
+}
+
+.cover .avatar { font-size: 30pt; line-height: 1; margin-bottom: 7mm; }
+.cover .kicker {
+  font: 600 9pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 5mm;
+}
+.cover h1 {
+  font: 600 31pt/1.14 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 15em;
+}
+.cover .subtitle {
+  margin-top: 5mm;
+  font: 400 13.5pt/1.5 var(--sans);
+  color: var(--ink-soft);
+  max-width: 30em;
+}
+.cover .warm {
+  margin-top: 4mm;
+  font: italic 400 12pt/1.5 var(--serif);
+  color: var(--accent);
+}
+
+.cover .chips { display: flex; flex-wrap: wrap; gap: 3mm; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.4mm 4mm;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(60,30,45,.04);
+  font: 400 9pt var(--sans);
+  color: var(--slate);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chip b { font: 700 10.5pt var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ headings --- */
+
+.chapter header { margin-bottom: 5mm; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  font: 700 8.5pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--accent);
+  margin-bottom: 3mm;
+}
+.eyebrow .num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h2 {
+  font: 600 20pt/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .emoji { font-size: 17pt; }
+
+.timepill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.5mm 3.5mm;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font: 600 8pt var(--mono);
+  letter-spacing: 0.02em;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h3 {
+  font: 600 12.5pt/1.34 var(--serif);
+  color: var(--ink);
+  margin: 6mm 0 2.5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+.ts { font: 400 8.5pt var(--mono); color: var(--slate); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- body --- */
+
+.section-body > :last-child { margin-bottom: 0; }
+p { margin: 0 0 3mm; }
+.lead { font-size: 11.2pt; color: var(--ink); }
+
+ul, ol { margin: 0 0 3mm 5.5mm; }
+li { margin-bottom: 1.7mm; padding-left: 1mm; }
+li::marker { color: var(--accent); }
+
+.kt { font-weight: 700; color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
+
+code { font: 9.5pt var(--mono); background: #F3EFF4; padding: .4pt 3.5pt; border-radius: 4px; }
+
+/* ------------------------------------------------------------ callouts --- */
+
+.note {
+  --c: var(--accent);
+  --f: var(--soft);
+  background: var(--f);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  border-left: 3px solid var(--c);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.note .label {
+  display: inline-flex; align-items: center; gap: 1.6mm;
+  font: 700 8pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c);
+  margin-bottom: 1.8mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.warn { --c: #B4791F; --f: #FaF1DF; }
+.note.exam { --c: #3B8B78; --f: #E6F3EF; }
+.note.def  { --c: var(--accent); --f: var(--soft); }
+
+/* ------------------------------------------------------- summary card --- */
+
+.summary { --accent: #C0567E; --soft: #FBECF1; }
+.summary ul { list-style: none; margin: 0; }
+.summary li { position: relative; padding: 0 0 0 7mm; margin-bottom: 3.5mm; }
+.summary li::before {
+  content: "";
+  position: absolute; left: 0; top: 2.6mm;
+  width: 3.2mm; height: 3.2mm; border-radius: 50%;
+  background: var(--accent);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.summary li:last-child { margin-bottom: 0; }
+.summary li b, .summary li strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------- TOC --- */
+
+nav.toc { --accent: #8B8490; --soft: #F3EFF4; }
+nav.toc ol { list-style: none; margin: 0; }
+nav.toc li {
+  display: flex; align-items: baseline; gap: 4mm;
+  padding: 2.7mm 0;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11pt var(--sans);
+}
+nav.toc li:last-child { border-bottom: 0; }
+nav.toc .dot { width: 3.4mm; height: 3.4mm; border-radius: 50%; flex-shrink: 0;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+nav.toc .title { flex: 1; color: var(--ink); }
+nav.toc .rng { flex-shrink: 0; font: 600 8.5pt var(--mono); color: var(--slate); }
+
+/* -------------------------------------------------------------- slides --- */
+
+figure.slide { margin: 0 0 5mm; break-inside: avoid; }
+figure.slide img {
+  width: 100%; display: block;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 10px rgba(40,30,45,.10);
+}
+figure.slide figcaption {
+  font: 400 8.5pt var(--sans);
+  color: var(--slate);
+  margin-top: 2mm;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4mm;
+}
+figure.slide figcaption .ts { color: var(--accent); }
+
+/* ------------------------------------------------------------ glossary --- */
+
+dl.glossary { margin: 0; }
+dl.glossary div { padding: 3mm 0; border-bottom: 1px solid var(--hairline); break-inside: avoid; }
+dl.glossary div:last-child { border-bottom: 0; padding-bottom: 0; }
+dl.glossary dt { font: 700 10.5pt var(--sans); color: var(--accent); margin-bottom: 1.2mm; }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- flashcards --- */
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 0; }
+.qa {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  background: linear-gradient(180deg, var(--soft) 0, #fff 60%);
+  break-inside: avoid;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.qa .q { font: 700 10pt var(--sans); color: var(--ink); margin-bottom: 2mm; }
+.qa .a { color: var(--ink-soft); font-size: 10pt; }
+
+/* ------------------------------------------------------------- tables --- */
+
+.tables-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0; break-inside: avoid; }
+th {
+  font: 700 9pt var(--sans); text-align: left; color: var(--accent);
+  border-bottom: 2px solid var(--soft); padding: 2mm 3mm 2mm 0;
+}
+td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+
+/* --- mobile / on-the-go reading (screen only; never affects the print PDF).
+   Placed LAST so it wins the cascade over the wider @media screen rules above.
+   Requires <meta name="viewport" content="width=device-width, initial-scale=1">. */
+@media screen and (max-width: 640px) {
+  body { padding: 1rem 0.85rem 2.5rem; font-size: 1.02rem; }
+  .card { padding: 5mm 5mm 6mm; border-radius: 14px; margin-bottom: 0.9rem; }
+  .cover { min-height: auto; padding: 2rem 1.3rem 1.6rem; border-radius: 16px; }
+  .cover .avatar { font-size: 24pt; margin-bottom: 4mm; }
+  .cover h1 { font-size: 20pt; max-width: 100%; }
+  .cover .subtitle { font-size: 11.5pt; }
+  .cover .warm { font-size: 11pt; }
+  .cover .chips { gap: 2mm; margin-top: 5mm; }
+  h2 { font-size: 16pt; }
+  h2 .emoji { font-size: 13.5pt; }
+  h3 { font-size: 11.5pt; }
+  .cards { grid-template-columns: 1fr; }
+  nav.toc li { font-size: 10.5pt; gap: 2.5mm; padding: 2.5mm 0; }
+  nav.toc .rng { font-size: 8pt; }
+  .note { padding: 3.5mm 4mm; }
+  table { font-size: 9.5pt; }
+}
+</style>
+<meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
+align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
+border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
+<body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/file/d/1b0PVoK22Zt9PvbfjyhSQMsu94M5IhGyU/view?usp=drivesdk" target="_blank" rel="noopener">Download PDF ↓</a></div>
+
+<!-- ============================================================ cover === -->
+<section class="cover" style="background:radial-gradient(700px 460px at 12% 8%,#FBEBEF 0,transparent 60%),radial-gradient(760px 520px at 96% 4%,#E7F1FB 0,transparent 58%),radial-gradient(620px 520px at 80% 96%,#E4F1F0 0,transparent 60%),var(--cream)">
+  <div>
+    <div class="avatar">&#9878;&#65039;</div>
+    <div class="kicker" style="color:#C6506E">CSS Criminology &middot; Class 5</div>
+    <h1>Criminal Investigation: Intelligence, Evidence, Interviews and Interrogation</h1>
+    <p class="subtitle">How investigators turn raw information into action, use databases and scientific evidence, interview people without accusation, interrogate primary suspects, and shape the material into past-paper answers.</p>
+    <p class="warm" style="color:#C6506E">A sound investigation protects the innocent as carefully as it identifies the offender. Follow the information, preserve the evidence, and make every step explainable. &#128269;</p>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>1h 39m</b> audio class</span>
+    <span class="chip"><b>4</b> forms of investigation</span>
+    <span class="chip"><b>PEACE</b> interview model</span>
+    <span class="chip"><b>2023-2025</b> paper practice</span>
+  </div>
+</section>
+
+<!-- ============================================================== toc === -->
+<nav class="toc card">
+  <header><span class="eyebrow">Contents</span><h2><span class="emoji">&#128506;&#65039;</span> In this chapter</h2></header>
+  <ol>
+    <li><span class="dot" style="background:#C6506E"></span><a class="title" href="#summary">The five-minute version</a><span class="rng">summary</span></li>
+    <li><span class="dot" style="background:#5866C4"></span><a class="title" href="#t1">01 &middot; Intelligence operations</a><span class="rng">information to action</span></li>
+    <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t2">02 &middot; Database investigation</a><span class="rng">identity and records</span></li>
+    <li><span class="dot" style="background:#3A7CC0"></span><a class="title" href="#t3">03 &middot; Electronic investigation</a><span class="rng">devices and digital traces</span></li>
+    <li><span class="dot" style="background:#B57A2A"></span><a class="title" href="#t4">04 &middot; Forensic investigation</a><span class="rng">what evidence proves</span></li>
+    <li><span class="dot" style="background:#46955C"></span><a class="title" href="#t5">05 &middot; Integrating the four forms</a><span class="rng">bank-robbery exercise</span></li>
+    <li><span class="dot" style="background:#B44A8C"></span><a class="title" href="#t6">06 &middot; Investigative interviews</a><span class="rng">PEACE, recall and cognition</span></li>
+    <li><span class="dot" style="background:#7A5AA8"></span><a class="title" href="#t7">07 &middot; Interrogation</a><span class="rng">Reid and good cop, bad cop</span></li>
+    <li><span class="dot" style="background:#C0762C"></span><a class="title" href="#t8">08 &middot; Past-paper application</a><span class="rng">2023-2025</span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t9">Glossary &middot; Flashcards &middot; Exam focus</a><span class="rng"></span></li>
+  </ol>
+</nav>
+
+<!-- ============================================================= tldr === -->
+<section id="summary" class="summary card" style="--accent:#C6506E; --soft:#FBEBEF; border-top-color:#C6506E">
+  <header><span class="eyebrow" style="color:#C6506E">Start here</span><h2><span class="emoji">&#11088;</span> The five-minute version</h2></header>
+  <ul>
+    <li><strong>Investigation must be intelligence-led and evidence-based.</strong> Information becomes useful after it is collected, analysed, evaluated and sent to the authority able to act on it. The aim may be prevention, suspect identification or the direction of the next investigative step.</li>
+    <li><strong>Intelligence comes from different channels.</strong> The lecture uses open sources, bank records, cyberspace, informants, undercover work, phone records and surveillance. A planned urban bombing exercise shows how separate clues become one assessed picture.</li>
+    <li><strong>Database investigation identifies or verifies people and things.</strong> Fingerprints, identity records, vehicle registration, telecom data, passport and immigration records, offender records and DNA databases can connect a trace to an existing record.</li>
+    <li><strong>Electronic investigation follows digital evidence.</strong> Phones, computers, email, social media, GPS, cloud storage, call records, messages and deleted files may reveal contact, location and activity. The lecture places cybercrime inside the broader field of electronic investigation.</li>
+    <li><strong>Forensics asks what collected evidence scientifically demonstrates.</strong> The examples include ballistics, toxicology, DNA analysis, pathology and forensic entomology. The point is to interpret evidence, support a lawful case and reduce the risk of a wrongful conviction.</li>
+    <li><strong>An investigative interview is non-accusatory.</strong> It seeks truthful information from a victim, witness or suspect, with dignity and procedural safeguards. The lecture's interview methods are PEACE, free recall and the enhanced cognitive interview.</li>
+    <li><strong>An interrogation is accusatory and suspect-focused.</strong> Its possible purpose is a confession. The class covers direct questioning, the Reid technique and good cop, bad cop, while rejecting physical violence.</li>
+    <li><strong>Past-paper answers must connect process to justice.</strong> Start at the crime scene, protect the evidence, explain search patterns and chain of custody, then show how sound investigation establishes facts, identifies the offender, protects innocent people and gives courts admissible evidence.</li>
+  </ul>
+</section>
+
+<!-- ======================================================== section 1 === -->
+<section id="t1" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
+  <header>
+    <span class="eyebrow"><span class="num">1</span> From clues to action</span>
+    <h2><span class="emoji">&#128225;</span> Intelligence operations</h2>
+    <span class="timepill">00:00-10:13</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The recording begins in the middle of the intelligence discussion. Its central rule is clear: an investigation should move beyond intuition. Investigators collect information, analyse it, evaluate its reliability and relevance, and decide what action or dissemination should follow <span class="ts">00:03:27</span>.</p>
+
+    <h3>Sources discussed in the lecture</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Source</th><th>What investigators look for</th><th>Lecture example</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Open-source intelligence</strong></td><td>Publicly available material such as social media, websites and newspapers</td><td>Repeated recruitment advertisements aimed at women led investigators to a company that did not exist and exposed a human-trafficking operation <span class="ts">00:00:00</span></td></tr>
+          <tr><td><strong>Financial intelligence</strong></td><td>Suspicious bank records, undeclared assets and transactions inconsistent with the account holder's apparent profile</td><td>The lecturer recalls unusually large sums moving through accounts held in the names of ordinary workers <span class="ts">00:02:19</span></td></tr>
+          <tr><td><strong>Cyber intelligence</strong></td><td>Digital profiles and footprints across cyberspace, the dark web and online forums</td><td>Tracking online activity to understand a person's network and conduct <span class="ts">00:03:01</span></td></tr>
+          <tr><td><strong>Human intelligence</strong></td><td>Informants and undercover collection</td><td>An undercover source may help detect preparations for an attack <span class="ts">00:04:34</span></td></tr>
+          <tr><td><strong>Signals and surveillance</strong></td><td>Phone records, intercepted communications and CCTV footage</td><td>Repeated contact with a number linked to unusual purchases may raise a lead for further assessment <span class="ts">00:06:44</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: FMU is not a wing of the State Bank of Pakistan.</strong> The lecture places the Financial Monitoring Unit under SBP <span class="ts">00:02:19</span>. FMU is Pakistan's statutory financial intelligence unit within the federal Finance Division's institutional structure. Its Karachi office is housed in the SBP Main Building, which may explain the confusion. Its functions include receiving, analysing and disseminating suspicious and currency transaction information under the <strong>Anti-Money Laundering Act, 2010</strong>. Keep the institutional placement distinct from the office address.</p>
+    </div>
+
+    <h3>The intelligence cycle in the urban-bombing exercise</h3>
+    <p>The teacher asks the class to imagine a potential bombing being planned in an urban centre <span class="ts">00:03:57</span>. The exercise is less about guessing one clue and more about combining different sources:</p>
+    <ol>
+      <li><strong>Collect:</strong> informant reports, undercover observations, CCTV, phone records, digital activity and purchasing records.</li>
+      <li><strong>Analyse:</strong> look for recurring numbers, shared locations, common companies or unusual purchases such as repeated fertilizer orders <span class="ts">00:06:44</span>.</li>
+      <li><strong>Classify:</strong> identify people or transactions that deserve closer examination.</li>
+      <li><strong>Evaluate:</strong> test innocent explanations. A farmer or a legitimate business may have a normal reason for buying fertilizer, so the information must be assessed before the suspect list is narrowed <span class="ts">00:08:24</span>.</li>
+      <li><strong>Disseminate:</strong> send the assessed intelligence to the body able to act, such as the Counter Terrorism Department, local police or a bomb disposal unit <span class="ts">00:09:01</span>.</li>
+    </ol>
+
+    <div class="note exam">
+      <p><strong>The examiner's takeaway.</strong> Intelligence is analysed and evaluated information, not a loose collection of tips. In a prevention question, show the movement from several sources to assessment, prioritisation and timely dissemination. The lecture names CTD, FIA and the Intelligence Bureau as Pakistan-facing examples <span class="ts">00:10:13</span>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 2 === -->
+<section id="t2" class="chapter card" style="--accent:#2C8C86; --soft:#E4F1F0;">
+  <header>
+    <span class="eyebrow"><span class="num">2</span> Records as evidence</span>
+    <h2><span class="emoji">&#128451;&#65039;</span> Database investigation</h2>
+    <span class="timepill">10:47-15:13</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">A database is an organised collection of data that can be retrieved through software. <span class="kt">Database investigation</span>, also called database-forensics investigation in the lecture, uses computerised records to identify a suspect or verify an identity <span class="ts">00:10:47</span>.</p>
+
+    <div class="note">
+      <p><strong>The practical move.</strong> A trace from the case is run against an existing record. A crime-scene fingerprint can be compared with a fingerprint database; a licence plate can be checked against vehicle registration; an identity can be tested against national identity records. The database does not create the trace. It supplies the stored comparison that may turn the trace into a lead <span class="ts">00:11:54</span>.</p>
+    </div>
+
+    <h3>Databases named in class</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Database or record</th><th>Investigative use described</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Offender and fingerprint records</strong></td><td>Compare a print or search people with a previous record relevant to the offence</td></tr>
+          <tr><td><strong>NADRA identity records</strong></td><td>Verify national identity details</td></tr>
+          <tr><td><strong>Vehicle registration / ETO records</strong></td><td>Run a number plate and determine the registered status of a vehicle</td></tr>
+          <tr><td><strong>Telecom records</strong></td><td>Connect phone data with subscriber or contact information</td></tr>
+          <tr><td><strong>Passport and immigration records</strong></td><td>Check digitally available travel and identity information</td></tr>
+          <tr><td><strong>DNA databases</strong></td><td>Compare a biological sample with a stored profile when an appropriate database exists</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The lecture also asks students to read about China's extensive surveillance databases as a comparative example <span class="ts">00:12:48</span>. Its purpose in this class is to show the reach of electronic record systems, not to supply a detailed China case study.</p>
+
+    <div class="note exam">
+      <p><strong>Distinguish method from result.</strong> Database investigation can identify, verify, include or exclude a possible suspect. An answer should still explain how the matched record relates to the case and how other evidence supports it.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 3 === -->
+<section id="t3" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+  <header>
+    <span class="eyebrow"><span class="num">3</span> The digital trail</span>
+    <h2><span class="emoji">&#128241;</span> Electronic investigation</h2>
+    <span class="timepill">15:57-19:38</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Electronic investigation gathers and examines evidence created, stored or transmitted through computers, smartphones and the internet. The lecture's examples show how contact history and digital activity can support a case when the material is verified and admitted in court <span class="ts">00:16:12</span>.</p>
+
+    <h3>Devices and records to examine</h3>
+    <ul>
+      <li>Mobile phones, computers and laptops.</li>
+      <li>Email and social-media accounts.</li>
+      <li>GPS devices and location-related traces.</li>
+      <li>Cloud storage.</li>
+      <li>Call records, messages and deleted files <span class="ts">00:17:14</span>.</li>
+    </ul>
+    <p>The teacher refers to an unnamed assassination case in which phone evidence showed contact between people and contributed to a conviction <span class="ts">00:16:12</span>. The recording does not identify the case clearly, so this note does not attach a name to it.</p>
+
+    <div class="note">
+      <p><strong>Broad field, narrower category.</strong> Electronic investigation is the broader term. Cybercrime is one class of offending that may require it. The lecture's examples of cybercrime include cyberstalking, identity theft, fake profiles used to seek money and conduct that harms the identity of the genuine person <span class="ts">00:18:51</span>.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Editorial: current institutional status.</strong> The lecture says the <strong>National Cyber Crime Investigation Agency (NCCIA)</strong> was formerly the FIA Cyber Crime Wing and now operates as a separate agency <span class="ts">00:17:54</span>. Current official material describes NCCIA as the central cybercrime body under the <strong>Ministry of Interior and Narcotics Control</strong>, and a National Assembly answer states that it replaced FIA's Cyber Crime Wing in <strong>2025</strong>. Verify this current-status statement again before publication because the transition has changed over time.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Build the chain.</strong> Name the device or account, identify the record sought, explain what proposition it may support, and connect it with the rest of the evidence. "Check the phone" is too vague for a developed answer.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 4 === -->
+<section id="t4" class="chapter card" style="--accent:#B57A2A; --soft:#FBF1DE;">
+  <header>
+    <span class="eyebrow"><span class="num">4</span> Scientific interpretation</span>
+    <h2><span class="emoji">&#129514;</span> Forensic investigation</h2>
+    <span class="timepill">19:38-24:34</span>
+  </header>
+  <div class="section-body">
+    <p class="lead"><span class="kt">Forensic investigation</span> uses scientific methods to examine collected evidence and determine what that evidence can support. Its result may guide the investigation or contribute to later court proceedings <span class="ts">00:19:38</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Forensic area named</th><th>Question it may help answer</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Ballistics / firearm examination</strong></td><td>What type of weapon may have fired a bullet, and what the impact may suggest about firing position or distance</td></tr>
+          <tr><td><strong>Toxicology</strong></td><td>What a substance in a sample may indicate</td></tr>
+          <tr><td><strong>DNA analysis</strong></td><td>Whether a biological sample can be associated with a person or compared with another profile</td></tr>
+          <tr><td><strong>Pathology</strong></td><td>What examination of the body or tissue may reveal</td></tr>
+          <tr><td><strong>Forensic entomology</strong></td><td>What insects associated with a body, vehicle or location may contribute to an inference</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>The vehicle-and-insects example</h3>
+    <p>In the teacher's example, a murder suspect tries to flee in a car. Investigators examine insects caught in the grille or engine area. Because insect populations may be associated with particular environments, they may contribute to an assessment of where the vehicle travelled <span class="ts">00:21:41</span>. The example illustrates the lecture's wider point: a small trace becomes meaningful through a specialised scientific field.</p>
+
+    <div class="note">
+      <p><strong>Four forms, four questions.</strong> Intelligence asks what collected information means and where it should go. A database asks whether a trace matches a stored record. Electronic investigation asks what digital devices and accounts reveal. Forensics asks what physical or biological evidence scientifically supports <span class="ts">00:23:07</span>.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Why accuracy matters.</strong> The teacher links careful evidence gathering with a fair criminal justice process. A wrongful conviction punishes an innocent person, wastes the time of courts and prosecutors, and leaves the actual offence unresolved <span class="ts">00:24:02</span>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 5 === -->
+<section id="t5" class="chapter card" style="--accent:#46955C; --soft:#E9F4EC;">
+  <header>
+    <span class="eyebrow"><span class="num">5</span> Worked application</span>
+    <h2><span class="emoji">&#129513;</span> Integrating the four forms</h2>
+    <span class="timepill">24:34-31:22</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The class works through a hypothetical bank robbery in Islamabad involving four armed men who escape in a white Corolla <span class="ts">00:24:34</span>. The transcript gives two different amounts for the stolen money, so the amount is omitted here. It does not affect the investigative method.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Form</th><th>Application to the scenario</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Intelligence operation</strong></td><td>Before the offence, gather tips, monitor digital footprints and assess information that could support interception. After the offence, analyse information and direct it to the relevant units.</td></tr>
+          <tr><td><strong>Database investigation</strong></td><td>Search for people previously connected with similar robberies, compare fingerprints, run the Corolla's registration through vehicle records and check official databases.</td></tr>
+          <tr><td><strong>Electronic investigation</strong></td><td>Collect CCTV footage, examine mobile data and review relevant electronic devices and surveillance systems.</td></tr>
+          <tr><td><strong>Forensic investigation</strong></td><td>Secure the scene, collect fingerprints and other physical traces, examine ballistic evidence and assess any footprints or biological material.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>How the methods connect</h3>
+    <ol>
+      <li><strong>Secure the crime scene</strong> so evidence is preserved.</li>
+      <li><strong>Collect traces</strong> such as prints, possible weapon-related evidence, CCTV and vehicle information.</li>
+      <li><strong>Interpret traces</strong> through the suitable forensic discipline.</li>
+      <li><strong>Run identifiers</strong> through databases to generate or test leads.</li>
+      <li><strong>Examine electronic records</strong> for contact, movement and activity.</li>
+      <li><strong>Analyse the combined picture</strong> before narrowing the suspect list or deciding the next action.</li>
+    </ol>
+    <p>The teacher also suggests that footprint analysis may contribute to tentative estimates about a person's physical characteristics <span class="ts">00:29:37</span>. Treat such an inference as supporting information, not as a standalone identification.</p>
+
+    <div class="note exam">
+      <p><strong>Use the scenario as a paragraph plan.</strong> An applied question becomes easier when each investigative form has its own evidence, purpose and next step. Do not list techniques without showing how they operate on the facts.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 6 === -->
+<section id="t6" class="chapter card" style="--accent:#B44A8C; --soft:#F8EAF3;">
+  <header>
+    <span class="eyebrow"><span class="num">6</span> Non-accusatory fact finding</span>
+    <h2><span class="emoji">&#128172;</span> Investigative interviews</h2>
+    <span class="timepill">34:28-53:08</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">An <span class="kt">investigative interview</span> is a non-accusatory conversation used to obtain truthful information from a victim, witness or suspect. Its purpose is fact finding that helps solve the case. The interviewer is not seeking a confession and should not use force <span class="ts">00:37:30</span>.</p>
+
+    <div class="note">
+      <p><strong>The presumption and the tone.</strong> The interview begins from a presumption of innocence. The teacher connects that presumption with an open, respectful process that avoids bias and treats the person as a source of information rather than as someone already proved guilty <span class="ts">00:41:36</span>.</p>
+    </div>
+
+    <h3>Safeguards emphasised in class</h3>
+    <ul>
+      <li>Respect the person's dignity.</li>
+      <li>Do not degrade the person or use torture and ill treatment.</li>
+      <li>Do not turn an information-gathering interview into arrest or detention.</li>
+      <li>Explain the person's rights and the process.</li>
+      <li>Do not compel speech merely because the investigator wants more information <span class="ts">00:40:30</span>.</li>
+    </ul>
+    <p>The lecturer illustrates the voluntary character by saying a person can ask whether they are being accused and, if the answer is no, ask to leave <span class="ts">00:42:16</span>. This is presented as the classroom expression of a non-accusatory interview, not as a complete statement of arrest and detention law.</p>
+
+    <h3>The PEACE model</h3>
+    <p>The lecture places the PEACE model in the United Kingdom in the 1990s and links its development to concern about forceful confessions and the need for human-rights safeguards <span class="ts">00:44:09</span>. It teaches the following five-stage route:</p>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Phase</th><th>What the interviewer does</th></tr></thead>
+        <tbody>
+          <tr><td><strong>P: Preparation and planning</strong></td><td>Clarify the purpose, information needs and plan before the conversation.</td></tr>
+          <tr><td><strong>E: Engage and Explain</strong></td><td>Build rapport, help the person feel comfortable, and develop trust in the interviewer and process <span class="ts">00:45:29</span>.</td></tr>
+          <tr><td><strong>A: Account, Clarification and Challenge</strong></td><td>Obtain the person's detailed account. Ask questions that clarify the investigation and ensure important details are accounted for <span class="ts">00:45:50</span>.</td></tr>
+          <tr><td><strong>C: Closure</strong></td><td>Summarise the interview, confirm the shared understanding and explain the next steps <span class="ts">00:47:04</span>.</td></tr>
+          <tr><td><strong>E: Evaluation</strong></td><td>Assess the information, the quality of the answers and whether the interview produced useful information <span class="ts">00:47:44</span>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note warn">
+      <p><strong>Editorial: formal wording verified.</strong> The lecture uses the short labels "Engage" and "Account". The recognised formal wording is <strong>Engage and Explain</strong> and <strong>Account, Clarification and Challenge</strong>.</p>
+    </div>
+
+    <h3>Two further interview techniques</h3>
+    <div class="note">
+      <p><strong>Free recall.</strong> Allow the interviewee to describe everything remembered without interruption. Questions follow after the uninterrupted account, so the person's own sequence and details emerge first <span class="ts">00:49:21</span>.</p>
+    </div>
+    <div class="note">
+      <p><strong>Enhanced cognitive interview (ECI).</strong> Use context and memory prompts, including closing the eyes and imagining the scene <span class="ts">00:50:29</span>. The teacher says the method requires expertise in cognitive psychology <span class="ts">00:51:16</span>.</p>
+    </div>
+    <p>A possible-offender sketch may be prepared before, during or after the interview <span class="ts">00:52:05</span>.</p>
+
+    <div class="note exam">
+      <p><strong>The line to hold.</strong> An interview seeks information in a non-accusatory setting. A confession is not its organising purpose.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 7 === -->
+<section id="t7" class="chapter card" style="--accent:#7A5AA8; --soft:#F0EBF8;">
+  <header>
+    <span class="eyebrow"><span class="num">7</span> Accusatory questioning</span>
+    <h2><span class="emoji">&#128269;</span> Interrogation</h2>
+    <span class="timepill">54:13-1:23:08</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Interrogation is the stronger, accusatory form of questioning used with an accused person or primary suspect. It is focused, may use direct questions, and may aim to obtain a confession when the investigator's information points strongly to the suspect <span class="ts">00:55:59</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Dimension</th><th>Investigative interview</th><th>Interrogation</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Basic character</strong></td><td>Non-accusatory</td><td>Accusatory</td></tr>
+          <tr><td><strong>People involved</strong></td><td>Victim, witness or suspect</td><td>Usually a primary suspect or accused person</td></tr>
+          <tr><td><strong>Main purpose</strong></td><td>Gather truthful, additional information</td><td>Test the suspect's account and possibly obtain a confession</td></tr>
+          <tr><td><strong>Presumption described</strong></td><td>Approach the person as innocent</td><td>Proceed because the existing information has made the person a strong suspect</td></tr>
+          <tr><td><strong>Tone</strong></td><td>Open, soft and fact-finding</td><td>Focused, harder and direct</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Direct questioning</h3>
+    <p>Direct questioning confronts the suspect with focused questions. The teacher notes that it may be ineffective with a hardened offender who recognises the attempt to obtain a statement and simply refuses to provide one <span class="ts">00:59:03</span>. This leads into structured psychological techniques.</p>
+
+    <h3>The Reid technique as taught</h3>
+    <p>The lecture attributes the method to <strong>John E. Reid</strong> in the United States and describes it as confession-oriented: a structured attempt to obtain a voluntary confession without physical force <span class="ts">00:59:32</span>. It presents two broad stages:</p>
+    <ol>
+      <li><strong>Non-accusatory interview:</strong> observe verbal and non-verbal responses and decide whether the account appears truthful or deceptive <span class="ts">01:01:36</span>.</li>
+      <li><strong>Nine-step interrogation:</strong> if the investigator judges the person deceptive, move into the accusatory sequence <span class="ts">01:02:37</span>.</li>
+    </ol>
+
+    <div class="note warn">
+      <p><strong>Watch the evidential leap.</strong> The lecture describes the first stage as observing whether a suspect appears truthful or deceptive. An investigator's reading of behaviour is still an assessment, not proof that the person is lying. The case must remain anchored in corroborated evidence.</p>
+    </div>
+
+    <h3>The steps the class explains in detail</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Step taught</th><th>Lecture explanation</th></tr></thead>
+        <tbody>
+          <tr><td><strong>1. Direct or positive confrontation</strong></td><td>Take control and state the accusation firmly <span class="ts">01:05:31</span>.</td></tr>
+          <tr><td><strong>2. Theme development</strong></td><td>Offer a narrative that makes the conduct psychologically easier to discuss, such as an accident, anger or a crime of passion <span class="ts">01:07:35</span>.</td></tr>
+          <tr><td><strong>3. Handling denials</strong></td><td>Expect denials, interrupt them and keep the theme moving. The teacher also notes that a denial may reveal another name or detail <span class="ts">01:09:21</span>.</td></tr>
+          <tr><td><strong>4. Overcoming objections</strong></td><td>Listen to and use the suspect's explanations, show some empathy and avoid shutting the suspect down completely <span class="ts">01:11:03</span>.</td></tr>
+          <tr><td><strong>Later movement</strong></td><td>The recording summarises the remaining steps rather than naming each one: use alternatives and the information already disclosed to work toward an oral confession, then record it <span class="ts">01:12:34</span>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The lecturer says the Reid technique has been widely used, has attracted criticism, and is accepted by some police departments and rejected by others <span class="ts">01:13:05</span>. The class does not develop the criticism, so this note does not invent a list of objections.</p>
+
+    <h3>Good cop, bad cop</h3>
+    <p>Two interrogators coordinate contrasting roles. The bad cop adopts an aggressive, accusatory and uncooperative posture. The good cop then removes or distances that pressure, shows empathy and offers a softer conversational corner. The intended psychological movement is from discomfort toward cooperation with the apparently sympathetic interrogator <span class="ts">01:15:20</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Legal and ethical boundary.</strong> The teacher repeatedly rejects physical torture and violence, calling them contrary to law and human rights <span class="ts">01:18:14</span>. A confession-oriented technique does not authorise physical abuse.</p>
+    </div>
+    <p>The lecture closes the distinction by restating that interviews seek additional information without accusation, while interrogations use an accusatory tone with primary suspects and may seek an oral confession <span class="ts">01:22:24</span>.</p>
+  </div>
+</section>
+
+<!-- ======================================================== section 8 === -->
+<section id="t8" class="chapter card" style="--accent:#C0762C; --soft:#FAF0E2;">
+  <header>
+    <span class="eyebrow"><span class="num">8</span> From lecture to answer</span>
+    <h2><span class="emoji">&#128221;</span> Past-paper application</h2>
+    <span class="timepill">1:23:47-1:35:38</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The final segment uses past papers to explain why criminal investigation appears in the syllabus. The teacher's method is to break the question into parts, build each part from the investigative process, and keep the answer connected to justice rather than writing a loose catalogue of techniques.</p>
+
+    <h3>2023: crime scene and search patterns</h3>
+    <div class="note exam">
+      <p><strong>Question as read in class:</strong> Why is a crime scene important for investigators, and what are crime-scene search patterns? <span class="ts">01:23:47</span></p>
+    </div>
+    <p>The teacher proposes the following answer structure:</p>
+    <ol>
+      <li><strong>Open with the crime scene as the starting point</strong> of every criminal investigation and the investigator's first major point of interaction.</li>
+      <li><strong>Identify the evidence located there:</strong> physical, biological and digital material, including fingerprints, DNA, bloodstains, weapons and footprints <span class="ts">01:24:46</span>.</li>
+      <li><strong>Explain preservation:</strong> secure the scene and keep evidence untampered so it remains useful in court.</li>
+      <li><strong>Show the outcomes:</strong> reconstruct the crime, identify the offender, link a suspect with evidence and choose the next course of action.</li>
+      <li><strong>Close with justice:</strong> proper scene work supports the right conviction and reduces the risk of a wrongful one <span class="ts">01:25:51</span>.</li>
+    </ol>
+
+    <h3>Search patterns taught</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Pattern</th><th>How the lecture describes it</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Line or strip search</strong></td><td>Move systematically across broad or open areas.</td></tr>
+          <tr><td><strong>Grid search</strong></td><td>Conduct a more detailed, structured examination after the first pass.</td></tr>
+          <tr><td><strong>Quadrant or zone search</strong></td><td>Divide the scene into sections, then assign each section for systematic examination <span class="ts">01:27:53</span>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note warn">
+      <p><strong>Correction: use the technical pattern definitions.</strong> The lecture informally describes a strip search as looking first at large areas and a grid search as checking furniture and drawers. More precise usage is spatial: a line or strip search moves in parallel lines, a grid repeats the line search at a right angle, and a zone or quadrant search divides the scene into manageable sectors. Keep room furniture and drawers as examples of places searched, not as the definition of a grid pattern.</p>
+    </div>
+
+    <h3>2024: principles of investigation</h3>
+    <p>The transcript's exact question wording is indistinct. The teacher clearly revisits <strong>objectivity, legality, chain of custody and documentation</strong> <span class="ts">01:30:18</span>. These principles explain why the investigative record must show what was collected, who handled it, how it was preserved and whether each step was lawful.</p>
+
+    <div class="note warn">
+      <p><strong>Editorial: exact legal title.</strong> Earlier in the class, the lecturer refers to the "Qanun-e-Shahadat Order" while placing investigation in Pakistan's evidentiary context <span class="ts">00:34:28</span>. The official title is <strong>Qanun-e-Shahadat Order, 1984 (President's Order No. X of 1984)</strong>.</p>
+    </div>
+
+    <h3>2025: importance and effectiveness of investigation</h3>
+    <p>The question asks students to discuss why the investigation process matters and how it can be made effective <span class="ts">01:30:18</span>. The lecture's answer has two halves:</p>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Why investigation matters</th><th>How to make it effective</th></tr></thead>
+        <tbody>
+          <tr><td>Establish facts and identify the correct offender.</td><td>Use defined procedures and methodologies.</td></tr>
+          <tr><td>Protect innocent people from wrongful prosecution and conviction.</td><td>Use properly conducted investigative interviews and interrogations.</td></tr>
+          <tr><td>Find legally admissible evidence for a timely and proper trial.</td><td>Gather intelligence-led information and evaluate it before action.</td></tr>
+          <tr><td>Build a strong case for the criminal justice system.</td><td>Use database, electronic and forensic methods where the facts require them.</td></tr>
+          <tr><td>Support justice and public confidence in the courts.</td><td>Preserve legality, objectivity, chain of custody and documentation.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The teacher says the 2026 questions belong mainly to the next part of Section III and will be discussed in Lecture 6 <span class="ts">01:34:04</span>. Do not force them into this chapter.</p>
+
+    <div class="note exam">
+      <p><strong>Practice rule from the lecturer.</strong> Understanding a lecture is not the same as producing an answer. Attempt the questions, use the assigned cases and readings, and repeat the course vocabulary in writing until it becomes usable <span class="ts">01:35:38</span>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================= glossary === -->
+<section id="t9" class="chapter card" style="--accent:#8B8490; --soft:#F0EEF2;">
+  <header>
+    <span class="eyebrow"><span class="num">G</span> Reference</span>
+    <h2><span class="emoji">&#128214;</span> Glossary</h2>
+  </header>
+  <div class="section-body">
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Term</th><th>Meaning in this lecture</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Intelligence</strong></td><td>Information that has been analysed and evaluated for a decision, preventive action or suspect identification.</td></tr>
+          <tr><td><strong>Open-source intelligence</strong></td><td>Intelligence drawn from publicly available sources such as social media, websites and newspapers.</td></tr>
+          <tr><td><strong>Financial intelligence</strong></td><td>Analysis of transactions and financial records for suspicious activity or possible proceeds of crime.</td></tr>
+          <tr><td><strong>Cyber intelligence</strong></td><td>Profiling and tracking digital footprints and activity in online spaces.</td></tr>
+          <tr><td><strong>Dissemination</strong></td><td>Sending assessed intelligence to the authority or unit able to act on it.</td></tr>
+          <tr><td><strong>Database investigation</strong></td><td>Using organised computerised records to identify a suspect or verify an identity or object.</td></tr>
+          <tr><td><strong>Electronic investigation</strong></td><td>Gathering and examining evidence from devices, accounts, networks and digital records.</td></tr>
+          <tr><td><strong>Forensic investigation</strong></td><td>Scientific examination of evidence to determine what it may support.</td></tr>
+          <tr><td><strong>Ballistics</strong></td><td>Forensic examination associated with firearms, bullets and firing-related evidence.</td></tr>
+          <tr><td><strong>Forensic entomology</strong></td><td>Use of insect evidence to contribute to an investigation.</td></tr>
+          <tr><td><strong>Investigative interview</strong></td><td>A non-accusatory conversation seeking truthful information from a victim, witness or suspect.</td></tr>
+          <tr><td><strong>PEACE</strong></td><td>Preparation and Planning; Engage and Explain; Account, Clarification and Challenge; Closure; Evaluation.</td></tr>
+          <tr><td><strong>Free recall</strong></td><td>Allowing the interviewee to give an uninterrupted account before follow-up questions.</td></tr>
+          <tr><td><strong>Enhanced cognitive interview</strong></td><td>Interview method using context and memory prompts to help a person retrieve details.</td></tr>
+          <tr><td><strong>Interrogation</strong></td><td>Focused, accusatory questioning of a primary suspect or accused person, possibly aimed at a confession.</td></tr>
+          <tr><td><strong>Reid technique</strong></td><td>A confession-oriented method taught here as a non-accusatory interview followed, when deception is suspected, by a nine-step interrogation.</td></tr>
+          <tr><td><strong>Theme development</strong></td><td>In the Reid sequence, offering a narrative that makes the alleged conduct psychologically easier to discuss.</td></tr>
+          <tr><td><strong>Chain of custody</strong></td><td>The documented handling of evidence from collection onward.</td></tr>
+          <tr><td><strong>Line / strip search</strong></td><td>A systematic scene search along parallel lines.</td></tr>
+          <tr><td><strong>Grid search</strong></td><td>A line search repeated at a right angle.</td></tr>
+          <tr><td><strong>Zone / quadrant search</strong></td><td>Division of a scene into manageable sectors for systematic examination.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================= flashcards === -->
+<section id="t10" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+  <header>
+    <span class="eyebrow"><span class="num">F</span> Recall</span>
+    <h2><span class="emoji">&#127183;</span> Flashcards</h2>
+  </header>
+  <div class="section-body">
+    <div class="cards">
+      <div class="qa"><p class="q">When does information become intelligence?</p><p class="a">When it has been analysed and evaluated so it can support a decision, prevention, suspect identification or another action.</p></div>
+      <div class="qa"><p class="q">Name the intelligence sources captured in this recording.</p><p class="a">Open sources, financial records, cyberspace, human sources or undercover work, signals or phone records, and surveillance such as CCTV.</p></div>
+      <div class="qa"><p class="q">What are the key moves in the urban-bombing exercise?</p><p class="a">Collect from several sources, analyse links, classify leads, evaluate innocent explanations, narrow the suspect list and disseminate to the unit able to act.</p></div>
+      <div class="qa"><p class="q">What does database investigation do?</p><p class="a">It runs a trace or identifier against organised stored records to identify, verify, include or exclude a lead.</p></div>
+      <div class="qa"><p class="q">Which databases does the lecture name?</p><p class="a">Offender and fingerprint records, NADRA identity data, vehicle registration, telecom records, passport and immigration records, and DNA databases.</p></div>
+      <div class="qa"><p class="q">What evidence may electronic investigation examine?</p><p class="a">Phones, computers, laptops, email, social media, GPS, cloud storage, call records, messages and deleted files.</p></div>
+      <div class="qa"><p class="q">How is electronic investigation related to cybercrime?</p><p class="a">Electronic investigation is the broader method; cybercrime is one category of offending that can require it.</p></div>
+      <div class="qa"><p class="q">What question does forensic investigation answer?</p><p class="a">What does the collected evidence scientifically support?</p></div>
+      <div class="qa"><p class="q">Name five forensic areas from the lecture.</p><p class="a">Ballistics, toxicology, DNA analysis, pathology and forensic entomology.</p></div>
+      <div class="qa"><p class="q">What is an investigative interview?</p><p class="a">A non-accusatory, information-gathering conversation with a victim, witness or suspect.</p></div>
+      <div class="qa"><p class="q">What does PEACE mean in the class sequence?</p><p class="a">Preparation and Planning; Engage and Explain; Account, Clarification and Challenge; Closure; Evaluation. The lecture uses shorter labels for the middle phases.</p></div>
+      <div class="qa"><p class="q">How does free recall work?</p><p class="a">The interviewee gives an uninterrupted account of everything remembered, followed by clarifying questions.</p></div>
+      <div class="qa"><p class="q">What is the enhanced cognitive interview?</p><p class="a">A method using context reconstruction and memory prompts to help an interviewee retrieve details.</p></div>
+      <div class="qa"><p class="q">How does interrogation differ from interview?</p><p class="a">It is accusatory, aimed at a primary suspect and may seek a confession; an interview is non-accusatory fact finding.</p></div>
+      <div class="qa"><p class="q">What two broad stages of the Reid technique are taught?</p><p class="a">A non-accusatory interview to assess the account, followed, if deception is suspected, by a nine-step interrogation.</p></div>
+      <div class="qa"><p class="q">Which Reid steps does the lecture explain?</p><p class="a">Direct or positive confrontation, theme development, handling denials and overcoming objections; later steps are summarised as movement toward an oral confession.</p></div>
+      <div class="qa"><p class="q">What is the psychology of good cop, bad cop?</p><p class="a">One interrogator creates pressure through aggression; the other offers empathy and a softer route toward cooperation.</p></div>
+      <div class="qa"><p class="q">Why is the crime scene important?</p><p class="a">It is the investigation's starting point and holds evidence needed to reconstruct the offence, identify the offender and determine the next action.</p></div>
+      <div class="qa"><p class="q">Name the three search patterns taught.</p><p class="a">Line or strip, grid, and quadrant or zone.</p></div>
+      <div class="qa"><p class="q">Why does a sound investigation matter to justice?</p><p class="a">It establishes facts, identifies the correct offender, protects innocent people, finds admissible evidence and strengthens public confidence.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== exam focus === -->
+<section id="t11" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+  <header>
+    <span class="eyebrow"><span class="num">X</span> Strategy</span>
+    <h2><span class="emoji">&#127919;</span> Exam focus</h2>
+  </header>
+  <div class="section-body">
+    <h3>The whole lecture on one page</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Area</th><th>Core purpose</th><th>Best example to carry</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Intelligence operation</strong></td><td>Turn information into assessed action</td><td>Urban bombing: sources, analysis, evaluation, dissemination</td></tr>
+          <tr><td><strong>Database investigation</strong></td><td>Identify or verify through stored records</td><td>Fingerprint, NADRA or vehicle-record comparison</td></tr>
+          <tr><td><strong>Electronic investigation</strong></td><td>Recover and interpret digital traces</td><td>Phone contacts, messages, deleted files, GPS and cloud</td></tr>
+          <tr><td><strong>Forensic investigation</strong></td><td>Scientifically examine what evidence supports</td><td>Ballistics or forensic entomology</td></tr>
+          <tr><td><strong>Investigative interview</strong></td><td>Obtain truthful information without accusation</td><td>PEACE, free recall or ECI</td></tr>
+          <tr><td><strong>Interrogation</strong></td><td>Question a primary suspect in an accusatory setting</td><td>Reid sequence or good cop, bad cop</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Suggested answer structure</h3>
+    <ol>
+      <li><strong>Define the process</strong> and tie it to fact finding, fairness and the criminal justice system.</li>
+      <li><strong>Separate the forms</strong> by the type of material each uses: assessed information, stored records, digital evidence and scientific evidence.</li>
+      <li><strong>Add the human techniques</strong> by drawing the interview-interrogation distinction before naming PEACE or Reid.</li>
+      <li><strong>Use one worked example</strong> to show how methods combine. The bank-robbery exercise is ready-made.</li>
+      <li><strong>End with safeguards and outcomes:</strong> legality, objectivity, preservation, chain of custody, admissibility, correct identification and protection of the innocent.</li>
+    </ol>
+
+    <h3>Common mistakes</h3>
+    <ul>
+      <li>Treating raw information as intelligence without analysis and evaluation.</li>
+      <li>Using database, electronic and forensic investigation as interchangeable labels.</li>
+      <li>Calling an investigative interview confession-oriented.</li>
+      <li>Listing all nine Reid steps when this lecture explains only the first four in detail.</li>
+      <li>Repeating the teacher's informal grid-search definition instead of the technical spatial definition.</li>
+      <li>Writing "FMU is under SBP" or using an incomplete name for the Qanun-e-Shahadat law.</li>
+      <li>Quoting a past-paper year or wording that the audio does not clearly support.</li>
+    </ul>
+
+    <div class="note exam">
+      <p><strong>Editorial: the one-line thesis.</strong> A credible investigation converts information into tested evidence through lawful methods, then presents a traceable case that can identify the offender without sacrificing the protection owed to innocent people.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="notefoot">Want the whole lecture? <a href="https://drive.google.com/file/d/1fiP4hFVJWEoJOJpn6Jc0S4JqikXs_1fn/view?usp=drivesdk" target="_blank" rel="noopener">▶ Watch the full recording</a><span class="sep">·</span><a href="https://drive.google.com/file/d/1b0PVoK22Zt9PvbfjyhSQMsu94M5IhGyU/view?usp=drivesdk" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+</html>
