@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pakistan's Criminal Justice System: Institutions, Corrections and Reform</title>
+<style>/* Lecture Notes ebook, "warm study" theme.
+   Inspired by Mehak's MarketCanvas app: soft cream ground, rounded white cards,
+   a different pastel accent per topic, serif display + friendly sans body,
+   gentle emoji + pill badges. Playful and pretty, but still a real study book.
+   Print-first (A4 PDF via headless Edge); reads well on screen too.
+
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
+   Everything themeable keys off --accent / --soft. Titles stay ink for
+   readability; accents colour eyebrows, numbers, pills, rules and callouts.
+*/
+
+:root {
+  --cream: #FCF6F0;          /* page ground (warm) */
+  --card: #FFFFFF;
+  --ink: #2C2630;            /* plum-black body/headings */
+  --ink-soft: #5A5360;
+  --slate: #8B8490;          /* captions, timestamps */
+  --hairline: #EEE6E4;
+
+  /* section default accent (overridden per section) */
+  --accent: #C0567E;
+  --soft: #FBECF1;
+
+  --shadow: 0 1px 2px rgba(60,30,45,.05), 0 10px 26px rgba(80,40,55,.07);
+  --radius: 20px;
+
+  --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: Consolas, "Cascadia Code", ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background:
+    radial-gradient(1100px 700px at 15% -5%, #FBEEF3 0%, transparent 55%),
+    radial-gradient(1000px 700px at 100% 0%, #EEF3FB 0%, transparent 50%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  font: 10.8pt/1.62 var(--sans);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+@media screen {
+  body { max-width: 51rem; margin: 0 auto; padding: 2.5rem 1.15rem 4rem; font-size: 1.0rem; }
+}
+
+/* ---------------------------------------------------------------- page --- */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm 14mm;
+  @bottom-center {
+    content: counter(page);
+    font: 8.5pt var(--sans);
+    color: #8B8490;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+/* --------------------------------------------------------------- cards --- */
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8mm 9mm 9mm;
+  margin: 0 0 6mm;
+  box-shadow: var(--shadow);
+  break-inside: auto;
+}
+@media screen { .card { margin-bottom: 1.4rem; } }
+
+/* a soft accent wash across the top of each section card (fades to white),
+   echoing the app's pastel cards without hurting readability */
+.chapter {
+  background:
+    linear-gradient(180deg, var(--soft) 0, rgba(255,255,255,0) 34mm),
+    var(--card);
+  border-top: 3px solid var(--accent);
+  break-inside: auto;
+  break-before: page;   /* each topic starts fresh: slide on top, notes below */
+}
+/* on screen (web/PWA) sections just stack; no forced page breaks */
+@media screen { .chapter { break-before: auto; } }
+
+h2, h3, .eyebrow { break-after: avoid; }
+p { orphans: 2; widows: 2; }
+
+/* keep the section header intact (eyebrow + title + time pill together) and
+   glued to its opening slide */
+.chapter > header { break-inside: avoid; break-after: avoid; }
+figure.slide { break-before: avoid; }
+
+/* --------------------------------------------------------------- cover --- */
+
+.cover {
+  page: cover;
+  break-after: page;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32mm 22mm 24mm;
+  background:
+    radial-gradient(700px 460px at 12% 8%, #FBE6EE 0%, transparent 60%),
+    radial-gradient(760px 520px at 96% 4%, #E7EEFB 0%, transparent 58%),
+    radial-gradient(620px 520px at 80% 96%, #E6F4EC 0%, transparent 60%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+@media screen {
+  .cover { min-height: 80vh; border-radius: 24px; padding: 3.2rem 2.6rem; margin-bottom: 1.4rem; }
+}
+
+.cover .avatar { font-size: 30pt; line-height: 1; margin-bottom: 7mm; }
+.cover .kicker {
+  font: 600 9pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 5mm;
+}
+.cover h1 {
+  font: 600 31pt/1.14 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 15em;
+}
+.cover .subtitle {
+  margin-top: 5mm;
+  font: 400 13.5pt/1.5 var(--sans);
+  color: var(--ink-soft);
+  max-width: 30em;
+}
+.cover .warm {
+  margin-top: 4mm;
+  font: italic 400 12pt/1.5 var(--serif);
+  color: var(--accent);
+}
+
+.cover .chips { display: flex; flex-wrap: wrap; gap: 3mm; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.4mm 4mm;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(60,30,45,.04);
+  font: 400 9pt var(--sans);
+  color: var(--slate);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chip b { font: 700 10.5pt var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ headings --- */
+
+.chapter header { margin-bottom: 5mm; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  font: 700 8.5pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--accent);
+  margin-bottom: 3mm;
+}
+.eyebrow .num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h2 {
+  font: 600 20pt/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .emoji { font-size: 17pt; }
+
+.timepill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.5mm 3.5mm;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font: 600 8pt var(--mono);
+  letter-spacing: 0.02em;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h3 {
+  font: 600 12.5pt/1.34 var(--serif);
+  color: var(--ink);
+  margin: 6mm 0 2.5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+.ts { font: 400 8.5pt var(--mono); color: var(--slate); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- body --- */
+
+.section-body > :last-child { margin-bottom: 0; }
+p { margin: 0 0 3mm; }
+.lead { font-size: 11.2pt; color: var(--ink); }
+
+ul, ol { margin: 0 0 3mm 5.5mm; }
+li { margin-bottom: 1.7mm; padding-left: 1mm; }
+li::marker { color: var(--accent); }
+
+.kt { font-weight: 700; color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
+
+code { font: 9.5pt var(--mono); background: #F3EFF4; padding: .4pt 3.5pt; border-radius: 4px; }
+
+/* ------------------------------------------------------------ callouts --- */
+
+.note {
+  --c: var(--accent);
+  --f: var(--soft);
+  background: var(--f);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  border-left: 3px solid var(--c);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.note .label {
+  display: inline-flex; align-items: center; gap: 1.6mm;
+  font: 700 8pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c);
+  margin-bottom: 1.8mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.warn { --c: #B4791F; --f: #FaF1DF; }
+.note.exam { --c: #3B8B78; --f: #E6F3EF; }
+.note.def  { --c: var(--accent); --f: var(--soft); }
+
+/* ------------------------------------------------------- summary card --- */
+
+.summary { --accent: #C0567E; --soft: #FBECF1; }
+.summary ul { list-style: none; margin: 0; }
+.summary li { position: relative; padding: 0 0 0 7mm; margin-bottom: 3.5mm; }
+.summary li::before {
+  content: "";
+  position: absolute; left: 0; top: 2.6mm;
+  width: 3.2mm; height: 3.2mm; border-radius: 50%;
+  background: var(--accent);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.summary li:last-child { margin-bottom: 0; }
+.summary li b, .summary li strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------- TOC --- */
+
+nav.toc { --accent: #8B8490; --soft: #F3EFF4; }
+nav.toc ol { list-style: none; margin: 0; }
+nav.toc li {
+  display: flex; align-items: baseline; gap: 4mm;
+  padding: 2.7mm 0;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11pt var(--sans);
+}
+nav.toc li:last-child { border-bottom: 0; }
+nav.toc .dot { width: 3.4mm; height: 3.4mm; border-radius: 50%; flex-shrink: 0;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+nav.toc .title { flex: 1; color: var(--ink); }
+nav.toc .rng { flex-shrink: 0; font: 600 8.5pt var(--mono); color: var(--slate); }
+
+/* -------------------------------------------------------------- slides --- */
+
+figure.slide { margin: 0 0 5mm; break-inside: avoid; }
+figure.slide img {
+  width: 100%; display: block;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 10px rgba(40,30,45,.10);
+}
+figure.slide figcaption {
+  font: 400 8.5pt var(--sans);
+  color: var(--slate);
+  margin-top: 2mm;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4mm;
+}
+figure.slide figcaption .ts { color: var(--accent); }
+
+/* ------------------------------------------------------------ glossary --- */
+
+dl.glossary { margin: 0; }
+dl.glossary div { padding: 3mm 0; border-bottom: 1px solid var(--hairline); break-inside: avoid; }
+dl.glossary div:last-child { border-bottom: 0; padding-bottom: 0; }
+dl.glossary dt { font: 700 10.5pt var(--sans); color: var(--accent); margin-bottom: 1.2mm; }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- flashcards --- */
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 0; }
+.qa {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  background: linear-gradient(180deg, var(--soft) 0, #fff 60%);
+  break-inside: avoid;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.qa .q { font: 700 10pt var(--sans); color: var(--ink); margin-bottom: 2mm; }
+.qa .a { color: var(--ink-soft); font-size: 10pt; }
+
+/* ------------------------------------------------------------- tables --- */
+
+.tables-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0; break-inside: avoid; }
+th {
+  font: 700 9pt var(--sans); text-align: left; color: var(--accent);
+  border-bottom: 2px solid var(--soft); padding: 2mm 3mm 2mm 0;
+}
+td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+
+/* --- mobile / on-the-go reading (screen only; never affects the print PDF).
+   Placed LAST so it wins the cascade over the wider @media screen rules above.
+   Requires <meta name="viewport" content="width=device-width, initial-scale=1">. */
+@media screen and (max-width: 640px) {
+  body { padding: 1rem 0.85rem 2.5rem; font-size: 1.02rem; }
+  .card { padding: 5mm 5mm 6mm; border-radius: 14px; margin-bottom: 0.9rem; }
+  .cover { min-height: auto; padding: 2rem 1.3rem 1.6rem; border-radius: 16px; }
+  .cover .avatar { font-size: 24pt; margin-bottom: 4mm; }
+  .cover h1 { font-size: 20pt; max-width: 100%; }
+  .cover .subtitle { font-size: 11.5pt; }
+  .cover .warm { font-size: 11pt; }
+  .cover .chips { gap: 2mm; margin-top: 5mm; }
+  h2 { font-size: 16pt; }
+  h2 .emoji { font-size: 13.5pt; }
+  h3 { font-size: 11.5pt; }
+  .cards { grid-template-columns: 1fr; }
+  nav.toc li { font-size: 10.5pt; gap: 2.5mm; padding: 2.5mm 0; }
+  nav.toc .rng { font-size: 8pt; }
+  .note { padding: 3.5mm 4mm; }
+  table { font-size: 9.5pt; }
+}
+</style>
+<meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
+align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
+border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
+<body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/file/d/1njF7P2-r4G8mLpUMUzRCgQX3I9FQokBx/view?usp=drivesdk" target="_blank" rel="noopener">Download PDF ↓</a></div>
+
+<!-- ============================================================ cover === -->
+<section class="cover" style="background:radial-gradient(700px 460px at 12% 8%,#FBEBEF 0,transparent 60%),radial-gradient(760px 520px at 96% 4%,#ECEEFA 0,transparent 58%),radial-gradient(620px 520px at 80% 96%,#E9F4EC 0,transparent 60%),var(--cream)">
+  <div>
+    <div class="avatar">&#9878;&#65039;</div>
+    <div class="kicker" style="color:#C6506E">CSS Criminology &middot; Criminal Justice System</div>
+    <h1>Pakistan's Criminal Justice System: Institutions, Corrections and Reform</h1>
+    <p class="subtitle">How police, prosecution, courts and correctional institutions carry a case from first response to reintegration, where probation and parole fit, and why institutional weakness changes crime-control outcomes.</p>
+    <p class="warm" style="color:#C6506E">Read the system as a chain. Evidence gathered at the first link shapes every decision that follows. &#128279;</p>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>2h 19m</b> taught content</span>
+    <span class="chip"><b>4</b> core institutions</span>
+    <span class="chip"><b>2</b> community corrections</span>
+    <span class="chip"><b>8</b> exam-ready topics</span>
+  </div>
+</section>
+
+<!-- ============================================================== toc === -->
+<nav class="toc card">
+  <header><span class="eyebrow">Contents</span><h2><span class="emoji">&#128506;&#65039;</span> In this chapter</h2></header>
+  <ol>
+    <li><span class="dot" style="background:#C6506E"></span><a class="title" href="#summary">The five-minute version</a><span class="rng">summary</span></li>
+    <li><span class="dot" style="background:#5866C4"></span><a class="title" href="#t1">01 &middot; The criminal justice sequence</a><span class="rng">case flow</span></li>
+    <li><span class="dot" style="background:#C6506E"></span><a class="title" href="#t2">02 &middot; Police and investigation</a><span class="rng">first contact</span></li>
+    <li><span class="dot" style="background:#46955C"></span><a class="title" href="#t3">03 &middot; Prosecution</a><span class="rng">the state's case</span></li>
+    <li><span class="dot" style="background:#3A7CC0"></span><a class="title" href="#t4">04 &middot; Courts and trial</a><span class="rng">adjudication</span></li>
+    <li><span class="dot" style="background:#B57A2A"></span><a class="title" href="#t5">05 &middot; Prisons and reintegration</a><span class="rng">correction</span></li>
+    <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t6">06 &middot; Probation and parole</a><span class="rng">community correction</span></li>
+    <li><span class="dot" style="background:#B44A8C"></span><a class="title" href="#t7">07 &middot; Institutional failures</a><span class="rng">Pakistan</span></li>
+    <li><span class="dot" style="background:#7A5AA8"></span><a class="title" href="#t8">08 &middot; Criminological analysis</a><span class="rng">theory to reform</span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t9">Glossary &middot; Flashcards &middot; Exam focus</a><span class="rng"></span></li>
+  </ol>
+</nav>
+
+<!-- ============================================================= tldr === -->
+<section id="summary" class="summary card" style="--accent:#C6506E; --soft:#FBEBEF; border-top-color:#C6506E">
+  <header><span class="eyebrow" style="color:#C6506E">Start here</span><h2><span class="emoji">&#11088;</span> The five-minute version</h2></header>
+  <ul>
+    <li><strong>The system works as a sequence.</strong> Police receive the first information and investigate; prosecution scrutinises the police material and presents the state's case; courts conduct the trial; correctional institutions execute the sentence and should support rehabilitation.</li>
+    <li><strong>Police have a wider role than arrest.</strong> The lecture includes watch and ward, prevention, apprehension, traffic, juveniles and protection of life, property and liberty. In a criminal case, the practical sequence is timely arrival, scene protection, evidence collection, witness statements and lawful action toward suspects.</li>
+    <li><strong>Prosecution is the bridge between investigation and trial.</strong> Prosecutors act for the state, scrutinise the police report and evidence, examine witnesses, attend proceedings and make legal arguments. A weak investigation limits what prosecution can prove.</li>
+    <li><strong>Courts adjudicate through law and evidence.</strong> The lecture anchors the trial in the Constitution, the Code of Criminal Procedure, 1898, the Qanun-e-Shahadat Order, 1984 and the Pakistan Penal Code. Article 10A protects fair trial and due process.</li>
+    <li><strong>Correction is larger than custody.</strong> Prison functions in the class are safe custody, execution of sentence, rehabilitation and reintegration. Education, vocational training and counselling matter because release eventually returns many prisoners to the community.</li>
+    <li><strong>Probation and parole are different routes.</strong> Probation is a court-ordered, non-custodial correctional measure under supervision. Parole is conditional release after part of a prison sentence, under licence and supervision.</li>
+    <li><strong>Institutional defects reinforce one another.</strong> Poor crime-scene work weakens prosecution; weak coordination and frightened witnesses weaken the trial; delay increases under-trial detention; overcrowded prisons struggle to rehabilitate.</li>
+    <li><strong>Criminology supplies the analytical finish.</strong> If an offender repeatedly escapes punishment because evidence is weak, the lecture links the result to learning through rewards and punishments. If an innocent person is wrongly processed and stigmatised, it invokes labelling theory.</li>
+  </ul>
+</section>
+
+<!-- ======================================================== section 1 === -->
+<section id="t1" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
+  <header>
+    <span class="eyebrow"><span class="num">1</span> One case, connected institutions</span>
+    <h2><span class="emoji">&#128279;</span> The criminal justice sequence</h2>
+    <span class="timepill">00:00-53:22</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecture treats the criminal justice system as a chain of specialised institutions rather than a single organisation. Police make the first contact, prosecution turns the investigation into a state case, courts determine the matter through judicial proceedings, and correctional institutions carry out the sentence and work toward reintegration <span class="ts">00:19:21</span> <span class="ts">00:28:42</span> <span class="ts">00:42:47</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Stage</th><th>Primary actor</th><th>Central task taught in class</th><th>Output to the next stage</th></tr></thead>
+        <tbody>
+          <tr><td><strong>First response and investigation</strong></td><td>Police</td><td>Register information, reach the scene, preserve and collect evidence, record witnesses, identify suspects</td><td>Investigation record and police report</td></tr>
+          <tr><td><strong>Case preparation</strong></td><td>Prosecution</td><td>Scrutinise the challan and evidence, examine witnesses, prepare legal arguments</td><td>A case fit to present before the court</td></tr>
+          <tr><td><strong>Adjudication</strong></td><td>Courts</td><td>Conduct judicial proceedings, frame charges, hear evidence and witnesses, decide bail or remand, and determine the case</td><td>Acquittal, release or sentence</td></tr>
+          <tr><td><strong>Correction</strong></td><td>Prisons and community-correction services</td><td>Safe custody, sentence execution, supervision, rehabilitation and reintegration</td><td>Completion of sentence and return to society</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <p><strong>The dependency rule.</strong> Adjudication relies heavily on the evidence and witnesses first gathered by police <span class="ts">00:28:19</span>. This means an error at the crime scene does not remain a police problem. It travels into prosecutorial scrutiny, the trial and, potentially, the correctional phase.</p>
+    </div>
+
+    <h3>Legal references used across the chain</h3>
+    <p>The lecturer repeatedly warns that criminology students are not being trained as lawyers. The statutes are anchors for institutional roles, while the examination task is to explain processes and their consequences <span class="ts">00:39:42</span>. The recurring references are:</p>
+    <ul>
+      <li><strong>Constitution of the Islamic Republic of Pakistan:</strong> fair trial, due process and constitutional judicial powers.</li>
+      <li><strong>Code of Criminal Procedure, 1898:</strong> information in cognizable cases, investigation, police reports, bail and remand.</li>
+      <li><strong>Qanun-e-Shahadat Order, 1984:</strong> evidence and examination of witnesses.</li>
+      <li><strong>Pakistan Penal Code:</strong> offences and punishments.</li>
+      <li><strong>Prisons Act, 1894:</strong> prison administration.</li>
+      <li><strong>Probation and parole legislation:</strong> supervised alternatives and conditional release.</li>
+    </ul>
+
+    <div class="note exam">
+      <p><strong>Exam lens.</strong> A component question needs a sequence, not four isolated definitions. For every institution, state its input, its main function, the output it gives the next actor, and the damage caused when that link fails.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 2 === -->
+<section id="t2" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+  <header>
+    <span class="eyebrow"><span class="num">2</span> First point of contact</span>
+    <h2><span class="emoji">&#128680;</span> Police and lawful investigation</h2>
+    <span class="timepill">00:00-19:21</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Police are introduced as an executive organ with a broad watch-and-ward function. Prevention, deterrence, apprehension, juvenile handling, traffic management, and protection of life, property and liberty sit beside investigation <span class="ts">00:00:34</span> <span class="ts">00:05:56</span> <span class="ts">00:06:33</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: Police Order, 2002, not 2000.</strong> The lecture says the Police Act was replaced by a "Police Order 2000" <span class="ts">00:05:25</span>. The federal instrument is the <strong>Police Order, 2002</strong>. Police law now varies across provinces, so use the relevant provincial framework where a question requires jurisdiction-specific detail.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: Code of Criminal Procedure, 1898.</strong> The lecturer initially says 1860, then corrects herself <span class="ts">00:07:29</span> <span class="ts">00:09:47</span>. The complete title is the <strong>Code of Criminal Procedure, 1898</strong>, commonly abbreviated as CrPC.</p>
+    </div>
+
+    <h3>From information to investigation</h3>
+    <ol>
+      <li><strong>Record the first information.</strong> Section 154 concerns information relating to the commission of a cognizable offence and its recording by the officer in charge of a police station <span class="ts">00:11:36</span> <span class="ts">00:12:23</span>.</li>
+      <li><strong>Reach and secure the scene promptly.</strong> Delay risks evidence being erased, disturbed or tampered with <span class="ts">00:16:09</span>.</li>
+      <li><strong>Collect and document evidence.</strong> Physical material and observations must be recorded so they can support later scrutiny and trial.</li>
+      <li><strong>Record witness accounts.</strong> The first responders identify available witnesses and preserve their accounts <span class="ts">00:16:45</span>.</li>
+      <li><strong>Identify and lawfully handle suspects.</strong> Suspicion may justify investigative attention, but arrest and detention are distinct legal concepts. The lecture cautions against treating arrest as intimidation <span class="ts">00:13:32</span> <span class="ts">00:17:37</span>.</li>
+      <li><strong>Complete the police report.</strong> The CrPC provisions from sections 156 to 173 structure police investigation, with section 173 addressing the report after completion <span class="ts">00:15:05</span>.</li>
+    </ol>
+
+    <div class="note warn">
+      <p><strong>Legal precision: section 154.</strong> The class shorthand says section 154 tells who "files the FIR" <span class="ts">00:12:23</span>. More precisely, it governs the recording of information about a cognizable offence. If given orally, the information is reduced to writing, read to the informant and signed, and its substance is entered in the prescribed record.</p>
+    </div>
+
+    <h3>Why lawful arrest matters</h3>
+    <p>In the lecture's process model, arrest or seizure facilitates investigation; it is not a licence to intimidate <span class="ts">00:13:32</span>. A <span class="kt">primary suspect</span> is simply the person at the front of the investigative hierarchy because evidence or circumstances point first in that direction <span class="ts">00:17:06</span>. That label is provisional until the evidence is tested.</p>
+
+    <div class="note exam">
+      <p><strong>High-scoring phrasing.</strong> Police are the system's first evidentiary gatekeepers. Their task is to preserve a lawful, documented path from initial information to a report that prosecution can scrutinise and a court can evaluate.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 3 === -->
+<section id="t3" class="chapter card" style="--accent:#46955C; --soft:#E9F4EC;">
+  <header>
+    <span class="eyebrow"><span class="num">3</span> Building the state's case</span>
+    <h2><span class="emoji">&#128221;</span> Prosecution</h2>
+    <span class="timepill">19:21-28:19</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Prosecution is defined in the class as the legal process through which the state initiates and conducts criminal proceedings. Prosecutors therefore appear as representatives of the state, not as a second police force <span class="ts">00:19:21</span> <span class="ts">00:20:29</span>.</p>
+
+    <h3>Four functions from the lecture</h3>
+    <div class="grid-2">
+      <div class="mini-card"><h4>1. Scrutinise the challan</h4><p>Examine the police report and test whether the collected material coherently supports the proposed case <span class="ts">00:21:23</span>.</p></div>
+      <div class="mini-card"><h4>2. Scrutinise evidence</h4><p>Assess the evidentiary material rather than passing it forward as a box-ticking exercise <span class="ts">00:22:25</span>.</p></div>
+      <div class="mini-card"><h4>3. Examine witnesses</h4><p>Work with the witnesses identified during first response and investigation, applying the law of evidence <span class="ts">00:22:54</span>.</p></div>
+      <div class="mini-card"><h4>4. Present legal arguments</h4><p>Remain present through the proceedings and explain the state's legal position to the court <span class="ts">00:25:37</span>.</p></div>
+    </div>
+
+    <div class="note">
+      <p><strong>Evidence framework.</strong> The correct title is the <strong>Qanun-e-Shahadat Order, 1984</strong>. The lecture uses it to explain which facts and evidence can be presented and how witnesses are examined <span class="ts">00:25:05</span> <span class="ts">00:26:30</span>.</p>
+    </div>
+
+    <h3>The handoff problem</h3>
+    <p>Prosecution depends on what police have collected. If scene work, documentation or witness identification is weak, the prosecutor receives a defective input. The lecturer later identifies poor police-prosecution coordination as a separate institutional problem because the police report contains the factual nexus on which prosecution must build <span class="ts">01:50:31</span> <span class="ts">01:51:10</span>.</p>
+
+    <div class="note exam">
+      <p><strong>Do not collapse the roles.</strong> Police investigate and report. Prosecutors scrutinise that work, prepare the state case, deal with witnesses and argue before the court. Their functions are connected but institutionally distinct.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 4 === -->
+<section id="t4" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+  <header>
+    <span class="eyebrow"><span class="num">4</span> Adjudication</span>
+    <h2><span class="emoji">&#9878;&#65039;</span> Courts and the trial process</h2>
+    <span class="timepill">28:42-42:47</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The trial begins when the case enters the court for judicial proceedings. Judges hear the matter through the applicable law, the charge, the evidence, witness testimony and the parties' legal arguments <span class="ts">00:28:42</span> <span class="ts">00:31:49</span> <span class="ts">00:38:49</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Reference</th><th>Use in the lecture's court map</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Constitution, Article 10A</strong></td><td>Right to fair trial and due process in the determination of a criminal charge <span class="ts">00:33:22</span></td></tr>
+          <tr><td><strong>Code of Criminal Procedure, 1898</strong></td><td>Judicial proceedings and criminal procedure; sections 496 to 498 are cited for bail, while section 167 concerns procedure when investigation cannot be completed within twenty-four hours <span class="ts">00:35:30</span></td></tr>
+          <tr><td><strong>Qanun-e-Shahadat Order, 1984</strong></td><td>Evidence and witness examination</td></tr>
+          <tr><td><strong>Pakistan Penal Code</strong></td><td>Substantive offences and punishments <span class="ts">00:38:11</span></td></tr>
+          <tr><td><strong>Constitution, Article 199</strong></td><td>Constitutional jurisdiction of High Courts, subject to the Constitution's current institutional arrangements <span class="ts">00:36:44</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>What the court does</h3>
+    <ul>
+      <li>Conducts and records judicial proceedings.</li>
+      <li>Frames the charge that the accused must answer.</li>
+      <li>Receives and evaluates evidence, witness statements and legal submissions.</li>
+      <li>Decides applications concerning bail and remand.</li>
+      <li>Determines whether the case results in acquittal, release or sentence.</li>
+    </ul>
+
+    <div class="note warn">
+      <p><strong>Current-law correction, reviewed 22 July 2026: the lecture's suo motu explanation is outdated.</strong> The class gives a generic account of a court taking cognisance on its own in the public interest <span class="ts">00:41:15</span> <span class="ts">00:41:40</span>. The <strong>Constitution (Twenty-seventh Amendment) Act, 2025</strong> created the Federal Constitutional Court and omitted Article 184. Under new Article 175E(3), fundamental-rights jurisdiction requires an application. Article 175E(5) separately permits the Federal Constitutional Court, on its own motion, to call for the record of a pending case involving a substantial constitutional-law question. The former Supreme Court jurisdiction commonly described through Article 184(3) is therefore not the current constitutional arrangement.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Keep the criminology answer procedural.</strong> Explain that courts test a case through fair process and legally presented evidence. Use section numbers as precise support, not as a substitute for explaining what adjudication actually does <span class="ts">00:39:42</span>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 5 === -->
+<section id="t5" class="chapter card" style="--accent:#B57A2A; --soft:#FBF1DE;">
+  <header>
+    <span class="eyebrow"><span class="num">5</span> After sentence</span>
+    <h2><span class="emoji">&#127968;</span> Prisons, rehabilitation and reintegration</h2>
+    <span class="timepill">42:47-53:22</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Once a court imposes imprisonment, the case enters the correctional phase. The lecture anchors prison administration in the <strong>Prisons Act, 1894</strong> and gives a prison a correctional purpose extending beyond confinement <span class="ts">00:42:47</span> <span class="ts">00:44:18</span>.</p>
+
+    <div class="grid-2">
+      <div class="mini-card"><h4>Safe custody</h4><p>Keep the person securely and lawfully during the period ordered by the court <span class="ts">00:45:21</span>.</p></div>
+      <div class="mini-card"><h4>Execution of sentence</h4><p>Carry out the punishment imposed by the court without adding unlawful violence or abuse <span class="ts">00:47:04</span>.</p></div>
+      <div class="mini-card"><h4>Rehabilitation</h4><p>Use education, vocational instruction and counselling to develop lawful capabilities <span class="ts">00:47:37</span> <span class="ts">00:48:10</span>.</p></div>
+      <div class="mini-card"><h4>Reintegration</h4><p>Prepare the individual to return to society with skills and support that reduce reliance on crime or violence <span class="ts">00:49:19</span>.</p></div>
+    </div>
+
+    <h3>The lecture's practical rehabilitation model</h3>
+    <p>Time in custody can be used for education, personal counselling and vocational training such as electrical or plumbing work. The lecturer also suggests basic information-technology and wage-earning skills so release is followed by a realistic route to work <span class="ts">00:48:10</span> <span class="ts">00:49:49</span>.</p>
+
+    <div class="note">
+      <p><strong>Correctional logic.</strong> Safe custody protects the sentence. Rehabilitation changes capabilities and conduct. Reintegration tests whether those gains can survive outside the institution. An answer that stops at confinement misses the class's criminological core.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Use the four-function formula:</strong> safe custody, execution of sentence, rehabilitation, reintegration <span class="ts">00:53:22</span>. Then show how education, training and counselling connect the third function to the fourth.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 6 === -->
+<section id="t6" class="chapter card" style="--accent:#2C8C86; --soft:#E4F1F0;">
+  <header>
+    <span class="eyebrow"><span class="num">6</span> Supervision outside custody</span>
+    <h2><span class="emoji">&#128694;</span> Probation and parole</h2>
+    <span class="timepill">53:57-1:15:42</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Both measures seek correction in the community under conditions and supervision, but they begin at different points. Probation avoids a custodial sentence in the relevant case; parole releases an eligible prisoner conditionally after imprisonment has begun <span class="ts">00:55:25</span> <span class="ts">01:08:49</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Feature</th><th>Probation</th><th>Parole</th></tr></thead>
+        <tbody>
+          <tr><td><strong>When it operates</strong></td><td>As a court-ordered non-custodial correctional measure</td><td>After a prisoner has served part of a custodial sentence</td></tr>
+          <tr><td><strong>Legal anchor used here</strong></td><td>Probation of Offenders Ordinance, 1960, subject to provincial law</td><td>Good Conduct Prisoners' Probational Release Act, 1926 and Rules, 1927, subject to provincial law</td></tr>
+          <tr><td><strong>Control mechanism</strong></td><td>Bond, conditions and supervision by a probation officer</td><td>Conditional release by licence and supervision by the parole machinery</td></tr>
+          <tr><td><strong>Core purpose</strong></td><td>Permit correction in the community without imprisonment</td><td>Support supervised return to the community before the sentence's full custodial term is completed</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Probation as taught</h3>
+    <p>The term is linked to the Latin <em>probatio</em>, associated with testing or examination <span class="ts">00:53:57</span>. In practice, the class defines probation as a non-custodial sentence or correctional measure: the person remains in the community, but conduct is monitored and conditions must be followed <span class="ts">00:56:02</span> <span class="ts">00:57:35</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: probation eligibility is not a blanket "first offence" or "two years or less" rule.</strong> The lecture uses both shortcuts and associates the two-year claim with section 4 <span class="ts">00:58:41</span> <span class="ts">01:00:13</span>. Under the <strong>Probation of Offenders Ordinance, 1960</strong>, section 4 concerns discharge after admonition or conditional discharge, while section 5 governs probation orders. Eligibility depends on the statute's offence conditions and the court's assessment of the circumstances, nature of the offence and character of the offender. A section 5 probation order runs for <strong>one to three years</strong>. Provincial amendments and administration can differ, so use the applicable provincial text.</p>
+    </div>
+
+    <h3>Probation officer: supervision with assistance</h3>
+    <ul>
+      <li>Visit the probationer at the intervals required by the supervision arrangement <span class="ts">01:02:30</span>.</li>
+      <li>Check compliance with the bond and its conditions <span class="ts">01:03:05</span>.</li>
+      <li>Observe conduct and prepare behaviour reports <span class="ts">01:03:42</span>.</li>
+      <li>Advise, assist and support lawful adjustment, including help with employment where needed <span class="ts">01:04:17</span>.</li>
+    </ul>
+
+    <div class="note warn">
+      <p><strong>Legal precision: sections 12 and 13.</strong> The lecture speaks as if section 12 assigns an officer to each probationer <span class="ts">01:01:23</span>. In the Ordinance, section 12 provides for the appointment of probation officers; section 13 sets out their duties, including visits, compliance checks, reporting and assistance. These provisions support the lecture's practical supervision model, but the section labels should remain exact <span class="ts">01:05:59</span>.</p>
+    </div>
+
+    <h3>Parole as taught</h3>
+    <p>Parole is a conditional return to the community after part of a prison term. The released person remains subject to supervision and compliance; release is not the same as unconditional completion of sentence <span class="ts">01:10:57</span>. The rehabilitative purpose is to give an eligible person a structured opportunity to resume lawful social life rather than harden further in custody <span class="ts">01:12:52</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: use the Act and the Rules together.</strong> The lecture recalls only a 1927 set of rules and is uncertain about the title <span class="ts">01:09:49</span> <span class="ts">01:10:19</span>. The legal framework is the <strong>Good Conduct Prisoners' Probational Release Act, 1926</strong>, read with the <strong>Good Conduct Prisoners' Probational Release Rules, 1927</strong>. It concerns conditional release by licence and supervision. Provincial regimes and amendments should be checked for a jurisdiction-specific answer.</p>
+    </div>
+
+    <div class="note">
+      <p><strong>Boundary note.</strong> The class briefly mentions preventive detention as detention before trial, subject to time limits and review boards <span class="ts">01:14:40</span> <span class="ts">01:15:11</span>. It is not probation, parole or a post-conviction correctional measure, so keep it outside the comparison above.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 7 === -->
+<section id="t7" class="chapter card" style="--accent:#B44A8C; --soft:#F8EAF3;">
+  <header>
+    <span class="eyebrow"><span class="num">7</span> The chain under pressure</span>
+    <h2><span class="emoji">&#9888;&#65039;</span> Institutional failures in Pakistan</h2>
+    <span class="timepill">1:30:32-2:08:34</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The second half moves from institutional design to institutional performance. The lecturer asks students to diagnose police, prosecution, court and prison problems together because failure in one part reshapes the workload and outcomes of the rest <span class="ts">01:30:32</span> <span class="ts">01:35:16</span>.</p>
+
+    <h3>Police</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Problem identified</th><th>How it weakens the system</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Poor investigation and documentation</strong></td><td>Statements, physical evidence and scene details may not be preserved well enough for later scrutiny <span class="ts">01:36:49</span> <span class="ts">01:37:14</span>.</td></tr>
+          <tr><td><strong>Weak crime-scene and forensic practice</strong></td><td>Reliance shifts toward confession while scientific and documentary support remains thin <span class="ts">01:38:55</span>.</td></tr>
+          <tr><td><strong>Political interference</strong></td><td>Registration and investigation may be selective, pressured or influenced <span class="ts">01:39:20</span> <span class="ts">01:41:27</span>.</td></tr>
+          <tr><td><strong>Limited modern capacity</strong></td><td>First responders may lack the skills or equipment needed to preserve cyber and other technical evidence <span class="ts">01:43:11</span> <span class="ts">01:44:50</span>.</td></tr>
+          <tr><td><strong>Resource strain and non-core duties</strong></td><td>Vehicles, equipment, staff time and funding are stretched, including through protocol duties <span class="ts">01:45:19</span> <span class="ts">01:46:56</span>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Source warning: do not quote the Karachi training percentage.</strong> The lecturer cites a survey said to show that 86% of police officers in Karachi lacked forensic-investigation training <span class="ts">01:42:28</span>, but the recording gives no report title, author, year or retrievable source. Treat the broader capacity point as lecture analysis and omit the percentage unless the original study is produced.</p>
+    </div>
+
+    <h3>Prosecution</h3>
+    <ul>
+      <li><strong>Low conviction outcomes</strong> are presented as a symptom of weak case-building <span class="ts">01:47:28</span>.</li>
+      <li><strong>Political interference</strong> can affect prosecutorial independence through pressure or transfer <span class="ts">01:49:48</span>.</li>
+      <li><strong>Poor police-prosecution coordination</strong> leaves gaps between the investigation report and the case presented in court <span class="ts">01:50:31</span>.</li>
+      <li><strong>Hostile or unavailable witnesses</strong>, combined with weak witness protection, remove a major source of proof <span class="ts">01:51:10</span> <span class="ts">01:51:53</span>.</li>
+    </ul>
+
+    <div class="note warn">
+      <p><strong>Source warning: do not quote the Khyber Pakhtunkhwa conviction figures.</strong> The lecture gives 32,204 cases and 837 convictions for 2013 <span class="ts">01:48:03</span>, but does not identify the dataset, offence category, court level or reporting institution. Without that denominator and source, the numbers cannot support a reliable conviction-rate claim.</p>
+    </div>
+
+    <h3>Courts</h3>
+    <div class="grid-2">
+      <div class="mini-card"><h4>Backlog and delayed trials</h4><p>Pending cases and slow disposal extend the time required to reach judgment <span class="ts">01:52:27</span> <span class="ts">01:53:37</span>.</p></div>
+      <div class="mini-card"><h4>Repeated adjournments</h4><p>Missing witnesses, absent parties and delayed forensic reports interrupt hearings <span class="ts">01:54:12</span>.</p></div>
+      <div class="mini-card"><h4>Judicial capacity</h4><p>Shortages of judges and institutional capacity compound delay <span class="ts">01:54:53</span>.</p></div>
+      <div class="mini-card"><h4>Cost of litigation</h4><p>Lawyer fees and repeated attendance can put effective access beyond poorer litigants <span class="ts">02:02:13</span> <span class="ts">02:03:07</span>.</p></div>
+    </div>
+
+    <h3>Prisons: verified 2024 snapshot</h3>
+    <div class="note">
+      <p><strong>NCHR prison data.</strong> The lecture correctly points students to the National Commission for Human Rights report on Pakistan's prison landscape <span class="ts">02:01:08</span> <span class="ts">02:03:41</span>. The official <strong>Prison Data Report 2024</strong> records <strong>102,026 prisoners in 128 functioning facilities</strong>. It reports <strong>74,918 under-trial prisoners, 73.41%</strong> of the total. Punjab prisons were operating at <strong>173.6%</strong> of capacity and Sindh at <strong>161.42%</strong>.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: capacity is not the same as "percent overcrowded."</strong> The lecture says Punjab was 173% overcrowded and Sindh 161% overcrowded <span class="ts">02:04:27</span>. The report says the systems were operating at 173.6% and 161.42% <strong>of capacity</strong>. This corresponds to 73.6% and 61.42% above capacity. The report concerns conditions and data in <strong>2024</strong>, although the lecturer once misspeaks and calls it a 2014 report <span class="ts">01:33:27</span>.</p>
+    </div>
+
+    <p>The prison problems described are overcrowding, inadequate health care, poor sanitation, weak infrastructure, limited rehabilitation, little education or vocational training, insufficient psychological counselling and inadequate arrangements for women <span class="ts">02:05:41</span> <span class="ts">02:06:27</span> <span class="ts">02:07:32</span>.</p>
+
+    <div class="note exam">
+      <p><strong>Write the causal chain.</strong> Weak investigation produces weak cases. Weak cases and poor coordination burden prosecution. Adjournments and capacity shortages prolong trials. Prolonged under-trial detention adds pressure to overcrowded prisons. Overcrowding then reduces the space and resources available for rehabilitation.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 8 === -->
+<section id="t8" class="chapter card" style="--accent:#7A5AA8; --soft:#F0EBF8;">
+  <header>
+    <span class="eyebrow"><span class="num">8</span> From description to analysis</span>
+    <h2><span class="emoji">&#129504;</span> Criminological inference and reform</h2>
+    <span class="timepill">2:08:34-2:18:56</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The final analytical move is to connect institutional defects with criminological theory. The question is not simply whether an office performs badly. It is how that failure changes behaviour, labelling, punishment and the possibility of reintegration <span class="ts">02:08:34</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Institutional failure</th><th>Lecture's theoretical link</th><th>Criminological consequence</th></tr></thead>
+        <tbody>
+          <tr><td><strong>The actual offender escapes because evidence was poorly collected</strong></td><td>Behaviour is learned through rewards and punishments</td><td>Absence of punishment can reinforce continued offending because the behaviour appears to succeed <span class="ts">02:09:40</span> <span class="ts">02:16:33</span>.</td></tr>
+          <tr><td><strong>An innocent person is wrongly arrested, prosecuted or imprisoned</strong></td><td>Labelling theory</td><td>Official processing and stigma may impose a deviant identity and create further exclusion <span class="ts">02:10:20</span>.</td></tr>
+          <tr><td><strong>Prison conditions defeat education, treatment and training</strong></td><td>Failure of correctional purpose</td><td>Custody cannot reliably produce rehabilitation or successful reintegration <span class="ts">02:11:26</span>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>A reform answer built from the lecture</h3>
+    <ol>
+      <li><strong>Police:</strong> improve crime-scene management, documentation, forensic and cyber capacity, equipment, resources and insulation from political pressure.</li>
+      <li><strong>Prosecution:</strong> create earlier coordination with investigators, protect professional independence and strengthen witness support.</li>
+      <li><strong>Courts:</strong> reduce avoidable adjournments, improve judge and forensic-report capacity, and lower procedural delay and access costs.</li>
+      <li><strong>Prisons:</strong> address overcrowding and health conditions while making education, vocational training, counselling and gender-responsive facilities operational.</li>
+      <li><strong>Community correction:</strong> use lawful probation and parole with properly staffed supervision so eligible people can be corrected outside or after custody.</li>
+    </ol>
+
+    <div class="note exam">
+      <p><strong>Classroom prompt.</strong> The recording ends with a question on challenges faced by police in controlling crime and maintaining law and order in Pakistan <span class="ts">02:18:22</span>. The year and complete official wording are not audible, so treat this as a practice prompt rather than a verbatim past-paper quotation.</p>
+    </div>
+
+    <div class="note">
+      <p><strong>Editorial synthesis.</strong> The lecture supports a systems thesis: criminal justice is only as reliable as the transfer between its institutions. Reform must improve the quality of each link and the handoffs among them, because a defect at first response can end as acquittal, wrongful labelling, prolonged detention or failed rehabilitation.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================= glossary === -->
+<section id="t9" class="chapter card" style="--accent:#8B8490; --soft:#F0EEF2;">
+  <header>
+    <span class="eyebrow"><span class="num">G</span> Reference</span>
+    <h2><span class="emoji">&#128214;</span> Glossary</h2>
+  </header>
+  <div class="section-body">
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Term</th><th>Meaning in this lecture</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Criminal justice system</strong></td><td>The connected institutions and processes that investigate, prosecute, adjudicate and correct criminal conduct.</td></tr>
+          <tr><td><strong>Cognizable offence</strong></td><td>An offence category for which section 154 CrPC governs the recording of first information.</td></tr>
+          <tr><td><strong>FIR</strong></td><td>First Information Report, the police record associated with first information concerning a cognizable offence.</td></tr>
+          <tr><td><strong>Investigation</strong></td><td>Lawful collection and documentation of evidence, witness accounts and suspect-related material for a criminal case.</td></tr>
+          <tr><td><strong>Challan</strong></td><td>The police report or case material scrutinised before and during prosecution.</td></tr>
+          <tr><td><strong>Prosecution</strong></td><td>The legal process through which the state initiates and conducts criminal proceedings.</td></tr>
+          <tr><td><strong>Prosecutor</strong></td><td>The state's legal representative who scrutinises the case, deals with witnesses and presents legal arguments.</td></tr>
+          <tr><td><strong>Adjudication</strong></td><td>Judicial determination of a case through legally structured proceedings.</td></tr>
+          <tr><td><strong>Fair trial</strong></td><td>The Article 10A guarantee of fair trial and due process in the determination of a criminal charge.</td></tr>
+          <tr><td><strong>Bail</strong></td><td>Conditional release from custody while the legal process continues, subject to the applicable law.</td></tr>
+          <tr><td><strong>Remand</strong></td><td>Judicially authorised custody under the relevant criminal-procedure provisions.</td></tr>
+          <tr><td><strong>Correctional institution</strong></td><td>An institution that provides lawful custody and should support rehabilitation and reintegration.</td></tr>
+          <tr><td><strong>Rehabilitation</strong></td><td>Education, training, counselling and other work intended to improve lawful functioning.</td></tr>
+          <tr><td><strong>Reintegration</strong></td><td>Return to community life after or during correction, with support for lawful participation.</td></tr>
+          <tr><td><strong>Probation</strong></td><td>A court-ordered non-custodial correctional measure under a bond, conditions and supervision.</td></tr>
+          <tr><td><strong>Probation officer</strong></td><td>An appointed officer who visits, checks compliance, reports on conduct and assists the probationer.</td></tr>
+          <tr><td><strong>Parole</strong></td><td>Conditional release by licence after part of a prison sentence, subject to supervision and compliance.</td></tr>
+          <tr><td><strong>Under-trial prisoner</strong></td><td>A person held in prison while the criminal case has not yet reached final determination.</td></tr>
+          <tr><td><strong>Hostile witness</strong></td><td>A witness whose position or testimony no longer supports the party that called the witness.</td></tr>
+          <tr><td><strong>Behavioural theory</strong></td><td>The lecture's learning-based view that rewards and punishments shape repeated behaviour.</td></tr>
+          <tr><td><strong>Labelling theory</strong></td><td>The view used here to analyse how official designation and stigma can shape identity and later conduct.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================= flashcards === -->
+<section id="t10" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+  <header>
+    <span class="eyebrow"><span class="num">F</span> Recall</span>
+    <h2><span class="emoji">&#127183;</span> Flashcards</h2>
+  </header>
+  <div class="section-body">
+    <div class="cards">
+      <div class="qa"><p class="q">What is the basic criminal justice sequence?</p><p class="a">Police investigation, prosecutorial scrutiny and presentation, court adjudication, then correction through custody or supervised community measures.</p></div>
+      <div class="qa"><p class="q">Why is the police role broader than investigation?</p><p class="a">It includes watch and ward, crime prevention, apprehension, traffic, juvenile handling and protection of life, property and liberty.</p></div>
+      <div class="qa"><p class="q">What is the correct year of the Police Order?</p><p class="a">2002, not 2000.</p></div>
+      <div class="qa"><p class="q">What is the correct title and year of CrPC?</p><p class="a">Code of Criminal Procedure, 1898.</p></div>
+      <div class="qa"><p class="q">What does section 154 CrPC concern?</p><p class="a">Recording information relating to the commission of a cognizable offence.</p></div>
+      <div class="qa"><p class="q">Which CrPC range does the lecture use for police investigation?</p><p class="a">Sections 156 to 173, with section 173 addressing the police report after investigation.</p></div>
+      <div class="qa"><p class="q">What are the prosecutor's four functions in this class?</p><p class="a">Scrutinise the challan, scrutinise evidence, examine witnesses, and attend proceedings to present legal arguments.</p></div>
+      <div class="qa"><p class="q">What is the full evidence-law title?</p><p class="a">Qanun-e-Shahadat Order, 1984.</p></div>
+      <div class="qa"><p class="q">Which constitutional article protects fair trial?</p><p class="a">Article 10A.</p></div>
+      <div class="qa"><p class="q">Which four legal references frame the court discussion?</p><p class="a">The Constitution, Code of Criminal Procedure, 1898, Qanun-e-Shahadat Order, 1984 and Pakistan Penal Code.</p></div>
+      <div class="qa"><p class="q">What are the four prison functions from the lecture?</p><p class="a">Safe custody, execution of sentence, rehabilitation and reintegration.</p></div>
+      <div class="qa"><p class="q">How does probation differ from parole?</p><p class="a">Probation is a non-custodial court measure; parole is conditional release after imprisonment has begun.</p></div>
+      <div class="qa"><p class="q">What law anchors probation in the lecture?</p><p class="a">Probation of Offenders Ordinance, 1960, subject to applicable provincial law and amendments.</p></div>
+      <div class="qa"><p class="q">What is the correct probation period under section 5?</p><p class="a">One to three years.</p></div>
+      <div class="qa"><p class="q">What do sections 12 and 13 of the probation law address?</p><p class="a">Section 12 addresses appointment of probation officers; section 13 sets out their duties.</p></div>
+      <div class="qa"><p class="q">What is the correct parole framework?</p><p class="a">Good Conduct Prisoners' Probational Release Act, 1926 and Rules, 1927, subject to provincial law.</p></div>
+      <div class="qa"><p class="q">What exact under-trial figure does the NCHR report give?</p><p class="a">74,918 under-trial prisoners, 73.41% of the total in the 2024 data.</p></div>
+      <div class="qa"><p class="q">How many functioning prison facilities does the report record?</p><p class="a">128 facilities housing 102,026 prisoners.</p></div>
+      <div class="qa"><p class="q">What were Punjab and Sindh prison operating-capacity figures?</p><p class="a">Punjab 173.6% of capacity and Sindh 161.42%.</p></div>
+      <div class="qa"><p class="q">Why should the Karachi 86% claim be omitted?</p><p class="a">The lecture gives no identifiable study, author, year or source with which to verify it.</p></div>
+      <div class="qa"><p class="q">How does weak evidence connect with behavioural theory?</p><p class="a">If offending repeatedly escapes punishment, the successful outcome can reinforce repetition of the behaviour.</p></div>
+      <div class="qa"><p class="q">How does wrongful processing connect with labelling theory?</p><p class="a">Official designation and stigma may impose a deviant identity and deepen exclusion.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== exam focus === -->
+<section id="t11" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+  <header>
+    <span class="eyebrow"><span class="num">X</span> Strategy</span>
+    <h2><span class="emoji">&#127919;</span> Exam focus</h2>
+  </header>
+  <div class="section-body">
+    <h3>The lecture on one page</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Actor</th><th>Core role</th><th>Best legal anchor</th><th>Main failure to analyse</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Police</strong></td><td>First response and investigation</td><td>Police Order, 2002; CrPC ss 154 and 156-173</td><td>Poor investigation, interference, limited modern capacity</td></tr>
+          <tr><td><strong>Prosecution</strong></td><td>Scrutinise and present the state's case</td><td>CrPC s 173; Qanun-e-Shahadat Order, 1984</td><td>Weak coordination, witness problems, interference</td></tr>
+          <tr><td><strong>Courts</strong></td><td>Fair adjudication</td><td>Constitution Art 10A; CrPC; evidence law; PPC</td><td>Backlog, delay, adjournments, cost and capacity</td></tr>
+          <tr><td><strong>Prisons</strong></td><td>Custody, sentence, rehabilitation, reintegration</td><td>Prisons Act, 1894</td><td>Overcrowding, health and sanitation, weak rehabilitation</td></tr>
+          <tr><td><strong>Probation</strong></td><td>Supervised non-custodial correction</td><td>Probation of Offenders Ordinance, 1960</td><td>Overbroad eligibility claims and weak supervision capacity</td></tr>
+          <tr><td><strong>Parole</strong></td><td>Conditional licensed release after custody</td><td>1926 Act and 1927 Rules</td><td>Underuse or weak supervision</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Suggested answer structure: challenges faced by police</h3>
+    <ol>
+      <li><strong>Define police as first contact</strong> and state the broad preventive and protective role.</li>
+      <li><strong>Explain the investigation standard:</strong> timely scene response, preservation, evidence, witnesses, suspects and documentation.</li>
+      <li><strong>Diagnose four challenges:</strong> poor investigation, political interference, limited modern capacity, and inadequate resources or diversion to protocol duties.</li>
+      <li><strong>Show system effects:</strong> weak police work reduces prosecutorial quality, increases trial failure and may produce wrongful detention or acquittal.</li>
+      <li><strong>Add theory:</strong> absence of punishment may reinforce offending; wrongful labelling can harm innocent people.</li>
+      <li><strong>Conclude with targeted reform</strong> in training, forensic and cyber capacity, documentation, equipment, resources and professional independence.</li>
+    </ol>
+
+    <h3>Common mistakes</h3>
+    <ul>
+      <li>Writing Police Order 2000 or CrPC 1860.</li>
+      <li>Reducing the police role to arrest and investigation.</li>
+      <li>Treating prosecution as another name for police investigation.</li>
+      <li>Writing an incomplete title for the Qanun-e-Shahadat Order, 1984.</li>
+      <li>Repeating the lecture's former suo motu account as current constitutional law.</li>
+      <li>Claiming every first-time offender or every offence punishable by two years qualifies for probation.</li>
+      <li>Naming only the 1927 Rules and omitting the Good Conduct Prisoners' Probational Release Act, 1926.</li>
+      <li>Calling 173.6% of capacity "173.6% overcrowded."</li>
+      <li>Quoting the unsourced Karachi training or Khyber Pakhtunkhwa conviction figures.</li>
+      <li>Listing institutional problems without tracing how one failure affects the next stage.</li>
+    </ul>
+
+    <div class="note exam">
+      <p><strong>Editorial: the one-line thesis.</strong> Pakistan's criminal justice problem is systemic: weak first response, fragile case preparation, delayed adjudication and overcrowded correctional institutions combine to reduce certainty, fairness and rehabilitation.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="notefoot">Want the whole lecture? <a href="https://drive.google.com/file/d/1IuMZe8JLq6RpMCL1TBset3zn7E1uAFG-/view?usp=drivesdk" target="_blank" rel="noopener">▶ Watch the full recording</a><span class="sep">·</span><a href="https://drive.google.com/file/d/1njF7P2-r4G8mLpUMUzRCgQX3I9FQokBx/view?usp=drivesdk" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+</html>
