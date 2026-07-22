@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Air Pollution, Plant Injury and Global Warming</title>
+<style>/* Lecture Notes ebook, "warm study" theme.
+   Inspired by Mehak's MarketCanvas app: soft cream ground, rounded white cards,
+   a different pastel accent per topic, serif display + friendly sans body,
+   gentle emoji + pill badges. Playful and pretty, but still a real study book.
+   Print-first (A4 PDF via headless Edge); reads well on screen too.
+
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
+   Everything themeable keys off --accent / --soft. Titles stay ink for
+   readability; accents colour eyebrows, numbers, pills, rules and callouts.
+*/
+
+:root {
+  --cream: #FCF6F0;          /* page ground (warm) */
+  --card: #FFFFFF;
+  --ink: #2C2630;            /* plum-black body/headings */
+  --ink-soft: #5A5360;
+  --slate: #8B8490;          /* captions, timestamps */
+  --hairline: #EEE6E4;
+
+  /* section default accent (overridden per section) */
+  --accent: #C0567E;
+  --soft: #FBECF1;
+
+  --shadow: 0 1px 2px rgba(60,30,45,.05), 0 10px 26px rgba(80,40,55,.07);
+  --radius: 20px;
+
+  --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: Consolas, "Cascadia Code", ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background:
+    radial-gradient(1100px 700px at 15% -5%, #FBEEF3 0%, transparent 55%),
+    radial-gradient(1000px 700px at 100% 0%, #EEF3FB 0%, transparent 50%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  font: 10.8pt/1.62 var(--sans);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+@media screen {
+  body { max-width: 51rem; margin: 0 auto; padding: 2.5rem 1.15rem 4rem; font-size: 1.0rem; }
+}
+
+/* ---------------------------------------------------------------- page --- */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm 14mm;
+  @bottom-center {
+    content: counter(page);
+    font: 8.5pt var(--sans);
+    color: #8B8490;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+/* --------------------------------------------------------------- cards --- */
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8mm 9mm 9mm;
+  margin: 0 0 6mm;
+  box-shadow: var(--shadow);
+  break-inside: auto;
+}
+@media screen { .card { margin-bottom: 1.4rem; } }
+
+/* a soft accent wash across the top of each section card (fades to white),
+   echoing the app's pastel cards without hurting readability */
+.chapter {
+  background:
+    linear-gradient(180deg, var(--soft) 0, rgba(255,255,255,0) 34mm),
+    var(--card);
+  border-top: 3px solid var(--accent);
+  break-inside: auto;
+  break-before: page;   /* each topic starts fresh: slide on top, notes below */
+}
+/* on screen (web/PWA) sections just stack; no forced page breaks */
+@media screen { .chapter { break-before: auto; } }
+
+h2, h3, .eyebrow { break-after: avoid; }
+p { orphans: 2; widows: 2; }
+
+/* keep the section header intact (eyebrow + title + time pill together) and
+   glued to its opening slide */
+.chapter > header { break-inside: avoid; break-after: avoid; }
+figure.slide { break-before: avoid; }
+
+/* --------------------------------------------------------------- cover --- */
+
+.cover {
+  page: cover;
+  break-after: page;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32mm 22mm 24mm;
+  background:
+    radial-gradient(700px 460px at 12% 8%, #FBE6EE 0%, transparent 60%),
+    radial-gradient(760px 520px at 96% 4%, #E7EEFB 0%, transparent 58%),
+    radial-gradient(620px 520px at 80% 96%, #E6F4EC 0%, transparent 60%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+@media screen {
+  .cover { min-height: 80vh; border-radius: 24px; padding: 3.2rem 2.6rem; margin-bottom: 1.4rem; }
+}
+
+.cover .avatar { font-size: 30pt; line-height: 1; margin-bottom: 7mm; }
+.cover .kicker {
+  font: 600 9pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 5mm;
+}
+.cover h1 {
+  font: 600 31pt/1.14 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 15em;
+}
+.cover .subtitle {
+  margin-top: 5mm;
+  font: 400 13.5pt/1.5 var(--sans);
+  color: var(--ink-soft);
+  max-width: 30em;
+}
+.cover .warm {
+  margin-top: 4mm;
+  font: italic 400 12pt/1.5 var(--serif);
+  color: var(--accent);
+}
+
+.cover .chips { display: flex; flex-wrap: wrap; gap: 3mm; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.4mm 4mm;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(60,30,45,.04);
+  font: 400 9pt var(--sans);
+  color: var(--slate);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chip b { font: 700 10.5pt var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ headings --- */
+
+.chapter header { margin-bottom: 5mm; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  font: 700 8.5pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--accent);
+  margin-bottom: 3mm;
+}
+.eyebrow .num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h2 {
+  font: 600 20pt/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .emoji { font-size: 17pt; }
+
+.timepill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.5mm 3.5mm;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font: 600 8pt var(--mono);
+  letter-spacing: 0.02em;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h3 {
+  font: 600 12.5pt/1.34 var(--serif);
+  color: var(--ink);
+  margin: 6mm 0 2.5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+.ts { font: 400 8.5pt var(--mono); color: var(--slate); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- body --- */
+
+.section-body > :last-child { margin-bottom: 0; }
+p { margin: 0 0 3mm; }
+.lead { font-size: 11.2pt; color: var(--ink); }
+
+ul, ol { margin: 0 0 3mm 5.5mm; }
+li { margin-bottom: 1.7mm; padding-left: 1mm; }
+li::marker { color: var(--accent); }
+
+.kt { font-weight: 700; color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
+
+code { font: 9.5pt var(--mono); background: #F3EFF4; padding: .4pt 3.5pt; border-radius: 4px; }
+
+/* ------------------------------------------------------------ callouts --- */
+
+.note {
+  --c: var(--accent);
+  --f: var(--soft);
+  background: var(--f);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  border-left: 3px solid var(--c);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.note .label {
+  display: inline-flex; align-items: center; gap: 1.6mm;
+  font: 700 8pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c);
+  margin-bottom: 1.8mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.warn { --c: #B4791F; --f: #FaF1DF; }
+.note.exam { --c: #3B8B78; --f: #E6F3EF; }
+.note.def  { --c: var(--accent); --f: var(--soft); }
+
+/* ------------------------------------------------------- summary card --- */
+
+.summary { --accent: #C0567E; --soft: #FBECF1; }
+.summary ul { list-style: none; margin: 0; }
+.summary li { position: relative; padding: 0 0 0 7mm; margin-bottom: 3.5mm; }
+.summary li::before {
+  content: "";
+  position: absolute; left: 0; top: 2.6mm;
+  width: 3.2mm; height: 3.2mm; border-radius: 50%;
+  background: var(--accent);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.summary li:last-child { margin-bottom: 0; }
+.summary li b, .summary li strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------- TOC --- */
+
+nav.toc { --accent: #8B8490; --soft: #F3EFF4; }
+nav.toc ol { list-style: none; margin: 0; }
+nav.toc li {
+  display: flex; align-items: baseline; gap: 4mm;
+  padding: 2.7mm 0;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11pt var(--sans);
+}
+nav.toc li:last-child { border-bottom: 0; }
+nav.toc .dot { width: 3.4mm; height: 3.4mm; border-radius: 50%; flex-shrink: 0;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+nav.toc .title { flex: 1; color: var(--ink); }
+nav.toc .rng { flex-shrink: 0; font: 600 8.5pt var(--mono); color: var(--slate); }
+
+/* -------------------------------------------------------------- slides --- */
+
+figure.slide { margin: 0 0 5mm; break-inside: avoid; }
+figure.slide img {
+  width: 100%; display: block;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 10px rgba(40,30,45,.10);
+}
+figure.slide figcaption {
+  font: 400 8.5pt var(--sans);
+  color: var(--slate);
+  margin-top: 2mm;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4mm;
+}
+figure.slide figcaption .ts { color: var(--accent); }
+
+/* ------------------------------------------------------------ glossary --- */
+
+dl.glossary { margin: 0; }
+dl.glossary div { padding: 3mm 0; border-bottom: 1px solid var(--hairline); break-inside: avoid; }
+dl.glossary div:last-child { border-bottom: 0; padding-bottom: 0; }
+dl.glossary dt { font: 700 10.5pt var(--sans); color: var(--accent); margin-bottom: 1.2mm; }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- flashcards --- */
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 0; }
+.qa {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  background: linear-gradient(180deg, var(--soft) 0, #fff 60%);
+  break-inside: avoid;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.qa .q { font: 700 10pt var(--sans); color: var(--ink); margin-bottom: 2mm; }
+.qa .a { color: var(--ink-soft); font-size: 10pt; }
+
+/* ------------------------------------------------------------- tables --- */
+
+.tables-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0; break-inside: avoid; }
+th {
+  font: 700 9pt var(--sans); text-align: left; color: var(--accent);
+  border-bottom: 2px solid var(--soft); padding: 2mm 3mm 2mm 0;
+}
+td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+
+/* --- mobile / on-the-go reading (screen only; never affects the print PDF).
+   Placed LAST so it wins the cascade over the wider @media screen rules above.
+   Requires <meta name="viewport" content="width=device-width, initial-scale=1">. */
+@media screen and (max-width: 640px) {
+  body { padding: 1rem 0.85rem 2.5rem; font-size: 1.02rem; }
+  .card { padding: 5mm 5mm 6mm; border-radius: 14px; margin-bottom: 0.9rem; }
+  .cover { min-height: auto; padding: 2rem 1.3rem 1.6rem; border-radius: 16px; }
+  .cover .avatar { font-size: 24pt; margin-bottom: 4mm; }
+  .cover h1 { font-size: 20pt; max-width: 100%; }
+  .cover .subtitle { font-size: 11.5pt; }
+  .cover .warm { font-size: 11pt; }
+  .cover .chips { gap: 2mm; margin-top: 5mm; }
+  h2 { font-size: 16pt; }
+  h2 .emoji { font-size: 13.5pt; }
+  h3 { font-size: 11.5pt; }
+  .cards { grid-template-columns: 1fr; }
+  nav.toc li { font-size: 10.5pt; gap: 2.5mm; padding: 2.5mm 0; }
+  nav.toc .rng { font-size: 8pt; }
+  .note { padding: 3.5mm 4mm; }
+  table { font-size: 9.5pt; }
+}
+</style>
+<meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
+align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
+border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
+<body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/file/d/1DIfT_79lm0zKcj_jz31ye4LWIVdQKGkc/view?usp=drivesdk" target="_blank" rel="noopener">Download PDF ↓</a></div>
+
+<!-- ============================================================ cover === -->
+<section class="cover" style="background:radial-gradient(700px 460px at 12% 8%,#E4F3EB 0,transparent 60%),radial-gradient(760px 520px at 96% 4%,#E7F1FB 0,transparent 58%),radial-gradient(620px 520px at 80% 96%,#FAF0E2 0,transparent 60%),var(--cream)">
+  <div>
+    <div class="avatar">&#127807;</div>
+    <div class="kicker" style="color:#2E9E6A">CSS Environmental Science &middot; Air pollution and climate</div>
+    <h1>Air Pollution, Plant Injury and Global Warming</h1>
+    <p class="subtitle">How pollutants move from air to leaves and soil, why plant injury becomes an agricultural and social problem, and how to use warming figures without confusing baselines or thresholds.</p>
+    <p class="warm" style="color:#2C8A5E">Read plant damage as a chain: exposure changes function, altered function changes growth, and lost growth reaches the food system. &#127793;</p>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>45m</b> recording</span>
+    <span class="chip"><b>2</b> teaching blocks</span>
+    <span class="chip"><b>6</b> core topics</span>
+    <span class="chip"><b>5</b> fact corrections</span>
+  </div>
+</section>
+
+<!-- ============================================================== toc === -->
+<nav class="toc card">
+  <header><span class="eyebrow">Contents</span><h2><span class="emoji">&#128506;&#65039;</span> In this chapter</h2></header>
+  <ol>
+    <li><span class="dot" style="background:#2E9E6A"></span><a class="title" href="#summary">The five-minute version</a><span class="rng">summary</span></li>
+    <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t1">01 &middot; From polluted air to soil</a><span class="rng">deposition</span></li>
+    <li><span class="dot" style="background:#46955C"></span><a class="title" href="#t2">02 &middot; Chlorosis and photosynthetic stress</a><span class="rng">leaves</span></li>
+    <li><span class="dot" style="background:#C0762C"></span><a class="title" href="#t3">03 &middot; Tissue injury, growth and flowers</a><span class="rng">plant response</span></li>
+    <li><span class="dot" style="background:#A4553A"></span><a class="title" href="#t4">04 &middot; Agriculture becomes a social issue</a><span class="rng">food and work</span></li>
+    <li><span class="dot" style="background:#3A7CC0"></span><a class="title" href="#t5">05 &middot; What global warming means</a><span class="rng">definition</span></li>
+    <li><span class="dot" style="background:#7A5AA8"></span><a class="title" href="#t6">06 &middot; Read the temperature numbers</a><span class="rng">baseline and time</span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t7">Glossary &middot; Flashcards &middot; Exam focus</a><span class="rng"></span></li>
+  </ol>
+</nav>
+
+<!-- ============================================================= tldr === -->
+<section id="summary" class="summary card" style="--accent:#2E9E6A; --soft:#E4F3EB; border-top-color:#2E9E6A">
+  <header><span class="eyebrow" style="color:#2E9E6A">Start here</span><h2><span class="emoji">&#11088;</span> The five-minute version</h2></header>
+  <ul>
+    <li><strong>Air pollution can reach plants by more than one route.</strong> Pollutants may contact leaves directly or return to land through wet and dry deposition, changing soil conditions and the resources available to roots.</li>
+    <li><strong>Chlorosis is a symptom.</strong> It means that leaf tissue has reduced chlorophyll and appears yellow. Nutrient stress can cause it, but the lecture's calcium-magnesium-potassium formula is too narrow.</li>
+    <li><strong>Lost chlorophyll can weaken photosynthesis.</strong> The lecture traces a visible sequence from yellowing to weakness, wilting and leaf fall, then connects reduced food production within the plant to stunted growth.</li>
+    <li><strong>Ground-level ozone can injure sensitive plants.</strong> Verified effects include reduced photosynthesis, slower growth, impaired reproduction and lower crop yield. The lecture's exact petal-colour-pollinator chain should be treated as an illustration, not a universal mechanism.</li>
+    <li><strong>Plant injury travels into the economy.</strong> Lower crop output can mean lost farm income, pressure on food security and fewer livelihood opportunities. The lecture's approximate 40% Pakistan figure is not verified by its stated denominator.</li>
+    <li><strong>Global warming is long-term.</strong> The lecture correctly stresses a gradual rise rather than a jump over a few months and attributes the trend to human activity.</li>
+    <li><strong>Every temperature figure needs a baseline and period.</strong> IPCC reports 1.09&deg;C for 2011-2020 relative to 1850-1900. WMO estimates long-term warming assessed in 2024 at about 1.3&deg;C on the same baseline.</li>
+    <li><strong>One hot year is different from a long-term limit.</strong> WMO put the 2024 annual mean at 1.55 &plusmn; 0.13&deg;C above 1850-1900, but one annual exceedance does not itself mean the Paris long-term 1.5&deg;C goal has been missed.</li>
+  </ul>
+</section>
+
+<!-- ======================================================== section 1 === -->
+<section id="t1" class="chapter card" style="--accent:#2C8C86; --soft:#E4F1F0;">
+  <header>
+    <span class="eyebrow"><span class="num">1</span> Exposure pathway</span>
+    <h2><span class="emoji">&#127783;&#65039;</span> From polluted air to soil</h2>
+    <span class="timepill">00:33-01:37</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecture begins with a transfer pathway: airborne pollutants can move towards soil under rainfall <span class="ts">00:00:33</span>. Once there, they may alter soil chemistry, raise toxicity or reduce the availability of minerals to plant roots <span class="ts">00:01:06</span>.</p>
+
+    <h3>The pathway in exam language</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Stage</th><th>What happens</th><th>Plant consequence</th></tr></thead>
+        <tbody>
+          <tr><td>1. Emission and transport</td><td>Pollutants are present in the atmosphere and may travel away from their source.</td><td>Leaves and ecosystems enter the exposure zone.</td></tr>
+          <tr><td>2. Deposition</td><td>Rain, snow or other wet processes, along with dry particles and gases, move pollutants to land.</td><td>Pollution reaches foliage and the root environment.</td></tr>
+          <tr><td>3. Soil change</td><td>The lecture describes greater toxicity and compromised mineral availability <span class="ts">00:01:06</span>.</td><td>Root uptake and plant nutrition may be disturbed.</td></tr>
+          <tr><td>4. Functional stress</td><td>Leaves and tissues lose some capacity to capture resources and make food.</td><td>Photosynthesis, growth and yield may decline.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <p><strong>Use precise language.</strong> Rainfall is one form of <em>wet deposition</em>. Pollutants also reach ecosystems through dry deposition. The lecture gives the wet route; the complete term prevents an answer from implying that rainfall is the only route.</p>
+    </div>
+
+    <h3>Direct and indirect injury</h3>
+    <div class="grid-2">
+      <div class="mini-card"><h4>Direct route</h4><p>A pollutant such as ground-level ozone enters a sensitive leaf and interferes with plant processes.</p></div>
+      <div class="mini-card"><h4>Indirect route</h4><p>Deposited pollutants alter soil or nutrient conditions, which then affects root uptake and plant function.</p></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ======================================================== section 2 === -->
+<section id="t2" class="chapter card" style="--accent:#46955C; --soft:#E9F4EC;">
+  <header>
+    <span class="eyebrow"><span class="num">2</span> Leaf function</span>
+    <h2><span class="emoji">&#127811;</span> Chlorosis and photosynthetic stress</h2>
+    <span class="timepill">00:01-02:08</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The teacher links green leaves to chlorophyll, then argues that nutrient deficiency weakens chlorophyll <span class="ts">00:00:01</span> <span class="ts">00:00:33</span>. The visible result described in class is yellowing, followed by weakness, wilting and eventual leaf fall <span class="ts">00:01:06</span>.</p>
+
+    <h3>Read the symptom before naming the cause</h3>
+    <p><strong>Chlorosis</strong> is the yellowing produced when leaf tissue contains less chlorophyll. It tells the examiner that chlorophyll formation or maintenance has been disturbed. It does not identify one cause by itself. Nutrient imbalance, disease, herbicide injury and environmental stress can all produce chlorotic tissue.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: the three-nutrient formula is too simple.</strong> The lecture says chlorophyll needs calcium, magnesium and potassium and that deficiency of these three causes chlorosis <span class="ts">00:00:01</span> <span class="ts">00:00:33</span>. Magnesium is a component of the chlorophyll molecule, and magnesium deficiency can cause chlorosis. Yet chlorosis is a broader symptom: iron, nitrogen, sulfur and other deficiencies or stresses can also cause yellowing. Calcium mainly supports cell walls, membranes and new growth; potassium has wider regulatory roles. Diagnose the pattern and cause rather than memorising Ca + Mg + K as a universal rule.</p>
+    </div>
+
+    <h3>Why chlorophyll loss matters</h3>
+    <ol>
+      <li><strong>Less chlorophyll:</strong> leaf tissue loses green pigmentation.</li>
+      <li><strong>Weaker light capture:</strong> the photosynthetic apparatus becomes less effective.</li>
+      <li><strong>Lower carbohydrate production:</strong> the plant has less energy and material for maintenance and new growth.</li>
+      <li><strong>Visible decline:</strong> yellowing may be followed by wilting, tissue injury and leaf loss, depending on the cause and severity.</li>
+      <li><strong>Growth effect:</strong> persistent food limitation can contribute to stunting, which the lecture calls dwarfism <span class="ts">00:02:08</span>.</li>
+    </ol>
+
+  </div>
+</section>
+
+<!-- ======================================================== section 3 === -->
+<section id="t3" class="chapter card" style="--accent:#C0762C; --soft:#FAF0E2;">
+  <header>
+    <span class="eyebrow"><span class="num">3</span> Whole-plant response</span>
+    <h2><span class="emoji">&#127804;</span> Tissue injury, growth and flowers</h2>
+    <span class="timepill">01:37-04:21</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecture expands from leaf colour to tissue breakdown, reduced food production and stunted growth <span class="ts">00:01:37</span> <span class="ts">00:02:08</span>. It then uses tropospheric ozone and flower damage to connect individual injury with reproduction and biodiversity <span class="ts">00:02:37</span> <span class="ts">00:04:03</span>.</p>
+
+    <h3>What ground-level ozone can do</h3>
+    <p>Tropospheric, or ground-level, ozone is an air pollutant. When it enters the leaves of a sensitive plant through stomata, it can trigger tissue reactions that reduce photosynthesis and disturb carbon allocation. Verified plant-level responses include visible foliar injury, slower growth, impaired reproduction and decreased yield.</p>
+
+    <div class="grid-3">
+      <div class="mini-card"><h4>Leaf</h4><p>Visible injury and reduced photosynthetic performance.</p></div>
+      <div class="mini-card"><h4>Whole plant</h4><p>Less above-ground and below-ground growth, with fewer resources for repair.</p></div>
+      <div class="mini-card"><h4>Reproduction</h4><p>Fewer resources for flowers and seeds, with effects that vary by species and exposure.</p></div>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: do not present the flower chain as universal.</strong> The lecture states that tropospheric ozone curls petals containing chromoplasts, removes flower colour, prevents insect attraction and produces biodiversity loss <span class="ts">00:02:37</span> <span class="ts">00:03:14</span> <span class="ts">00:04:03</span>. Authoritative ozone assessments support plant injury, impaired reproduction and ecosystem change, but they do not support that exact deterministic sequence for all flowers. Use it only as the lecturer's illustrative chain. In an exam, write the verified mechanism and add that ecological consequences depend on plant sensitivity, exposure and species interactions.</p>
+    </div>
+
+    <h3>Scale the effect carefully</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Scale</th><th>Defensible statement</th></tr></thead>
+        <tbody>
+          <tr><td>Cell and tissue</td><td>Oxidative reactions can disturb cellular function and produce visible injury.</td></tr>
+          <tr><td>Individual plant</td><td>Reduced photosynthesis and altered allocation can slow growth and impair reproduction.</td></tr>
+          <tr><td>Crop</td><td>Sensitive varieties may suffer lower yield or quality.</td></tr>
+          <tr><td>Ecosystem</td><td>Different sensitivities can alter competition, habitat quality and nutrient or water cycles over time.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 4 === -->
+<section id="t4" class="chapter card" style="--accent:#A4553A; --soft:#F7EBE5;">
+  <header>
+    <span class="eyebrow"><span class="num">4</span> Consequence chain</span>
+    <h2><span class="emoji">&#127806;</span> Agriculture becomes a social issue</h2>
+    <span class="timepill">04:21-06:57</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The class lists cotton, wheat, oats, barley, rice, beans, tobacco, tomatoes and potatoes as crops to remember when discussing plant damage <span class="ts">00:04:51</span>. The list is followed by the main analytical move: agricultural loss creates consequences beyond the field.</p>
+
+    <h3>From biological loss to human pressure</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Link</th><th>Explanation from the lecture's logic</th></tr></thead>
+        <tbody>
+          <tr><td>Plant injury</td><td>Photosynthesis, tissue health, growth or reproduction is compromised.</td></tr>
+          <tr><td>Lower agricultural output</td><td>Crop quantity, quality or cash-crop performance may decline <span class="ts">00:05:29</span>.</td></tr>
+          <tr><td>Economic loss</td><td>Farm revenue and related economic activity are reduced <span class="ts">00:05:29</span>.</td></tr>
+          <tr><td>Food insecurity</td><td>Reduced availability and weaker purchasing power can make adequate food harder to secure <span class="ts">00:05:58</span>.</td></tr>
+          <tr><td>Employment pressure</td><td>Farming and linked activities may support fewer livelihoods <span class="ts">00:05:58</span>.</td></tr>
+          <tr><td>Socioeconomic problem</td><td>An environmental exposure becomes a problem of welfare, income and public policy <span class="ts">00:06:27</span>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: qualify the Pakistan livelihood figure.</strong> The lecturer says that roughly 40% of Pakistan's people depend directly or indirectly on agriculture for livelihoods <span class="ts">00:05:58</span>. No source or denominator is given, and "people", "employment" and "livelihood dependence" are different measures. Pakistan Bureau of Statistics reports agriculture at <strong>33.1% of employment in 2024-25</strong>. Use that official employment share when the question is about jobs; do not reuse the lecture's 40% claim as a current statistic without a source defining indirect dependence.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ======================================================== section 5 === -->
+<section id="t5" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+  <header>
+    <span class="eyebrow"><span class="num">5</span> Climate concept</span>
+    <h2><span class="emoji">&#127758;</span> What global warming means</h2>
+    <span class="timepill">34:52-37:45</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">After a long gap in usable audio, the lecture begins a new topic at <span class="ts">00:34:52</span>. It attributes global warming to human activity <span class="ts">00:35:17</span>, identifies temperature as the key variable and stresses a long-term increasing trend rather than a sudden change over a few months <span class="ts">00:35:28</span> <span class="ts">00:36:15</span>.</p>
+
+    <h3>A precise working definition</h3>
+    <p><strong>Global warming is the long-term rise in Earth's global average surface temperature, driven in the modern period mainly by human greenhouse-gas emissions.</strong> The teacher describes warming of the atmosphere closest to the surface and identifies the lower troposphere <span class="ts">00:36:15</span>. That is part of the physical picture, but the standard headline metric used by IPCC is global surface temperature.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: define the measured quantity accurately.</strong> The lecture centres the lower troposphere <span class="ts">00:36:15</span>. Atmospheric warming matters, yet IPCC's quantified statements in this topic concern <strong>global surface temperature</strong>, a combined land-surface air and sea-surface measure. Write the metric named by the source instead of treating lower-tropospheric temperature as an interchangeable definition.</p>
+    </div>
+
+    <h3>Trend, weather and scale</h3>
+    <div class="grid-2">
+      <div class="mini-card"><h4>Short-term variation</h4><p>A month, season or individual year may sit above or below the longer trend because the climate system varies.</p></div>
+      <div class="mini-card"><h4>Long-term warming</h4><p>A multi-decadal change in global average temperature, evaluated against a stated baseline.</p></div>
+    </div>
+
+    <p>The lecture's emphasis on gradual change is useful <span class="ts">00:35:28</span>. The century-scale record can rise while individual places and dates remain cooler than usual. "Global" refers to the aggregated planet-wide measure, not identical warming at every location <span class="ts">00:37:14</span>.</p>
+
+    <div class="note tip">
+      <p><strong>Cause statement.</strong> The current IPCC conclusion is stronger than a tentative association: human activities, principally greenhouse-gas emissions, have unequivocally caused global warming.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 6 === -->
+<section id="t6" class="chapter card" style="--accent:#7A5AA8; --soft:#F0EBF8;">
+  <header>
+    <span class="eyebrow"><span class="num">6</span> Numerical discipline</span>
+    <h2><span class="emoji">&#127777;&#65039;</span> Read the temperature numbers</h2>
+    <span class="timepill">37:45-39:21</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The final usable section compares IPCC, the 1.5&deg;C limit, a range to 2100 and a NASA figure <span class="ts">00:37:45</span> <span class="ts">00:38:15</span> <span class="ts">00:38:47</span>. The central lesson is valuable: the numbers differ because sources may use different baselines, periods and quantities. Several figures themselves need updating or clarification.</p>
+
+    <h3>Every number needs four labels</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Label</th><th>Question to ask</th><th>Why it matters</th></tr></thead>
+        <tbody>
+          <tr><td>Quantity</td><td>Surface temperature, atmospheric temperature or another metric?</td><td>Different physical measures are not interchangeable.</td></tr>
+          <tr><td>Baseline</td><td>Relative to 1850-1900, 1951-1980 or another reference?</td><td>The same year has different anomalies against different baselines.</td></tr>
+          <tr><td>Period</td><td>One year, one decade or a multi-decadal average?</td><td>An annual spike is not a long-term warming level.</td></tr>
+          <tr><td>Status</td><td>Observed estimate, policy limit or model projection?</td><td>A measured past value cannot be compared directly with a future scenario endpoint.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Corrected reference set</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Claim type</th><th>Authoritative figure</th><th>How to write it</th></tr></thead>
+        <tbody>
+          <tr><td>Observed IPCC warming</td><td>1.09&deg;C [0.95 to 1.20] in 2011-2020 above 1850-1900</td><td>Name the decade and pre-industrial baseline.</td></tr>
+          <tr><td>Long-term level assessed in 2024</td><td>About 1.3&deg;C above 1850-1900</td><td>Use WMO's long-term estimate, not the single-year anomaly.</td></tr>
+          <tr><td>Annual 2024 anomaly</td><td>1.55 &plusmn; 0.13&deg;C above 1850-1900</td><td>Call it one calendar year and include the uncertainty.</td></tr>
+          <tr><td>Paris temperature aim</td><td>Hold warming well below 2&deg;C and pursue efforts to limit it to 1.5&deg;C</td><td>Describe 1.5&deg;C as a long-term goal, measured over decades.</td></tr>
+          <tr><td>Late-century IPCC best estimates</td><td>1.4&deg;C under very low emissions, 2.7&deg;C intermediate, 4.4&deg;C very high</td><td>Give scenario and 2081-2100 period relative to 1850-1900.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: separate the 1.2&deg;C, 1.5&deg;C and annual figures.</strong> The lecturer gives about 1.2&deg;C for 1850-2025 and correctly warns that 1.5&deg;C is a limit rather than the then-current long-term warming level <span class="ts">00:37:45</span> <span class="ts">00:38:15</span>. Use time-stamped authoritative values: IPCC gives 1.09&deg;C for 2011-2020; WMO assesses long-term warming in 2024 at about 1.3&deg;C; and WMO reports the single calendar year 2024 at 1.55 &plusmn; 0.13&deg;C. One year above 1.5&deg;C does not itself breach the Paris long-term goal.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: update the projection and do not reuse the NASA comparison.</strong> The lecture projects 1.4-5.6&deg;C by 2100 and then cites a garbled NASA "1&deg;C over 55 years" statement <span class="ts">00:38:15</span> <span class="ts">00:38:47</span> <span class="ts">00:39:21</span>. IPCC AR6 instead gives best estimates for 2081-2100 from <strong>1.4&deg;C</strong> under a very low-emissions scenario to <strong>4.4&deg;C</strong> under a very high-emissions scenario, relative to 1850-1900. NASA's current annual indicator uses a 1951-1980 baseline, so it should not be placed beside the IPCC pre-industrial figure without conversion and full labels.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Exam sentence.</strong> "According to IPCC AR6, global surface temperature in 2011-2020 was 1.09&deg;C above 1850-1900; late-century warming depends on emissions, with best estimates ranging from 1.4&deg;C under SSP1-1.9 to 4.4&deg;C under SSP5-8.5 for 2081-2100."</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== glossary === -->
+<section id="t7" class="chapter card" style="--accent:#8B8490; --soft:#F0EEF2;">
+  <header>
+    <span class="eyebrow">Reference</span>
+    <h2><span class="emoji">&#128214;</span> Glossary</h2>
+  </header>
+  <div class="section-body">
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Term</th><th>Meaning in this lecture</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Wet deposition</strong></td><td>Transfer of atmospheric pollutants to Earth's surface through rain, snow, fog or cloud water.</td></tr>
+          <tr><td><strong>Dry deposition</strong></td><td>Direct transfer of gases and particles from the atmosphere to surfaces without precipitation.</td></tr>
+          <tr><td><strong>Chlorophyll</strong></td><td>The green pigment central to capturing light energy for photosynthesis.</td></tr>
+          <tr><td><strong>Chlorosis</strong></td><td>Yellowing of plant tissue caused by reduced chlorophyll; a symptom with several possible causes.</td></tr>
+          <tr><td><strong>Photosynthesis</strong></td><td>The process by which plants use light energy to form carbohydrates from carbon dioxide and water.</td></tr>
+          <tr><td><strong>Stunting</strong></td><td>Growth below the expected size or rate because plant development has been constrained.</td></tr>
+          <tr><td><strong>Tropospheric ozone</strong></td><td>Ground-level ozone formed through atmospheric reactions; a pollutant harmful to health and sensitive vegetation.</td></tr>
+          <tr><td><strong>Food insecurity</strong></td><td>Lack of reliable physical and economic access to sufficient, safe and nutritious food.</td></tr>
+          <tr><td><strong>Global warming</strong></td><td>The long-term rise in global average surface temperature, driven in the modern period mainly by human greenhouse-gas emissions.</td></tr>
+          <tr><td><strong>Temperature anomaly</strong></td><td>The difference between an observed temperature and a stated reference-period average.</td></tr>
+          <tr><td><strong>Baseline</strong></td><td>The reference period against which a temperature change is calculated.</td></tr>
+          <tr><td><strong>Emissions scenario</strong></td><td>A defined pathway of future greenhouse-gas emissions used to assess possible climate outcomes.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== flashcards === -->
+<section id="t8" class="chapter card" style="--accent:#2E9E6A; --soft:#E4F3EB;">
+  <header>
+    <span class="eyebrow">Active recall</span>
+    <h2><span class="emoji">&#127183;</span> Flashcards</h2>
+  </header>
+  <div class="section-body">
+    <div class="cards">
+      <div class="qa"><p class="q">How can airborne pollution reach soil?</p><p class="a">Through wet deposition such as rainfall and through dry deposition of gases and particles.</p></div>
+      <div class="qa"><p class="q">What is chlorosis?</p><p class="a">Yellowing of plant tissue because it contains less chlorophyll.</p></div>
+      <div class="qa"><p class="q">Does chlorosis identify one nutrient deficiency?</p><p class="a">No. It is a symptom with several possible nutritional, biological and environmental causes.</p></div>
+      <div class="qa"><p class="q">Which nutrient is part of the chlorophyll molecule?</p><p class="a">Magnesium.</p></div>
+      <div class="qa"><p class="q">How can chlorophyll loss affect growth?</p><p class="a">It can weaken photosynthesis, reduce carbohydrate production and leave fewer resources for maintenance and growth.</p></div>
+      <div class="qa"><p class="q">What visible sequence does the lecture describe?</p><p class="a">Yellowing, weakness, wilting and eventual leaf fall.</p></div>
+      <div class="qa"><p class="q">What does the lecture mean by dwarfism?</p><p class="a">Stunted growth caused by prolonged constraint on plant food production and development.</p></div>
+      <div class="qa"><p class="q">What is tropospheric ozone?</p><p class="a">Ground-level ozone, an air pollutant that can harm sensitive vegetation.</p></div>
+      <div class="qa"><p class="q">Name four verified ozone effects on plants.</p><p class="a">Visible foliar injury, reduced photosynthesis, slower growth and impaired reproduction or yield.</p></div>
+      <div class="qa"><p class="q">Why is the lecture's flower-colour chain qualified?</p><p class="a">Its deterministic chromoplast-to-no-insects sequence is not established as a universal ozone mechanism.</p></div>
+      <div class="qa"><p class="q">Name four crops listed in the lecture.</p><p class="a">Any four of cotton, wheat, oats, barley, rice, beans, tobacco, tomatoes and potatoes.</p></div>
+      <div class="qa"><p class="q">How can plant injury become a socioeconomic problem?</p><p class="a">By lowering output and income, adding pressure to food security and weakening agriculture-linked employment.</p></div>
+      <div class="qa"><p class="q">What agriculture employment share does PBS report for 2024-25?</p><p class="a">33.1% of employment.</p></div>
+      <div class="qa"><p class="q">What is global warming?</p><p class="a">The long-term rise in global average surface temperature, driven in the modern period mainly by human greenhouse-gas emissions.</p></div>
+      <div class="qa"><p class="q">What four labels belong beside a warming figure?</p><p class="a">Quantity, baseline, period and status as observation, goal or projection.</p></div>
+      <div class="qa"><p class="q">What IPCC figure describes 2011-2020 warming?</p><p class="a">1.09&deg;C above the 1850-1900 average.</p></div>
+      <div class="qa"><p class="q">What did WMO report for the 2024 annual mean?</p><p class="a">1.55 &plusmn; 0.13&deg;C above 1850-1900.</p></div>
+      <div class="qa"><p class="q">Did one year above 1.5&deg;C itself breach the Paris long-term goal?</p><p class="a">No. The long-term goal is assessed over an extended period, typically decades.</p></div>
+      <div class="qa"><p class="q">What is the AR6 best-estimate range for 2081-2100 across very low to very high emissions?</p><p class="a">1.4&deg;C to 4.4&deg;C above 1850-1900, with the scenario stated.</p></div>
+      <div class="qa"><p class="q">Why can NASA and IPCC anomalies differ?</p><p class="a">They may use different baselines, periods and measured quantities.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== exam focus === -->
+<section id="t9" class="chapter card" style="--accent:#2E9E6A; --soft:#E4F3EB;">
+  <header>
+    <span class="eyebrow">Revision sheet</span>
+    <h2><span class="emoji">&#127919;</span> Exam focus</h2>
+  </header>
+  <div class="section-body">
+    <h3>Build an effects answer as a causal chain</h3>
+    <ol>
+      <li><strong>Name the pollutant and route:</strong> direct leaf exposure, wet deposition or dry deposition.</li>
+      <li><strong>Explain the mechanism:</strong> altered soil chemistry, disrupted nutrient uptake or direct ozone entry through stomata.</li>
+      <li><strong>Identify the plant response:</strong> chlorosis, reduced photosynthesis, tissue injury, stunting or impaired reproduction.</li>
+      <li><strong>Scale to agriculture:</strong> lower crop yield or quality and reduced farm revenue.</li>
+      <li><strong>Scale to society:</strong> food-security and employment pressure, using a verified Pakistan statistic.</li>
+    </ol>
+
+    <h3>Temperature-number checklist</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Before writing a figure</th><th>Minimum label</th></tr></thead>
+        <tbody>
+          <tr><td>What is measured?</td><td>Global surface temperature or the exact alternative metric.</td></tr>
+          <tr><td>Compared with what?</td><td>The baseline, commonly 1850-1900 for IPCC statements.</td></tr>
+          <tr><td>For which period?</td><td>A year, decade, 20-year average or late-century interval.</td></tr>
+          <tr><td>What type of claim?</td><td>Observed estimate, long-term target or scenario-based projection.</td></tr>
+          <tr><td>Who says it?</td><td>Named authority and report, such as IPCC AR6 or WMO.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Common mistakes</h3>
+    <ul>
+      <li>Treating rainfall as the only path by which pollutants reach ecosystems.</li>
+      <li>Calling every yellow leaf proof of calcium, magnesium and potassium deficiency.</li>
+      <li>Presenting the lecture's flower-discolouration chain as universal.</li>
+      <li>Using the unverified 40% livelihood figure as if it were the official employment share.</li>
+      <li>Defining global warming only as warming of the lower troposphere.</li>
+      <li>Writing 1.5&deg;C without distinguishing an annual anomaly from the Paris long-term goal.</li>
+      <li>Comparing NASA and IPCC anomalies without their baselines, or reusing the outdated 1.4-5.6&deg;C range without a scenario.</li>
+    </ul>
+
+  </div>
+</section>
+
+<footer class="notefoot">Want the whole lecture? <a href="https://drive.google.com/file/d/1V3FORZfYzzg8uXMiMAiHE5h94B2RqALc/view?usp=drivesdk" target="_blank" rel="noopener">▶ Watch the full recording</a><span class="sep">·</span><a href="https://drive.google.com/file/d/1DIfT_79lm0zKcj_jz31ye4LWIVdQKGkc/view?usp=drivesdk" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+</html>
