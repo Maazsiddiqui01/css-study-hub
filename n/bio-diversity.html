@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Biodiversity: Value, Threats, Conservation and the CBD</title>
+<style>/* Lecture Notes ebook, "warm study" theme.
+   Inspired by Mehak's MarketCanvas app: soft cream ground, rounded white cards,
+   a different pastel accent per topic, serif display + friendly sans body,
+   gentle emoji + pill badges. Playful and pretty, but still a real study book.
+   Print-first (A4 PDF via headless Edge); reads well on screen too.
+
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
+   Everything themeable keys off --accent / --soft. Titles stay ink for
+   readability; accents colour eyebrows, numbers, pills, rules and callouts.
+*/
+
+:root {
+  --cream: #FCF6F0;          /* page ground (warm) */
+  --card: #FFFFFF;
+  --ink: #2C2630;            /* plum-black body/headings */
+  --ink-soft: #5A5360;
+  --slate: #8B8490;          /* captions, timestamps */
+  --hairline: #EEE6E4;
+
+  /* section default accent (overridden per section) */
+  --accent: #C0567E;
+  --soft: #FBECF1;
+
+  --shadow: 0 1px 2px rgba(60,30,45,.05), 0 10px 26px rgba(80,40,55,.07);
+  --radius: 20px;
+
+  --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: Consolas, "Cascadia Code", ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background:
+    radial-gradient(1100px 700px at 15% -5%, #FBEEF3 0%, transparent 55%),
+    radial-gradient(1000px 700px at 100% 0%, #EEF3FB 0%, transparent 50%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  font: 10.8pt/1.62 var(--sans);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+@media screen {
+  body { max-width: 51rem; margin: 0 auto; padding: 2.5rem 1.15rem 4rem; font-size: 1.0rem; }
+}
+
+/* ---------------------------------------------------------------- page --- */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm 14mm;
+  @bottom-center {
+    content: counter(page);
+    font: 8.5pt var(--sans);
+    color: #8B8490;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+/* --------------------------------------------------------------- cards --- */
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8mm 9mm 9mm;
+  margin: 0 0 6mm;
+  box-shadow: var(--shadow);
+  break-inside: auto;
+}
+@media screen { .card { margin-bottom: 1.4rem; } }
+
+/* a soft accent wash across the top of each section card (fades to white),
+   echoing the app's pastel cards without hurting readability */
+.chapter {
+  background:
+    linear-gradient(180deg, var(--soft) 0, rgba(255,255,255,0) 34mm),
+    var(--card);
+  border-top: 3px solid var(--accent);
+  break-inside: auto;
+  break-before: page;   /* each topic starts fresh: slide on top, notes below */
+}
+/* on screen (web/PWA) sections just stack; no forced page breaks */
+@media screen { .chapter { break-before: auto; } }
+
+h2, h3, .eyebrow { break-after: avoid; }
+p { orphans: 2; widows: 2; }
+
+/* keep the section header intact (eyebrow + title + time pill together) and
+   glued to its opening slide */
+.chapter > header { break-inside: avoid; break-after: avoid; }
+figure.slide { break-before: avoid; }
+
+/* --------------------------------------------------------------- cover --- */
+
+.cover {
+  page: cover;
+  break-after: page;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32mm 22mm 24mm;
+  background:
+    radial-gradient(700px 460px at 12% 8%, #FBE6EE 0%, transparent 60%),
+    radial-gradient(760px 520px at 96% 4%, #E7EEFB 0%, transparent 58%),
+    radial-gradient(620px 520px at 80% 96%, #E6F4EC 0%, transparent 60%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+@media screen {
+  .cover { min-height: 80vh; border-radius: 24px; padding: 3.2rem 2.6rem; margin-bottom: 1.4rem; }
+}
+
+.cover .avatar { font-size: 30pt; line-height: 1; margin-bottom: 7mm; }
+.cover .kicker {
+  font: 600 9pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 5mm;
+}
+.cover h1 {
+  font: 600 31pt/1.14 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 15em;
+}
+.cover .subtitle {
+  margin-top: 5mm;
+  font: 400 13.5pt/1.5 var(--sans);
+  color: var(--ink-soft);
+  max-width: 30em;
+}
+.cover .warm {
+  margin-top: 4mm;
+  font: italic 400 12pt/1.5 var(--serif);
+  color: var(--accent);
+}
+
+.cover .chips { display: flex; flex-wrap: wrap; gap: 3mm; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.4mm 4mm;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(60,30,45,.04);
+  font: 400 9pt var(--sans);
+  color: var(--slate);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chip b { font: 700 10.5pt var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ headings --- */
+
+.chapter header { margin-bottom: 5mm; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  font: 700 8.5pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--accent);
+  margin-bottom: 3mm;
+}
+.eyebrow .num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h2 {
+  font: 600 20pt/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .emoji { font-size: 17pt; }
+
+.timepill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.5mm 3.5mm;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font: 600 8pt var(--mono);
+  letter-spacing: 0.02em;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h3 {
+  font: 600 12.5pt/1.34 var(--serif);
+  color: var(--ink);
+  margin: 6mm 0 2.5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+.ts { font: 400 8.5pt var(--mono); color: var(--slate); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- body --- */
+
+.section-body > :last-child { margin-bottom: 0; }
+p { margin: 0 0 3mm; }
+.lead { font-size: 11.2pt; color: var(--ink); }
+
+ul, ol { margin: 0 0 3mm 5.5mm; }
+li { margin-bottom: 1.7mm; padding-left: 1mm; }
+li::marker { color: var(--accent); }
+
+.kt { font-weight: 700; color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
+
+code { font: 9.5pt var(--mono); background: #F3EFF4; padding: .4pt 3.5pt; border-radius: 4px; }
+
+/* ------------------------------------------------------------ callouts --- */
+
+.note {
+  --c: var(--accent);
+  --f: var(--soft);
+  background: var(--f);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  border-left: 3px solid var(--c);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.note .label {
+  display: inline-flex; align-items: center; gap: 1.6mm;
+  font: 700 8pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c);
+  margin-bottom: 1.8mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.warn { --c: #B4791F; --f: #FaF1DF; }
+.note.exam { --c: #3B8B78; --f: #E6F3EF; }
+.note.def  { --c: var(--accent); --f: var(--soft); }
+
+/* ------------------------------------------------------- summary card --- */
+
+.summary { --accent: #C0567E; --soft: #FBECF1; }
+.summary ul { list-style: none; margin: 0; }
+.summary li { position: relative; padding: 0 0 0 7mm; margin-bottom: 3.5mm; }
+.summary li::before {
+  content: "";
+  position: absolute; left: 0; top: 2.6mm;
+  width: 3.2mm; height: 3.2mm; border-radius: 50%;
+  background: var(--accent);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.summary li:last-child { margin-bottom: 0; }
+.summary li b, .summary li strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------- TOC --- */
+
+nav.toc { --accent: #8B8490; --soft: #F3EFF4; }
+nav.toc ol { list-style: none; margin: 0; }
+nav.toc li {
+  display: flex; align-items: baseline; gap: 4mm;
+  padding: 2.7mm 0;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11pt var(--sans);
+}
+nav.toc li:last-child { border-bottom: 0; }
+nav.toc .dot { width: 3.4mm; height: 3.4mm; border-radius: 50%; flex-shrink: 0;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+nav.toc .title { flex: 1; color: var(--ink); }
+nav.toc .rng { flex-shrink: 0; font: 600 8.5pt var(--mono); color: var(--slate); }
+
+/* -------------------------------------------------------------- slides --- */
+
+figure.slide { margin: 0 0 5mm; break-inside: avoid; }
+figure.slide img {
+  width: 100%; display: block;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 10px rgba(40,30,45,.10);
+}
+figure.slide figcaption {
+  font: 400 8.5pt var(--sans);
+  color: var(--slate);
+  margin-top: 2mm;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4mm;
+}
+figure.slide figcaption .ts { color: var(--accent); }
+
+/* ------------------------------------------------------------ glossary --- */
+
+dl.glossary { margin: 0; }
+dl.glossary div { padding: 3mm 0; border-bottom: 1px solid var(--hairline); break-inside: avoid; }
+dl.glossary div:last-child { border-bottom: 0; padding-bottom: 0; }
+dl.glossary dt { font: 700 10.5pt var(--sans); color: var(--accent); margin-bottom: 1.2mm; }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- flashcards --- */
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 0; }
+.qa {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  background: linear-gradient(180deg, var(--soft) 0, #fff 60%);
+  break-inside: avoid;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.qa .q { font: 700 10pt var(--sans); color: var(--ink); margin-bottom: 2mm; }
+.qa .a { color: var(--ink-soft); font-size: 10pt; }
+
+/* ------------------------------------------------------------- tables --- */
+
+.tables-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0; break-inside: avoid; }
+th {
+  font: 700 9pt var(--sans); text-align: left; color: var(--accent);
+  border-bottom: 2px solid var(--soft); padding: 2mm 3mm 2mm 0;
+}
+td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+
+/* --- mobile / on-the-go reading (screen only; never affects the print PDF).
+   Placed LAST so it wins the cascade over the wider @media screen rules above.
+   Requires <meta name="viewport" content="width=device-width, initial-scale=1">. */
+@media screen and (max-width: 640px) {
+  body { padding: 1rem 0.85rem 2.5rem; font-size: 1.02rem; }
+  .card { padding: 5mm 5mm 6mm; border-radius: 14px; margin-bottom: 0.9rem; }
+  .cover { min-height: auto; padding: 2rem 1.3rem 1.6rem; border-radius: 16px; }
+  .cover .avatar { font-size: 24pt; margin-bottom: 4mm; }
+  .cover h1 { font-size: 20pt; max-width: 100%; }
+  .cover .subtitle { font-size: 11.5pt; }
+  .cover .warm { font-size: 11pt; }
+  .cover .chips { gap: 2mm; margin-top: 5mm; }
+  h2 { font-size: 16pt; }
+  h2 .emoji { font-size: 13.5pt; }
+  h3 { font-size: 11.5pt; }
+  .cards { grid-template-columns: 1fr; }
+  nav.toc li { font-size: 10.5pt; gap: 2.5mm; padding: 2.5mm 0; }
+  nav.toc .rng { font-size: 8pt; }
+  .note { padding: 3.5mm 4mm; }
+  table { font-size: 9.5pt; }
+}
+</style>
+<meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
+align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
+border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
+<body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/file/d/19Mi3DIF0U0MB9yS4dK--GJpazg5oIJPX/view?usp=drivesdk" target="_blank" rel="noopener">Download PDF ↓</a></div>
+
+<!-- ============================================================ cover === -->
+<section class="cover" style="background:radial-gradient(700px 460px at 12% 8%,#E4F3EB 0,transparent 60%),radial-gradient(760px 520px at 96% 4%,#E7F1FB 0,transparent 58%),radial-gradient(620px 520px at 80% 96%,#FAF0E2 0,transparent 60%),var(--cream)">
+  <div>
+    <div class="avatar">&#129419;</div>
+    <div class="kicker" style="color:#2E9E6A">CSS Environmental Science &middot; Biodiversity cluster</div>
+    <h1>Biodiversity: Value, Threats, Conservation and the CBD</h1>
+    <p class="subtitle">Four connected recordings on genetic, species and ecosystem diversity; the values people derive from living systems; major drivers of loss; marine pressures; education for action; and the Convention on Biological Diversity.</p>
+    <p class="warm" style="color:#2C8A5E">Define the living system, diagnose the driver, then connect action to law and institutions. &#127807;</p>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>27m</b> combined</span>
+    <span class="chip"><b>4</b> recordings</span>
+    <span class="chip"><b>8</b> core topics</span>
+    <span class="chip"><b>25</b> correction boxes</span>
+  </div>
+</section>
+
+<!-- ============================================================== toc === -->
+<nav class="toc card">
+  <header><span class="eyebrow">Contents</span><h2><span class="emoji">&#128506;&#65039;</span> In this chapter</h2></header>
+  <ol>
+    <li><span class="dot" style="background:#2E9E6A"></span><a class="title" href="#summary">The five-minute version</a><span class="rng">summary</span></li>
+    <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t1">01 &middot; Define biodiversity at three levels</a><span class="rng">concept</span></li>
+    <li><span class="dot" style="background:#3A7CC0"></span><a class="title" href="#t2">02 &middot; Explain why biodiversity matters</a><span class="rng">values</span></li>
+    <li><span class="dot" style="background:#C0762C"></span><a class="title" href="#t3">03 &middot; Diagnose biodiversity decline</a><span class="rng">drivers and scale</span></li>
+    <li><span class="dot" style="background:#557E9B"></span><a class="title" href="#t4">04 &middot; Trace human pressure through marine systems</a><span class="rng">ocean impacts</span></li>
+    <li><span class="dot" style="background:#7A5AA8"></span><a class="title" href="#t5">05 &middot; Evaluate acidification and artificial reefs</a><span class="rng">chemistry and habitat</span></li>
+    <li><span class="dot" style="background:#B44A8C"></span><a class="title" href="#t6">06 &middot; Turn biodiversity education into action</a><span class="rng">CEPA</span></li>
+    <li><span class="dot" style="background:#46955C"></span><a class="title" href="#t7">07 &middot; Read the CBD as a binding framework</a><span class="rng">treaty design</span></li>
+    <li><span class="dot" style="background:#A4553A"></span><a class="title" href="#t8">08 &middot; Track protocols, COPs and global targets</a><span class="rng">institutions</span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t9">Glossary &middot; Flashcards &middot; Exam focus</a><span class="rng"></span></li>
+  </ol>
+</nav>
+
+<!-- ============================================================= tldr === -->
+<section id="summary" class="summary card" style="--accent:#2E9E6A; --soft:#E4F3EB; border-top-color:#2E9E6A">
+  <header><span class="eyebrow" style="color:#2E9E6A">Start here</span><h2><span class="emoji">&#11088;</span> The five-minute version</h2></header>
+  <ul>
+    <li><strong>Biodiversity is variability at genetic, species and ecosystem levels.</strong> Functions and benefits arise from living systems, while several value lenses explain why people care about them.</li>
+    <li><strong>Loss follows interacting direct and indirect drivers.</strong> Five direct pressures act through production, consumption, governance, technology and demographic change.</li>
+    <li><strong>The CBD links conservation with use and justice.</strong> It joins conservation, sustainable use and fair benefit-sharing with national plans, participation, finance, science and education.</li>
+  </ul>
+</section>
+
+<!-- ======================================================== section 1 === -->
+<section id="t1" class="chapter card" style="--accent:#2C8C86; --soft:#E4F1F0;">
+  <header>
+    <span class="eyebrow"><span class="num">1</span> Living variability</span>
+    <h2><span class="emoji">&#129516;</span> Define biodiversity at three levels</h2>
+    <span class="timepill">Bio &middot; 00:00:22-00:01:53</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The first recording calls biodiversity the "web of life" and builds it from species, genetic variability within species, ecosystems and evolutionary history <span class="ts">Bio &middot; 00:00:22</span> <span class="ts">Bio &middot; 00:00:52</span>. That is a useful entry point, provided the formal definition stays precise.</p>
+
+    <div class="grid-3">
+      <div class="mini"><h3>Genetic diversity</h3><p>Variation within a species or population, including traits that affect adaptation and resilience.</p></div>
+      <div class="mini"><h3>Species diversity</h3><p>Variety and relative abundance of species within an area or across the planet.</p></div>
+      <div class="mini"><h3>Ecosystem diversity</h3><p>Variety of ecological complexes, habitats, communities and their physical settings.</p></div>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: ecosystem processes and benefits are connected to biodiversity, but they are not extra levels in the formal definition.</strong> The lecture includes clean water, nutrient cycling, evolutionary history and all living-world processes within biodiversity itself <span class="ts">Bio &middot; 00:00:52</span>. CBD Article 2 defines biodiversity as variability within species, between species and of ecosystems. Processes explain how those components interact and generate ecological functions.</p>
+    </div>
+
+    <p>The lecturer places the rise of the biodiversity concept in the 1980s, when concern about human impacts made a single integrating term valuable <span class="ts">Bio &middot; 00:01:23</span>. In policy writing, the term joins biological measurement with questions of use, loss, value and responsibility.</p>
+
+    <div class="formula"><strong>Biodiversity diagnosis</strong> = level of variability + spatial scale + trend + driver + affected function + distribution of costs and benefits</div>
+  </div>
+</section>
+
+<!-- ======================================================== section 2 === -->
+<section id="t2" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+  <header>
+    <span class="eyebrow"><span class="num">2</span> Reasons for conservation</span>
+    <h2><span class="emoji">&#128161;</span> Explain why biodiversity matters</h2>
+    <span class="timepill">Bio &middot; 00:01:53-00:05:22</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecturer organises biodiversity's importance into economic use, ecological life support, cultural identity, recreation and science <span class="ts">Bio &middot; 00:01:53</span>. The examples move from timber and fisheries to clean water, pollination, art, country, outdoor experience and Australia's distinctive biota <span class="ts">Bio &middot; 00:02:25</span> <span class="ts">Bio &middot; 00:02:52</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Course value</th><th>What it captures</th><th>Example taught</th></tr></thead>
+        <tbody>
+          <tr><td>Economic</td><td>Direct material use and livelihoods</td><td>Timber and fish harvests</td></tr>
+          <tr><td>Ecological life support</td><td>Functions and benefits generated by ecosystems</td><td>Clean water, pollination, pest control</td></tr>
+          <tr><td>Cultural</td><td>Identity, meaning, heritage and relationship to place</td><td>Art, Indigenous depictions of country, national symbols</td></tr>
+          <tr><td>Recreational</td><td>Experience, health, tourism and enjoyment</td><td>Bushwalking and birdwatching</td></tr>
+          <tr><td>Scientific</td><td>Knowledge, discovery and learning from unique systems</td><td>Australian species and ecosystems</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the five categories are the lecturer's explanatory framework, not an official universal taxonomy.</strong> The class presents them as the values to consider <span class="ts">Bio &middot; 00:03:50</span> <span class="ts">Bio &middot; 00:04:20</span>. Other frameworks separate intrinsic, instrumental and relational values or classify ecosystem contributions differently. Label the framework before using it.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: pathogens and dangerous animals are not a sixth "negative value" of biodiversity.</strong> The lecturer uses malaria, smallpox and crocodiles to show that human relationships with living organisms include fear and harm <span class="ts">Bio &middot; 00:04:49</span>. This is a conflict or disvalue from a human perspective. It does not alter the biological definition, and public-health control is compatible with biodiversity conservation.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ======================================================== section 3 === -->
+<section id="t3" class="chapter card" style="--accent:#C0762C; --soft:#FAF0E2;">
+  <header>
+    <span class="eyebrow"><span class="num">3</span> Loss and human pressure</span>
+    <h2><span class="emoji">&#128200;</span> Diagnose biodiversity decline</h2>
+    <span class="timepill">Bio &middot; 00:04:49-00:07:46; Protect &middot; 00:00:08-00:01:38</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Both recordings centre human influence. One describes biodiversity decline and resource-use trade-offs <span class="ts">Bio &middot; 00:04:49</span> <span class="ts">Bio &middot; 00:06:26</span>; the other links population, climate change and consumption to ecosystem loss <span class="ts">Protect &middot; 00:00:34</span> <span class="ts">Protect &middot; 00:01:14</span>.</p>
+
+    <div class="grid-2">
+      <div>
+        <h3>Five direct drivers</h3>
+        <ol>
+          <li>Land and sea-use change</li>
+          <li>Direct exploitation of organisms</li>
+          <li>Climate change</li>
+          <li>Pollution</li>
+          <li>Invasive alien species</li>
+        </ol>
+      </div>
+      <div>
+        <h3>Indirect drivers</h3>
+        <ul>
+          <li>Production and consumption patterns</li>
+          <li>Population dynamics and settlement</li>
+          <li>Trade and technological change</li>
+          <li>Institutions, incentives and governance</li>
+          <li>Values, behaviour and unequal power</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: wealthy-country consumption is an important indirect driver, not the single principal cause of all biodiversity loss.</strong> The education video makes that universal claim <span class="ts">Protect &middot; 00:00:34</span>. IPBES ranks direct drivers globally as land and sea-use change, direct exploitation, climate change, pollution and invasive alien species, while consumption patterns sit among their underlying causes.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the Anthropocene remains an informal and widely used concept, not a formally ratified geological epoch.</strong> The lecturer calls it a new geological era dominated by human activity <span class="ts">Bio &middot; 00:05:22</span>. In 2024, the International Union of Geological Sciences approved rejection of the proposed formal Anthropocene epoch while recognising continuing use of the term as a concept.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the biodiversity inventory figures are dated estimates, not settled counts.</strong> The education video states that 1.75 million species are identified, 13 million exist and more than 70,000 plant and tree species are used in medicine <span class="ts">Protect &middot; 00:00:08</span> <span class="ts">Protect &middot; 00:00:34</span>. Discovery, synonymy, estimation methods and the definition of medicinal use change these totals. Cite an identified database or assessment year and preserve its uncertainty.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the claim that extinction is 1,000 to 10,000 times the natural rate is too definite.</strong> The video gives it as a current estimate <span class="ts">Protect &middot; 00:00:34</span>. The IPBES 2019 assessment reports a current global rate tens to hundreds of times higher than the average over the past ten million years and accelerating. It also estimated around one million species threatened with extinction.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the seven-billion-present and nine-billion-in-2050 comparison is outdated.</strong> The recording uses that frame <span class="ts">Protect &middot; 00:00:34</span>. UN World Population Prospects 2024 estimated 8.2 billion people in 2024 and projects about 9.7 billion in 2050.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 4 === -->
+<section id="t4" class="chapter card" style="--accent:#557E9B; --soft:#E8F0F5;">
+  <header>
+    <span class="eyebrow"><span class="num">4</span> Marine pressure chain</span>
+    <h2><span class="emoji">&#127754;</span> Trace human pressure through marine systems</h2>
+    <span class="timepill">Marine &middot; 00:00:20-00:03:19</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The marine recording begins with seafood as a major benefit, then turns to overfishing, food-web effects and land-based pollution <span class="ts">Marine &middot; 00:00:20</span>. It links higher demand and more efficient fishing technology to declining stocks <span class="ts">Marine &middot; 00:01:09</span>.</p>
+
+    <div class="formula"><strong>Pressure chain</strong> = demand and access &rarr; extraction or discharge &rarr; population and habitat change &rarr; food-web effects &rarr; livelihood and ecosystem consequences</div>
+
+    <div class="grid-2">
+      <div>
+        <h3>Direct exploitation</h3>
+        <ul>
+          <li>Fishing mortality exceeds a stock's productive capacity.</li>
+          <li>Selective removal changes age, size and trophic structure.</li>
+          <li>Bycatch can affect non-target species.</li>
+          <li>Predators may lose prey and habitats may lose key ecological roles.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Land-to-sea pollution</h3>
+        <ul>
+          <li>Wastewater and stormwater carry nutrients, chemicals and pathogens.</li>
+          <li>Oil and hazardous releases can cause acute mortality and chronic exposure.</li>
+          <li>Plastics and debris create ingestion and entanglement hazards.</li>
+          <li>Impacts depend on dose, persistence, pathway and ecosystem sensitivity.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: cyclones and tsunamis are ocean-related hazards, not harmful actions by the marine biome.</strong> The recording describes them as the biome negatively impacting people <span class="ts">Marine &middot; 00:00:20</span>. A precise answer separates natural hazards and exposure from human pressures placed on marine ecosystems.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: overfishing can disrupt reefs and estuaries, but fish do not maintain them through a simple oxygen-and-nutrient supply.</strong> The lecture gives that mechanism <span class="ts">Marine &middot; 00:01:56</span>. Fish can shape grazing, predation, nutrient cycling and food webs; outcomes depend on the species removed, habitat condition and other pressures.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: household products do not all flow directly from drains to reefs.</strong> The video presents an unbroken pathway <span class="ts">Marine &middot; 00:01:56</span>. Actual transport depends on sewer connection, treatment, stormwater systems, chemical persistence, hydrology and discharge location. The correct policy response traces the specific contaminant pathway.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: oil does not harm marine life mainly by preventing oxygen from entering the sea surface.</strong> Slide s003 makes that claim. Oil can smother organisms, foul feathers and fur, expose animals to toxic compounds, contaminate habitat and food, and cause acute or chronic injury. Oxygen effects can occur in particular degradation and enclosed-water conditions, but a universal surface seal is not the core mechanism.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the Deepwater Horizon numbers on slide s004 should not be used as an official injury total.</strong> The slide says more than 8,000 birds, sea turtles and mammals were found dead or injured and that seven animals were placed on an endangered-species list. It gives no assessment or species names. The official natural-resource injury assessment reports taxon-specific injuries and much larger modelled losses in some groups; the slide's combined figure and listing claim are excluded.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the northern cod case needs a named stock and date.</strong> The slide says early-1990s overfishing caused a northern Canadian cod collapse and a 1992 ban. Canada imposed a moratorium on the Northern cod stock in 1992 after severe decline. Use the proper stock name rather than treating every cod fishery as closed.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 5 === -->
+<section id="t5" class="chapter card" style="--accent:#7A5AA8; --soft:#F0EBF8;">
+  <header>
+    <span class="eyebrow"><span class="num">5</span> Chemistry and intervention</span>
+    <h2><span class="emoji">&#129514;</span> Evaluate acidification and artificial reefs</h2>
+    <span class="timepill">Marine &middot; 00:03:19-00:04:20</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The recording closes with two claimed positive human effects: additional carbon dioxide for calcium-carbonate structures and artificial reefs that create breeding and feeding habitat <span class="ts">Marine &middot; 00:03:19</span>. One claim reverses the chemistry; the other needs conditions and monitoring.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: additional human-produced carbon dioxide is not a net benefit to marine calcifiers.</strong> Dissolved CO<sub>2</sub> forms carbonic acid, raises hydrogen-ion concentration and reduces carbonate-ion availability. Corals, oysters and other calcifying organisms use carbonate to build calcium-carbonate structures, so ocean acidification can make construction and maintenance harder.</p>
+    </div>
+
+    <div class="formula">CO<sub>2</sub> uptake &rarr; more H<sup>+</sup> &rarr; lower pH and less CO<sub>3</sub><sup>2&minus;</sup> &rarr; greater calcification stress</div>
+
+    <div class="note warn">
+      <p><strong>Correction: an artificial reef does not convert an empty, bottomless ocean into guaranteed new production.</strong> The lecture makes that broad claim <span class="ts">Marine &middot; 00:03:19</span>. Properly designed structures can create habitat and accumulate organisms, but evidence is less certain on new biomass production. Placement, material toxicity, structural stability, invasive-species movement and added fishing pressure require assessment.</p>
+    </div>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Artificial-reef test</th><th>Question</th></tr></thead>
+        <tbody>
+          <tr><td>Objective</td><td>Habitat restoration, fisheries management, recreation or mitigation?</td></tr>
+          <tr><td>Baseline</td><td>What organisms, substrate, currents and uses exist before deployment?</td></tr>
+          <tr><td>Material</td><td>Is it durable, stable, clean and free of hazardous coatings or residues?</td></tr>
+          <tr><td>Ecology</td><td>Does it produce biomass, redistribute organisms or aid invasive species?</td></tr>
+          <tr><td>Governance</td><td>Who permits, monitors, maintains and removes the structure if it fails?</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 6 === -->
+<section id="t6" class="chapter card" style="--accent:#B44A8C; --soft:#F8EAF3;">
+  <header>
+    <span class="eyebrow"><span class="num">6</span> Education and participation</span>
+    <h2><span class="emoji">&#127891;</span> Turn biodiversity education into action</h2>
+    <span class="timepill">Protect &middot; 00:01:38-00:03:14</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The education recording argues that personal actions can scale through ecological connections and asks schools to move from observation to community communication <span class="ts">Protect &middot; 00:01:38</span>. Its forest example is a compact action-learning cycle.</p>
+
+    <div class="grid-3">
+      <div class="mini"><h3>Observe</h3><p>Visit a protected forest and learn from the remaining habitat.</p></div>
+      <div class="mini"><h3>Diagnose</h3><p>Discuss deforestation, community livelihoods, climate and hazards.</p></div>
+      <div class="mini"><h3>Act and communicate</h3><p>Design restoration actions, use community radio and organise role play.</p></div>
+    </div>
+
+    <p>The class places young people at the centre of future protection <span class="ts">Protect &middot; 00:02:03</span> and closes with replanting, local awareness and better management of protected-area resources <span class="ts">Protect &middot; 00:02:31</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: one species' disappearance does not automatically cause every connected species to disappear.</strong> The video uses that cascade as a universal warning <span class="ts">Protect &middot; 00:01:38</span>. Co-extinction and trophic cascades are possible when dependencies are strong, but ecological networks can also contain redundancy and adaptation. State the relationship and evidence.</p>
+    </div>
+
+    <div class="note"><p><strong>Editorial action cycle:</strong> establish a baseline, identify the driver and responsible institutions, co-design a feasible intervention, communicate in locally meaningful forms, monitor ecological and social results, then adapt.</p></div>
+
+    <p>This educational role has a treaty foundation. CBD Article 13 asks Parties to promote understanding of conservation measures through media and educational programmes and to cooperate on public-awareness programmes.</p>
+  </div>
+</section>
+
+<!-- ======================================================== section 7 === -->
+<section id="t7" class="chapter card" style="--accent:#46955C; --soft:#E9F4EC;">
+  <header>
+    <span class="eyebrow"><span class="num">7</span> Treaty architecture</span>
+    <h2><span class="emoji">&#128220;</span> Read the CBD as a binding framework</h2>
+    <span class="timepill">CBD &middot; 00:00:00-00:07:43</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The treaty recording identifies the Convention on Biological Diversity as a legally binding Rio agreement and stresses that conservation is a common concern of humankind and part of development <span class="ts">CBD &middot; 00:00:54</span> <span class="ts">CBD &middot; 00:01:23</span>.</p>
+
+    <div class="grid-3">
+      <div class="mini"><h3>1. Conserve</h3><p>Protect biological diversity across genes, species and ecosystems.</p></div>
+      <div class="mini"><h3>2. Use sustainably</h3><p>Use components of biodiversity in ways compatible with long-term conservation.</p></div>
+      <div class="mini"><h3>3. Share benefits fairly</h3><p>Apply appropriate access, technology transfer, funding and benefit-sharing for genetic resources.</p></div>
+    </div>
+
+    <p>The lecturer correctly presents these three objectives <span class="ts">CBD &middot; 00:01:49</span> <span class="ts">CBD &middot; 00:02:18</span>, then surveys sovereign rights, national biodiversity strategies, incentives, access to genetic resources and traditional knowledge, technology transfer, scientific cooperation, taxonomy, impact assessment, education and finance <span class="ts">CBD &middot; 00:03:02</span> <span class="ts">CBD &middot; 00:06:52</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: UNCCD was not opened for signature at the 1992 Rio Earth Summit.</strong> The lecture groups UNFCCC, CBD and UNCCD as three conventions opened there <span class="ts">CBD &middot; 00:00:29</span>. CBD and UNFCCC were opened at Rio in 1992. UNCCD grew from the Rio process but was adopted on 17 June 1994 and opened for signature in Paris on 14 October 1994.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: access and benefit-sharing does not require an automatic equal royalty.</strong> The lecture says a company must pay royalty to the local government and provide an equal benefit <span class="ts">CBD &middot; 00:05:00</span> <span class="ts">CBD &middot; 00:05:55</span>. The CBD and Nagoya Protocol centre prior informed consent where applicable, mutually agreed terms, and fair and equitable monetary or non-monetary benefits. The provider, rights holder and terms depend on law and agreement.</p>
+    </div>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>CBD implementation lever</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td>NBSAP</td><td>Translate global objectives and targets into national strategy and action.</td></tr>
+          <tr><td>In-situ and ex-situ conservation</td><td>Protect ecosystems and species in place, with complementary off-site conservation.</td></tr>
+          <tr><td>Access and benefit-sharing</td><td>Govern use of genetic resources and associated knowledge under lawful, agreed terms.</td></tr>
+          <tr><td>Impact assessment</td><td>Identify and reduce significant adverse effects on biodiversity.</td></tr>
+          <tr><td>Science and technology</td><td>Support monitoring, taxonomy, research, cooperation and appropriate transfer.</td></tr>
+          <tr><td>Finance and participation</td><td>Provide means of implementation and include affected knowledge holders and communities.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 8 === -->
+<section id="t8" class="chapter card" style="--accent:#A4553A; --soft:#F7EBE5;">
+  <header>
+    <span class="eyebrow"><span class="num">8</span> Protocols and decisions</span>
+    <h2><span class="emoji">&#127758;</span> Track protocols, COPs and global targets</h2>
+    <span class="timepill">CBD &middot; 00:07:14-00:11:40</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The Convention is governed through a Conference of the Parties, where representatives adopt decisions and guide implementation <span class="ts">CBD &middot; 00:07:14</span> <span class="ts">CBD &middot; 00:07:43</span>. The lecture then links the CBD to the Cartagena and Nagoya Protocols and the Aichi Biodiversity Targets.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Instrument</th><th>Focus</th><th>Verified milestone</th></tr></thead>
+        <tbody>
+          <tr><td>CBD</td><td>Conservation, sustainable use and benefit-sharing</td><td>Opened 5 June 1992; entered into force 29 December 1993</td></tr>
+          <tr><td>Cartagena Protocol</td><td>Safe transfer, handling and use of living modified organisms</td><td>Adopted 29 January 2000 in Montreal; in force 11 September 2003</td></tr>
+          <tr><td>Nagoya Protocol</td><td>Access to genetic resources and fair and equitable benefit-sharing</td><td>Adopted 29 October 2010 in Nagoya; in force 12 October 2014</td></tr>
+          <tr><td>Nagoya-Kuala Lumpur Supplementary Protocol</td><td>Liability and redress related to living modified organisms</td><td>Adopted 15 October 2010; in force 5 March 2018</td></tr>
+          <tr><td>Kunming-Montreal GBF</td><td>Current global biodiversity goals and targets</td><td>Adopted at COP15 in December 2022; 4 goals and 23 targets</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the Aichi Biodiversity Targets are not a protocol or a current sister instrument.</strong> The lecture groups two protocols and one target together as three "sister protocols" <span class="ts">CBD &middot; 00:00:54</span>. The 20 Aichi Targets belonged to the Strategic Plan for Biodiversity 2011-2020. The current global framework is the Kunming-Montreal GBF with 4 goals for 2050 and 23 targets for 2030.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the treaty is called the Nagoya Protocol, not "Nagaya," and access is the term in access and benefit-sharing.</strong> The lecture repeatedly mispronounces both words <span class="ts">CBD &middot; 00:09:32</span>. Preserve the formal title in an exam answer.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the CBD currently has 196 Parties.</strong> The lecture says 195 countries plus the European Union and identifies the United States as outside <span class="ts">CBD &middot; 00:07:43</span> <span class="ts">CBD &middot; 00:08:06</span>. The total of 196 Parties is correct when the EU is included as a regional economic integration organisation. The United States is a non-Party; it signed in 1993 but did not ratify.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the Cartagena Protocol was adopted in Montreal, not at a 2000 COP meeting in Cartagena.</strong> The lecture says the COP met in Cartagena in 2000 <span class="ts">CBD &middot; 00:08:36</span>. Negotiations had an unresolved session in Cartagena in 1999; the resumed extraordinary COP adopted the Protocol in Montreal on 29 January 2000.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: COP12 met in Pyeongchang, Republic of Korea, and COP13 met in Cancun, Mexico.</strong> The lecture gives "Peyongyang" for 2014 and Los Cabos, Baja California Sur, for 2016 <span class="ts">CBD &middot; 00:09:32</span> <span class="ts">CBD &middot; 00:10:01</span>. Pyongyang is a different city in the Democratic People's Republic of Korea.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the 2012 resource-mobilisation decision was collective, while India's $50 million Hyderabad Pledge was a separate national commitment.</strong> The lecture merges the two <span class="ts">CBD &middot; 00:10:51</span>. Keep the COP decision on doubling international biodiversity-related financial flows distinct from India's announced contribution.</p>
+    </div>
+
+    <h3>Selected COP sequence</h3>
+    <div class="timeline">
+      <div class="tl-item"><span class="yr">1994</span><div><strong>COP1, Nassau</strong><p>First ordinary meeting of the Conference of the Parties.</p></div></div>
+      <div class="tl-item"><span class="yr">2010</span><div><strong>COP10, Nagoya</strong><p>Nagoya Protocol and Strategic Plan 2011-2020 with Aichi Targets.</p></div></div>
+      <div class="tl-item"><span class="yr">2012</span><div><strong>COP11, Hyderabad</strong><p>Implementation and resource-mobilisation decisions.</p></div></div>
+      <div class="tl-item"><span class="yr">2022</span><div><strong>COP15, Montreal</strong><p>Kunming-Montreal Global Biodiversity Framework adopted.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================= glossary === -->
+<section id="t9" class="chapter card" style="--accent:#8B8490; --soft:#F0EEF2;">
+  <header>
+    <span class="eyebrow">Reference</span>
+    <h2><span class="emoji">&#128214;</span> Glossary</h2>
+  </header>
+  <div class="section-body">
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Term</th><th>Meaning in these recordings</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Biodiversity</strong></td><td>Variability within species, between species and of ecosystems.</td></tr>
+          <tr><td><strong>Genetic diversity</strong></td><td>Variation in inherited characteristics within a species or population.</td></tr>
+          <tr><td><strong>Species diversity</strong></td><td>Variety and relative abundance of species in a defined area.</td></tr>
+          <tr><td><strong>Ecosystem diversity</strong></td><td>Variety of ecological complexes, communities, habitats and settings.</td></tr>
+          <tr><td><strong>Ecosystem service</strong></td><td>Benefit people obtain from ecosystems, interpreted with attention to beneficiaries and trade-offs.</td></tr>
+          <tr><td><strong>Direct driver</strong></td><td>Immediate pressure changing nature, such as exploitation, pollution or land-use change.</td></tr>
+          <tr><td><strong>Indirect driver</strong></td><td>Underlying social, economic, institutional or technological cause of a direct driver.</td></tr>
+          <tr><td><strong>Overfishing</strong></td><td>Fishing pressure that exceeds the productive capacity of a stock under the management reference used.</td></tr>
+          <tr><td><strong>Ocean acidification</strong></td><td>Long-term decline in ocean pH driven mainly by uptake of atmospheric carbon dioxide.</td></tr>
+          <tr><td><strong>CBD</strong></td><td>Convention on Biological Diversity, opened for signature in 1992 and in force from 1993.</td></tr>
+          <tr><td><strong>NBSAP</strong></td><td>National biodiversity strategy and action plan prepared to implement the CBD and current framework.</td></tr>
+          <tr><td><strong>ABS</strong></td><td>Access to genetic resources and fair and equitable sharing of benefits from their utilisation.</td></tr>
+          <tr><td><strong>COP</strong></td><td>Conference of the Parties, the CBD's treaty decision-making body.</td></tr>
+          <tr><td><strong>GBF</strong></td><td>Kunming-Montreal Global Biodiversity Framework adopted in 2022.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== flashcards === -->
+<section id="t10" class="chapter card" style="--accent:#2E9E6A; --soft:#E4F3EB;">
+  <header>
+    <span class="eyebrow">Active recall</span>
+    <h2><span class="emoji">&#127183;</span> Flashcards</h2>
+  </header>
+  <div class="section-body">
+    <div class="cards">
+      <div class="qa"><p class="q">What are the three biodiversity levels?</p><p class="a">Genetic diversity, species diversity and ecosystem diversity.</p></div>
+      <div class="qa"><p class="q">Are ecosystem services a fourth level?</p><p class="a">No. They are benefits arising from ecosystem structures, processes and functions.</p></div>
+      <div class="qa"><p class="q">Which values does the course list?</p><p class="a">Economic, ecological life support, cultural, recreational and scientific values.</p></div>
+      <div class="qa"><p class="q">Is that value list universal?</p><p class="a">No. It is the lecturer's explanatory framework.</p></div>
+      <div class="qa"><p class="q">What are the five direct drivers of loss?</p><p class="a">Land and sea-use change, direct exploitation, climate change, pollution and invasive alien species.</p></div>
+      <div class="qa"><p class="q">What are indirect drivers?</p><p class="a">Underlying production, consumption, demographic, trade, technology, governance and value systems.</p></div>
+      <div class="qa"><p class="q">Is the Anthropocene a formal epoch?</p><p class="a">No. IUGS rejected formalisation in 2024, though the concept remains widely used.</p></div>
+      <div class="qa"><p class="q">What is IPBES's broad extinction-rate finding?</p><p class="a">Current rates are tens to hundreds of times the long-term average and accelerating.</p></div>
+      <div class="qa"><p class="q">What did IPBES estimate about threatened species?</p><p class="a">Around one million animal and plant species are threatened with extinction.</p></div>
+      <div class="qa"><p class="q">How can overfishing affect an ecosystem?</p><p class="a">Through stock depletion, size and age change, bycatch, food-web effects and loss of ecological roles.</p></div>
+      <div class="qa"><p class="q">What happened to Northern cod in 1992?</p><p class="a">Canada imposed a moratorium after severe stock decline.</p></div>
+      <div class="qa"><p class="q">Why does extra CO2 stress calcifiers?</p><p class="a">It lowers pH and reduces carbonate-ion availability for calcium-carbonate structures.</p></div>
+      <div class="qa"><p class="q">Do artificial reefs guarantee new fish production?</p><p class="a">No. They can create habitat and accumulate organisms, while net production and risks require evidence.</p></div>
+      <div class="qa"><p class="q">What is the education action cycle?</p><p class="a">Observe, diagnose, design action, communicate, monitor and adapt.</p></div>
+      <div class="qa"><p class="q">What does CBD Article 13 cover?</p><p class="a">Public education, awareness, media communication and international cooperation.</p></div>
+      <div class="qa"><p class="q">What are the CBD's three objectives?</p><p class="a">Conservation, sustainable use, and fair and equitable benefit-sharing from genetic resources.</p></div>
+      <div class="qa"><p class="q">When did the CBD open and enter into force?</p><p class="a">Opened 5 June 1992; entered into force 29 December 1993.</p></div>
+      <div class="qa"><p class="q">How many CBD Parties are there?</p><p class="a">196, including the European Union.</p></div>
+      <div class="qa"><p class="q">What is the United States' CBD status?</p><p class="a">It signed but did not ratify and remains a non-Party.</p></div>
+      <div class="qa"><p class="q">What does the Cartagena Protocol cover?</p><p class="a">Biosafety concerning living modified organisms.</p></div>
+      <div class="qa"><p class="q">What does the Nagoya Protocol cover?</p><p class="a">Access to genetic resources and fair and equitable benefit-sharing.</p></div>
+      <div class="qa"><p class="q">What replaced the Aichi target period?</p><p class="a">The Kunming-Montreal GBF, with 4 goals and 23 targets.</p></div>
+      <div class="qa"><p class="q">Where did COP12 and COP13 meet?</p><p class="a">Pyeongchang in 2014 and Cancun in 2016.</p></div>
+      <div class="qa"><p class="q">What are the core ABS terms?</p><p class="a">Prior informed consent where applicable, mutually agreed terms, and fair and equitable benefits.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== exam focus === -->
+<section id="t11" class="chapter card" style="--accent:#2E9E6A; --soft:#E4F3EB;">
+  <header>
+    <span class="eyebrow">Revision sheet</span>
+    <h2><span class="emoji">&#127919;</span> Exam focus</h2>
+  </header>
+  <div class="section-body">
+    <h3>Biodiversity answer architecture</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Move</th><th>What to write</th><th>Exam verb</th></tr></thead>
+        <tbody>
+          <tr><td>Define</td><td>Variability within species, between species and of ecosystems</td><td>Frame</td></tr>
+          <tr><td>Value</td><td>Economic, ecological, cultural, recreational, scientific, intrinsic and relational reasons</td><td>Explain</td></tr>
+          <tr><td>Diagnose</td><td>Direct driver, indirect cause, scale, trend and affected groups</td><td>Analyse</td></tr>
+          <tr><td>Trace impact</td><td>Pressure, exposure, ecological change and social consequence</td><td>Connect</td></tr>
+          <tr><td>Select action</td><td>Conservation, sustainable use, restoration, education, regulation or incentive</td><td>Design</td></tr>
+          <tr><td>Link treaty</td><td>CBD objective, NBSAP, protocol, COP decision or GBF target</td><td>Anchor</td></tr>
+          <tr><td>Monitor</td><td>Baseline, indicator, institution, reporting interval and adaptive response</td><td>Verify</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Corrections to remember</h3>
+    <ul>
+      <li>Keep the formal three-level biodiversity definition separate from functions and services.</li>
+      <li>Use IPBES's five direct drivers and current assessment figures with year and uncertainty.</li>
+      <li>Treat Anthropocene as an informal concept, not a formal geological epoch.</li>
+      <li>Explain ocean acidification through lower pH and reduced carbonate availability.</li>
+      <li>Evaluate artificial reefs for habitat, redistribution, production, material and governance risks.</li>
+      <li>CBD has three objectives and 196 Parties; the United States remains a non-Party.</li>
+      <li>Cartagena was adopted in Montreal in 2000; Nagoya is the correct protocol name.</li>
+      <li>The Kunming-Montreal GBF replaced the 2011-2020 Aichi target period.</li>
+      <li>COP12 was in Pyeongchang and COP13 was in Cancun.</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="notefoot">Source recordings: <a href="https://drive.google.com/file/d/1wy3Mzm3fuLrP_zeDVsIcbX9ZB22RFZ9c/view?usp=drivesdk" target="_blank" rel="noopener">▶ Bio Diversity</a><span class="sep">·</span><a href="https://drive.google.com/file/d/1bJNZcq1UFNjgp0JdvehFUPprw7tKKs8B/view?usp=drivesdk" target="_blank" rel="noopener">▶ Learning to protect biodiversity</a><span class="sep">·</span><a href="https://drive.google.com/file/d/1Apgye0FgZHHf6AP893xw12s6ApvJv3Hd/view?usp=drivesdk" target="_blank" rel="noopener">▶ Human Impact on the Marine Biome</a><span class="sep">·</span><a href="https://drive.google.com/file/d/1an5Swf55MNll5bXD2UdLfIw0emhfd2fo/view?usp=drivesdk" target="_blank" rel="noopener">▶ Convention on Biological Diversity</a><span class="sep">·</span><a href="https://drive.google.com/file/d/19Mi3DIF0U0MB9yS4dK--GJpazg5oIJPX/view?usp=drivesdk" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+</html>

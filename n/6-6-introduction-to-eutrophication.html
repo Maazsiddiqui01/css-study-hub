@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eutrophication: Nutrient Enrichment, Algal Growth and Oxygen Loss</title>
+<style>/* Lecture Notes ebook, "warm study" theme.
+   Inspired by Mehak's MarketCanvas app: soft cream ground, rounded white cards,
+   a different pastel accent per topic, serif display + friendly sans body,
+   gentle emoji + pill badges. Playful and pretty, but still a real study book.
+   Print-first (A4 PDF via headless Edge); reads well on screen too.
+
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
+   Everything themeable keys off --accent / --soft. Titles stay ink for
+   readability; accents colour eyebrows, numbers, pills, rules and callouts.
+*/
+
+:root {
+  --cream: #FCF6F0;          /* page ground (warm) */
+  --card: #FFFFFF;
+  --ink: #2C2630;            /* plum-black body/headings */
+  --ink-soft: #5A5360;
+  --slate: #8B8490;          /* captions, timestamps */
+  --hairline: #EEE6E4;
+
+  /* section default accent (overridden per section) */
+  --accent: #C0567E;
+  --soft: #FBECF1;
+
+  --shadow: 0 1px 2px rgba(60,30,45,.05), 0 10px 26px rgba(80,40,55,.07);
+  --radius: 20px;
+
+  --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: Consolas, "Cascadia Code", ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background:
+    radial-gradient(1100px 700px at 15% -5%, #FBEEF3 0%, transparent 55%),
+    radial-gradient(1000px 700px at 100% 0%, #EEF3FB 0%, transparent 50%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  font: 10.8pt/1.62 var(--sans);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+@media screen {
+  body { max-width: 51rem; margin: 0 auto; padding: 2.5rem 1.15rem 4rem; font-size: 1.0rem; }
+}
+
+/* ---------------------------------------------------------------- page --- */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm 14mm;
+  @bottom-center {
+    content: counter(page);
+    font: 8.5pt var(--sans);
+    color: #8B8490;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+/* --------------------------------------------------------------- cards --- */
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8mm 9mm 9mm;
+  margin: 0 0 6mm;
+  box-shadow: var(--shadow);
+  break-inside: auto;
+}
+@media screen { .card { margin-bottom: 1.4rem; } }
+
+/* a soft accent wash across the top of each section card (fades to white),
+   echoing the app's pastel cards without hurting readability */
+.chapter {
+  background:
+    linear-gradient(180deg, var(--soft) 0, rgba(255,255,255,0) 34mm),
+    var(--card);
+  border-top: 3px solid var(--accent);
+  break-inside: auto;
+  break-before: page;   /* each topic starts fresh: slide on top, notes below */
+}
+/* on screen (web/PWA) sections just stack; no forced page breaks */
+@media screen { .chapter { break-before: auto; } }
+
+h2, h3, .eyebrow { break-after: avoid; }
+p { orphans: 2; widows: 2; }
+
+/* keep the section header intact (eyebrow + title + time pill together) and
+   glued to its opening slide */
+.chapter > header { break-inside: avoid; break-after: avoid; }
+figure.slide { break-before: avoid; }
+
+/* --------------------------------------------------------------- cover --- */
+
+.cover {
+  page: cover;
+  break-after: page;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32mm 22mm 24mm;
+  background:
+    radial-gradient(700px 460px at 12% 8%, #FBE6EE 0%, transparent 60%),
+    radial-gradient(760px 520px at 96% 4%, #E7EEFB 0%, transparent 58%),
+    radial-gradient(620px 520px at 80% 96%, #E6F4EC 0%, transparent 60%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+@media screen {
+  .cover { min-height: 80vh; border-radius: 24px; padding: 3.2rem 2.6rem; margin-bottom: 1.4rem; }
+}
+
+.cover .avatar { font-size: 30pt; line-height: 1; margin-bottom: 7mm; }
+.cover .kicker {
+  font: 600 9pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 5mm;
+}
+.cover h1 {
+  font: 600 31pt/1.14 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 15em;
+}
+.cover .subtitle {
+  margin-top: 5mm;
+  font: 400 13.5pt/1.5 var(--sans);
+  color: var(--ink-soft);
+  max-width: 30em;
+}
+.cover .warm {
+  margin-top: 4mm;
+  font: italic 400 12pt/1.5 var(--serif);
+  color: var(--accent);
+}
+
+.cover .chips { display: flex; flex-wrap: wrap; gap: 3mm; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.4mm 4mm;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(60,30,45,.04);
+  font: 400 9pt var(--sans);
+  color: var(--slate);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chip b { font: 700 10.5pt var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ headings --- */
+
+.chapter header { margin-bottom: 5mm; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  font: 700 8.5pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--accent);
+  margin-bottom: 3mm;
+}
+.eyebrow .num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h2 {
+  font: 600 20pt/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .emoji { font-size: 17pt; }
+
+.timepill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.5mm 3.5mm;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font: 600 8pt var(--mono);
+  letter-spacing: 0.02em;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h3 {
+  font: 600 12.5pt/1.34 var(--serif);
+  color: var(--ink);
+  margin: 6mm 0 2.5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+.ts { font: 400 8.5pt var(--mono); color: var(--slate); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- body --- */
+
+.section-body > :last-child { margin-bottom: 0; }
+p { margin: 0 0 3mm; }
+.lead { font-size: 11.2pt; color: var(--ink); }
+
+ul, ol { margin: 0 0 3mm 5.5mm; }
+li { margin-bottom: 1.7mm; padding-left: 1mm; }
+li::marker { color: var(--accent); }
+
+.kt { font-weight: 700; color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
+
+code { font: 9.5pt var(--mono); background: #F3EFF4; padding: .4pt 3.5pt; border-radius: 4px; }
+
+/* ------------------------------------------------------------ callouts --- */
+
+.note {
+  --c: var(--accent);
+  --f: var(--soft);
+  background: var(--f);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  border-left: 3px solid var(--c);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.note .label {
+  display: inline-flex; align-items: center; gap: 1.6mm;
+  font: 700 8pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c);
+  margin-bottom: 1.8mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.warn { --c: #B4791F; --f: #FaF1DF; }
+.note.exam { --c: #3B8B78; --f: #E6F3EF; }
+.note.def  { --c: var(--accent); --f: var(--soft); }
+
+/* ------------------------------------------------------- summary card --- */
+
+.summary { --accent: #C0567E; --soft: #FBECF1; }
+.summary ul { list-style: none; margin: 0; }
+.summary li { position: relative; padding: 0 0 0 7mm; margin-bottom: 3.5mm; }
+.summary li::before {
+  content: "";
+  position: absolute; left: 0; top: 2.6mm;
+  width: 3.2mm; height: 3.2mm; border-radius: 50%;
+  background: var(--accent);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.summary li:last-child { margin-bottom: 0; }
+.summary li b, .summary li strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------- TOC --- */
+
+nav.toc { --accent: #8B8490; --soft: #F3EFF4; }
+nav.toc ol { list-style: none; margin: 0; }
+nav.toc li {
+  display: flex; align-items: baseline; gap: 4mm;
+  padding: 2.7mm 0;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11pt var(--sans);
+}
+nav.toc li:last-child { border-bottom: 0; }
+nav.toc .dot { width: 3.4mm; height: 3.4mm; border-radius: 50%; flex-shrink: 0;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+nav.toc .title { flex: 1; color: var(--ink); }
+nav.toc .rng { flex-shrink: 0; font: 600 8.5pt var(--mono); color: var(--slate); }
+
+/* -------------------------------------------------------------- slides --- */
+
+figure.slide { margin: 0 0 5mm; break-inside: avoid; }
+figure.slide img {
+  width: 100%; display: block;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 10px rgba(40,30,45,.10);
+}
+figure.slide figcaption {
+  font: 400 8.5pt var(--sans);
+  color: var(--slate);
+  margin-top: 2mm;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4mm;
+}
+figure.slide figcaption .ts { color: var(--accent); }
+
+/* ------------------------------------------------------------ glossary --- */
+
+dl.glossary { margin: 0; }
+dl.glossary div { padding: 3mm 0; border-bottom: 1px solid var(--hairline); break-inside: avoid; }
+dl.glossary div:last-child { border-bottom: 0; padding-bottom: 0; }
+dl.glossary dt { font: 700 10.5pt var(--sans); color: var(--accent); margin-bottom: 1.2mm; }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- flashcards --- */
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 0; }
+.qa {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  background: linear-gradient(180deg, var(--soft) 0, #fff 60%);
+  break-inside: avoid;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.qa .q { font: 700 10pt var(--sans); color: var(--ink); margin-bottom: 2mm; }
+.qa .a { color: var(--ink-soft); font-size: 10pt; }
+
+/* ------------------------------------------------------------- tables --- */
+
+.tables-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0; break-inside: avoid; }
+th {
+  font: 700 9pt var(--sans); text-align: left; color: var(--accent);
+  border-bottom: 2px solid var(--soft); padding: 2mm 3mm 2mm 0;
+}
+td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+
+/* --- mobile / on-the-go reading (screen only; never affects the print PDF).
+   Placed LAST so it wins the cascade over the wider @media screen rules above.
+   Requires <meta name="viewport" content="width=device-width, initial-scale=1">. */
+@media screen and (max-width: 640px) {
+  body { padding: 1rem 0.85rem 2.5rem; font-size: 1.02rem; }
+  .card { padding: 5mm 5mm 6mm; border-radius: 14px; margin-bottom: 0.9rem; }
+  .cover { min-height: auto; padding: 2rem 1.3rem 1.6rem; border-radius: 16px; }
+  .cover .avatar { font-size: 24pt; margin-bottom: 4mm; }
+  .cover h1 { font-size: 20pt; max-width: 100%; }
+  .cover .subtitle { font-size: 11.5pt; }
+  .cover .warm { font-size: 11pt; }
+  .cover .chips { gap: 2mm; margin-top: 5mm; }
+  h2 { font-size: 16pt; }
+  h2 .emoji { font-size: 13.5pt; }
+  h3 { font-size: 11.5pt; }
+  .cards { grid-template-columns: 1fr; }
+  nav.toc li { font-size: 10.5pt; gap: 2.5mm; padding: 2.5mm 0; }
+  nav.toc .rng { font-size: 8pt; }
+  .note { padding: 3.5mm 4mm; }
+  table { font-size: 9.5pt; }
+}
+</style>
+<style>
+@media print {
+  body { font-size: 9.5pt; line-height: 1.43; }
+  .card { padding: 6.5mm 7.5mm 7mm; }
+  .chapter header { margin-bottom: 3mm; }
+  p { margin-bottom: 2mm; }
+  .lead { font-size: 10pt; }
+  ul, ol { margin-bottom: 2mm; }
+  li { margin-bottom: 1mm; }
+  .summary li { margin-bottom: 2mm; }
+  .note { padding: 3mm 4mm; margin: 2.5mm 0; }
+  table { font-size: 8.6pt; margin: 2mm 0; }
+  th { padding: 1.4mm 2mm 1.4mm 0; }
+  td { padding: 1.4mm 2mm; }
+  .cards { gap: 1.5mm 2mm; }
+  .qa { padding: 2mm 3mm; line-height: 1.25; }
+  .qa .q { font-size: 8.6pt; margin-bottom: .6mm; }
+  .qa .a { font-size: 8.5pt; }
+}
+</style>
+<meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
+align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
+border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
+<body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/file/d/16tSjBRppy_ooeV5r4mVc6pJajjwyWIOg/view?usp=drivesdk" target="_blank" rel="noopener">Download PDF ↓</a></div>
+
+<!-- ============================================================ cover === -->
+<section class="cover" style="background:radial-gradient(700px 460px at 12% 8%,#E4F3EB 0,transparent 60%),radial-gradient(760px 520px at 96% 4%,#E8F0F5 0,transparent 58%),radial-gradient(620px 520px at 80% 96%,#FBF1DE 0,transparent 60%),var(--cream)">
+  <div>
+    <div class="avatar">&#127754;</div>
+    <div class="kicker" style="color:#2E9E6A">CSS Environmental Science &middot; Module 6.6</div>
+    <h1>Eutrophication: Nutrient Enrichment, Algal Growth and Oxygen Loss</h1>
+    <p class="subtitle">A precise reconstruction of the lecture's introductory chain: excess nutrients, rapid algal and plant growth, light loss, decomposition, dissolved-oxygen depletion and ecological stress.</p>
+    <p class="warm" style="color:#237C53">Follow the nutrient. A green surface is only the visible clue; the exam-worthy explanation runs from watershed inputs to biological growth and then to oxygen conditions below the surface.</p>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>6.6</b> pollution module</span>
+    <span class="chip"><b>8m</b> focused lecture</span>
+    <span class="chip"><b>5</b> core topics</span>
+    <span class="chip"><b>N + P</b> nutrient pressure</span>
+  </div>
+</section>
+
+<!-- ============================================================== toc === -->
+<nav class="toc card">
+  <header><span class="eyebrow">Contents</span><h2><span class="emoji">&#128506;&#65039;</span> In this chapter</h2></header>
+  <ol>
+    <li><span class="dot" style="background:#2E9E6A"></span><a class="title" href="#summary">The five-minute version</a><span class="rng">summary</span></li>
+    <li><span class="dot" style="background:#5866C4"></span><a class="title" href="#t1">01 &middot; Define the process accurately</a><span class="rng">00:00-01:29</span></li>
+    <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t2">02 &middot; Read the visible signs and limiting factors</a><span class="rng">00:32-03:23</span></li>
+    <li><span class="dot" style="background:#C6506E"></span><a class="title" href="#t3">03 &middot; Trace the oxygen-loss chain</a><span class="rng">02:28-04:21</span></li>
+    <li><span class="dot" style="background:#B57A2A"></span><a class="title" href="#t4">04 &middot; Separate natural from accelerated change</a><span class="rng">02:01-06:14</span></li>
+    <li><span class="dot" style="background:#46955C"></span><a class="title" href="#t5">05 &middot; Map nutrients from land to water</a><span class="rng">05:19-07:09</span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t6">Glossary &middot; Flashcards &middot; Exam focus</a><span class="rng"></span></li>
+  </ol>
+</nav>
+
+<!-- ============================================================= tldr === -->
+<section id="summary" class="summary card" style="--accent:#2E9E6A; --soft:#E4F3EB; border-top-color:#2E9E6A">
+  <header><span class="eyebrow" style="color:#2E9E6A">Start here</span><h2><span class="emoji">&#11088;</span> The five-minute version</h2></header>
+  <ul>
+    <li><strong>Eutrophication is nutrient enrichment of a water body.</strong> The lecture introduces it through excessive plant and algal growth in lakes and ponds <span class="ts">6.6 &middot; 00:01:29</span>.</li>
+    <li><strong>The visible clue is dense green growth.</strong> The lecturer uses a surface bloom as the starting image, then asks what happens beneath it <span class="ts">6.6 &middot; 00:00:32</span> <span class="ts">6.6 &middot; 00:02:28</span>.</li>
+    <li><strong>The central causal chain is nutrient input &rarr; excess biomass &rarr; decay &rarr; dissolved-oxygen demand.</strong> The lecture correctly identifies decomposition as an oxygen-consuming step <span class="ts">6.6 &middot; 00:03:51</span>.</li>
+    <li><strong>Light can also be reduced.</strong> Dense floating growth can shade submerged plants and alter habitat below the surface <span class="ts">6.6 &middot; 00:02:58</span>.</li>
+    <li><strong>The process can occur naturally.</strong> The environmental problem is its acceleration through human nutrient loading <span class="ts">6.6 &middot; 00:02:01</span> <span class="ts">6.6 &middot; 00:04:49</span>.</li>
+    <li><strong>The lecture names agriculture, sewage and industry as nutrient pathways.</strong> Fertiliser not taken up by crops may leave fields in runoff, while poorly controlled sewage and industrial discharges can add further nutrients <span class="ts">6.6 &middot; 00:05:19</span> <span class="ts">6.6 &middot; 00:06:39</span>.</li>
+    <li><strong>Scientific correction:</strong> eutrophication is not itself the literal death of a lake. It can produce hypoxia, fish kills and dead zones when nutrient enrichment and oxygen depletion become severe.</li>
+  </ul>
+</section>
+
+<!-- ======================================================== section 1 === -->
+<section id="t1" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
+  <header>
+    <span class="eyebrow"><span class="num">1</span> Definition</span>
+    <h2><span class="emoji">&#128214;</span> Define the process accurately</h2>
+    <span class="timepill">6.6 &middot; 00:00-01:29</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecturer places eutrophication within aquatic pollution and flags it as an exam-relevant issue <span class="ts">6.6 &middot; 00:00:00</span>. The lesson begins with a green water surface and describes a process in which algal and plant growth becomes excessive <span class="ts">6.6 &middot; 00:00:32</span> <span class="ts">6.6 &middot; 00:01:29</span>.</p>
+
+    <div class="note def">
+      <p><strong>Exam definition:</strong> eutrophication is the enrichment of a lake, pond, estuary or other water body with nutrients, especially nitrogen and phosphorus, which can stimulate excessive algae and aquatic-plant growth and alter oxygen, light and habitat conditions.</p>
+    </div>
+
+    <p>The lecture repeatedly calls this a process that can turn a living lake into a "dead lake" <span class="ts">6.6 &middot; 00:01:01</span>. That phrase captures the possible endpoint, but it should not replace the definition.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: eutrophication does not mean the death of a water body.</strong> It means nutrient enrichment and the ecological changes that follow. Severe enrichment can lead to hypoxia, anoxia, fish mortality and a dead zone, but those are possible consequences. A water body can be eutrophic without being biologically dead.</p>
+    </div>
+
+    <div class="formula"><strong>Definition first</strong> = nutrient enrichment + biological response + water-quality change</div>
+
+    <p>This distinction gives an answer a clean logic. Define the process, identify nutrient sources, explain the response, and then evaluate the severity of its effects. Do not put the final ecological outcome inside the definition itself.</p>
+  </div>
+</section>
+
+<!-- ======================================================== section 2 === -->
+<section id="t2" class="chapter card" style="--accent:#2C8C86; --soft:#E4F1F0;">
+  <header>
+    <span class="eyebrow"><span class="num">2</span> Diagnosis</span>
+    <h2><span class="emoji">&#128269;</span> Read the visible signs and limiting factors</h2>
+    <span class="timepill">6.6 &middot; 00:32-03:23</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecture asks the student to diagnose the process visually. A dense green layer at the surface signals abundant algae or floating plants, while the important ecological changes may be occurring deeper in the water column <span class="ts">6.6 &middot; 00:00:32</span> <span class="ts">6.6 &middot; 00:02:28</span>.</p>
+
+    <p><strong>Editorial diagnostic aid:</strong> the lecture supplies the visible bloom and causal chain; the checks below show how to keep an observation from becoming an unsupported conclusion.</p>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Observation</th><th>What it may indicate</th><th>What must still be checked</th></tr></thead>
+        <tbody>
+          <tr><td>Green surface scum or dense growth</td><td>High algal, cyanobacterial or floating-plant biomass</td><td>Species, toxins, chlorophyll, nutrient status and bloom extent</td></tr>
+          <tr><td>Low water clarity</td><td>Light attenuation through algae or suspended matter</td><td>Depth profile and effects on submerged vegetation</td></tr>
+          <tr><td>Dead plants or algae</td><td>Organic matter available for decomposition</td><td>Dissolved oxygen, temperature and microbial demand</td></tr>
+          <tr><td>Fish stress or mortality</td><td>Possible hypoxia, toxins or another water-quality shock</td><td>Oxygen, toxin, temperature and contaminant evidence</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The slide describes excessive growth as a response to greater availability of limiting growth factors and names sunlight, carbon dioxide and fertiliser nutrients <span class="ts">6.6 &middot; 00:01:29</span>. The broad idea is useful: growth depends on environmental conditions and on whatever essential resource is in shortest supply.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: eutrophication is specifically about nutrient enrichment.</strong> Nitrogen and phosphorus are the central nutrients in the standard definition. Light, temperature, mixing, residence time and carbon availability can influence whether a bloom forms, but more sunlight or carbon dioxide alone is not the definition of eutrophication. "Fertiliser" is a source of nutrients, not a growth factor separate from them.</p>
+    </div>
+
+    <p>The lecturer also says the surface layer obstructs sunlight to vegetation below <span class="ts">6.6 &middot; 00:02:58</span>. This is a defensible pathway: dense blooms and surface mats can reduce the light that submerged plants need. Those plants may weaken or die, adding more organic matter to the system.</p>
+
+    <div class="note"><p><strong>Editorial diagnostic rule:</strong> green water is evidence to investigate, not a complete causal proof. Confirm nutrient inputs, biological response and the oxygen-light consequences before attributing a fish kill or ecosystem decline to eutrophication.</p></div>
+  </div>
+</section>
+
+<!-- ======================================================== section 3 === -->
+<section id="t3" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+  <header>
+    <span class="eyebrow"><span class="num">3</span> Mechanism</span>
+    <h2><span class="emoji">&#129516;</span> Trace the oxygen-loss chain</h2>
+    <span class="timepill">6.6 &middot; 02:28-04:21</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The strongest scientific step in the lecture is the link between dying biomass, decomposition and dissolved oxygen. When plants or algae die, decomposers consume oxygen while breaking down the organic matter <span class="ts">6.6 &middot; 00:03:51</span>.</p>
+
+    <div class="flow">
+      <div class="step"><span class="badge">1</span><div><strong>Nutrient loading</strong><p>Nitrogen and phosphorus enter the water.</p></div></div>
+      <div class="arrow">&darr;</div>
+      <div class="step"><span class="badge">2</span><div><strong>Rapid biomass growth</strong><p>Algae, cyanobacteria or aquatic plants increase.</p></div></div>
+      <div class="arrow">&darr;</div>
+      <div class="step"><span class="badge">3</span><div><strong>Shading and turnover</strong><p>Light below the surface falls; biomass eventually dies.</p></div></div>
+      <div class="arrow">&darr;</div>
+      <div class="step"><span class="badge">4</span><div><strong>Microbial decomposition</strong><p>Bacteria break down organic material and exert oxygen demand.</p></div></div>
+      <div class="arrow">&darr;</div>
+      <div class="step"><span class="badge">5</span><div><strong>Hypoxia or anoxia</strong><p>Fish and other oxygen-dependent organisms become stressed or die.</p></div></div>
+    </div>
+
+    <p>The lecture describes reduced light and gas exchange beneath a surface cover <span class="ts">6.6 &middot; 00:02:58</span> <span class="ts">6.6 &middot; 00:03:23</span>, then identifies decomposition as an additional consumer of dissolved oxygen <span class="ts">6.6 &middot; 00:03:51</span>. It concludes that severe eutrophication can be disastrous for a lake and its aquatic species <span class="ts">6.6 &middot; 00:04:21</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: a surface bloom is not simply a lid that stops oxygen and carbon dioxide from entering.</strong> The main low-oxygen pathway is biological demand from respiration and microbial decomposition, often intensified by water-column stratification. Algae can produce oxygen in daylight and consume it through respiration, especially at night. Dense growth may affect air-water exchange, but that is not the complete mechanism.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: fish do not need sunlight to photosynthesise.</strong> The transcript says "fisheries" do not receive sunlight. Submerged plants need light; fish and many other animals need suitable dissolved oxygen, habitat and food-web conditions. Keep those pathways separate in an answer.</p>
+    </div>
+
+    <div class="formula"><strong>Editorial oxygen balance</strong> = oxygen supplied by photosynthesis and exchange minus oxygen used by respiration and decomposition</div>
+  </div>
+</section>
+
+<!-- ======================================================== section 4 === -->
+<section id="t4" class="chapter card" style="--accent:#B57A2A; --soft:#FBF1DE;">
+  <header>
+    <span class="eyebrow"><span class="num">4</span> Rate of change</span>
+    <h2><span class="emoji">&#9201;&#65039;</span> Separate natural from accelerated change</h2>
+    <span class="timepill">6.6 &middot; 02:01-06:14</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecturer makes the essential distinction that eutrophication can be a natural process, while the environmental problem studied in pollution is its acceleration or enhancement <span class="ts">6.6 &middot; 00:02:01</span> <span class="ts">6.6 &middot; 00:04:49</span>.</p>
+
+    <p><strong>Editorial comparison:</strong> this table organises the lecture's natural-versus-accelerated distinction without assigning a universal timescale.</p>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Dimension</th><th>Natural eutrophication</th><th>Human-accelerated eutrophication</th></tr></thead>
+        <tbody>
+          <tr><td>Driver</td><td>Long-term nutrient and organic-matter accumulation within a basin</td><td>Additional nutrient loading from human activities</td></tr>
+          <tr><td>Rate</td><td>Usually gradual, with rates varying among water bodies</td><td>Can be rapid enough to outpace ecosystem adjustment</td></tr>
+          <tr><td>Lecture emphasis</td><td>The underlying process occurs naturally</td><td>Agriculture, industry and sewage intensify it</td></tr>
+          <tr><td>Management implication</td><td>Understand the basin and background condition</td><td>Reduce controllable nutrient loads at their sources</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The lecture says the process naturally fills lakes with sediment over time, then asks why it has become a modern pollution issue <span class="ts">6.6 &middot; 00:04:21</span> <span class="ts">6.6 &middot; 00:04:49</span>. Its answer is acceleration: human activity adds nutrients faster and in larger amounts than the receiving system can absorb.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: there is no universal timetable for a lake to become eutrophic or fill with sediment.</strong> The rate depends on basin shape, water exchange, climate, nutrient loading, productivity and sediment processes. Use "gradual natural process" unless a named lake and dated evidence support a specific timescale.</p>
+    </div>
+
+    <p>The lecturer places scientific recognition of the anthropogenic link in the 1960s and 1970s <span class="ts">6.6 &middot; 00:06:14</span>. That period is important because whole-lake nutrient experiments produced powerful evidence about nutrient control.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: the 1960s and 1970s were a landmark experimental period, not the moment eutrophication was first discovered.</strong> Canada's Experimental Lakes Area began whole-lake enrichment work in 1969, and results published in the early 1970s demonstrated the central role of phosphorus in freshwater blooms. Phrase the date as a major evidence milestone.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 5 === -->
+<section id="t5" class="chapter card" style="--accent:#46955C; --soft:#E9F4EC;">
+  <header>
+    <span class="eyebrow"><span class="num">5</span> Source pathways</span>
+    <h2><span class="emoji">&#127806;</span> Map nutrients from land to water</h2>
+    <span class="timepill">6.6 &middot; 05:19-07:09</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecture moves upstream from the bloom to the nutrient source. Its main example is agricultural fertiliser: nutrients not taken up by crops can be carried from fields by irrigation return flow or surface runoff into a receiving water body <span class="ts">6.6 &middot; 00:05:19</span>.</p>
+
+    <p><strong>Editorial source-control aid:</strong> the sources are the lecturer's; the pathway and control questions turn them into an answer framework.</p>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Source named in the lecture</th><th>Transport pathway</th><th>Control question</th></tr></thead>
+        <tbody>
+          <tr><td>Agricultural fertiliser</td><td>Runoff, irrigation return flow, erosion or leaching into connected waters</td><td>Were nutrient rate, timing and placement matched to crop demand?</td></tr>
+          <tr><td>Sewage</td><td>Untreated discharge, weak treatment, overflow or leakage</td><td>Were nitrogen and phosphorus removed before discharge?</td></tr>
+          <tr><td>Industry</td><td>Wastewater or drainage carrying nutrient-rich material</td><td>Which process creates the nutrient load, and what permit or treatment applies?</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The lecturer explains that nutrient-enriched runoff stimulates the algal growth that was previously natural and slower <span class="ts">6.6 &middot; 00:05:45</span>. The discussion then adds agriculture, industry and sewage disposal as anthropogenic activities associated with nutrient enrichment <span class="ts">6.6 &middot; 00:06:14</span>.</p>
+
+    <p>Sewage is treated as a direct drainage problem: if nitrogen and phosphorus are not adequately removed, the receiving water body gets the extra nutrient load <span class="ts">6.6 &middot; 00:06:39</span>. The lecturer closes by reserving a fuller treatment of causes and the process for the next video <span class="ts">6.6 &middot; 00:07:09</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: fertiliser runoff is important, but it is not the only pathway and every bloom is not automatically caused by human nutrient pollution.</strong> Wastewater, animal waste, stormwater, atmospheric deposition and natural nutrient cycling may contribute. Bloom formation also depends on light, temperature, flow, mixing and the organisms present. Identify the actual watershed sources before assigning responsibility.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Editorial exam model:</strong> organise causes as <strong>source &rarr; pathway &rarr; receiving water &rarr; ecological response</strong>. This prevents a loose list. For example: excess field phosphorus &rarr; storm runoff &rarr; shallow lake &rarr; algal growth, decomposition and low oxygen.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================= glossary === -->
+<section id="t6" class="chapter card" style="--accent:#8B8490; --soft:#F0EEF2;">
+  <header>
+    <span class="eyebrow">Reference</span>
+    <h2><span class="emoji">&#128218;</span> Glossary</h2>
+  </header>
+  <div class="section-body">
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Term</th><th>Meaning in this lecture</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Eutrophication</strong></td><td>Nutrient enrichment of a water body and the ecological changes that follow.</td></tr>
+          <tr><td><strong>Nutrient loading</strong></td><td>Movement of nutrients into a receiving water over a defined period.</td></tr>
+          <tr><td><strong>Limiting nutrient</strong></td><td>The nutrient in shortest effective supply relative to biological demand.</td></tr>
+          <tr><td><strong>Algal bloom</strong></td><td>Rapid or dense increase in algae or algae-like cyanobacteria.</td></tr>
+          <tr><td><strong>Dissolved oxygen</strong></td><td>Oxygen present in water and available to aquatic organisms.</td></tr>
+          <tr><td><strong>Hypoxia</strong></td><td>Low dissolved-oxygen condition that stresses oxygen-dependent life.</td></tr>
+          <tr><td><strong>Anoxia</strong></td><td>Condition in which dissolved oxygen is effectively absent.</td></tr>
+          <tr><td><strong>Decomposition</strong></td><td>Microbial breakdown of dead organic matter, a process that consumes oxygen.</td></tr>
+          <tr><td><strong>Light attenuation</strong></td><td>Reduction of light as it passes through water, algae or surface growth.</td></tr>
+          <tr><td><strong>Runoff</strong></td><td>Water flowing across land and carrying dissolved or particulate material.</td></tr>
+          <tr><td><strong>Receiving water</strong></td><td>Lake, pond, river, estuary or other water body into which a discharge enters.</td></tr>
+          <tr><td><strong>Dead zone</strong></td><td>Area of water with oxygen too low to support much aquatic life.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== flashcards === -->
+<section id="t7" class="chapter card" style="--accent:#2E9E6A; --soft:#E4F3EB;">
+  <header>
+    <span class="eyebrow">Active recall</span>
+    <h2><span class="emoji">&#127183;</span> Flashcards</h2>
+  </header>
+  <div class="section-body">
+    <div class="cards">
+      <div class="qa"><p class="q">What is eutrophication?</p><p class="a">Nutrient enrichment of a water body and the resulting ecological changes.</p></div>
+      <div class="qa"><p class="q">Which nutrients are central?</p><p class="a">Nitrogen and phosphorus.</p></div>
+      <div class="qa"><p class="q">What visible clue opens the lecture?</p><p class="a">Dense green algal or plant growth at the water surface.</p></div>
+      <div class="qa"><p class="q">Does eutrophication mean a lake is dead?</p><p class="a">No. Death or a dead zone is a possible severe consequence, not the definition.</p></div>
+      <div class="qa"><p class="q">How can a bloom reduce light?</p><p class="a">Dense biomass attenuates light before it reaches submerged plants.</p></div>
+      <div class="qa"><p class="q">What consumes oxygen after a bloom dies?</p><p class="a">Microbial decomposition of the dead organic matter.</p></div>
+      <div class="qa"><p class="q">What is hypoxia?</p><p class="a">A low dissolved-oxygen condition that stresses aquatic life.</p></div>
+      <div class="qa"><p class="q">Can eutrophication occur naturally?</p><p class="a">Yes. Human nutrient loading can accelerate the process.</p></div>
+      <div class="qa"><p class="q">What is the lecture's main agricultural pathway?</p><p class="a">Unused fertiliser nutrients moving from fields in runoff or irrigation return flow.</p></div>
+      <div class="qa"><p class="q">Which other sources does the lecture name?</p><p class="a">Sewage and industry.</p></div>
+      <div class="qa"><p class="q">Is fertiliser itself a limiting factor?</p><p class="a">It is a nutrient source; nitrogen or phosphorus may be the limiting nutrient.</p></div>
+      <div class="qa"><p class="q">Does every algal bloom prove nutrient pollution?</p><p class="a">No. Source evidence and environmental conditions must be examined.</p></div>
+      <div class="qa"><p class="q">Why is the surface-lid model incomplete?</p><p class="a">Low oxygen mainly reflects respiration and decomposition, often with stratification.</p></div>
+      <div class="qa"><p class="q">What do submerged plants need from sunlight?</p><p class="a">Light for photosynthesis.</p></div>
+      <div class="qa"><p class="q">What do fish need in this chain?</p><p class="a">Suitable dissolved oxygen, habitat and food-web conditions.</p></div>
+      <div class="qa"><p class="q">Why are the 1960s and 1970s important?</p><p class="a">They were a landmark period of whole-lake nutrient experiments and policy evidence.</p></div>
+      <div class="qa"><p class="q">What is a complete source pathway?</p><p class="a">Source, transport route, receiving water and ecological response.</p></div>
+      <div class="qa"><p class="q">What should follow the definition in an exam answer?</p><p class="a">A causal chain from nutrient inputs to biological growth and oxygen effects.</p></div>
+      <div class="qa"><p class="q">What should a diagnosis measure?</p><p class="a">Nutrients, biological response, light or clarity, and dissolved oxygen.</p></div>
+      <div class="qa"><p class="q">What is the safest one-line chain?</p><p class="a">Nutrients to bloom to decay to oxygen loss to ecological stress.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== exam focus === -->
+<section id="t8" class="chapter card" style="--accent:#2E9E6A; --soft:#E4F3EB;">
+  <header>
+    <span class="eyebrow">Revision sheet</span>
+    <h2><span class="emoji">&#127919;</span> Exam focus</h2>
+  </header>
+  <div class="section-body">
+    <h3>Editorial answer architecture</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Move</th><th>What to write</th><th>Exam verb</th></tr></thead>
+        <tbody>
+          <tr><td>Define</td><td>Nutrient enrichment and resulting ecological change</td><td>State</td></tr>
+          <tr><td>Distinguish</td><td>Natural process versus human acceleration</td><td>Differentiate</td></tr>
+          <tr><td>Source</td><td>Agriculture, sewage and relevant industrial pathways</td><td>Identify</td></tr>
+          <tr><td>Mechanism</td><td>Nutrient load, biomass growth, shading, decay and oxygen demand</td><td>Explain</td></tr>
+          <tr><td>Effect</td><td>Hypoxia, habitat loss, fish stress and possible dead zones</td><td>Analyse</td></tr>
+          <tr><td>Evidence</td><td>Nutrients, chlorophyll or biomass, water clarity and oxygen profile</td><td>Evaluate</td></tr>
+          <tr><td>Control</td><td>Match the intervention to the verified source and pathway</td><td>Recommend</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Corrections to remember</h3>
+    <ul>
+      <li>Define eutrophication as nutrient enrichment, not the literal death of a lake.</li>
+      <li>Nitrogen and phosphorus are central; sunlight and temperature modify bloom conditions.</li>
+      <li>Decomposition and respiration are central to dissolved-oxygen depletion.</li>
+      <li>Submerged plants need light; fish need suitable oxygen and habitat conditions.</li>
+      <li>Treat the 1960s and 1970s as a landmark evidence period, not the date of first discovery.</li>
+      <li>Do not blame a single source until the watershed pathway is established.</li>
+    </ul>
+
+    <div class="note exam">
+      <p><strong>Editorial thirty-second thesis:</strong> eutrophication becomes a pollution problem when controllable nutrient loads accelerate biological production beyond a water body's assimilative capacity, increasing shading, organic-matter decay and oxygen stress. Effective control therefore begins upstream, with evidence linking a nutrient source to its transport pathway and receiving water.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="notefoot">Want the whole lecture? <a href="https://drive.google.com/file/d/1kjRFohQoeoFnTQGkrcE5PNkrPKjy531q/view?usp=drivesdk" target="_blank" rel="noopener">▶ Watch the full recording</a><span class="sep">·</span><a href="https://drive.google.com/file/d/16tSjBRppy_ooeV5r4mVc6pJajjwyWIOg/view?usp=drivesdk" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+</html>

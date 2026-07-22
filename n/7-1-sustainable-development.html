@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sustainable Development: Resources, Equity and Policy Design</title>
+<style>/* Lecture Notes ebook, "warm study" theme.
+   Inspired by Mehak's MarketCanvas app: soft cream ground, rounded white cards,
+   a different pastel accent per topic, serif display + friendly sans body,
+   gentle emoji + pill badges. Playful and pretty, but still a real study book.
+   Print-first (A4 PDF via headless Edge); reads well on screen too.
+
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
+   Everything themeable keys off --accent / --soft. Titles stay ink for
+   readability; accents colour eyebrows, numbers, pills, rules and callouts.
+*/
+
+:root {
+  --cream: #FCF6F0;          /* page ground (warm) */
+  --card: #FFFFFF;
+  --ink: #2C2630;            /* plum-black body/headings */
+  --ink-soft: #5A5360;
+  --slate: #8B8490;          /* captions, timestamps */
+  --hairline: #EEE6E4;
+
+  /* section default accent (overridden per section) */
+  --accent: #C0567E;
+  --soft: #FBECF1;
+
+  --shadow: 0 1px 2px rgba(60,30,45,.05), 0 10px 26px rgba(80,40,55,.07);
+  --radius: 20px;
+
+  --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: Consolas, "Cascadia Code", ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background:
+    radial-gradient(1100px 700px at 15% -5%, #FBEEF3 0%, transparent 55%),
+    radial-gradient(1000px 700px at 100% 0%, #EEF3FB 0%, transparent 50%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  font: 10.8pt/1.62 var(--sans);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+@media screen {
+  body { max-width: 51rem; margin: 0 auto; padding: 2.5rem 1.15rem 4rem; font-size: 1.0rem; }
+}
+
+/* ---------------------------------------------------------------- page --- */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm 14mm;
+  @bottom-center {
+    content: counter(page);
+    font: 8.5pt var(--sans);
+    color: #8B8490;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+/* --------------------------------------------------------------- cards --- */
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8mm 9mm 9mm;
+  margin: 0 0 6mm;
+  box-shadow: var(--shadow);
+  break-inside: auto;
+}
+@media screen { .card { margin-bottom: 1.4rem; } }
+
+/* a soft accent wash across the top of each section card (fades to white),
+   echoing the app's pastel cards without hurting readability */
+.chapter {
+  background:
+    linear-gradient(180deg, var(--soft) 0, rgba(255,255,255,0) 34mm),
+    var(--card);
+  border-top: 3px solid var(--accent);
+  break-inside: auto;
+  break-before: page;   /* each topic starts fresh: slide on top, notes below */
+}
+/* on screen (web/PWA) sections just stack; no forced page breaks */
+@media screen { .chapter { break-before: auto; } }
+
+h2, h3, .eyebrow { break-after: avoid; }
+p { orphans: 2; widows: 2; }
+
+/* keep the section header intact (eyebrow + title + time pill together) and
+   glued to its opening slide */
+.chapter > header { break-inside: avoid; break-after: avoid; }
+figure.slide { break-before: avoid; }
+
+/* --------------------------------------------------------------- cover --- */
+
+.cover {
+  page: cover;
+  break-after: page;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32mm 22mm 24mm;
+  background:
+    radial-gradient(700px 460px at 12% 8%, #FBE6EE 0%, transparent 60%),
+    radial-gradient(760px 520px at 96% 4%, #E7EEFB 0%, transparent 58%),
+    radial-gradient(620px 520px at 80% 96%, #E6F4EC 0%, transparent 60%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+@media screen {
+  .cover { min-height: 80vh; border-radius: 24px; padding: 3.2rem 2.6rem; margin-bottom: 1.4rem; }
+}
+
+.cover .avatar { font-size: 30pt; line-height: 1; margin-bottom: 7mm; }
+.cover .kicker {
+  font: 600 9pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 5mm;
+}
+.cover h1 {
+  font: 600 31pt/1.14 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 15em;
+}
+.cover .subtitle {
+  margin-top: 5mm;
+  font: 400 13.5pt/1.5 var(--sans);
+  color: var(--ink-soft);
+  max-width: 30em;
+}
+.cover .warm {
+  margin-top: 4mm;
+  font: italic 400 12pt/1.5 var(--serif);
+  color: var(--accent);
+}
+
+.cover .chips { display: flex; flex-wrap: wrap; gap: 3mm; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.4mm 4mm;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(60,30,45,.04);
+  font: 400 9pt var(--sans);
+  color: var(--slate);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chip b { font: 700 10.5pt var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ headings --- */
+
+.chapter header { margin-bottom: 5mm; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  font: 700 8.5pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--accent);
+  margin-bottom: 3mm;
+}
+.eyebrow .num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h2 {
+  font: 600 20pt/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .emoji { font-size: 17pt; }
+
+.timepill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.5mm 3.5mm;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font: 600 8pt var(--mono);
+  letter-spacing: 0.02em;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h3 {
+  font: 600 12.5pt/1.34 var(--serif);
+  color: var(--ink);
+  margin: 6mm 0 2.5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+.ts { font: 400 8.5pt var(--mono); color: var(--slate); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- body --- */
+
+.section-body > :last-child { margin-bottom: 0; }
+p { margin: 0 0 3mm; }
+.lead { font-size: 11.2pt; color: var(--ink); }
+
+ul, ol { margin: 0 0 3mm 5.5mm; }
+li { margin-bottom: 1.7mm; padding-left: 1mm; }
+li::marker { color: var(--accent); }
+
+.kt { font-weight: 700; color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
+
+code { font: 9.5pt var(--mono); background: #F3EFF4; padding: .4pt 3.5pt; border-radius: 4px; }
+
+/* ------------------------------------------------------------ callouts --- */
+
+.note {
+  --c: var(--accent);
+  --f: var(--soft);
+  background: var(--f);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  border-left: 3px solid var(--c);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.note .label {
+  display: inline-flex; align-items: center; gap: 1.6mm;
+  font: 700 8pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c);
+  margin-bottom: 1.8mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.warn { --c: #B4791F; --f: #FaF1DF; }
+.note.exam { --c: #3B8B78; --f: #E6F3EF; }
+.note.def  { --c: var(--accent); --f: var(--soft); }
+
+/* ------------------------------------------------------- summary card --- */
+
+.summary { --accent: #C0567E; --soft: #FBECF1; }
+.summary ul { list-style: none; margin: 0; }
+.summary li { position: relative; padding: 0 0 0 7mm; margin-bottom: 3.5mm; }
+.summary li::before {
+  content: "";
+  position: absolute; left: 0; top: 2.6mm;
+  width: 3.2mm; height: 3.2mm; border-radius: 50%;
+  background: var(--accent);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.summary li:last-child { margin-bottom: 0; }
+.summary li b, .summary li strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------- TOC --- */
+
+nav.toc { --accent: #8B8490; --soft: #F3EFF4; }
+nav.toc ol { list-style: none; margin: 0; }
+nav.toc li {
+  display: flex; align-items: baseline; gap: 4mm;
+  padding: 2.7mm 0;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11pt var(--sans);
+}
+nav.toc li:last-child { border-bottom: 0; }
+nav.toc .dot { width: 3.4mm; height: 3.4mm; border-radius: 50%; flex-shrink: 0;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+nav.toc .title { flex: 1; color: var(--ink); }
+nav.toc .rng { flex-shrink: 0; font: 600 8.5pt var(--mono); color: var(--slate); }
+
+/* -------------------------------------------------------------- slides --- */
+
+figure.slide { margin: 0 0 5mm; break-inside: avoid; }
+figure.slide img {
+  width: 100%; display: block;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 10px rgba(40,30,45,.10);
+}
+figure.slide figcaption {
+  font: 400 8.5pt var(--sans);
+  color: var(--slate);
+  margin-top: 2mm;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4mm;
+}
+figure.slide figcaption .ts { color: var(--accent); }
+
+/* ------------------------------------------------------------ glossary --- */
+
+dl.glossary { margin: 0; }
+dl.glossary div { padding: 3mm 0; border-bottom: 1px solid var(--hairline); break-inside: avoid; }
+dl.glossary div:last-child { border-bottom: 0; padding-bottom: 0; }
+dl.glossary dt { font: 700 10.5pt var(--sans); color: var(--accent); margin-bottom: 1.2mm; }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- flashcards --- */
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 0; }
+.qa {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  background: linear-gradient(180deg, var(--soft) 0, #fff 60%);
+  break-inside: avoid;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.qa .q { font: 700 10pt var(--sans); color: var(--ink); margin-bottom: 2mm; }
+.qa .a { color: var(--ink-soft); font-size: 10pt; }
+
+/* ------------------------------------------------------------- tables --- */
+
+.tables-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0; break-inside: avoid; }
+th {
+  font: 700 9pt var(--sans); text-align: left; color: var(--accent);
+  border-bottom: 2px solid var(--soft); padding: 2mm 3mm 2mm 0;
+}
+td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+
+/* --- mobile / on-the-go reading (screen only; never affects the print PDF).
+   Placed LAST so it wins the cascade over the wider @media screen rules above.
+   Requires <meta name="viewport" content="width=device-width, initial-scale=1">. */
+@media screen and (max-width: 640px) {
+  body { padding: 1rem 0.85rem 2.5rem; font-size: 1.02rem; }
+  .card { padding: 5mm 5mm 6mm; border-radius: 14px; margin-bottom: 0.9rem; }
+  .cover { min-height: auto; padding: 2rem 1.3rem 1.6rem; border-radius: 16px; }
+  .cover .avatar { font-size: 24pt; margin-bottom: 4mm; }
+  .cover h1 { font-size: 20pt; max-width: 100%; }
+  .cover .subtitle { font-size: 11.5pt; }
+  .cover .warm { font-size: 11pt; }
+  .cover .chips { gap: 2mm; margin-top: 5mm; }
+  h2 { font-size: 16pt; }
+  h2 .emoji { font-size: 13.5pt; }
+  h3 { font-size: 11.5pt; }
+  .cards { grid-template-columns: 1fr; }
+  nav.toc li { font-size: 10.5pt; gap: 2.5mm; padding: 2.5mm 0; }
+  nav.toc .rng { font-size: 8pt; }
+  .note { padding: 3.5mm 4mm; }
+  table { font-size: 9.5pt; }
+}
+</style>
+<meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
+align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
+border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
+<body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/file/d/12viTYC2Ipk-oIRKljHOpDXM9xOIZQTSw/view?usp=drivesdk" target="_blank" rel="noopener">Download PDF ↓</a></div>
+
+<!-- ============================================================ cover === -->
+<section class="cover" style="background:radial-gradient(700px 460px at 12% 8%,#E4F3EB 0,transparent 60%),radial-gradient(760px 520px at 96% 4%,#E7F1FB 0,transparent 58%),radial-gradient(620px 520px at 80% 96%,#FAF0E2 0,transparent 60%),var(--cream)">
+  <div>
+    <div class="avatar">&#127757;</div>
+    <div class="kicker" style="color:#2E9E6A">CSS Environmental Science &middot; Modules 7.1 and 7.2</div>
+    <h1>Sustainable Development: Resources, Equity and Policy Design</h1>
+    <p class="subtitle">A policy-centred guide to sustainable development: needs across generations, renewable and finite resources, social progress, equity, environmental limits, conflict diagnosis, measurement and practical urban responses.</p>
+    <p class="warm" style="color:#2C8A5E">Keep development, distribution and ecological capacity in the same decision frame. &#127793;</p>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>36m</b> combined</span>
+    <span class="chip"><b>2</b> modules</span>
+    <span class="chip"><b>8</b> core topics</span>
+    <span class="chip"><b>14</b> correction boxes</span>
+  </div>
+</section>
+
+<!-- ============================================================== toc === -->
+<nav class="toc card">
+  <header><span class="eyebrow">Contents</span><h2><span class="emoji">&#128506;&#65039;</span> In this chapter</h2></header>
+  <ol>
+    <li><span class="dot" style="background:#2E9E6A"></span><a class="title" href="#summary">The five-minute version</a><span class="rng">summary</span></li>
+    <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t1">01 &middot; Separate the idea from the SDGs</a><span class="rng">concept</span></li>
+    <li><span class="dot" style="background:#3A7CC0"></span><a class="title" href="#t2">02 &middot; Apply the resource-time test</a><span class="rng">stocks and flows</span></li>
+    <li><span class="dot" style="background:#C0762C"></span><a class="title" href="#t3">03 &middot; Turn growth into well-being</a><span class="rng">four priorities</span></li>
+    <li><span class="dot" style="background:#46955C"></span><a class="title" href="#t4">04 &middot; Measure social progress carefully</a><span class="rng">SPI</span></li>
+    <li><span class="dot" style="background:#A4553A"></span><a class="title" href="#t5">05 &middot; Read population and overshoot</a><span class="rng">scale and limits</span></li>
+    <li><span class="dot" style="background:#7A5AA8"></span><a class="title" href="#t6">06 &middot; Reconcile policy conflicts</a><span class="rng">growth, equity, environment</span></li>
+    <li><span class="dot" style="background:#B44A8C"></span><a class="title" href="#t7">07 &middot; Build new areas differently</a><span class="rng">forward design</span></li>
+    <li><span class="dot" style="background:#557E9B"></span><a class="title" href="#t8">08 &middot; Retrofit developed cities</a><span class="rng">implementation</span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t9">Glossary &middot; Flashcards &middot; Exam focus</a><span class="rng"></span></li>
+  </ol>
+</nav>
+
+<!-- ============================================================= tldr === -->
+<section id="summary" class="summary card" style="--accent:#2E9E6A; --soft:#E4F3EB; border-top-color:#2E9E6A">
+  <header><span class="eyebrow" style="color:#2E9E6A">Start here</span><h2><span class="emoji">&#11088;</span> The five-minute version</h2></header>
+  <ul>
+    <li><strong>Sustainable development is the governing idea; the SDGs are its 2030 policy framework.</strong> The idea protects the ability of future generations to meet their needs while integrating economic, social and environmental decisions.</li>
+    <li><strong>Resource rules differ.</strong> Renewable use must respect regeneration and ecosystem function; finite-resource policy manages depletion, efficiency, substitution, reuse and recycling. No physical stock is made infinite by wording it as sustainable.</li>
+    <li><strong>Policy requires conflict analysis and implementation.</strong> Growth, equity and environmental protection can pull in different directions. Indicators, inventories, urban form, transit, buildings, water systems, forestry and enforcement turn the principle into decisions.</li>
+  </ul>
+</section>
+
+<!-- ======================================================== section 1 === -->
+<section id="t1" class="chapter card" style="--accent:#2C8C86; --soft:#E4F1F0;">
+  <header>
+    <span class="eyebrow"><span class="num">1</span> Conceptual boundary</span>
+    <h2><span class="emoji">&#129504;</span> Separate the idea from the SDGs</h2>
+    <span class="timepill">7.1 &middot; 00:00:30-02:28</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecturer explicitly distinguishes the broad idea of sustainable development from the Sustainable Development Goals <span class="ts">7.1 &middot; 00:01:31</span>. The course will touch the goals connected to environmental science, but its immediate purpose is to conceptualise the governing idea <span class="ts">7.1 &middot; 00:01:56</span>.</p>
+
+    <div class="grid-2">
+      <div>
+        <h3>Sustainable development</h3>
+        <p>A continuing decision principle: meet present needs and improve well-being without undermining the resource and opportunity base available to future generations.</p>
+      </div>
+      <div>
+        <h3>The SDGs</h3>
+        <p>Seventeen integrated and indivisible goals adopted under the 2030 Agenda, with targets that operationalise economic, social and environmental priorities.</p>
+      </div>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: sustainable development is not defined as making resources last forever.</strong> The lecture begins with that shorthand <span class="ts">7.1 &middot; 00:02:28</span>. The Brundtland formulation is about meeting present needs without compromising future generations' ability to meet theirs. It requires attention to needs, distribution, technology, institutions and ecological limits.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the SDGs are seventeen integrated goals, not a separable environmental subset.</strong> The course intentionally selects environmentally relevant goals <span class="ts">7.2 &middot; 00:04:01</span>. For formal use, the 2030 Agenda says all 17 goals and 169 targets are integrated and indivisible; an exact list of six or seven "environmental goals" is an analytical grouping, not an official UN classification.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 2 === -->
+<section id="t2" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+  <header>
+    <span class="eyebrow"><span class="num">2</span> Stocks, flows and time</span>
+    <h2><span class="emoji">&#9203;</span> Apply the resource-time test</h2>
+    <span class="timepill">7.1 &middot; 00:02:55-03:55; 10:07-10:35</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecture's strongest operational rule is that consumption of a renewable resource should not exceed its rate of regrowth <span class="ts">7.1 &middot; 00:03:26</span>. The same test cannot be copied unchanged to finite stocks, which do not regenerate on a human time scale.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Resource type</th><th>Policy question</th><th>Typical response</th></tr></thead>
+        <tbody>
+          <tr><td>Renewable flow</td><td>Is extraction below regeneration while ecosystem function is maintained?</td><td>Harvest limits, habitat protection, restoration and monitoring.</td></tr>
+          <tr><td>Finite stock</td><td>How quickly is the stock depleted, and what service does it provide?</td><td>Efficiency, demand reduction, substitution and a managed transition.</td></tr>
+          <tr><td>Reusable material</td><td>Can product life and material cycles be extended safely?</td><td>Repair, reuse, remanufacture and recycling.</td></tr>
+          <tr><td>Waste sink</td><td>Can receiving systems absorb emissions without losing function?</td><td>Prevention, cleaner production, treatment and enforceable limits.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: finite resources cannot be made permanent.</strong> The lecturer recognises the difficulty after suggesting that they should remain forever <span class="ts">7.1 &middot; 00:02:55</span>. Sustainable policy manages the rate and consequences of depletion and builds substitutes; it does not convert a finite stock into an infinite one.</p>
+    </div>
+
+    <p>The waste-management example extends the time horizon through repeated material use <span class="ts">7.1 &middot; 00:10:07</span>. Recycling can reduce virgin-material demand, but each loop has technical losses, quality constraints and energy requirements.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: "zero waste" is a direction, not proof that no waste remains.</strong> The lecture describes a closed loop and says materials may pass through six or seven cycles <span class="ts">7.1 &middot; 00:10:35</span>. The cycle count is unsupported and material-specific. A defensible answer prioritises prevention and reuse, then measures actual recovery and residual disposal.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 3 === -->
+<section id="t3" class="chapter card" style="--accent:#C0762C; --soft:#FAF0E2;">
+  <header>
+    <span class="eyebrow"><span class="num">3</span> Development purpose</span>
+    <h2><span class="emoji">&#128161;</span> Turn growth into well-being</h2>
+    <span class="timepill">7.1 &middot; 00:03:55-07:41</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecturer treats development as a persistent feature of human societies and asks how it can remain sustainable when it depends on resources <span class="ts">7.1 &middot; 00:04:50</span>. The slide organises the answer around social progress, economic growth, turning wealth into well-being and human well-being <span class="ts">7.1 &middot; 00:05:21</span>.</p>
+
+    <div class="grid-2">
+      <div>
+        <h3>Means</h3>
+        <ul>
+          <li><strong>Economic growth:</strong> expands production and fiscal capacity.</li>
+          <li><strong>Wealth conversion:</strong> channels resources into health, education, safety, services and opportunity.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Ends</h3>
+        <ul>
+          <li><strong>Social progress:</strong> improves lived conditions and inclusion.</li>
+          <li><strong>Human well-being:</strong> tests whether development improves life over the long run.</li>
+        </ul>
+      </div>
+    </div>
+
+    <p>The lecture gives human well-being special weight and calls development that damages long-run well-being a form of regression <span class="ts">7.1 &middot; 00:06:17</span>. Its future-city lens adds environmental quality, economic vitality, community and connectedness <span class="ts">7.1 &middot; 00:07:41</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: these four items are the course's planning frame, not the official four principles of sustainable development.</strong> UN material commonly organises the core relationship around economic growth, social inclusion and environmental protection. The lecture's wealth-to-well-being distinction is still useful, but it should be labelled as an analytical model.</p>
+    </div>
+
+    <div class="note"><p><strong>Editorial test:</strong> for any project, ask who gains, who bears cost, which capability improves, which resource stock or ecosystem service changes, and whether the outcome remains viable over time.</p></div>
+  </div>
+</section>
+
+<!-- ======================================================== section 4 === -->
+<section id="t4" class="chapter card" style="--accent:#46955C; --soft:#E9F4EC;">
+  <header>
+    <span class="eyebrow"><span class="num">4</span> Measurement discipline</span>
+    <h2><span class="emoji">&#128202;</span> Measure social progress carefully</h2>
+    <span class="timepill">7.2 &middot; 00:00:33-04:56</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Module 7.2 introduces the Social Progress Index as a way to examine non-economic social and environmental outcomes <span class="ts">7.2 &middot; 00:00:33</span>. Its durable contribution is the three-dimension structure, not the historical numbers printed on the slide.</p>
+
+    <div class="grid-3">
+      <div class="mini"><h3>Basic Needs</h3><p>Nutrition and medical care, water and sanitation, housing and safety.</p></div>
+      <div class="mini"><h3>Foundations of Wellbeing</h3><p>Knowledge, information, health and environmental quality.</p></div>
+      <div class="mini"><h3>Opportunity</h3><p>Rights, freedom and choice, inclusion and access to advanced education.</p></div>
+    </div>
+
+    <p>The lecturer works through the dimensions as basic human needs, foundations of well-being and opportunity <span class="ts">7.2 &middot; 00:02:28</span>, then links them back to the earlier policy objectives <span class="ts">7.2 &middot; 00:03:06</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: 61, 75 and Pakistan 48 are undated historical slide values, not timeless benchmarks.</strong> The class repeats them <span class="ts">7.2 &middot; 00:04:56</span>. Social Progress Index scores change by edition and methodology, and the index is scaled from 0 to 100. The index owner does not define 75 as a universal threshold for achieving the SDGs. Cite the year and edition before using any score.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: an SPI score is not a percentage of SDGs achieved.</strong> The lecture uses percentage language and treats movement to 75 as the goal <span class="ts">7.2 &middot; 00:01:55</span>. SPI is a composite social-progress score built from its own dimensions, components and indicators; it can inform SDG analysis but is not an SDG completion rate.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 5 === -->
+<section id="t5" class="chapter card" style="--accent:#A4553A; --soft:#F7EBE5;">
+  <header>
+    <span class="eyebrow"><span class="num">5</span> Scale and ecological demand</span>
+    <h2><span class="emoji">&#127758;</span> Read population and overshoot</h2>
+    <span class="timepill">7.1 &middot; 00:08:09-10:07</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecture uses population growth and longer lives to explain why pressure on finite land and renewable systems can rise <span class="ts">7.1 &middot; 00:08:09</span> <span class="ts">7.1 &middot; 00:08:37</span>. The sound analytical point is that total demand depends on population, consumption patterns, technology and distribution.</p>
+
+    <div class="formula"><strong>Total pressure</strong> = population &times; per-person demand &times; production impact, moderated by technology, institutions and distribution</div>
+
+    <div class="note warn">
+      <p><strong>Correction: the 7.2-to-9-billion population line is outdated and underspecified.</strong> The lecturer gives it as a present-to-future comparison <span class="ts">7.1 &middot; 00:08:09</span>. UN World Population Prospects 2024 estimated 8.2 billion people in 2024 and projected a peak near 10.3 billion in the mid-2080s. Population claims need a base year, scenario and projection horizon.</p>
+    </div>
+
+    <p>The class then says the world's resources suit eight billion people while humanity exhausts a year's resources in six months <span class="ts">7.1 &middot; 00:09:04</span>. This blends carrying-capacity language with the ecological-footprint metaphor.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: there is no verified universal capacity of exactly eight billion people.</strong> Ecological capacity depends on consumption, technology, trade, ecosystems and distribution. Earth Overshoot Day is an accounting estimate of when annual demand exceeds annual regeneration; it is not the date all resources physically disappear.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the 2021 overshoot date was 29 July, not a generic six-month cutoff.</strong> The Global Footprint Network placed Earth Overshoot Day 2021 on 29 July. The metric has a methodology and a year-specific date, so use it with attribution rather than as an unqualified depletion fact.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 6 === -->
+<section id="t6" class="chapter card" style="--accent:#7A5AA8; --soft:#F0EBF8;">
+  <header>
+    <span class="eyebrow"><span class="num">6</span> Conflict-centred planning</span>
+    <h2><span class="emoji">&#9878;&#65039;</span> Reconcile policy conflicts</h2>
+    <span class="timepill">7.1 &middot; 00:11:00-19:44</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecturer gives a sustainable planner three obligations: grow the economy, distribute growth fairly and avoid degrading the environmental system <span class="ts">7.1 &middot; 00:11:00</span> <span class="ts">7.1 &middot; 00:11:30</span>. Policy quality depends on making the conflicts visible before choosing instruments.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Conflict taught</th><th>What can collide</th><th>Planner's task</th></tr></thead>
+        <tbody>
+          <tr><td>Economic vs social progress</td><td>Output growth, labour conditions, land relations and unequal exposure to harm</td><td>Distribute gains and protect affected groups.</td></tr>
+          <tr><td>Economy vs environment</td><td>Extraction and production against resource stocks and ecological function</td><td>Set limits, prices, standards and transition pathways.</td></tr>
+          <tr><td>Development vs environment</td><td>Housing, roads and mobility against land, emissions and habitat</td><td>Change form and technology rather than freezing development.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The industry example shows how unconstrained production may ignore environmental harms <span class="ts">7.1 &middot; 00:13:29</span>. Those harms can fall unequally, with poorer groups suffering more <span class="ts">7.1 &middot; 00:14:26</span>. The resource example adds that an economy ultimately depends on the resource base it depletes <span class="ts">7.1 &middot; 00:15:56</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: equity is not simply equal distribution.</strong> The lecture defines it as equal or fair distribution <span class="ts">7.1 &middot; 00:11:30</span>. Equality gives the same share or treatment; equity considers differing needs, responsibilities, exposure and capacity. A strong answer states which distributional rule it uses.</p>
+    </div>
+
+    <p>The forest example rejects both total exclusion and unconstrained clearing, favouring use compatible with regeneration and reforestation <span class="ts">7.1 &middot; 00:17:47</span>. The built-environment example similarly rejects stopping houses, roads and mobility, and points toward better urban management <span class="ts">7.1 &middot; 00:18:48</span> <span class="ts">7.1 &middot; 00:19:16</span>.</p>
+
+  </div>
+</section>
+
+<!-- ======================================================== section 7 === -->
+<section id="t7" class="chapter card" style="--accent:#B44A8C; --soft:#F8EAF3;">
+  <header>
+    <span class="eyebrow"><span class="num">7</span> Forward design</span>
+    <h2><span class="emoji">&#127959;&#65039;</span> Build new areas differently</h2>
+    <span class="timepill">7.2 &middot; 00:04:28-09:27</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The sustainable-model lecture proposes a research-backed package for new development: compact and mixed-use urban form, greenhouse-gas accounting, forestry, bus rapid transit and rainwater harvesting <span class="ts">7.2 &middot; 00:04:28</span>.</p>
+
+    <div class="grid-2">
+      <div>
+        <h3>Measure first</h3>
+        <ul>
+          <li>Build a greenhouse-gas inventory with transparent activity data and emission factors.</li>
+          <li>Map land, water, mobility and ecological constraints before approving growth.</li>
+          <li>Define indicators for access, exposure, emissions, water and equity.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Design the system</h3>
+        <ul>
+          <li>Use walkable, mixed-use development where context permits.</li>
+          <li>Connect growth with public transport and efficient buildings.</li>
+          <li>Protect and restore ecosystems while maintaining legitimate social use.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: Pakistan has had national greenhouse-gas inventories.</strong> The lecture says none exists <span class="ts">7.2 &middot; 00:05:21</span> <span class="ts">7.2 &middot; 00:05:51</span>. Pakistan's Initial National Communication contained an inventory, its first Biennial Update Report reported a 2017-18 inventory, and later transparency reporting updated the system. The real policy issue is regularity, quality, coverage and institutional continuity.</p>
+    </div>
+
+    <p>The class presents lower-carbon development as a chance to avoid repeating hydrocarbon dependence and unmanaged sprawl <span class="ts">7.2 &middot; 00:06:49</span>. Forestry is offered as a way to combine environmental, social and economic gains <span class="ts">7.2 &middot; 00:07:18</span>, while BRT and rainwater harvesting provide transport and water examples <span class="ts">7.2 &middot; 00:07:49</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: rainwater harvesting does not automatically refill a water table.</strong> The lecture makes that direct claim <span class="ts">7.2 &middot; 00:08:17</span>. Harvested rain may be stored for use, slowed to reduce runoff or directed to recharge where soil, geology, water quality and design permit. The destination and safeguards must be specified.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 8 === -->
+<section id="t8" class="chapter card" style="--accent:#557E9B; --soft:#E8F0F5;">
+  <header>
+    <span class="eyebrow"><span class="num">8</span> Existing-city transition</span>
+    <h2><span class="emoji">&#127970;</span> Retrofit developed cities</h2>
+    <span class="timepill">7.2 &middot; 00:09:27-12:33</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">For existing cities, the lecture shifts from greenfield design to retrofit: new urban management, greener buildings, reforestation and action against unplanned encroachment <span class="ts">7.2 &middot; 00:09:27</span> <span class="ts">7.2 &middot; 00:11:36</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Lever</th><th>Action</th><th>Required safeguard</th></tr></thead>
+        <tbody>
+          <tr><td>Buildings</td><td>Improve envelopes, appliances, lighting, water fixtures and on-site energy.</td><td>Measure baseline and post-retrofit performance.</td></tr>
+          <tr><td>Power</td><td>Add solar or other lower-emission supply where technically suitable.</td><td>Check structural, grid, tariff and maintenance conditions.</td></tr>
+          <tr><td>Water</td><td>Reduce leakage and fit efficient fixtures; capture rain where useful.</td><td>Match the intervention to flow, duration, user behaviour and water quality.</td></tr>
+          <tr><td>Urban form</td><td>Manage density, access, walkability, transit and land conversion.</td><td>Protect tenure, affordability, public space and ecological constraints.</td></tr>
+          <tr><td>Enforcement</td><td>Address unsafe or environmentally damaging unplanned development.</td><td>Use lawful process, clear mandates and fair treatment.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The lecturer uses solar panels, efficient taps and household water use as accessible examples <span class="ts">7.2 &middot; 00:09:45</span> <span class="ts">7.2 &middot; 00:10:11</span>, then scales small savings across households <span class="ts">7.2 &middot; 00:11:07</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: a shower is not universally ten times more water-intensive than another washing method.</strong> The lecture gives that multiplier <span class="ts">7.2 &middot; 00:10:38</span>. Water use is flow rate multiplied by duration, so the comparison needs measured flow, time and the alternative method's volume.</p>
+      <p><strong>Correction: rooftop solar does not automatically permit sale to the grid.</strong> The lecture says surplus can be sold <span class="ts">7.2 &middot; 00:10:11</span>. Export depends on current interconnection, metering, tariff, licensing and technical rules. Write "where applicable rules allow" unless a current policy is cited.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ========================================================= glossary === -->
+<section id="t9" class="chapter card" style="--accent:#8B8490; --soft:#F0EEF2;">
+  <header>
+    <span class="eyebrow">Reference</span>
+    <h2><span class="emoji">&#128214;</span> Glossary</h2>
+  </header>
+  <div class="section-body">
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Term</th><th>Meaning in these modules</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Sustainable development</strong></td><td>Development that meets present needs without compromising future generations' ability to meet theirs.</td></tr>
+          <tr><td><strong>SDGs</strong></td><td>Seventeen integrated goals and 169 targets in the UN 2030 Agenda.</td></tr>
+          <tr><td><strong>Regeneration rate</strong></td><td>Rate at which a renewable resource or ecological function is renewed.</td></tr>
+          <tr><td><strong>Finite resource</strong></td><td>Stock that does not regenerate on a relevant human time scale.</td></tr>
+          <tr><td><strong>Circularity</strong></td><td>Design and management that extend product and material use through prevention, repair, reuse and recovery.</td></tr>
+          <tr><td><strong>Social Progress Index</strong></td><td>Composite index of Basic Needs, Foundations of Wellbeing and Opportunity.</td></tr>
+          <tr><td><strong>Equity</strong></td><td>Fair distribution that considers differences in need, exposure, responsibility and capacity.</td></tr>
+          <tr><td><strong>Biocapacity</strong></td><td>Capacity of ecosystems to generate biological materials and absorb some wastes under prevailing management.</td></tr>
+          <tr><td><strong>Ecological footprint</strong></td><td>Accounting estimate of biologically productive area needed to support demand and absorb specified wastes.</td></tr>
+          <tr><td><strong>GHG inventory</strong></td><td>Structured estimate of greenhouse-gas emissions and removals by source, sink, gas and sector.</td></tr>
+          <tr><td><strong>Mixed-use development</strong></td><td>Urban form that places compatible residential, commercial and civic functions near one another.</td></tr>
+          <tr><td><strong>BRT</strong></td><td>Bus rapid transit, a bus system designed with features that improve speed, reliability and capacity.</td></tr>
+          <tr><td><strong>Rainwater harvesting</strong></td><td>Capture and management of rain for storage, use, runoff control or suitable recharge.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== flashcards === -->
+<section id="t10" class="chapter card" style="--accent:#2E9E6A; --soft:#E4F3EB;">
+  <header>
+    <span class="eyebrow">Active recall</span>
+    <h2><span class="emoji">&#127183;</span> Flashcards</h2>
+  </header>
+  <div class="section-body">
+    <div class="cards">
+      <div class="qa"><p class="q">How do the idea and SDGs differ?</p><p class="a">Sustainable development is the governing concept; the SDGs are the 2030 Agenda's operational framework.</p></div>
+      <div class="qa"><p class="q">What is the Brundtland test?</p><p class="a">Meet present needs without compromising future generations' ability to meet theirs.</p></div>
+      <div class="qa"><p class="q">How many SDGs are there?</p><p class="a">Seventeen integrated and indivisible goals with 169 targets.</p></div>
+      <div class="qa"><p class="q">What is the renewable-resource rule?</p><p class="a">Keep extraction compatible with regeneration and ecosystem function.</p></div>
+      <div class="qa"><p class="q">How is a finite stock managed?</p><p class="a">Through efficiency, demand management, substitution, reuse and a planned transition.</p></div>
+      <div class="qa"><p class="q">Does recycling make materials infinite?</p><p class="a">No. Each cycle can involve losses, quality limits and energy use.</p></div>
+      <div class="qa"><p class="q">What four priorities does the course use?</p><p class="a">Social progress, economic growth, converting wealth into well-being and human well-being.</p></div>
+      <div class="qa"><p class="q">Are those the official four principles?</p><p class="a">No. They are the course's planning frame.</p></div>
+      <div class="qa"><p class="q">What are the three SPI dimensions?</p><p class="a">Basic Needs, Foundations of Wellbeing and Opportunity.</p></div>
+      <div class="qa"><p class="q">Is SPI an SDG completion percentage?</p><p class="a">No. It is its own composite index on a 0-to-100 scale.</p></div>
+      <div class="qa"><p class="q">How should an SPI score be cited?</p><p class="a">With the edition, year, entity and methodology.</p></div>
+      <div class="qa"><p class="q">What was the UN 2024 population estimate?</p><p class="a">8.2 billion, with a projected peak near 10.3 billion in the mid-2080s.</p></div>
+      <div class="qa"><p class="q">What does Earth Overshoot Day mean?</p><p class="a">The estimated date annual ecological demand exceeds annual regeneration.</p></div>
+      <div class="qa"><p class="q">When was Earth Overshoot Day in 2021?</p><p class="a">29 July, according to Global Footprint Network.</p></div>
+      <div class="qa"><p class="q">What three obligations does the course planner reconcile?</p><p class="a">Economic growth, fair distribution and environmental protection.</p></div>
+      <div class="qa"><p class="q">How do equality and equity differ?</p><p class="a">Equality gives the same; equity applies a fairness rule sensitive to relevant differences.</p></div>
+      <div class="qa"><p class="q">Why is a GHG inventory needed?</p><p class="a">To estimate emissions and removals by gas, sector, source and sink for policy and tracking.</p></div>
+      <div class="qa"><p class="q">Did Pakistan have no GHG inventory?</p><p class="a">No. It reported national inventories through UNFCCC communications and later transparency reports.</p></div>
+      <div class="qa"><p class="q">Can rainwater harvesting always recharge groundwater?</p><p class="a">No. It depends on purpose, soil, geology, quality and design.</p></div>
+      <div class="qa"><p class="q">How is shower water use calculated?</p><p class="a">Flow rate multiplied by duration.</p></div>
+      <div class="qa"><p class="q">Can rooftop solar always sell power?</p><p class="a">No. Export depends on current grid and regulatory rules.</p></div>
+      <div class="qa"><p class="q">What is the policy conflict test?</p><p class="a">Identify interests, affected groups, resources, time, distribution, alternatives, safeguards and accountability.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== exam focus === -->
+<section id="t11" class="chapter card" style="--accent:#2E9E6A; --soft:#E4F3EB;">
+  <header>
+    <span class="eyebrow">Revision sheet</span>
+    <h2><span class="emoji">&#127919;</span> Exam focus</h2>
+  </header>
+  <div class="section-body">
+    <h3>Policy answer architecture</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Move</th><th>What to write</th><th>Exam verb</th></tr></thead>
+        <tbody>
+          <tr><td>Define</td><td>Present needs, future capability and integrated dimensions</td><td>Frame</td></tr>
+          <tr><td>Classify resources</td><td>Renewable flows, finite stocks, materials and waste sinks</td><td>Distinguish</td></tr>
+          <tr><td>State outcomes</td><td>Growth, social progress, well-being and environmental function</td><td>Prioritise</td></tr>
+          <tr><td>Measure</td><td>Year-specific indicators, SPI dimensions, GHG inventory and ecological demand</td><td>Diagnose</td></tr>
+          <tr><td>Map conflict</td><td>Interests, groups, distribution, resources, time and irreversibility</td><td>Evaluate</td></tr>
+          <tr><td>Select instruments</td><td>Urban form, transit, buildings, water, forestry, standards and enforcement</td><td>Design</td></tr>
+          <tr><td>Monitor</td><td>Baseline, target, owner, review date and corrective action</td><td>Verify</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Corrections to remember</h3>
+    <ul>
+      <li>Use the intergenerational-needs definition; do not promise that finite resources last forever.</li>
+      <li>Treat all 17 SDGs as integrated; a six-or-seven environmental subset is an analytical choice.</li>
+      <li>Label the lecture's four priorities as a course frame, not an official universal taxonomy.</li>
+      <li>Cite SPI values by edition and never convert them into an SDG completion percentage.</li>
+      <li>Use UN population projections and year-specific Overshoot Day data with methodology attached.</li>
+      <li>Pakistan has reported GHG inventories; the question is their quality, continuity and policy use.</li>
+      <li>Test rainwater recharge, shower use and solar export against physical and regulatory conditions.</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="notefoot">Source recordings: <a href="https://drive.google.com/file/d/1A1APlkY8IVqlHUoxrMIr6JoEMGjUMxBG/view?usp=drivesdk" target="_blank" rel="noopener">▶ 7.1 Sustainable development</a><span class="sep">·</span><a href="https://drive.google.com/file/d/1N9PAY7Gev5RmDWuPZHsHR7iFyyw1QF4G/view?usp=drivesdk" target="_blank" rel="noopener">▶ 7.2 Sustainable model</a><span class="sep">·</span><a href="https://drive.google.com/file/d/12viTYC2Ipk-oIRKljHOpDXM9xOIZQTSw/view?usp=drivesdk" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+</html>

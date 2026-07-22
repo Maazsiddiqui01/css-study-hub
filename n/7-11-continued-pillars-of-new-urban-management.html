@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>New Urban Management: Density, Partnerships and Intermediary Cities</title>
+<style>/* Lecture Notes ebook, "warm study" theme.
+   Inspired by Mehak's MarketCanvas app: soft cream ground, rounded white cards,
+   a different pastel accent per topic, serif display + friendly sans body,
+   gentle emoji + pill badges. Playful and pretty, but still a real study book.
+   Print-first (A4 PDF via headless Edge); reads well on screen too.
+
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
+   Everything themeable keys off --accent / --soft. Titles stay ink for
+   readability; accents colour eyebrows, numbers, pills, rules and callouts.
+*/
+
+:root {
+  --cream: #FCF6F0;          /* page ground (warm) */
+  --card: #FFFFFF;
+  --ink: #2C2630;            /* plum-black body/headings */
+  --ink-soft: #5A5360;
+  --slate: #8B8490;          /* captions, timestamps */
+  --hairline: #EEE6E4;
+
+  /* section default accent (overridden per section) */
+  --accent: #C0567E;
+  --soft: #FBECF1;
+
+  --shadow: 0 1px 2px rgba(60,30,45,.05), 0 10px 26px rgba(80,40,55,.07);
+  --radius: 20px;
+
+  --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: Consolas, "Cascadia Code", ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background:
+    radial-gradient(1100px 700px at 15% -5%, #FBEEF3 0%, transparent 55%),
+    radial-gradient(1000px 700px at 100% 0%, #EEF3FB 0%, transparent 50%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  font: 10.8pt/1.62 var(--sans);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+@media screen {
+  body { max-width: 51rem; margin: 0 auto; padding: 2.5rem 1.15rem 4rem; font-size: 1.0rem; }
+}
+
+/* ---------------------------------------------------------------- page --- */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm 14mm;
+  @bottom-center {
+    content: counter(page);
+    font: 8.5pt var(--sans);
+    color: #8B8490;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+/* --------------------------------------------------------------- cards --- */
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8mm 9mm 9mm;
+  margin: 0 0 6mm;
+  box-shadow: var(--shadow);
+  break-inside: auto;
+}
+@media screen { .card { margin-bottom: 1.4rem; } }
+
+/* a soft accent wash across the top of each section card (fades to white),
+   echoing the app's pastel cards without hurting readability */
+.chapter {
+  background:
+    linear-gradient(180deg, var(--soft) 0, rgba(255,255,255,0) 34mm),
+    var(--card);
+  border-top: 3px solid var(--accent);
+  break-inside: auto;
+  break-before: page;   /* each topic starts fresh: slide on top, notes below */
+}
+/* on screen (web/PWA) sections just stack; no forced page breaks */
+@media screen { .chapter { break-before: auto; } }
+
+h2, h3, .eyebrow { break-after: avoid; }
+p { orphans: 2; widows: 2; }
+
+/* keep the section header intact (eyebrow + title + time pill together) and
+   glued to its opening slide */
+.chapter > header { break-inside: avoid; break-after: avoid; }
+figure.slide { break-before: avoid; }
+
+/* --------------------------------------------------------------- cover --- */
+
+.cover {
+  page: cover;
+  break-after: page;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32mm 22mm 24mm;
+  background:
+    radial-gradient(700px 460px at 12% 8%, #FBE6EE 0%, transparent 60%),
+    radial-gradient(760px 520px at 96% 4%, #E7EEFB 0%, transparent 58%),
+    radial-gradient(620px 520px at 80% 96%, #E6F4EC 0%, transparent 60%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+@media screen {
+  .cover { min-height: 80vh; border-radius: 24px; padding: 3.2rem 2.6rem; margin-bottom: 1.4rem; }
+}
+
+.cover .avatar { font-size: 30pt; line-height: 1; margin-bottom: 7mm; }
+.cover .kicker {
+  font: 600 9pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 5mm;
+}
+.cover h1 {
+  font: 600 31pt/1.14 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 15em;
+}
+.cover .subtitle {
+  margin-top: 5mm;
+  font: 400 13.5pt/1.5 var(--sans);
+  color: var(--ink-soft);
+  max-width: 30em;
+}
+.cover .warm {
+  margin-top: 4mm;
+  font: italic 400 12pt/1.5 var(--serif);
+  color: var(--accent);
+}
+
+.cover .chips { display: flex; flex-wrap: wrap; gap: 3mm; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.4mm 4mm;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(60,30,45,.04);
+  font: 400 9pt var(--sans);
+  color: var(--slate);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chip b { font: 700 10.5pt var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ headings --- */
+
+.chapter header { margin-bottom: 5mm; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  font: 700 8.5pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--accent);
+  margin-bottom: 3mm;
+}
+.eyebrow .num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h2 {
+  font: 600 20pt/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .emoji { font-size: 17pt; }
+
+.timepill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.5mm 3.5mm;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font: 600 8pt var(--mono);
+  letter-spacing: 0.02em;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h3 {
+  font: 600 12.5pt/1.34 var(--serif);
+  color: var(--ink);
+  margin: 6mm 0 2.5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+.ts { font: 400 8.5pt var(--mono); color: var(--slate); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- body --- */
+
+.section-body > :last-child { margin-bottom: 0; }
+p { margin: 0 0 3mm; }
+.lead { font-size: 11.2pt; color: var(--ink); }
+
+ul, ol { margin: 0 0 3mm 5.5mm; }
+li { margin-bottom: 1.7mm; padding-left: 1mm; }
+li::marker { color: var(--accent); }
+
+.kt { font-weight: 700; color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
+
+code { font: 9.5pt var(--mono); background: #F3EFF4; padding: .4pt 3.5pt; border-radius: 4px; }
+
+/* ------------------------------------------------------------ callouts --- */
+
+.note {
+  --c: var(--accent);
+  --f: var(--soft);
+  background: var(--f);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  border-left: 3px solid var(--c);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.note .label {
+  display: inline-flex; align-items: center; gap: 1.6mm;
+  font: 700 8pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c);
+  margin-bottom: 1.8mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.warn { --c: #B4791F; --f: #FaF1DF; }
+.note.exam { --c: #3B8B78; --f: #E6F3EF; }
+.note.def  { --c: var(--accent); --f: var(--soft); }
+
+/* ------------------------------------------------------- summary card --- */
+
+.summary { --accent: #C0567E; --soft: #FBECF1; }
+.summary ul { list-style: none; margin: 0; }
+.summary li { position: relative; padding: 0 0 0 7mm; margin-bottom: 3.5mm; }
+.summary li::before {
+  content: "";
+  position: absolute; left: 0; top: 2.6mm;
+  width: 3.2mm; height: 3.2mm; border-radius: 50%;
+  background: var(--accent);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.summary li:last-child { margin-bottom: 0; }
+.summary li b, .summary li strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------- TOC --- */
+
+nav.toc { --accent: #8B8490; --soft: #F3EFF4; }
+nav.toc ol { list-style: none; margin: 0; }
+nav.toc li {
+  display: flex; align-items: baseline; gap: 4mm;
+  padding: 2.7mm 0;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11pt var(--sans);
+}
+nav.toc li:last-child { border-bottom: 0; }
+nav.toc .dot { width: 3.4mm; height: 3.4mm; border-radius: 50%; flex-shrink: 0;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+nav.toc .title { flex: 1; color: var(--ink); }
+nav.toc .rng { flex-shrink: 0; font: 600 8.5pt var(--mono); color: var(--slate); }
+
+/* -------------------------------------------------------------- slides --- */
+
+figure.slide { margin: 0 0 5mm; break-inside: avoid; }
+figure.slide img {
+  width: 100%; display: block;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 10px rgba(40,30,45,.10);
+}
+figure.slide figcaption {
+  font: 400 8.5pt var(--sans);
+  color: var(--slate);
+  margin-top: 2mm;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4mm;
+}
+figure.slide figcaption .ts { color: var(--accent); }
+
+/* ------------------------------------------------------------ glossary --- */
+
+dl.glossary { margin: 0; }
+dl.glossary div { padding: 3mm 0; border-bottom: 1px solid var(--hairline); break-inside: avoid; }
+dl.glossary div:last-child { border-bottom: 0; padding-bottom: 0; }
+dl.glossary dt { font: 700 10.5pt var(--sans); color: var(--accent); margin-bottom: 1.2mm; }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- flashcards --- */
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 0; }
+.qa {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  background: linear-gradient(180deg, var(--soft) 0, #fff 60%);
+  break-inside: avoid;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.qa .q { font: 700 10pt var(--sans); color: var(--ink); margin-bottom: 2mm; }
+.qa .a { color: var(--ink-soft); font-size: 10pt; }
+
+/* ------------------------------------------------------------- tables --- */
+
+.tables-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0; break-inside: avoid; }
+th {
+  font: 700 9pt var(--sans); text-align: left; color: var(--accent);
+  border-bottom: 2px solid var(--soft); padding: 2mm 3mm 2mm 0;
+}
+td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+
+/* --- mobile / on-the-go reading (screen only; never affects the print PDF).
+   Placed LAST so it wins the cascade over the wider @media screen rules above.
+   Requires <meta name="viewport" content="width=device-width, initial-scale=1">. */
+@media screen and (max-width: 640px) {
+  body { padding: 1rem 0.85rem 2.5rem; font-size: 1.02rem; }
+  .card { padding: 5mm 5mm 6mm; border-radius: 14px; margin-bottom: 0.9rem; }
+  .cover { min-height: auto; padding: 2rem 1.3rem 1.6rem; border-radius: 16px; }
+  .cover .avatar { font-size: 24pt; margin-bottom: 4mm; }
+  .cover h1 { font-size: 20pt; max-width: 100%; }
+  .cover .subtitle { font-size: 11.5pt; }
+  .cover .warm { font-size: 11pt; }
+  .cover .chips { gap: 2mm; margin-top: 5mm; }
+  h2 { font-size: 16pt; }
+  h2 .emoji { font-size: 13.5pt; }
+  h3 { font-size: 11.5pt; }
+  .cards { grid-template-columns: 1fr; }
+  nav.toc li { font-size: 10.5pt; gap: 2.5mm; padding: 2.5mm 0; }
+  nav.toc .rng { font-size: 8pt; }
+  .note { padding: 3.5mm 4mm; }
+  table { font-size: 9.5pt; }
+}
+</style>
+<meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
+align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
+border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
+<body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/file/d/1_3YWkSlwLkGTkCKRNS19tXg_1Ne4paj4/view?usp=drivesdk" target="_blank" rel="noopener">Download PDF ↓</a></div>
+
+<!-- ============================================================ cover === -->
+<section class="cover" style="background:radial-gradient(700px 460px at 12% 8%,#E4F3EB 0,transparent 60%),radial-gradient(760px 520px at 96% 4%,#E7F1FB 0,transparent 58%),radial-gradient(620px 520px at 80% 96%,#FAF0E2 0,transparent 60%),var(--cream)">
+  <div>
+    <div class="avatar">&#127961;&#65039;</div>
+    <div class="kicker" style="color:#2E9E6A">CSS Environmental Science &middot; Module 7.11</div>
+    <h1>New Urban Management: Density, Partnerships and Intermediary Cities</h1>
+    <p class="subtitle">A policy guide to compact urban form, basic-service partnerships, the Manila water case, project-finance models, affordable housing, population change and the rural-urban role of intermediary cities.</p>
+    <p class="warm" style="color:#2C8A5E">Match each urban problem to an instrument, an institution and an accountability test. &#127963;&#65039;</p>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>10m</b> lecture</span>
+    <span class="chip"><b>1</b> module</span>
+    <span class="chip"><b>7</b> core topics</span>
+    <span class="chip"><b>12</b> correction boxes</span>
+  </div>
+</section>
+
+<!-- ============================================================== toc === -->
+<nav class="toc card">
+  <header><span class="eyebrow">Contents</span><h2><span class="emoji">&#128506;&#65039;</span> In this chapter</h2></header>
+  <ol>
+    <li><span class="dot" style="background:#2E9E6A"></span><a class="title" href="#summary">The five-minute version</a><span class="rng">summary</span></li>
+    <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t1">01 &middot; Design compact, connected neighbourhoods</a><span class="rng">urban form</span></li>
+    <li><span class="dot" style="background:#3A7CC0"></span><a class="title" href="#t2">02 &middot; Diagnose the service problem first</a><span class="rng">water utilities</span></li>
+    <li><span class="dot" style="background:#C0762C"></span><a class="title" href="#t3">03 &middot; Read Manila as a concession case</a><span class="rng">case study</span></li>
+    <li><span class="dot" style="background:#7A5AA8"></span><a class="title" href="#t4">04 &middot; Distinguish PPP, concession and BOT</a><span class="rng">delivery models</span></li>
+    <li><span class="dot" style="background:#B44A8C"></span><a class="title" href="#t5">05 &middot; Put housing finance inside housing policy</a><span class="rng">affordability</span></li>
+    <li><span class="dot" style="background:#557E9B"></span><a class="title" href="#t6">06 &middot; Read population and migration accurately</a><span class="rng">urban pressure</span></li>
+    <li><span class="dot" style="background:#46955C"></span><a class="title" href="#t7">07 &middot; Use intermediary towns as connectors</a><span class="rng">urban system</span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t8">Glossary &middot; Flashcards &middot; Exam focus</a><span class="rng"></span></li>
+  </ol>
+</nav>
+
+<!-- ============================================================= tldr === -->
+<section id="summary" class="summary card" style="--accent:#2E9E6A; --soft:#E4F3EB; border-top-color:#2E9E6A">
+  <header><span class="eyebrow" style="color:#2E9E6A">Start here</span><h2><span class="emoji">&#11088;</span> The five-minute version</h2></header>
+  <ul>
+    <li><strong>Urban density is a package, not a skyline.</strong> The lecture favours vertical growth over outward sprawl, but a walkable compact city also needs mixed land use, connected streets, public space and public transport.</li>
+    <li><strong>Choose a partnership from the problem and the asset.</strong> Weak collection, leakage, poor service and unclear accountability require different remedies. PPP is an umbrella category; concessions and BOT projects allocate different responsibilities and risks.</li>
+    <li><strong>Manage the urban system, not one symptom.</strong> Housing finance, population policy, rural opportunity and intermediary towns can influence migration and settlement, but each requires affordability, rights, services and accountable institutions.</li>
+  </ul>
+</section>
+
+<!-- ======================================================== section 1 === -->
+<section id="t1" class="chapter card" style="--accent:#2C8C86; --soft:#E4F1F0;">
+  <header>
+    <span class="eyebrow"><span class="num">1</span> Urban form</span>
+    <h2><span class="emoji">&#127970;</span> Design compact, connected neighbourhoods</h2>
+    <span class="timepill">00:00:05-00:01:24</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The fourth urban-management solution in the lecture is regulation of real-estate development to encourage high-rise construction <span class="ts">00:00:05</span>. The intended outcome is to limit horizontal expansion and make neighbourhoods easier to traverse <span class="ts">00:00:46</span>.</p>
+
+    <div class="grid-2">
+      <div>
+        <h3>The course diagnosis</h3>
+        <ul>
+          <li>Outward expansion increases distance between activities.</li>
+          <li>Broad, single-purpose neighbourhoods can become difficult to walk.</li>
+          <li>Development control can redirect some growth vertically.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>The complete planning package</h3>
+        <ul>
+          <li>Appropriate density and a mix of daily uses.</li>
+          <li>Connected streets, safe walking routes and public space.</li>
+          <li>Public transport, utilities and access to services.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: high-rise buildings alone do not create a compact or walkable city.</strong> The lecture treats skyscraper promotion as the central response to horizontal sprawl <span class="ts">00:00:05</span>. UN-Habitat's compact-city principles combine density with mixed land use, social mix, connected streets, public space and transport. Height is one design choice within that system.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the course term is not the formal title of the New Urban Agenda.</strong> The lecturer uses "new urban management" as a solution category <span class="ts">00:00:46</span>. The UN New Urban Agenda is a specific framework adopted at Habitat III on 20 October 2016 and endorsed by the General Assembly on 23 December 2016. Keep the labels distinct in an exam answer.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 2 === -->
+<section id="t2" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+  <header>
+    <span class="eyebrow"><span class="num">2</span> Basic-service reform</span>
+    <h2><span class="emoji">&#128167;</span> Diagnose the service problem first</h2>
+    <span class="timepill">00:01:25-00:02:38</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecture proposes public-private partnership for basic services such as water and uses Karachi's water utility as the motivating case <span class="ts">00:01:25</span>. It identifies weak bill collection, unmetered use, large system losses, inefficient delivery, weak performance incentives and weak accountability <span class="ts">00:01:54</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Observed problem</th><th>Management question</th><th>Possible response</th></tr></thead>
+        <tbody>
+          <tr><td>Low collection</td><td>Are bills accurate, affordable and enforceable?</td><td>Customer records, metering, transparent tariffs and targeted support.</td></tr>
+          <tr><td>Physical losses</td><td>Where is water leaking before delivery?</td><td>District metering, pressure management and pipe rehabilitation.</td></tr>
+          <tr><td>Commercial losses</td><td>Which connections or volumes are unrecorded?</td><td>Regularisation, meter audit and billing controls.</td></tr>
+          <tr><td>Poor continuity</td><td>Is supply constrained by source, network or operation?</td><td>Asset planning, maintenance and service targets.</td></tr>
+          <tr><td>Weak accountability</td><td>Who bears service and financial risk?</td><td>Published standards, monitoring, remedies and independent oversight.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: PPP is not a synonym for outsourcing or BOT.</strong> The lecture moves directly from utility weakness to outsourcing and then to build-operate-transfer <span class="ts">00:02:22</span>. PPP covers several long-term arrangements. The correct choice depends on whether the task concerns management, an existing network, a discrete new asset or a complete service obligation.</p>
+    </div>
+
+    <div class="note"><p><strong>Editorial diagnostic:</strong> define the service baseline, map physical and commercial losses, identify the legal asset owner, set affordability safeguards, allocate risks to the party able to manage them, and publish measurable performance obligations before selecting a contract.</p></div>
+  </div>
+</section>
+
+<!-- ======================================================== section 3 === -->
+<section id="t3" class="chapter card" style="--accent:#C0762C; --soft:#FAF0E2;">
+  <header>
+    <span class="eyebrow"><span class="num">3</span> Manila water case</span>
+    <h2><span class="emoji">&#128679;</span> Read Manila as a concession case</h2>
+    <span class="timepill">00:02:55-00:04:48</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The class cites the Asian Development Bank's 2012 study of good practices in urban water management and uses Metro Manila to illustrate private participation after underinvestment and poor service <span class="ts">00:02:55</span>. It says private operators would invest, run the system, earn a return and later hand it back <span class="ts">00:03:26</span>.</p>
+
+    <div class="grid-2">
+      <div>
+        <h3>Lecture narrative</h3>
+        <p>Mid-1990s underinvestment produced low coverage and only two hours of supply on average. A partnership then improved the system.</p>
+      </div>
+      <div>
+        <h3>Verified case frame</h3>
+        <p>In 1997, Metro Manila's water service was divided into two zones under 25-year concession agreements. Operators took over service obligations for existing networks.</p>
+      </div>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the ADB baseline does not support the lecture's two-hour average.</strong> The lecture gives two hours of water a day and says 35% was uncovered <span class="ts">00:02:55</span>. ADB's 2012 case table reports a 1996 baseline of 17 hours of availability per day, 67% population coverage and 61% non-revenue water. The coverage figure implies about one-third was unserved, but the service-hours claim is substantially wrong.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: Manila used concessions, not a BOT contract.</strong> The lecture labels the arrangement build-operate-transfer <span class="ts">00:03:26</span>. The World Bank records two 25-year concession agreements signed in 1997. This distinction matters because a concession can assign service and investment duties across an existing utility network, while BOT normally centres on a specified facility.</p>
+    </div>
+
+    <h3>How to use the case</h3>
+    <p>State the baseline year and indicator, name the contractual model, compare service and financial outcomes, then discuss tariff, regulatory, investment and equity risks. A success claim needs evidence across the full concession period, not a single output statistic.</p>
+  </div>
+</section>
+
+<!-- ======================================================== section 4 === -->
+<section id="t4" class="chapter card" style="--accent:#7A5AA8; --soft:#F0EBF8;">
+  <header>
+    <span class="eyebrow"><span class="num">4</span> Contract architecture</span>
+    <h2><span class="emoji">&#129309;</span> Distinguish PPP, concession and BOT</h2>
+    <span class="timepill">00:02:22-00:04:48</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecturer describes a model in which the private party designs, finances, constructs and operates a project before transfer <span class="ts">00:03:50</span>. That is the core logic of BOT, but it should not be attached to every PPP case.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Model</th><th>Typical asset position</th><th>Private role</th><th>End point</th></tr></thead>
+        <tbody>
+          <tr><td>Management contract</td><td>Public asset and service system</td><td>Runs specified functions for a fee</td><td>Operations return under the contract terms.</td></tr>
+          <tr><td>Concession</td><td>Often an existing network or service area</td><td>Operates, maintains and invests; may collect user revenue</td><td>Rights and obligations expire or are renewed.</td></tr>
+          <tr><td>BOT</td><td>Usually a discrete new facility</td><td>Designs or builds, finances and operates</td><td>Facility transfers after the concession term.</td></tr>
+          <tr><td>IPP</td><td>Privately financed power facility</td><td>Builds and operates; sells power under agreed contracts</td><td>Depends on project documents, not the label alone.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the Sahiwal project is verified as an IPP, but the lecture's transfer claim is not established by the public project pages reviewed.</strong> The class calls the 1,320 MW plant a 30-year BOT that will transfer from China to Pakistan <span class="ts">00:03:50</span>. PPIB lists a 30-year term and the CPEC authority labels the project an independent power producer, with commercial operation on 28 October 2017. Use the verified description unless the governing project agreement is cited.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the unnamed motorway example cannot be independently verified from the lecture.</strong> The lecturer says a motorway was built "in Korea" and later returned to government <span class="ts">00:03:50</span>, but gives no road, concessionaire or agreement. It should not be used as a factual case study without those identifiers.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 5 === -->
+<section id="t5" class="chapter card" style="--accent:#B44A8C; --soft:#F8EAF3;">
+  <header>
+    <span class="eyebrow"><span class="num">5</span> Housing and land</span>
+    <h2><span class="emoji">&#127968;</span> Put housing finance inside housing policy</h2>
+    <span class="timepill">00:04:48-00:06:12</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The next solution is housing credit for middle-class urban families, presented as a way to prevent slums and urban sprawl <span class="ts">00:04:48</span>. Islamabad and Lahore are used as local illustrations, although the lecture does not supply evidence for the named settlements.</p>
+
+    <div class="grid-2">
+      <div>
+        <h3>Demand-side tools</h3>
+        <ul>
+          <li>Mortgage or rental support matched to household income.</li>
+          <li>Credit assessment that does not exclude informal earners automatically.</li>
+          <li>Targeted assistance with clear eligibility and fiscal cost.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Supply and planning tools</h3>
+        <ul>
+          <li>Serviced land, infrastructure and diverse tenure options.</li>
+          <li>Affordable locations connected to work and public transport.</li>
+          <li>Secure tenure, lawful upgrading and protection from unsafe sites.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: housing credit alone does not prevent informal settlements or sprawl.</strong> The lecture presents a direct preventive link <span class="ts">00:04:48</span>. Credit can increase purchasing power, but outcomes also depend on land supply, price, tenure, infrastructure, transport, planning rules, household income and the location of new housing.</p>
+    </div>
+
+    <div class="note"><p><strong>Editorial evaluation:</strong> test a housing policy by affordability after finance costs, distance to employment, service access, tenure security, displacement risk, land consumption and the number of households actually reached.</p></div>
+  </div>
+</section>
+
+<!-- ======================================================== section 6 === -->
+<section id="t6" class="chapter card" style="--accent:#557E9B; --soft:#E8F0F5;">
+  <header>
+    <span class="eyebrow"><span class="num">6</span> Population and settlement</span>
+    <h2><span class="emoji">&#128101;</span> Read population and migration accurately</h2>
+    <span class="timepill">00:06:13-00:07:34</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecture links fast population growth to urban pressure and lists family-planning education, contraceptive access and later marriage among possible interventions <span class="ts">00:06:13</span> <span class="ts">00:06:37</span>. It then turns to rural-urban migration and proposes intermediary towns as mediating centres between villages and major cities <span class="ts">00:07:02</span> <span class="ts">00:07:34</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: use the 2023 census period and its denominator.</strong> The lecture gives national growth of 2.4-2.5% and urban growth of 3.3% without a period <span class="ts">00:06:13</span>. Pakistan Bureau of Statistics reports average annual national growth of 2.55% between the 2017 and 2023 censuses. Any urban growth rate needs its own defined interval and source.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the country comparisons are distorted.</strong> The lecture says roughly New Zealand's population, about 5.5 million, is added each year, then calls that equivalent to Australia or Canada <span class="ts">00:06:13</span> <span class="ts">00:06:37</span>. Pakistan's census increase from 207.68 million in 2017 to 241.50 million in 2023 averages about 5.64 million a year, which is close to New Zealand's estimated 5.2 million population in June 2023. The Australia and Canada comparison is incompatible with that scale and should be removed.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the rural-share sequence in the lecture is wrong.</strong> It gives 64% in 1998, 62% in 2013 and 59% in 2017 <span class="ts">00:07:02</span>. Official census reporting gives 67.5% rural in 1998, 63.56% in 2017 and about 61.1% in 2023. A 2013 census point does not belong in that official sequence.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ======================================================== section 7 === -->
+<section id="t7" class="chapter card" style="--accent:#46955C; --soft:#E9F4EC;">
+  <header>
+    <span class="eyebrow"><span class="num">7</span> Regional urban system</span>
+    <h2><span class="emoji">&#127963;&#65039;</span> Use intermediary towns as connectors</h2>
+    <span class="timepill">00:07:34-00:09:29</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">As a response to overloaded major cities and uneven rural opportunity, the lecture proposes intermediary towns as alternative urban centres that mediate the rural-urban relationship <span class="ts">00:07:34</span>.</p>
+
+    <h3>Intermediary towns as a rural-urban bridge</h3>
+    <p>The final slide proposes alternative urban centres with populations from 250,000 to one million. It argues that nearer markets can serve small farmers, migrants can retain rural ties while learning urban skills, and major cities can face less concentrated pressure. These are the course slide's planning propositions, not a universal official definition <span class="ts">00:07:34</span>.</p>
+
+    <div class="grid-3">
+      <div class="mini"><h3>Market role</h3><p>Connect rural producers to nearby buyers, services, storage and logistics.</p></div>
+      <div class="mini"><h3>Mobility role</h3><p>Create more destinations for work and education than a single primate city.</p></div>
+      <div class="mini"><h3>Identity role</h3><p>Maintain social links while people acquire skills for urban institutions and labour markets.</p></div>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the Punjab programme was not a $600 million ADB project approved in 2016.</strong> The slide makes that claim. ADB's preparatory assistance began in September 2016, while the Punjab Intermediate Cities Improvement Investment Project was approved on 19 September 2017 with a total project cost of $250 million, including $200 million in ADB financing and $50 million in counterpart financing.</p>
+    </div>
+
+    <div class="note"><p><strong>Editorial safeguard:</strong> migration policy should expand choices and services in places of origin and destination. Avoid coercive population control or restrictions on movement; evaluate family-planning measures through informed consent, health, privacy and equal access.</p></div>
+  </div>
+</section>
+
+<!-- ========================================================= glossary === -->
+<section id="t8" class="chapter card" style="--accent:#8B8490; --soft:#F0EEF2;">
+  <header>
+    <span class="eyebrow">Reference</span>
+    <h2><span class="emoji">&#128214;</span> Glossary</h2>
+  </header>
+  <div class="section-body">
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Term</th><th>Meaning in this module</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Compact city</strong></td><td>Urban form that combines suitable density with connected streets, mixed uses, public space and accessible transport.</td></tr>
+          <tr><td><strong>Urban sprawl</strong></td><td>Dispersed outward urban expansion, often associated with low density, longer trips and high infrastructure demand.</td></tr>
+          <tr><td><strong>Mixed use</strong></td><td>Placement of compatible residential, commercial, civic and recreational functions near one another.</td></tr>
+          <tr><td><strong>PPP</strong></td><td>Long-term public-private arrangement for an asset or service with defined risk and responsibility allocation.</td></tr>
+          <tr><td><strong>Concession</strong></td><td>Arrangement in which a private party operates and may invest in a public service or network under specified obligations.</td></tr>
+          <tr><td><strong>BOT</strong></td><td>Build-operate-transfer model in which a private party develops and operates a facility before transfer at the agreed endpoint.</td></tr>
+          <tr><td><strong>IPP</strong></td><td>Independent power producer that develops and operates generating capacity and sells electricity under contractual arrangements.</td></tr>
+          <tr><td><strong>Non-revenue water</strong></td><td>Water put into a distribution system that does not produce billed revenue because of losses or authorised unbilled use.</td></tr>
+          <tr><td><strong>Housing credit</strong></td><td>Finance that helps households rent, buy, build or improve housing, subject to affordability and eligibility rules.</td></tr>
+          <tr><td><strong>Informal settlement</strong></td><td>Settlement where residents may lack secure tenure, planning recognition, durable housing or adequate services.</td></tr>
+          <tr><td><strong>Rural-urban migration</strong></td><td>Movement of people from rural settlements to towns and cities, temporary or permanent.</td></tr>
+          <tr><td><strong>Intermediary city</strong></td><td>Small or medium urban centre that links rural areas, larger cities, markets and public services.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== flashcards === -->
+<section id="t9" class="chapter card" style="--accent:#2E9E6A; --soft:#E4F3EB;">
+  <header>
+    <span class="eyebrow">Active recall</span>
+    <h2><span class="emoji">&#127183;</span> Flashcards</h2>
+  </header>
+  <div class="section-body">
+    <div class="cards">
+      <div class="qa"><p class="q">What urban-form solution does the lecture propose?</p><p class="a">Regulate real-estate development to favour vertical growth over horizontal sprawl.</p></div>
+      <div class="qa"><p class="q">Why is building height insufficient?</p><p class="a">Walkability also needs mixed uses, connected streets, public space and transport.</p></div>
+      <div class="qa"><p class="q">When was the New Urban Agenda adopted?</p><p class="a">At Habitat III on 20 October 2016; the UN General Assembly endorsed it on 23 December 2016.</p></div>
+      <div class="qa"><p class="q">Which utility problems does the lecture identify?</p><p class="a">Weak collection, unmetered use, system losses, inefficient delivery and weak accountability.</p></div>
+      <div class="qa"><p class="q">Is every PPP outsourcing?</p><p class="a">No. PPP is an umbrella for arrangements with different asset, service and risk allocations.</p></div>
+      <div class="qa"><p class="q">What was Manila's verified 1996 water availability?</p><p class="a">ADB reported 17 hours per day, not the lecture's two-hour average.</p></div>
+      <div class="qa"><p class="q">What was Manila's verified 1996 coverage?</p><p class="a">67% of the population, with 61% non-revenue water.</p></div>
+      <div class="qa"><p class="q">What contract model did Manila use in 1997?</p><p class="a">Two 25-year concession agreements.</p></div>
+      <div class="qa"><p class="q">What is a concession?</p><p class="a">A right and obligation to operate and often invest in a service or network for a defined term.</p></div>
+      <div class="qa"><p class="q">What is BOT?</p><p class="a">A private party builds, operates and later transfers a specified facility under agreed terms.</p></div>
+      <div class="qa"><p class="q">Why is BOT different from a concession?</p><p class="a">BOT usually centres on a discrete new facility; a concession can cover an existing service network.</p></div>
+      <div class="qa"><p class="q">How should Sahiwal be described from verified public sources?</p><p class="a">As a 1,320 MW IPP with a 30-year term and commercial operation from 28 October 2017.</p></div>
+      <div class="qa"><p class="q">Can the lecture's motorway example be cited?</p><p class="a">No, not without the road, concessionaire and agreement.</p></div>
+      <div class="qa"><p class="q">Why can credit alone fail to solve housing problems?</p><p class="a">Land, prices, tenure, infrastructure, transport and household incomes also shape outcomes.</p></div>
+      <div class="qa"><p class="q">What was Pakistan's 2017-2023 annual growth rate?</p><p class="a">2.55% on average, according to Pakistan Bureau of Statistics.</p></div>
+      <div class="qa"><p class="q">What was the average annual population addition?</p><p class="a">About 5.64 million across the six years between the 2017 and 2023 censuses.</p></div>
+      <div class="qa"><p class="q">What rural shares belong in the census sequence?</p><p class="a">67.5% in 1998, 63.56% in 2017 and about 61.1% in 2023.</p></div>
+      <div class="qa"><p class="q">What is an intermediary city's course role?</p><p class="a">Link rural producers and migrants with markets, services, skills and larger urban centres.</p></div>
+      <div class="qa"><p class="q">What was the Punjab project cost?</p><p class="a">$250 million total, including $200 million from ADB and $50 million counterpart financing.</p></div>
+      <div class="qa"><p class="q">When was that Punjab project approved?</p><p class="a">19 September 2017; preparatory assistance had begun in 2016.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== exam focus === -->
+<section id="t10" class="chapter card" style="--accent:#2E9E6A; --soft:#E4F3EB;">
+  <header>
+    <span class="eyebrow">Revision sheet</span>
+    <h2><span class="emoji">&#127919;</span> Exam focus</h2>
+  </header>
+  <div class="section-body">
+    <h3>Urban-policy answer architecture</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Move</th><th>What to write</th><th>Exam verb</th></tr></thead>
+        <tbody>
+          <tr><td>Diagnose</td><td>Sprawl, service failure, housing exclusion, demographic pressure or regional imbalance</td><td>Identify</td></tr>
+          <tr><td>Set the objective</td><td>Access, affordability, continuity, walkability, resilience and equity</td><td>Frame</td></tr>
+          <tr><td>Choose the scale</td><td>Building, neighbourhood, utility, city or rural-urban system</td><td>Locate</td></tr>
+          <tr><td>Select the instrument</td><td>Land-use regulation, service reform, concession, BOT, housing support or town investment</td><td>Design</td></tr>
+          <tr><td>Allocate risk</td><td>Construction, demand, finance, operation, tariff, environmental and political risk</td><td>Assign</td></tr>
+          <tr><td>Protect users</td><td>Affordability, tenure, consent, access, grievance and transparency safeguards</td><td>Qualify</td></tr>
+          <tr><td>Measure</td><td>Baseline, target, owner, reporting interval and corrective action</td><td>Verify</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Corrections to remember</h3>
+    <ul>
+      <li>Vertical construction needs mixed use, connected streets, public space and transport to support walkability.</li>
+      <li>PPP, concession and BOT are distinct contractual ideas; name the actual model.</li>
+      <li>ADB's Manila baseline was 17 hours per day, 67% coverage and 61% non-revenue water.</li>
+      <li>Manila's 1997 reform used two 25-year concessions.</li>
+      <li>Describe Sahiwal as a verified IPP unless the transfer obligation is proved from the contract.</li>
+      <li>Housing finance works only inside a broader land, service, tenure and transport policy.</li>
+      <li>Use the official 1998, 2017 and 2023 census sequence for rural population shares.</li>
+      <li>The Punjab intermediary-cities project was $250 million and approved in 2017.</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="notefoot">Want the whole lecture? <a href="https://drive.google.com/file/d/1eEfyydiavn8FHdcvNMV4TKxPb70n1bs5/view?usp=drivesdk" target="_blank" rel="noopener">▶ Watch the full recording</a><span class="sep">·</span><a href="https://drive.google.com/file/d/1_3YWkSlwLkGTkCKRNS19tXg_1Ne4paj4/view?usp=drivesdk" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+</html>

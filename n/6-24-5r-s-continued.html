@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Waste and Sustainability: Circular Systems and Hazardous-Waste Identification</title>
+<style>/* Lecture Notes ebook, "warm study" theme.
+   Inspired by Mehak's MarketCanvas app: soft cream ground, rounded white cards,
+   a different pastel accent per topic, serif display + friendly sans body,
+   gentle emoji + pill badges. Playful and pretty, but still a real study book.
+   Print-first (A4 PDF via headless Edge); reads well on screen too.
+
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
+   Everything themeable keys off --accent / --soft. Titles stay ink for
+   readability; accents colour eyebrows, numbers, pills, rules and callouts.
+*/
+
+:root {
+  --cream: #FCF6F0;          /* page ground (warm) */
+  --card: #FFFFFF;
+  --ink: #2C2630;            /* plum-black body/headings */
+  --ink-soft: #5A5360;
+  --slate: #8B8490;          /* captions, timestamps */
+  --hairline: #EEE6E4;
+
+  /* section default accent (overridden per section) */
+  --accent: #C0567E;
+  --soft: #FBECF1;
+
+  --shadow: 0 1px 2px rgba(60,30,45,.05), 0 10px 26px rgba(80,40,55,.07);
+  --radius: 20px;
+
+  --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: Consolas, "Cascadia Code", ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background:
+    radial-gradient(1100px 700px at 15% -5%, #FBEEF3 0%, transparent 55%),
+    radial-gradient(1000px 700px at 100% 0%, #EEF3FB 0%, transparent 50%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  font: 10.8pt/1.62 var(--sans);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+@media screen {
+  body { max-width: 51rem; margin: 0 auto; padding: 2.5rem 1.15rem 4rem; font-size: 1.0rem; }
+}
+
+/* ---------------------------------------------------------------- page --- */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm 14mm;
+  @bottom-center {
+    content: counter(page);
+    font: 8.5pt var(--sans);
+    color: #8B8490;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+/* --------------------------------------------------------------- cards --- */
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8mm 9mm 9mm;
+  margin: 0 0 6mm;
+  box-shadow: var(--shadow);
+  break-inside: auto;
+}
+@media screen { .card { margin-bottom: 1.4rem; } }
+
+/* a soft accent wash across the top of each section card (fades to white),
+   echoing the app's pastel cards without hurting readability */
+.chapter {
+  background:
+    linear-gradient(180deg, var(--soft) 0, rgba(255,255,255,0) 34mm),
+    var(--card);
+  border-top: 3px solid var(--accent);
+  break-inside: auto;
+  break-before: page;   /* each topic starts fresh: slide on top, notes below */
+}
+/* on screen (web/PWA) sections just stack; no forced page breaks */
+@media screen { .chapter { break-before: auto; } }
+
+h2, h3, .eyebrow { break-after: avoid; }
+p { orphans: 2; widows: 2; }
+
+/* keep the section header intact (eyebrow + title + time pill together) and
+   glued to its opening slide */
+.chapter > header { break-inside: avoid; break-after: avoid; }
+figure.slide { break-before: avoid; }
+
+/* --------------------------------------------------------------- cover --- */
+
+.cover {
+  page: cover;
+  break-after: page;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32mm 22mm 24mm;
+  background:
+    radial-gradient(700px 460px at 12% 8%, #FBE6EE 0%, transparent 60%),
+    radial-gradient(760px 520px at 96% 4%, #E7EEFB 0%, transparent 58%),
+    radial-gradient(620px 520px at 80% 96%, #E6F4EC 0%, transparent 60%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+@media screen {
+  .cover { min-height: 80vh; border-radius: 24px; padding: 3.2rem 2.6rem; margin-bottom: 1.4rem; }
+}
+
+.cover .avatar { font-size: 30pt; line-height: 1; margin-bottom: 7mm; }
+.cover .kicker {
+  font: 600 9pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 5mm;
+}
+.cover h1 {
+  font: 600 31pt/1.14 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 15em;
+}
+.cover .subtitle {
+  margin-top: 5mm;
+  font: 400 13.5pt/1.5 var(--sans);
+  color: var(--ink-soft);
+  max-width: 30em;
+}
+.cover .warm {
+  margin-top: 4mm;
+  font: italic 400 12pt/1.5 var(--serif);
+  color: var(--accent);
+}
+
+.cover .chips { display: flex; flex-wrap: wrap; gap: 3mm; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.4mm 4mm;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(60,30,45,.04);
+  font: 400 9pt var(--sans);
+  color: var(--slate);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chip b { font: 700 10.5pt var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ headings --- */
+
+.chapter header { margin-bottom: 5mm; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  font: 700 8.5pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--accent);
+  margin-bottom: 3mm;
+}
+.eyebrow .num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h2 {
+  font: 600 20pt/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .emoji { font-size: 17pt; }
+
+.timepill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.5mm 3.5mm;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font: 600 8pt var(--mono);
+  letter-spacing: 0.02em;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h3 {
+  font: 600 12.5pt/1.34 var(--serif);
+  color: var(--ink);
+  margin: 6mm 0 2.5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+.ts { font: 400 8.5pt var(--mono); color: var(--slate); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- body --- */
+
+.section-body > :last-child { margin-bottom: 0; }
+p { margin: 0 0 3mm; }
+.lead { font-size: 11.2pt; color: var(--ink); }
+
+ul, ol { margin: 0 0 3mm 5.5mm; }
+li { margin-bottom: 1.7mm; padding-left: 1mm; }
+li::marker { color: var(--accent); }
+
+.kt { font-weight: 700; color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
+
+code { font: 9.5pt var(--mono); background: #F3EFF4; padding: .4pt 3.5pt; border-radius: 4px; }
+
+/* ------------------------------------------------------------ callouts --- */
+
+.note {
+  --c: var(--accent);
+  --f: var(--soft);
+  background: var(--f);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  border-left: 3px solid var(--c);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.note .label {
+  display: inline-flex; align-items: center; gap: 1.6mm;
+  font: 700 8pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c);
+  margin-bottom: 1.8mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.warn { --c: #B4791F; --f: #FaF1DF; }
+.note.exam { --c: #3B8B78; --f: #E6F3EF; }
+.note.def  { --c: var(--accent); --f: var(--soft); }
+
+/* ------------------------------------------------------- summary card --- */
+
+.summary { --accent: #C0567E; --soft: #FBECF1; }
+.summary ul { list-style: none; margin: 0; }
+.summary li { position: relative; padding: 0 0 0 7mm; margin-bottom: 3.5mm; }
+.summary li::before {
+  content: "";
+  position: absolute; left: 0; top: 2.6mm;
+  width: 3.2mm; height: 3.2mm; border-radius: 50%;
+  background: var(--accent);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.summary li:last-child { margin-bottom: 0; }
+.summary li b, .summary li strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------- TOC --- */
+
+nav.toc { --accent: #8B8490; --soft: #F3EFF4; }
+nav.toc ol { list-style: none; margin: 0; }
+nav.toc li {
+  display: flex; align-items: baseline; gap: 4mm;
+  padding: 2.7mm 0;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11pt var(--sans);
+}
+nav.toc li:last-child { border-bottom: 0; }
+nav.toc .dot { width: 3.4mm; height: 3.4mm; border-radius: 50%; flex-shrink: 0;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+nav.toc .title { flex: 1; color: var(--ink); }
+nav.toc .rng { flex-shrink: 0; font: 600 8.5pt var(--mono); color: var(--slate); }
+
+/* -------------------------------------------------------------- slides --- */
+
+figure.slide { margin: 0 0 5mm; break-inside: avoid; }
+figure.slide img {
+  width: 100%; display: block;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 10px rgba(40,30,45,.10);
+}
+figure.slide figcaption {
+  font: 400 8.5pt var(--sans);
+  color: var(--slate);
+  margin-top: 2mm;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4mm;
+}
+figure.slide figcaption .ts { color: var(--accent); }
+
+/* ------------------------------------------------------------ glossary --- */
+
+dl.glossary { margin: 0; }
+dl.glossary div { padding: 3mm 0; border-bottom: 1px solid var(--hairline); break-inside: avoid; }
+dl.glossary div:last-child { border-bottom: 0; padding-bottom: 0; }
+dl.glossary dt { font: 700 10.5pt var(--sans); color: var(--accent); margin-bottom: 1.2mm; }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- flashcards --- */
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 0; }
+.qa {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  background: linear-gradient(180deg, var(--soft) 0, #fff 60%);
+  break-inside: avoid;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.qa .q { font: 700 10pt var(--sans); color: var(--ink); margin-bottom: 2mm; }
+.qa .a { color: var(--ink-soft); font-size: 10pt; }
+
+/* ------------------------------------------------------------- tables --- */
+
+.tables-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0; break-inside: avoid; }
+th {
+  font: 700 9pt var(--sans); text-align: left; color: var(--accent);
+  border-bottom: 2px solid var(--soft); padding: 2mm 3mm 2mm 0;
+}
+td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+
+/* --- mobile / on-the-go reading (screen only; never affects the print PDF).
+   Placed LAST so it wins the cascade over the wider @media screen rules above.
+   Requires <meta name="viewport" content="width=device-width, initial-scale=1">. */
+@media screen and (max-width: 640px) {
+  body { padding: 1rem 0.85rem 2.5rem; font-size: 1.02rem; }
+  .card { padding: 5mm 5mm 6mm; border-radius: 14px; margin-bottom: 0.9rem; }
+  .cover { min-height: auto; padding: 2rem 1.3rem 1.6rem; border-radius: 16px; }
+  .cover .avatar { font-size: 24pt; margin-bottom: 4mm; }
+  .cover h1 { font-size: 20pt; max-width: 100%; }
+  .cover .subtitle { font-size: 11.5pt; }
+  .cover .warm { font-size: 11pt; }
+  .cover .chips { gap: 2mm; margin-top: 5mm; }
+  h2 { font-size: 16pt; }
+  h2 .emoji { font-size: 13.5pt; }
+  h3 { font-size: 11.5pt; }
+  .cards { grid-template-columns: 1fr; }
+  nav.toc li { font-size: 10.5pt; gap: 2.5mm; padding: 2.5mm 0; }
+  nav.toc .rng { font-size: 8pt; }
+  .note { padding: 3.5mm 4mm; }
+  table { font-size: 9.5pt; }
+}
+</style>
+<meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
+align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
+border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
+<body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/file/d/1ehtX_c-8cSPlk1AVV2Y82ZcJaekUf0s6/view?usp=drivesdk" target="_blank" rel="noopener">Download PDF ↓</a></div>
+
+<!-- ============================================================ cover === -->
+<section class="cover" style="background:radial-gradient(700px 460px at 12% 8%,#E4F3EB 0,transparent 60%),radial-gradient(760px 520px at 96% 4%,#E7F1FB 0,transparent 58%),radial-gradient(620px 520px at 80% 96%,#FAF0E2 0,transparent 60%),var(--cream)">
+  <div>
+    <div class="avatar">&#9851;&#65039;</div>
+    <div class="kicker" style="color:#2E9E6A">CSS Environmental Science &middot; Modules 6.24 and 6.26</div>
+    <h1>Waste and Sustainability: Circular Systems and Hazardous-Waste Identification</h1>
+    <p class="subtitle">A resource-to-risk guide: why waste grows, why segregation matters, how circular systems move responsibility upstream, and how hazardous waste is defined, classified and traced to industrial sources.</p>
+    <p class="warm" style="color:#2C8A5E">Prevent first, separate at source, identify the hazard, then choose a controlled route. &#127793;</p>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>30m</b> combined</span>
+    <span class="chip"><b>2</b> modules</span>
+    <span class="chip"><b>8</b> core topics</span>
+    <span class="chip"><b>11</b> correction boxes</span>
+  </div>
+</section>
+
+<!-- ============================================================== toc === -->
+<nav class="toc card">
+  <header><span class="eyebrow">Contents</span><h2><span class="emoji">&#128506;&#65039;</span> In this chapter</h2></header>
+  <ol>
+    <li><span class="dot" style="background:#2E9E6A"></span><a class="title" href="#summary">The five-minute version</a><span class="rng">summary</span></li>
+    <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t1">01 &middot; Link waste with resource pressure</a><span class="rng">system frame</span></li>
+    <li><span class="dot" style="background:#3A7CC0"></span><a class="title" href="#t2">02 &middot; Separate generation from collection</a><span class="rng">Pakistan evidence</span></li>
+    <li><span class="dot" style="background:#C0762C"></span><a class="title" href="#t3">03 &middot; Build the circular route</a><span class="rng">segregation and loops</span></li>
+    <li><span class="dot" style="background:#46955C"></span><a class="title" href="#t4">04 &middot; Define hazardous waste precisely</a><span class="rng">legal boundary</span></li>
+    <li><span class="dot" style="background:#A4553A"></span><a class="title" href="#t5">05 &middot; Classify hazard properties</a><span class="rng">RCRA and EU</span></li>
+    <li><span class="dot" style="background:#7A5AA8"></span><a class="title" href="#t6">06 &middot; Diagnose Pakistan's control gap</a><span class="rng">inventory and handling</span></li>
+    <li><span class="dot" style="background:#B44A8C"></span><a class="title" href="#t7">07 &middot; Map industries to waste streams</a><span class="rng">source diagnosis</span></li>
+    <li><span class="dot" style="background:#557E9B"></span><a class="title" href="#t8">08 &middot; Read metal hazards accurately</a><span class="rng">lead, mercury, cadmium</span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t9">Glossary &middot; Flashcards &middot; Exam focus</a><span class="rng"></span></li>
+  </ol>
+</nav>
+
+<!-- ============================================================= tldr === -->
+<section id="summary" class="summary card" style="--accent:#2E9E6A; --soft:#E4F3EB; border-top-color:#2E9E6A">
+  <header><span class="eyebrow" style="color:#2E9E6A">Start here</span><h2><span class="emoji">&#11088;</span> The five-minute version</h2></header>
+  <ul>
+    <li><strong>Waste is the downstream face of resource use.</strong> Products draw materials and energy from natural systems, then require collection, recovery, treatment or disposal.</li>
+    <li><strong>Measure the chain in separate parts.</strong> Generation, collection, segregation, recovery and controlled disposal answer different questions; every figure needs a place, year and method.</li>
+    <li><strong>Segregation protects value and workers.</strong> Mixing paper, organics, oils, chemicals and metals can contaminate recoverable streams and create exposure.</li>
+    <li><strong>Circularity needs a complete route.</strong> Retain value upstream; identify hazardous waste by jurisdiction and evidence; control residuals and exposure.</li>
+  </ul>
+</section>
+
+<!-- ======================================================== section 1 === -->
+<section id="t1" class="chapter card" style="--accent:#2C8C86; --soft:#E5F3F2;">
+  <header>
+    <span class="eyebrow"><span class="num">1</span> System frame</span>
+    <h2><span class="emoji">&#128260;</span> Link waste with resource pressure</h2>
+    <span class="timepill">6.24 &middot; 00:00:30-06:10</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecture begins from ordinary consumption: clothing, packaging and household goods provide utility, but their material and energy flows also create waste <span class="ts">6.24 &middot; 00:00:30</span>. The governing idea is to manage that waste within sustainability constraints <span class="ts">6.24 &middot; 00:01:27</span>.</p>
+
+    <div class="formula"><strong>Resource-to-waste chain</strong> = extraction &rarr; production &rarr; distribution &rarr; use &rarr; discard &rarr; collection &rarr; recovery, treatment or disposal</div>
+
+    <p>Urbanisation concentrates people, needs, material throughput and discarded outputs in the same places <span class="ts">6.24 &middot; 00:01:55</span> <span class="ts">6.24 &middot; 00:02:24</span>. The slide therefore treats waste as a by-product of using natural resources and connects growing urban demand with both resource depletion and waste accumulation <span class="ts">6.24 &middot; 00:03:47</span>.</p>
+
+    <div class="grid-3">
+      <div class="mini"><h3>Inputs</h3><p>Materials, water, energy, land and ecosystem services enter production and consumption.</p></div>
+      <div class="mini"><h3>Useful service</h3><p>Products meet needs and wants during their useful life.</p></div>
+      <div class="mini"><h3>Residuals</h3><p>Discarded materials, emissions and contaminated streams need a managed destination.</p></div>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the claim that every person generates 2 to 2.5 kg of waste per day is not a verified Pakistan average.</strong> The lecture gives no place, year or waste definition <span class="ts">6.24 &middot; 00:01:01</span>. Pakistan Bureau of Statistics reported 2014 city estimates of 0.49 kg per person per day for Karachi and 0.56 for Lahore. Waste figures need geography, year and stream.</p>
+      <p><strong>Correction: the paper and can numbers need material and source labels.</strong> The "six trees per family" line has no Pakistan source <span class="ts">6.24 &middot; 00:05:13</span>. The twenty-to-one energy comparison fits the roughly 95% saving cited for aluminium, not a universal tin-can rule; EPA reports 60 to 74% for steel or tin cans.</p>
+    </div>
+
+    <p>The paper and can examples are meant to make embedded resources visible <span class="ts">6.24 &middot; 00:04:44</span> <span class="ts">6.24 &middot; 00:05:44</span>. Their useful lesson is comparative: prevention and secondary material can reduce virgin extraction and processing energy.</p>
+
+  </div>
+</section>
+
+<!-- ======================================================== section 2 === -->
+<section id="t2" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+  <header>
+    <span class="eyebrow"><span class="num">2</span> Evidence discipline</span>
+    <h2><span class="emoji">&#128666;</span> Separate generation from collection</h2>
+    <span class="timepill">6.24 &middot; 00:06:36-10:48</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The Pakistan segment distinguishes the waste produced from the waste formally collected <span class="ts">6.24 &middot; 00:06:36</span> <span class="ts">6.24 &middot; 00:07:30</span>. That distinction is essential because uncollected waste does not disappear; it may be dumped, burned, washed into drains or handled informally.</p>
+
+    <div class="formula"><strong>Five separate indicators:</strong> generated mass &ne; collected mass &ne; segregated streams &ne; recovered value &ne; residual sent to controlled disposal</div>
+
+    <p><strong>Generation</strong> measures what enters the system. <strong>Collection</strong> measures the share captured by a service. <strong>Segregation</strong> tests whether streams remain separate. <strong>Recovery</strong> counts value actually returned. <strong>Controlled disposal</strong> records the managed destination of residuals.</p>
+
+    <p>The lecturer highlights poor segregation as a direct barrier to recycling <span class="ts">6.24 &middot; 00:08:33</span>. Paper contaminated by oil is his practical example: once incompatible materials are mixed, quality and worker safety can both deteriorate <span class="ts">6.24 &middot; 00:08:57</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: there is no universal 75% collection threshold that automatically makes a city clean.</strong> The lecture labels 75% an international standard and estimates Pakistan near 50% <span class="ts">6.24 &middot; 00:08:04</span>. Evaluation also needs service frequency, spatial coverage, segregation, leakage, recovery and controlled disposal.</p>
+      <p><strong>Correction: the Pakistan pressure statistics mix dates and indicators.</strong> Pakistan was fifth most populous in the lecture's 2020 frame <span class="ts">6.24 &middot; 00:09:30</span>, but the water rank needs a named index. The undefined 43% nutrition claim differs from 40.2% under-five stunting in the 2018 national survey. The 140-million electricity claim conflicts with the World Bank's 95.6% access estimate for 2022 <span class="ts">6.24 &middot; 00:09:51</span> <span class="ts">6.24 &middot; 00:10:19</span>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 3 === -->
+<section id="t3" class="chapter card" style="--accent:#C0762C; --soft:#FAF0E2;">
+  <header>
+    <span class="eyebrow"><span class="num">3</span> Circular route</span>
+    <h2><span class="emoji">&#9851;&#65039;</span> Build the circular route</h2>
+    <span class="timepill">6.24 &middot; 00:11:40-13:39</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecture contrasts a linear product path with a return loop. A plastic bottle is produced, sold, used and discarded; the circular proposition is to keep it out of unmanaged disposal and return useful material to production <span class="ts">6.24 &middot; 00:11:40</span> <span class="ts">6.24 &middot; 00:12:15</span>.</p>
+
+    <div class="grid-2">
+      <div>
+        <h3>Downstream discipline</h3>
+        <ul>
+          <li>Separate materials where they are generated.</li>
+          <li>Collect them without destroying recoverable quality.</li>
+          <li>Sort, clean and route each stream to a suitable process.</li>
+          <li>Control the residual that cannot safely return to use.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Upstream redesign</h3>
+        <ul>
+          <li>Reduce avoidable material and toxic inputs.</li>
+          <li>Design products for durability, repair, reuse and recovery.</li>
+          <li>Use cleaner production and recycled feedstock where feasible.</li>
+          <li>Align rules, subsidies and markets with return systems.</li>
+        </ul>
+      </div>
+    </div>
+
+    <p>The lecturer names this the circular economy of waste and links it with cleaner production <span class="ts">6.24 &middot; 00:12:42</span> <span class="ts">6.24 &middot; 00:13:11</span>. Government is assigned an enabling role through standards, market rules, incentives and design requirements <span class="ts">6.24 &middot; 00:13:39</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: zero waste is a policy direction, and circularity is not confined to "first-world" countries.</strong> A physical system still has losses, contamination, energy use and residuals. UNEP frames zero waste through prevention, reduction, reuse and recycling. The policy question is how far a jurisdiction can retain value and control residual harm, given its infrastructure and institutions.</p>
+    </div>
+
+    <div class="note"><p><strong>Editorial exam structure:</strong> write the sequence as prevention &rarr; reduction &rarr; reuse or repair &rarr; material recovery &rarr; treatment &rarr; controlled disposal. Then assign a responsible actor, facility and measurable indicator to each step.</p></div>
+  </div>
+</section>
+
+<!-- ======================================================== section 4 === -->
+<section id="t4" class="chapter card" style="--accent:#46955C; --soft:#E9F4EC;">
+  <header>
+    <span class="eyebrow"><span class="num">4</span> Legal boundary</span>
+    <h2><span class="emoji">&#9888;&#65039;</span> Define hazardous waste precisely</h2>
+    <span class="timepill">6.26 &middot; 00:00:05-03:25</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Module 6.26 narrows the discussion from general waste to waste capable of creating substantial present or potential harm when it is improperly treated, stored, transported, disposed of or otherwise managed <span class="ts">6.26 &middot; 00:00:05</span> <span class="ts">6.26 &middot; 00:01:02</span>.</p>
+
+    <div class="note def">
+      <p><strong>Working definition for this lecture:</strong> waste requiring special control because its identity, composition, listed status or hazardous properties create a material risk to human health or the environment during handling or management.</p>
+    </div>
+
+    <p>The slide adds an identification principle: characteristics may be determined through standardised tests or through reliable knowledge of the process and materials that generated the waste <span class="ts">6.26 &middot; 00:01:33</span>. This makes the generator's records part of the safety system.</p>
+
+    <div class="formula"><strong>Identification record</strong> = source identity + listed status or property evidence + controlled management route</div>
+
+    <div class="note warn">
+      <p><strong>Correction: the slide reproduces a US-style legal definition, not a universal scientific definition.</strong> In RCRA, "solid waste" is a legal category that can include some liquids and contained gases. Other jurisdictions use their own lists, thresholds and hazard properties. For an exam answer, name the legal system before quoting a definition.</p>
+    </div>
+
+    <p>Mercury from a broken device is used to show why careless household handling can become an inhalation and environmental problem <span class="ts">6.26 &middot; 00:02:28</span> <span class="ts">6.26 &middot; 00:02:55</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: mercury is not one uniform, simply "very volatile" substance.</strong> Elemental mercury from a broken thermometer can evaporate and create an inhalation hazard, especially indoors. Elemental, inorganic and organic mercury compounds differ in exposure route and toxic effect. The correct response is isolation and approved spill guidance, never ordinary sweeping or disposal.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 5 === -->
+<section id="t5" class="chapter card" style="--accent:#A4553A; --soft:#F7EBE5;">
+  <header>
+    <span class="eyebrow"><span class="num">5</span> Hazard classification</span>
+    <h2><span class="emoji">&#129514;</span> Classify hazard properties</h2>
+    <span class="timepill">6.26 &middot; 00:03:25-05:44</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecturer organises identification around four US characteristic properties <span class="ts">6.26 &middot; 00:03:25</span>. A waste need exhibit only one applicable property to enter that characteristic route <span class="ts">6.26 &middot; 00:04:21</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>RCRA characteristic</th><th>Core question</th><th>Typical signal</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Ignitability</strong></td><td>Can it readily create or sustain fire under defined conditions?</td><td>Low flash point, spontaneous combustion, ignitable gas or oxidiser.</td></tr>
+          <tr><td><strong>Corrosivity</strong></td><td>Is it strongly acidic or alkaline, or able to corrode steel at the regulatory rate?</td><td>Extreme pH or container corrosion.</td></tr>
+          <tr><td><strong>Reactivity</strong></td><td>Is it unstable or liable to react violently, explode or release toxic gas?</td><td>Water reaction, cyanide or sulphide gas, detonation potential.</td></tr>
+          <tr><td><strong>Toxicity</strong></td><td>Can regulated contaminants leach above specified concentrations?</td><td>TCLP result for a listed contaminant.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The lecture then shifts to the European Union list, covering explosive, oxidising, flammable, irritant, toxic, carcinogenic, corrosive, infectious, mutagenic and ecotoxic properties <span class="ts">6.26 &middot; 00:04:48</span> <span class="ts">6.26 &middot; 00:05:17</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: the H1 to H14 table is an obsolete EU scheme.</strong> Current Annex III uses HP1 to HP15: explosive, oxidising, flammable, irritant, target-organ or aspiration toxicity, acute toxicity, carcinogenic, corrosive, infectious, reproductive toxicity, mutagenic, acute toxic gas release, sensitising, ecotoxic and a final property for waste capable of exhibiting a listed hazard. These are not interchangeable with the four RCRA characteristics; always state the jurisdiction and version.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 6 === -->
+<section id="t6" class="chapter card" style="--accent:#7A5AA8; --soft:#F0EBF8;">
+  <header>
+    <span class="eyebrow"><span class="num">6</span> Pakistan control gap</span>
+    <h2><span class="emoji">&#128737;&#65039;</span> Diagnose inventory and handling failures</h2>
+    <span class="timepill">6.26 &middot; 00:05:44-08:39</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecture uses European figures to establish that hazardous waste is a minority of total waste but demands disproportionate control <span class="ts">6.26 &middot; 00:05:44</span> <span class="ts">6.26 &middot; 00:06:13</span>. It then turns to Pakistan's treatment and informal-handling gap <span class="ts">6.26 &middot; 00:06:43</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: the slide's EU total is internally inconsistent and obsolete.</strong> It gives about 22 million tonnes of hazardous waste against 420 million tonnes of solid waste while also claiming a 2 to 20% range. Eurostat reports that the EU generated 119.0 million tonnes of hazardous waste in 2022, 5.3% of total waste. Country shares varied from 0.7% to 24.6%, which explains why a single range must be tied to a year and dataset.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: Pakistan's hazardous waste cannot be assumed to equal 0.5% of total waste.</strong> The lecturer offers that estimate without an inventory <span class="ts">6.26 &middot; 00:07:15</span>. Pakistan's official implementation action plan says the absence of a first-level generation inventory and national classification system made accurate generation estimates extremely difficult. Use the policy's data gap as the verified fact.</p>
+    </div>
+
+    <p>The strongest observation is operational: informal workers may sort dangerous materials by hand without suitable protection <span class="ts">6.26 &middot; 00:07:43</span> <span class="ts">6.26 &middot; 00:08:13</span>. Mixed municipal and hazardous streams transfer risk to collectors, scavengers, nearby communities and receiving environments.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: the safety acronym is PPE, not PPP.</strong> Personal protective equipment is selected for a known hazard and task. Gloves alone cannot replace source segregation, compatible containers, labels, training, exposure control, emergency procedures and a licensed destination.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ======================================================== section 7 === -->
+<section id="t7" class="chapter card" style="--accent:#B44A8C; --soft:#F8EAF3;">
+  <header>
+    <span class="eyebrow"><span class="num">7</span> Source diagnosis</span>
+    <h2><span class="emoji">&#127981;</span> Map industries to waste streams</h2>
+    <span class="timepill">6.26 &middot; 00:08:39-11:25</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecture distinguishes classification by hazardous property from grouping by physical form, chemical family or industrial source <span class="ts">6.26 &middot; 00:08:39</span> <span class="ts">6.26 &middot; 00:09:07</span>. That distinction keeps an inventory useful: one field describes what the waste is, another why it is hazardous, and another where it came from.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Source taught</th><th>Indicative streams</th><th>Questions before classification</th></tr></thead>
+        <tbody>
+          <tr><td>Batteries and electronics</td><td>Metal-bearing components, acids, electrolytes, oils and circuit boards</td><td>Which chemistry, condition and packaging?</td></tr>
+          <tr><td>Chemical and pharmaceutical manufacture</td><td>Solvents, acids, alkalis, active ingredients, residues and rejected product</td><td>Which process, concentration and incompatibilities?</td></tr>
+          <tr><td>Printing, paints and coatings</td><td>Inks, pigments, solvents, sludges and contaminated containers</td><td>Which formulation, flash point and metal content?</td></tr>
+          <tr><td>Electroplating and metal finishing</td><td>Metal-bearing sludges, acids, alkalis and cyanide-bearing streams</td><td>What bath chemistry and treatment history?</td></tr>
+          <tr><td>Textiles, plastics and leather</td><td>Dyes, auxiliaries, solvents, chromium-bearing and organic residues</td><td>Which process stage and chemical inputs?</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Batteries are used as the most familiar source example <span class="ts">6.26 &middot; 00:09:36</span>, followed by chemical manufacture, electronics, printing, electroplating, textiles, pharmaceuticals, paints, plastics and leather <span class="ts">6.26 &middot; 00:10:49</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: the industry table is indicative, not a definitive chemical inventory.</strong> Waste composition depends on the actual product and process. A battery may involve lead, nickel, cadmium or lithium chemistry; a sector name does not prove that every listed metal is present. Classification requires records, sampling where appropriate, and the applicable list or test.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ======================================================== section 8 === -->
+<section id="t8" class="chapter card" style="--accent:#557E9B; --soft:#E8F0F5;">
+  <header>
+    <span class="eyebrow"><span class="num">8</span> Toxicological precision</span>
+    <h2><span class="emoji">&#9878;&#65039;</span> Read metal hazards accurately</h2>
+    <span class="timepill">6.26 &middot; 00:11:25-13:54</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The closing section highlights copper, zinc, lead, mercury and cadmium, then focuses on the health significance of lead, mercury and cadmium <span class="ts">6.26 &middot; 00:11:25</span> <span class="ts">6.26 &middot; 00:11:55</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Metal</th><th>Lecture source examples</th><th>Verified health boundary</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Lead</strong></td><td>Paints, pipes and batteries</td><td>Multi-system toxicant; can cause anaemia, neurological harm, kidney damage and cardiovascular effects. Children are especially vulnerable.</td></tr>
+          <tr><td><strong>Mercury</strong></td><td>Devices, industry, combustion and waste incineration</td><td>Effects depend on form and route; nervous-system and kidney effects are established concerns.</td></tr>
+          <tr><td><strong>Cadmium</strong></td><td>Plating, combustion, waste incineration and rechargeable batteries</td><td>Accumulates over time; the kidney is a principal target organ. Inhalation and dietary pathways differ.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The lecturer links lead with impaired oxygen transport <span class="ts">6.26 &middot; 00:12:23</span> <span class="ts">6.26 &middot; 00:12:52</span>, mercury with nervous-system and kidney damage <span class="ts">6.26 &middot; 00:13:22</span>, and cadmium bioaccumulation with kidney malfunction <span class="ts">6.26 &middot; 00:13:54</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: the metal-health statements need mechanism and exposure qualifiers.</strong> Lead does not merely cause a vague "haemoglobin disorder"; it inhibits haem synthesis and can cause anaemia alongside neurological, renal and cardiovascular harm. Mercury toxicity varies across elemental, inorganic and organic forms. Cadmium accumulates in the kidney and has a long biological half-life. A simple claim that copper and zinc are always of less concern is unsafe because risk depends on form, dose, route and duration.</p>
+    </div>
+
+    <div class="formula"><strong>Risk statement</strong> = hazard identity + chemical form + concentration + exposure route + duration + exposed population + control condition</div>
+
+  </div>
+</section>
+
+<!-- ========================================================= glossary === -->
+<section id="t9" class="chapter card" style="--accent:#8B8490; --soft:#F0EEF2;">
+  <header>
+    <span class="eyebrow">Reference</span>
+    <h2><span class="emoji">&#128214;</span> Glossary</h2>
+  </header>
+  <div class="section-body">
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Term</th><th>Meaning in these modules</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Waste generation</strong></td><td>Quantity of waste produced within a defined place, period and scope.</td></tr>
+          <tr><td><strong>Collection coverage</strong></td><td>Share of people, premises or generated mass served by a collection system.</td></tr>
+          <tr><td><strong>Source segregation</strong></td><td>Separation of streams close to where waste is generated.</td></tr>
+          <tr><td><strong>Recovery</strong></td><td>Operation that returns material or energy value from waste.</td></tr>
+          <tr><td><strong>Circular economy</strong></td><td>System designed to reduce virgin inputs, retain product and material value, and control residuals.</td></tr>
+          <tr><td><strong>Hazardous waste</strong></td><td>Waste subject to special control because of listed status, composition or hazardous properties.</td></tr>
+          <tr><td><strong>Listed waste</strong></td><td>Waste legally identified as hazardous because it matches a specified list entry.</td></tr>
+          <tr><td><strong>Characteristic waste</strong></td><td>Waste hazardous under RCRA because it exhibits ignitability, corrosivity, reactivity or toxicity.</td></tr>
+          <tr><td><strong>TCLP</strong></td><td>US Toxicity Characteristic Leaching Procedure used to assess specified contaminants.</td></tr>
+          <tr><td><strong>HP1 to HP15</strong></td><td>Current EU properties of waste that render it hazardous.</td></tr>
+          <tr><td><strong>PPE</strong></td><td>Personal protective equipment selected for a known hazard and task.</td></tr>
+          <tr><td><strong>Bioaccumulation</strong></td><td>Build-up of a substance in an organism when uptake exceeds elimination.</td></tr>
+          <tr><td><strong>Generator knowledge</strong></td><td>Reliable process and material information used to support waste identification.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== flashcards === -->
+<section id="t10" class="chapter card" style="--accent:#2E9E6A; --soft:#E4F3EB;">
+  <header>
+    <span class="eyebrow">Active recall</span>
+    <h2><span class="emoji">&#127183;</span> Flashcards</h2>
+  </header>
+  <div class="section-body">
+    <div class="cards">
+      <div class="qa"><p class="q">What is the resource-to-waste chain?</p><p class="a">Extraction, production, distribution, use, discard, collection and a recovery, treatment or disposal route.</p></div>
+      <div class="qa"><p class="q">Why does urbanisation matter for waste?</p><p class="a">It concentrates population, consumption, discarded material and service demand.</p></div>
+      <div class="qa"><p class="q">Why must waste figures state a year and place?</p><p class="a">Generation and service conditions vary across cities, periods, definitions and methods.</p></div>
+      <div class="qa"><p class="q">How do generation and collection differ?</p><p class="a">Generation is what enters the waste system; collection is the share captured by a service.</p></div>
+      <div class="qa"><p class="q">Why segregate at source?</p><p class="a">To protect material quality, prevent incompatible mixing and reduce worker exposure.</p></div>
+      <div class="qa"><p class="q">What does circularity add to recycling?</p><p class="a">Prevention, durable design, reuse, repair, cleaner production, return systems and controlled residuals.</p></div>
+      <div class="qa"><p class="q">Is zero waste a literal physical guarantee?</p><p class="a">No. It is a direction for prevention, value retention and residual control.</p></div>
+      <div class="qa"><p class="q">Why name the jurisdiction in a definition?</p><p class="a">Waste lists, thresholds and hazard properties differ across legal systems.</p></div>
+      <div class="qa"><p class="q">What are the four RCRA characteristics?</p><p class="a">Ignitability, corrosivity, reactivity and toxicity.</p></div>
+      <div class="qa"><p class="q">How many current EU hazard properties are there?</p><p class="a">Fifteen, numbered HP1 to HP15.</p></div>
+      <div class="qa"><p class="q">Was the lecture's H1 to H14 EU table current?</p><p class="a">No. It was an obsolete scheme and is corrected to HP1 to HP15.</p></div>
+      <div class="qa"><p class="q">What did Eurostat report for EU hazardous waste in 2022?</p><p class="a">119.0 million tonnes, 5.3% of total waste generated.</p></div>
+      <div class="qa"><p class="q">Why is Pakistan's 0.5% estimate rejected?</p><p class="a">The official policy baseline reported no adequate first-level national inventory.</p></div>
+      <div class="qa"><p class="q">What does PPE stand for?</p><p class="a">Personal protective equipment.</p></div>
+      <div class="qa"><p class="q">Can PPE replace source control?</p><p class="a">No. Prevention, segregation, containers, labels, training and controlled facilities remain necessary.</p></div>
+      <div class="qa"><p class="q">Why is an industry table only indicative?</p><p class="a">Actual waste composition depends on product, process, chemistry and operating conditions.</p></div>
+      <div class="qa"><p class="q">What is the key lead correction?</p><p class="a">Lead inhibits haem synthesis and has multi-system toxicity; it is not just a vague haemoglobin disorder.</p></div>
+      <div class="qa"><p class="q">What is the key mercury correction?</p><p class="a">Elemental, inorganic and organic mercury forms have different routes and effects.</p></div>
+      <div class="qa"><p class="q">What is cadmium's principal target organ?</p><p class="a">The kidney, with accumulation over a long biological half-life.</p></div>
+      <div class="qa"><p class="q">What makes a complete risk statement?</p><p class="a">Hazard, form, concentration, route, duration, exposed population and control condition.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== exam focus === -->
+<section id="t11" class="chapter card" style="--accent:#2E9E6A; --soft:#E4F3EB;">
+  <header>
+    <span class="eyebrow">Revision sheet</span>
+    <h2><span class="emoji">&#127919;</span> Exam focus</h2>
+  </header>
+  <div class="section-body">
+    <h3>Answer architecture</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Move</th><th>What to write</th><th>Exam verb</th></tr></thead>
+        <tbody>
+          <tr><td>Frame</td><td>Connect resource use, consumption, urbanisation and waste generation</td><td>Explain</td></tr>
+          <tr><td>Measure</td><td>Separate generation, collection, segregation, recovery and disposal</td><td>Distinguish</td></tr>
+          <tr><td>Design</td><td>Move from prevention and product design to a controlled residual route</td><td>Propose</td></tr>
+          <tr><td>Define hazard</td><td>Name the jurisdiction, legal list or hazardous property</td><td>Classify</td></tr>
+          <tr><td>Trace source</td><td>Link generator, process, waste stream, constituent and exposure route</td><td>Diagnose</td></tr>
+          <tr><td>Control</td><td>Segregation, compatible storage, labels, records, transport and treatment</td><td>Recommend</td></tr>
+          <tr><td>Verify</td><td>Inventory, manifest, facility record, exposure indicator and audit trail</td><td>Evaluate</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Corrections to remember</h3>
+    <ul>
+      <li>Reject 2 to 2.5 kg per person per day as an undated Pakistan average.</li>
+      <li>The 95% can-energy comparison concerns aluminium; steel or tin differs.</li>
+      <li>No universal 75% collection threshold proves that a city is clean.</li>
+      <li>The Pakistan pressure slide mixes dates and incompatible indicators.</li>
+      <li>Use current EU HP1 to HP15, not obsolete H1 to H14.</li>
+      <li>Eurostat's 2022 EU figure is 119.0 million tonnes, or 5.3%.</li>
+      <li>Pakistan's baseline reported no adequate national hazardous-waste inventory.</li>
+      <li>Use PPE within a full control system and qualify metal claims by exposure.</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="notefoot">Source recordings: <a href="https://drive.google.com/file/d/1hSveOTk3ZF1zniYVFfNPUl0yBJK9DbLM/view?usp=drivesdk" target="_blank" rel="noopener">▶ 6.24 5Rs continued</a><span class="sep">·</span><a href="https://drive.google.com/file/d/1J03qY4IQqBK036erajYfIMnR1epbjZtJ/view?usp=drivesdk" target="_blank" rel="noopener">▶ 6.26 Hazardous waste management</a><span class="sep">·</span><a href="https://drive.google.com/file/d/1ehtX_c-8cSPlk1AVV2Y82ZcJaekUf0s6/view?usp=drivesdk" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+</html>
