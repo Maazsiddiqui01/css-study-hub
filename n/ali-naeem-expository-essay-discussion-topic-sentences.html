@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Expository Essays: Outline, Coherence and Topic Sentences</title>
+<style>/* Lecture Notes ebook, "warm study" theme.
+   Inspired by Mehak's MarketCanvas app: soft cream ground, rounded white cards,
+   a different pastel accent per topic, serif display + friendly sans body,
+   gentle emoji + pill badges. Playful and pretty, but still a real study book.
+   Print-first (A4 PDF via headless Edge); reads well on screen too.
+
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
+   Everything themeable keys off --accent / --soft. Titles stay ink for
+   readability; accents colour eyebrows, numbers, pills, rules and callouts.
+*/
+
+:root {
+  --cream: #FCF6F0;          /* page ground (warm) */
+  --card: #FFFFFF;
+  --ink: #2C2630;            /* plum-black body/headings */
+  --ink-soft: #5A5360;
+  --slate: #8B8490;          /* captions, timestamps */
+  --hairline: #EEE6E4;
+
+  /* section default accent (overridden per section) */
+  --accent: #C0567E;
+  --soft: #FBECF1;
+
+  --shadow: 0 1px 2px rgba(60,30,45,.05), 0 10px 26px rgba(80,40,55,.07);
+  --radius: 20px;
+
+  --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: Consolas, "Cascadia Code", ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background:
+    radial-gradient(1100px 700px at 15% -5%, #FBEEF3 0%, transparent 55%),
+    radial-gradient(1000px 700px at 100% 0%, #EEF3FB 0%, transparent 50%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  font: 10.8pt/1.62 var(--sans);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+@media screen {
+  body { max-width: 51rem; margin: 0 auto; padding: 2.5rem 1.15rem 4rem; font-size: 1.0rem; }
+}
+
+/* ---------------------------------------------------------------- page --- */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm 14mm;
+  @bottom-center {
+    content: counter(page);
+    font: 8.5pt var(--sans);
+    color: #8B8490;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+/* --------------------------------------------------------------- cards --- */
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8mm 9mm 9mm;
+  margin: 0 0 6mm;
+  box-shadow: var(--shadow);
+  break-inside: auto;
+}
+@media screen { .card { margin-bottom: 1.4rem; } }
+
+/* a soft accent wash across the top of each section card (fades to white),
+   echoing the app's pastel cards without hurting readability */
+.chapter {
+  background:
+    linear-gradient(180deg, var(--soft) 0, rgba(255,255,255,0) 34mm),
+    var(--card);
+  border-top: 3px solid var(--accent);
+  break-inside: auto;
+  break-before: page;   /* each topic starts fresh: slide on top, notes below */
+}
+/* on screen (web/PWA) sections just stack; no forced page breaks */
+@media screen { .chapter { break-before: auto; } }
+
+h2, h3, .eyebrow { break-after: avoid; }
+p { orphans: 2; widows: 2; }
+
+/* keep the section header intact (eyebrow + title + time pill together) and
+   glued to its opening slide */
+.chapter > header { break-inside: avoid; break-after: avoid; }
+figure.slide { break-before: avoid; }
+
+/* --------------------------------------------------------------- cover --- */
+
+.cover {
+  page: cover;
+  break-after: page;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32mm 22mm 24mm;
+  background:
+    radial-gradient(700px 460px at 12% 8%, #FBE6EE 0%, transparent 60%),
+    radial-gradient(760px 520px at 96% 4%, #E7EEFB 0%, transparent 58%),
+    radial-gradient(620px 520px at 80% 96%, #E6F4EC 0%, transparent 60%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+@media screen {
+  .cover { min-height: 80vh; border-radius: 24px; padding: 3.2rem 2.6rem; margin-bottom: 1.4rem; }
+}
+
+.cover .avatar { font-size: 30pt; line-height: 1; margin-bottom: 7mm; }
+.cover .kicker {
+  font: 600 9pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 5mm;
+}
+.cover h1 {
+  font: 600 31pt/1.14 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 15em;
+}
+.cover .subtitle {
+  margin-top: 5mm;
+  font: 400 13.5pt/1.5 var(--sans);
+  color: var(--ink-soft);
+  max-width: 30em;
+}
+.cover .warm {
+  margin-top: 4mm;
+  font: italic 400 12pt/1.5 var(--serif);
+  color: var(--accent);
+}
+
+.cover .chips { display: flex; flex-wrap: wrap; gap: 3mm; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.4mm 4mm;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(60,30,45,.04);
+  font: 400 9pt var(--sans);
+  color: var(--slate);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chip b { font: 700 10.5pt var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ headings --- */
+
+.chapter header { margin-bottom: 5mm; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  font: 700 8.5pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--accent);
+  margin-bottom: 3mm;
+}
+.eyebrow .num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h2 {
+  font: 600 20pt/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .emoji { font-size: 17pt; }
+
+.timepill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.5mm 3.5mm;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font: 600 8pt var(--mono);
+  letter-spacing: 0.02em;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h3 {
+  font: 600 12.5pt/1.34 var(--serif);
+  color: var(--ink);
+  margin: 6mm 0 2.5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+.ts { font: 400 8.5pt var(--mono); color: var(--slate); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- body --- */
+
+.section-body > :last-child { margin-bottom: 0; }
+p { margin: 0 0 3mm; }
+.lead { font-size: 11.2pt; color: var(--ink); }
+
+ul, ol { margin: 0 0 3mm 5.5mm; }
+li { margin-bottom: 1.7mm; padding-left: 1mm; }
+li::marker { color: var(--accent); }
+
+.kt { font-weight: 700; color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
+
+code { font: 9.5pt var(--mono); background: #F3EFF4; padding: .4pt 3.5pt; border-radius: 4px; }
+
+/* ------------------------------------------------------------ callouts --- */
+
+.note {
+  --c: var(--accent);
+  --f: var(--soft);
+  background: var(--f);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  border-left: 3px solid var(--c);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.note .label {
+  display: inline-flex; align-items: center; gap: 1.6mm;
+  font: 700 8pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c);
+  margin-bottom: 1.8mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.warn { --c: #B4791F; --f: #FaF1DF; }
+.note.exam { --c: #3B8B78; --f: #E6F3EF; }
+.note.def  { --c: var(--accent); --f: var(--soft); }
+
+/* ------------------------------------------------------- summary card --- */
+
+.summary { --accent: #C0567E; --soft: #FBECF1; }
+.summary ul { list-style: none; margin: 0; }
+.summary li { position: relative; padding: 0 0 0 7mm; margin-bottom: 3.5mm; }
+.summary li::before {
+  content: "";
+  position: absolute; left: 0; top: 2.6mm;
+  width: 3.2mm; height: 3.2mm; border-radius: 50%;
+  background: var(--accent);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.summary li:last-child { margin-bottom: 0; }
+.summary li b, .summary li strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------- TOC --- */
+
+nav.toc { --accent: #8B8490; --soft: #F3EFF4; }
+nav.toc ol { list-style: none; margin: 0; }
+nav.toc li {
+  display: flex; align-items: baseline; gap: 4mm;
+  padding: 2.7mm 0;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11pt var(--sans);
+}
+nav.toc li:last-child { border-bottom: 0; }
+nav.toc .dot { width: 3.4mm; height: 3.4mm; border-radius: 50%; flex-shrink: 0;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+nav.toc .title { flex: 1; color: var(--ink); }
+nav.toc .rng { flex-shrink: 0; font: 600 8.5pt var(--mono); color: var(--slate); }
+
+/* -------------------------------------------------------------- slides --- */
+
+figure.slide { margin: 0 0 5mm; break-inside: avoid; }
+figure.slide img {
+  width: 100%; display: block;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 10px rgba(40,30,45,.10);
+}
+figure.slide figcaption {
+  font: 400 8.5pt var(--sans);
+  color: var(--slate);
+  margin-top: 2mm;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4mm;
+}
+figure.slide figcaption .ts { color: var(--accent); }
+
+/* ------------------------------------------------------------ glossary --- */
+
+dl.glossary { margin: 0; }
+dl.glossary div { padding: 3mm 0; border-bottom: 1px solid var(--hairline); break-inside: avoid; }
+dl.glossary div:last-child { border-bottom: 0; padding-bottom: 0; }
+dl.glossary dt { font: 700 10.5pt var(--sans); color: var(--accent); margin-bottom: 1.2mm; }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- flashcards --- */
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 0; }
+.qa {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  background: linear-gradient(180deg, var(--soft) 0, #fff 60%);
+  break-inside: avoid;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.qa .q { font: 700 10pt var(--sans); color: var(--ink); margin-bottom: 2mm; }
+.qa .a { color: var(--ink-soft); font-size: 10pt; }
+
+/* ------------------------------------------------------------- tables --- */
+
+.tables-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0; break-inside: avoid; }
+th {
+  font: 700 9pt var(--sans); text-align: left; color: var(--accent);
+  border-bottom: 2px solid var(--soft); padding: 2mm 3mm 2mm 0;
+}
+td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+
+/* --- mobile / on-the-go reading (screen only; never affects the print PDF).
+   Placed LAST so it wins the cascade over the wider @media screen rules above.
+   Requires <meta name="viewport" content="width=device-width, initial-scale=1">. */
+@media screen and (max-width: 640px) {
+  body { padding: 1rem 0.85rem 2.5rem; font-size: 1.02rem; }
+  .card { padding: 5mm 5mm 6mm; border-radius: 14px; margin-bottom: 0.9rem; }
+  .cover { min-height: auto; padding: 2rem 1.3rem 1.6rem; border-radius: 16px; }
+  .cover .avatar { font-size: 24pt; margin-bottom: 4mm; }
+  .cover h1 { font-size: 20pt; max-width: 100%; }
+  .cover .subtitle { font-size: 11.5pt; }
+  .cover .warm { font-size: 11pt; }
+  .cover .chips { gap: 2mm; margin-top: 5mm; }
+  h2 { font-size: 16pt; }
+  h2 .emoji { font-size: 13.5pt; }
+  h3 { font-size: 11.5pt; }
+  .cards { grid-template-columns: 1fr; }
+  nav.toc li { font-size: 10.5pt; gap: 2.5mm; padding: 2.5mm 0; }
+  nav.toc .rng { font-size: 8pt; }
+  .note { padding: 3.5mm 4mm; }
+  table { font-size: 9.5pt; }
+}
+</style>
+<meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
+align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
+border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
+<body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/file/d/1CImGtUZXwyDZeFGwT7mtOZCbQxIMUCnC/view?usp=drivesdk" target="_blank" rel="noopener">Download PDF ↓</a></div>
+
+<!-- ============================================================ cover === -->
+<section class="cover" style="background:radial-gradient(700px 460px at 12% 8%,#F7EBE5 0,transparent 60%),radial-gradient(760px 520px at 96% 4%,#EFEAF7 0,transparent 58%),radial-gradient(620px 520px at 80% 96%,#E4F1F0 0,transparent 60%),var(--cream)">
+  <div>
+    <div class="avatar">&#9997;&#65039;</div>
+    <div class="kicker" style="color:#A4553A">CSS English Essay &middot; Ali Naeem</div>
+    <h1>Expository Essays: Outline, Coherence and Topic Sentences</h1>
+    <p class="subtitle">How to turn an outline into a connected essay: distinguish main and supporting sections, build an optional roadmap, bridge major headings, protect the topic sentence and develop each paragraph through explanation and evidence.</p>
+    <p class="warm" style="color:#A4553A">The outline decides what you will say. Coherence decides whether the examiner can follow it. &#128279;</p>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>1h 16m</b> taught content</span>
+    <span class="chip"><b>3</b> bridge sentences</span>
+    <span class="chip"><b>4</b> paragraph moves</span>
+    <span class="chip"><b>8</b> practical topics</span>
+  </div>
+</section>
+
+<!-- ============================================================== toc === -->
+<nav class="toc card">
+  <header><span class="eyebrow">Contents</span><h2><span class="emoji">&#128506;&#65039;</span> In this chapter</h2></header>
+  <ol>
+    <li><span class="dot" style="background:#A4553A"></span><a class="title" href="#summary">The five-minute version</a><span class="rng">summary</span></li>
+    <li><span class="dot" style="background:#5866C4"></span><a class="title" href="#t1">01 &middot; Build an essay, not a short answer</a><span class="rng">narrative</span></li>
+    <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t2">02 &middot; Design the outline</a><span class="rng">main + supporting</span></li>
+    <li><span class="dot" style="background:#B57A2A"></span><a class="title" href="#t3">03 &middot; Make headings do real work</a><span class="rng">phrasing + evidence</span></li>
+    <li><span class="dot" style="background:#46955C"></span><a class="title" href="#t4">04 &middot; Create coherence</a><span class="rng">devices + flow</span></li>
+    <li><span class="dot" style="background:#B44A8C"></span><a class="title" href="#t5">05 &middot; The optional abstract</a><span class="rng">body roadmap</span></li>
+    <li><span class="dot" style="background:#3A7CC0"></span><a class="title" href="#t6">06 &middot; Transitory paragraphs</a><span class="rng">bridge sections</span></li>
+    <li><span class="dot" style="background:#C0762C"></span><a class="title" href="#t7">07 &middot; Topic sentences and paragraphing</a><span class="rng">micro-structure</span></li>
+    <li><span class="dot" style="background:#7A5AA8"></span><a class="title" href="#t8">08 &middot; Assemble and practise</a><span class="rng">workflow</span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t9">Glossary &middot; Flashcards &middot; Exam focus</a><span class="rng"></span></li>
+  </ol>
+</nav>
+
+<!-- ============================================================= tldr === -->
+<section id="summary" class="summary card" style="--accent:#A4553A; --soft:#F7EBE5; border-top-color:#A4553A">
+  <header><span class="eyebrow" style="color:#A4553A">Start here</span><h2><span class="emoji">&#11088;</span> The five-minute version</h2></header>
+  <ul>
+    <li><strong>An essay develops a narrative.</strong> A current-affairs response may list the required pros, cons or threats and stop. The essay must arrange context, arguments, evidence, remedies and conclusion into a complete intellectual journey.</li>
+    <li><strong>Separate main headings from supporting headings.</strong> Main headings answer the central demand. Supporting sections may define the key term, provide an overview, add recommendations or use a case study to complete the picture.</li>
+    <li><strong>Map the outline into the body.</strong> Each argument in the outline becomes a paragraph. Put its supporting example, case or evidence directly beneath it in the outline so the logic is visible before drafting begins.</li>
+    <li><strong>Use meaningful phrases as headings.</strong> Replace a one-word label such as "causes" with an actual phrase such as "Major causes behind Pakistan's population crisis." The heading should reveal its function and subject.</li>
+    <li><strong>Coherence operates at several levels.</strong> Connecting words link sentences; connecting phrases can open related paragraphs; an optional abstract previews the body; and a transitory paragraph bridges one major heading to the next.</li>
+    <li><strong>The abstract is a roadmap after the introduction.</strong> It previews the sequence of the body in one short paragraph. The teacher makes it optional once the writer can maintain flow without it.</li>
+    <li><strong>A transitory paragraph uses three moves.</strong> Summarise the completed section, explain why the next section is needed, then formally introduce the next section. Use it between different chains of thought, such as causes to effects, not between two causes under the same heading.</li>
+    <li><strong>Protect the topic sentence.</strong> The class method begins each argument paragraph with the paragraph's own claim, followed by explanation, evidence and a concluding sentence. Put general bridging language in the transition so the topic sentence can stay direct.</li>
+  </ul>
+</section>
+
+<!-- ======================================================== section 1 === -->
+<section id="t1" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
+  <header>
+    <span class="eyebrow"><span class="num">1</span> Think in sections</span>
+    <h2><span class="emoji">&#128214;</span> Build an essay, not a short answer</h2>
+    <span class="timepill">00:00-05:33</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The class opens in the middle of an outline discussion. Its first important distinction is between answering a subject question and developing an essay. An essay has to create a connected narrative around the issue, even when the obvious demand looks like a simple list of pros, cons, threats or causes <span class="ts">00:03:32</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Short-answer instinct</th><th>Essay-writing move</th></tr></thead>
+        <tbody>
+          <tr><td>List the pros and cons of globalisation</td><td>Introduce the issue, establish context, develop the advantages and disadvantages, address the harms through recommendations, then conclude <span class="ts">00:04:05</span>.</td></tr>
+          <tr><td>List the threats caused by climate change</td><td>Clarify what the issue means, frame its context, develop the threats, then move from diagnosis to policy response <span class="ts">00:04:35</span>.</td></tr>
+          <tr><td>State arguments and stop</td><td>Add the support that makes the chosen narrative credible: examples, evidence, a relevant case study or practical recommendations.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>The complete-picture test</h3>
+    <p>The lecturer describes an overpopulation essay whose body includes exposition, arguments and a Bangladesh case study before the conclusion <span class="ts">00:02:25</span>. The point is structural: the case study supports the essay's argument and helps the examiner see a complete picture. The recording does not supply the study's facts, so it should not be reproduced as evidence from this class.</p>
+
+    <div class="note">
+      <p><strong>Course principle.</strong> Outline headings become body sections, and each outline argument becomes the paragraph that develops it <span class="ts">00:00:28</span> <span class="ts">00:01:29</span>. If one idea contains too much material, it may be divided into two paragraphs as long as each paragraph preserves unity of thought.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Ask before outlining:</strong> What story will the essay tell about the issue? Which background does the reader need? Which claims carry the thesis? What evidence supports them? What response follows from the diagnosis?</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 2 === -->
+<section id="t2" class="chapter card" style="--accent:#2C8C86; --soft:#E4F1F0;">
+  <header>
+    <span class="eyebrow"><span class="num">2</span> Main argument plus support</span>
+    <h2><span class="emoji">&#128506;&#65039;</span> Design the outline</h2>
+    <span class="timepill">05:58-09:33</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">A useful outline distinguishes the sections that answer the topic directly from sections that help the reader understand or trust that answer. The lecturer calls them <span class="kt">main headings</span> and <span class="kt">supporting</span> or auxiliary headings <span class="ts">00:05:58</span>.</p>
+
+    <div class="grid-2">
+      <div class="mini-card"><h4>Main headings</h4><p>The central argumentative divisions demanded by the topic: advantages and disadvantages, causes and effects, threats, or another issue-specific structure.</p></div>
+      <div class="mini-card"><h4>Supporting headings</h4><p>Sections that complete the presentation: definition or exposition, historical overview, case study, recommendations and conclusion <span class="ts">00:06:27</span>.</p></div>
+    </div>
+
+    <h3>A flexible expository skeleton</h3>
+    <ol>
+      <li><strong>Introduction:</strong> establish the issue and build the thesis.</li>
+      <li><strong>Exposition or overview:</strong> define the key variable, explain the background or orient the reader.</li>
+      <li><strong>Argument section one:</strong> develop the first main side of the topic.</li>
+      <li><strong>Argument section two:</strong> develop the second main side or consequence.</li>
+      <li><strong>Recommendations or case study:</strong> add a response or supporting application where the topic needs one.</li>
+      <li><strong>Conclusion:</strong> close the narrative built by the thesis and body.</li>
+    </ol>
+
+    <p>This is a planning frame, not a fixed list for every topic. An overview may be useful for globalisation, a definition may be enough for another subject, and a historical exposition may help when the issue has a clear developmental story <span class="ts">00:09:33</span>.</p>
+
+    <h3>Evidence belongs under the argument</h3>
+    <p>In the outline, place the case, example or evidence immediately under the claim it supports <span class="ts">00:07:36</span>. This does two jobs:</p>
+    <ul>
+      <li>It tests whether the planned paragraph has enough support to be developed.</li>
+      <li>It lets the examiner see the claim-and-evidence relationship at a glance <span class="ts">00:08:07</span>.</li>
+    </ul>
+
+  </div>
+</section>
+
+<!-- ======================================================== section 3 === -->
+<section id="t3" class="chapter card" style="--accent:#B57A2A; --soft:#FBF1DE;">
+  <header>
+    <span class="eyebrow"><span class="num">3</span> Actual phrasing</span>
+    <h2><span class="emoji">&#128221;</span> Make headings do real work</h2>
+    <span class="timepill">08:07-11:09</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">A heading should name the idea precisely enough to guide both writer and examiner. The lecturer rejects one-word headings and asks for a proper phrase that reveals the section's subject and purpose <span class="ts">00:10:39</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Weak label</th><th>More useful outline phrasing</th><th>Why it works</th></tr></thead>
+        <tbody>
+          <tr><td>Overview</td><td>Overview of globalisation</td><td>Names the function and the variable.</td></tr>
+          <tr><td>Definition</td><td>What is meant by overpopulation?</td><td>Signals a clear expository task.</td></tr>
+          <tr><td>History</td><td>Historical overview of Pakistan's population boom</td><td>Specifies the setting and direction <span class="ts">00:09:33</span>.</td></tr>
+          <tr><td>Causes</td><td>Major causes behind the population crisis</td><td>Turns a category into an issue-specific section.</td></tr>
+          <tr><td>Recommendations</td><td>Policy measures to manage the adverse effects</td><td>Shows what the section will achieve.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>From heading to paragraph</h3>
+    <p>A main heading may contain several arguments. Each argument becomes its own paragraph, and its outline wording should be specific enough to become that paragraph's topic sentence. Supporting evidence sits under the argument, then enters the body after the explanation <span class="ts">00:07:36</span>.</p>
+
+    <div class="note">
+      <p><strong>Example outline fragment.</strong><br>
+      <strong>3. Major causes behind overpopulation</strong><br>
+      3.1 Rising illiteracy sustains high population growth<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;Evidence or case in point</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ======================================================== section 4 === -->
+<section id="t4" class="chapter card" style="--accent:#46955C; --soft:#E9F4EC;">
+  <header>
+    <span class="eyebrow"><span class="num">4</span> Keep the chain visible</span>
+    <h2><span class="emoji">&#128279;</span> Create coherence</h2>
+    <span class="timepill">11:09-13:58</span>
+  </header>
+  <div class="section-body">
+    <p class="lead"><span class="kt">Coherence</span> is the connectivity and flow that lets one idea lead naturally to the next. Without it, discussion becomes disjointed, the reader loses the line of thought, and the writer may also lose track of the argument <span class="ts">00:11:09</span> <span class="ts">00:11:50</span>.</p>
+
+    <h3>Four levels of connection</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Device</th><th>Where it works</th><th>Examples or function from class</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Connecting words</strong></td><td>Within or between closely related sentences</td><td>Therefore, hence, accordingly <span class="ts">00:12:24</span>.</td></tr>
+          <tr><td><strong>Connecting phrases</strong></td><td>At the start of a related paragraph</td><td>Similarly, in addition, however, on the contrary, having established that, moving forward.</td></tr>
+          <tr><td><strong>Abstract</strong></td><td>Immediately after the introduction</td><td>Preview the major divisions of the body <span class="ts">00:13:58</span>.</td></tr>
+          <tr><td><strong>Transitory paragraph</strong></td><td>Between major headings</td><td>Close the previous chain of thought and introduce a different one.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The class treats topic sentences as direct and forceful. Loading a topic sentence with backward-looking transition language can hide the actual claim. The solution is to place the section-level bridge in its own short paragraph, leaving the next argument paragraph free to begin with its precise idea <span class="ts">00:13:21</span>.</p>
+
+    <div class="note">
+      <p><strong>Scale the device to the gap.</strong> Use a word or phrase between related arguments under one heading. Use a transitory paragraph when the essay changes its chain of thought, such as history to causes, causes to effects, or effects to remedies.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Coherence audit.</strong> Circle every change of major heading in the outline. In the body, each circle should correspond to a deliberate bridge. Then check whether paragraphs inside the same heading are linked lightly rather than interrupted by repeated mini-essays.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 5 === -->
+<section id="t5" class="chapter card" style="--accent:#B44A8C; --soft:#F8EAF3;">
+  <header>
+    <span class="eyebrow"><span class="num">5</span> Preview the body</span>
+    <h2><span class="emoji">&#128270;</span> The optional abstract</h2>
+    <span class="timepill">13:58-23:35</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecturer uses <span class="kt">abstract</span> for a short roadmap paragraph placed after the introduction and before the first body section. It tells the reader how the essay's body has been divided <span class="ts">00:14:34</span> <span class="ts">00:17:23</span>.</p>
+
+    <h3>What it contains</h3>
+    <p>Give roughly one sentence to each major body heading, in the order the essay will follow. For an overpopulation essay, the roadmap might announce:</p>
+    <ol>
+      <li>a brief historical overview of population growth;</li>
+      <li>the root causes behind the problem;</li>
+      <li>the major effects on the country; and</li>
+      <li>recommendations for addressing the crisis <span class="ts">00:18:29</span> <span class="ts">00:18:41</span> <span class="ts">00:19:09</span>.</li>
+    </ol>
+
+    <div class="note">
+      <p><strong>Model roadmap.</strong> This essay first gives a brief overview of the issue. It then examines the principal causes before assessing their effects on the country. Finally, it proposes measures for addressing the problem.</p>
+    </div>
+
+    <h3>What it does not contain</h3>
+    <ul>
+      <li>It is not a heading or bullet in the outline; it belongs only to the body <span class="ts">00:17:01</span>.</li>
+      <li>It does not develop evidence or prove arguments.</li>
+      <li>It does not replace the introduction or thesis statement. The thesis is part of the introduction <span class="ts">00:22:09</span>.</li>
+      <li>It does not need to preview every individual paragraph. It maps the large divisions.</li>
+    </ul>
+
+    <h3>Introduction, thesis and abstract</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Element</th><th>Job in this method</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Introduction</strong></td><td>Build the case and create the essay's opening narrative. It is a separate paragraph from the body <span class="ts">00:21:22</span>.</td></tr>
+          <tr><td><strong>Thesis statement</strong></td><td>State the controlling narrative or position built from the selected arguments. The lecture illustrates choosing eight useful arguments from a larger pool rather than forcing every available point into the introduction <span class="ts">00:20:48</span>.</td></tr>
+          <tr><td><strong>Abstract</strong></td><td>Tell the reader how the body will unfold after the introduction.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note tip">
+      <p><strong>Optional after practice.</strong> The teacher later says the abstract may be included or omitted once the writer becomes comfortable and can maintain flow without it <span class="ts">01:05:36</span> <span class="ts">01:06:04</span>. Practise it first as a planning discipline.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 6 === -->
+<section id="t6" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+  <header>
+    <span class="eyebrow"><span class="num">6</span> Bridge a major shift</span>
+    <h2><span class="emoji">&#127753;&#65039;</span> Transitory paragraphs</h2>
+    <span class="timepill">23:35-44:38</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">A transitory paragraph solves the abruptness created when one major section ends and another begins. It is a short bridge between headings, not a new argument and not a summary of the whole essay <span class="ts">00:23:35</span> <span class="ts">00:25:35</span>.</p>
+
+    <h3>The three-sentence drill</h3>
+    <div class="grid-3">
+      <div class="mini-card"><h4>1. Look back</h4><p>Summarise the completed section in fresh, general language <span class="ts">00:26:36</span>.</p></div>
+      <div class="mini-card"><h4>2. Explain the need</h4><p>Show why the next section must now be examined <span class="ts">00:27:01</span>.</p></div>
+      <div class="mini-card"><h4>3. Look ahead</h4><p>Formally introduce the next heading <span class="ts">00:27:32</span>.</p></div>
+    </div>
+
+    <h3>Worked bridge: history to causes</h3>
+    <div class="note">
+      <p><strong>Look back:</strong> Population growth has remained a persistent concern for Pakistani policymakers, and the problem has become increasingly difficult to manage.<br>
+      <strong>Need:</strong> A full understanding of this crisis requires attention to the forces that continue to drive it.<br>
+      <strong>Look ahead:</strong> The next section examines the major causes behind overpopulation.</p>
+    </div>
+
+    <h3>Worked bridge: causes to effects</h3>
+    <div class="note">
+      <p><strong>Look back:</strong> The combined causes of overpopulation have pushed Pakistan toward a serious demographic challenge.<br>
+      <strong>Need:</strong> The gravity of that challenge becomes clearer when its consequences for the country are assessed.<br>
+      <strong>Look ahead:</strong> The following section highlights the major effects of overpopulation.</p>
+    </div>
+
+    <h3>When to use it</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Movement in the essay</th><th>Device</th><th>Reason</th></tr></thead>
+        <tbody>
+          <tr><td>Cause one to cause two</td><td>Connecting word or phrase</td><td>Both paragraphs remain inside the same chain of thought <span class="ts">00:39:47</span>.</td></tr>
+          <tr><td>Causes to effects</td><td>Transitory paragraph</td><td>The analytical function changes <span class="ts">00:38:18</span>.</td></tr>
+          <tr><td>Effects to recommendations</td><td>Transitory paragraph</td><td>The essay moves from diagnosis to remedy <span class="ts">00:46:24</span>.</td></tr>
+          <tr><td>One example to another inside one argument</td><td>Sentence-level connection</td><td>A full bridge would interrupt the paragraph's unity.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Within a major heading, lighter phrases such as "similarly," "in addition" or "moving forward" can connect related paragraphs <span class="ts">00:40:37</span> <span class="ts">00:41:13</span>. The full transitory paragraph is reserved for a move from one school or chain of thought to another.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: sentence count does not define a paragraph.</strong> The lecturer repeatedly treats three sentences as the minimum for any paragraph <span class="ts">00:26:04</span> <span class="ts">00:56:52</span>. Sentence count is not a universal definition of paragraphing. In this course, the three-sentence rule is best understood as a disciplined beginner's template for a complete transition: look back, explain the need, look ahead.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Keep the bridge general.</strong> Do not leak the next section's individual arguments into the transition. Introduce the category, then let each following topic sentence state its own claim <span class="ts">00:52:05</span> <span class="ts">00:54:40</span>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 7 === -->
+<section id="t7" class="chapter card" style="--accent:#C0762C; --soft:#FAF0E2;">
+  <header>
+    <span class="eyebrow"><span class="num">7</span> One paragraph, one claim</span>
+    <h2><span class="emoji">&#127919;</span> Topic sentences and paragraphing</h2>
+    <span class="timepill">42:47-47:01</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The course method treats paragraphing as a rigid training structure. Each argument paragraph begins with a topic sentence that states the paragraph's own main idea directly <span class="ts">00:43:11</span>.</p>
+
+    <h3>The four-move paragraph</h3>
+    <ol>
+      <li><strong>Argument:</strong> state the claim in the first sentence.</li>
+      <li><strong>Explanation:</strong> clarify how or why the claim operates.</li>
+      <li><strong>Evidence:</strong> add the example, case in point or evidence promised in the outline.</li>
+      <li><strong>Concluding statement:</strong> close the paragraph's reasoning and reconnect it to the essay's direction <span class="ts">00:45:59</span>.</li>
+    </ol>
+
+    <div class="note">
+      <p><strong>Direct topic sentence:</strong> "Rising illiteracy is a major cause of overpopulation."<br>
+      <strong>Direct effect sentence:</strong> "Overpopulation intensifies unemployment by expanding the labour force faster than available jobs."</p>
+    </div>
+
+    <h3>What goes wrong at a section change</h3>
+    <p>After finishing causes, a writer may be tempted to open the first effects paragraph with a general sentence such as "There are various effects of overpopulation." That sentence names the new category but fails to state the first effect. Put the category-level shift in a transitory paragraph, then begin the first effects paragraph with the actual first consequence <span class="ts">00:38:18</span> <span class="ts">00:38:47</span>.</p>
+
+  </div>
+</section>
+
+<!-- ======================================================== section 8 === -->
+<section id="t8" class="chapter card" style="--accent:#7A5AA8; --soft:#F0EBF8;">
+  <header>
+    <span class="eyebrow"><span class="num">8</span> Put the system together</span>
+    <h2><span class="emoji">&#129513;</span> Assemble and practise the essay</h2>
+    <span class="timepill">51:39-1:16:14</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The closing recap separates additions to the outline from additions to the body. The outline carries headings, arguments and evidence. The body adds an optional abstract and the transitions that establish visible flow <span class="ts">01:01:59</span> <span class="ts">01:03:07</span>.</p>
+
+    <h3>End-to-end sequence</h3>
+    <ol>
+      <li><strong>Read the topic as an essay demand.</strong> Decide the narrative rather than collecting disconnected points.</li>
+      <li><strong>Choose the main sections.</strong> These carry the direct answer.</li>
+      <li><strong>Add only useful supporting sections.</strong> Exposition, overview, case study or recommendations must complete the picture.</li>
+      <li><strong>Write phrase-level headings.</strong> Make the purpose of every section visible.</li>
+      <li><strong>Place evidence beneath each argument.</strong> Test paragraph support before drafting.</li>
+      <li><strong>Write the introduction and thesis.</strong> The lecturer's classroom target is a separate introduction of roughly one to one-and-a-half pages <span class="ts">01:03:43</span>.</li>
+      <li><strong>Optionally add the abstract.</strong> Preview the body's major headings.</li>
+      <li><strong>Develop each argument paragraph.</strong> Topic sentence, explanation, evidence, concluding statement.</li>
+      <li><strong>Bridge every major heading.</strong> Summarise, identify the need, introduce the next section.</li>
+      <li><strong>Move from the final substantive section to the conclusion.</strong> The class allows a direct conclusion after the recommendations are completed <span class="ts">01:09:05</span>.</li>
+    </ol>
+
+    <div class="note">
+      <p><strong>Body-only reminder.</strong> Abstracts and transitory paragraphs are body devices. They do not appear as headings in the outline, whose job is to show the substantive arguments <span class="ts">01:08:41</span>.</p>
+    </div>
+
+    <h3>Practice progression</h3>
+    <p>The lecturer advises students to begin with short assignments, move to medium pieces and then attempt full-length essays <span class="ts">01:13:19</span>. Repeated class assignments should make the structure automatic: check the topic sentence, check the evidence, then increase length after the method becomes familiar <span class="ts">01:13:50</span> <span class="ts">01:14:16</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Practice round</th><th>What to write</th><th>What to check</th></tr></thead>
+        <tbody>
+          <tr><td><strong>1. Outline only</strong></td><td>Main and supporting headings, arguments, evidence lines</td><td>Complete narrative and meaningful phrasing</td></tr>
+          <tr><td><strong>2. One section</strong></td><td>Two or three related argument paragraphs</td><td>Topic sentences, development and light connections</td></tr>
+          <tr><td><strong>3. One transition</strong></td><td>A three-move bridge between two sections</td><td>Look back, need, look ahead</td></tr>
+          <tr><td><strong>4. Short essay</strong></td><td>Introduction, selected body sections and conclusion</td><td>Outline-to-body correspondence and flow</td></tr>
+          <tr><td><strong>5. Longer essay</strong></td><td>Full narrative with evidence</td><td>Whether structure remains controlled as length increases</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Method boundary.</strong> Newspaper, book and report prose may use different creative structures. The lecturer tells beginners not to reverse-engineer every newspaper paragraph through this classroom template <span class="ts">01:12:24</span> <span class="ts">01:13:50</span>. Practise the CSS essay method through the assigned exercises first.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Final diagnostic.</strong> If the outline is strong but the body still feels abrupt, inspect the section changes. If a paragraph wanders, inspect its first sentence. If a claim feels thin, inspect the evidence line that should have appeared beneath it in the outline.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================= glossary === -->
+<section id="t9" class="chapter card" style="--accent:#8B8490; --soft:#F0EEF2;">
+  <header>
+    <span class="eyebrow"><span class="num">G</span> Reference</span>
+    <h2><span class="emoji">&#128214;</span> Glossary</h2>
+  </header>
+  <div class="section-body">
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Term</th><th>Meaning in this lecture</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Unity of thought</strong></td><td>A paragraph's focus on one controlling idea.</td></tr>
+          <tr><td><strong>Narrative</strong></td><td>The connected intellectual story through which the essay develops its answer.</td></tr>
+          <tr><td><strong>Main heading</strong></td><td>A major section that directly carries the topic's central demand.</td></tr>
+          <tr><td><strong>Supporting heading</strong></td><td>An auxiliary section that supplies background, exposition, a case study or recommendations.</td></tr>
+          <tr><td><strong>Exposition</strong></td><td>Orientation through definition, explanation, overview or historical background before the main argument.</td></tr>
+          <tr><td><strong>Case in point</strong></td><td>An example or piece of evidence placed beneath an argument in the outline and used to support its paragraph.</td></tr>
+          <tr><td><strong>Coherence</strong></td><td>Connectivity and flow among sentences, paragraphs and sections.</td></tr>
+          <tr><td><strong>Connecting word</strong></td><td>A small logical link such as therefore, hence or accordingly.</td></tr>
+          <tr><td><strong>Connecting phrase</strong></td><td>A phrase such as similarly, in addition or having established that, used to link related discussion.</td></tr>
+          <tr><td><strong>Abstract</strong></td><td>In this class, an optional roadmap paragraph after the introduction that previews the body's major sections.</td></tr>
+          <tr><td><strong>Transitory paragraph</strong></td><td>A short bridge between major headings that looks back, identifies the need for the next section and looks ahead.</td></tr>
+          <tr><td><strong>Topic sentence</strong></td><td>The first sentence in the course template, stating the paragraph's main claim.</td></tr>
+          <tr><td><strong>Thesis statement</strong></td><td>The controlling narrative or position developed in the introduction and supported by selected arguments.</td></tr>
+          <tr><td><strong>Need identification</strong></td><td>The middle move in a transition, explaining why the next section must be discussed.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================= flashcards === -->
+<section id="t10" class="chapter card" style="--accent:#A4553A; --soft:#F7EBE5;">
+  <header>
+    <span class="eyebrow"><span class="num">F</span> Recall</span>
+    <h2><span class="emoji">&#127183;</span> Flashcards</h2>
+  </header>
+  <div class="section-body">
+    <div class="cards">
+      <div class="qa"><p class="q">How does an essay differ from a short current-affairs response?</p><p class="a">It develops a connected narrative with context, arguments, evidence, response and conclusion rather than stopping after a list.</p></div>
+      <div class="qa"><p class="q">What is a main heading?</p><p class="a">A major section that directly answers the central demand of the topic.</p></div>
+      <div class="qa"><p class="q">What is a supporting heading?</p><p class="a">An auxiliary section such as exposition, overview, case study or recommendations that completes the presentation.</p></div>
+      <div class="qa"><p class="q">Where should evidence appear in the outline?</p><p class="a">Directly beneath the argument it supports.</p></div>
+      <div class="qa"><p class="q">Why avoid one-word headings?</p><p class="a">They do not reveal enough about the section's subject or purpose to guide a paragraph.</p></div>
+      <div class="qa"><p class="q">What is coherence?</p><p class="a">The connectivity and flow that keeps the chain of thought visible to writer and reader.</p></div>
+      <div class="qa"><p class="q">Name the four connection levels in the note.</p><p class="a">Connecting words, connecting phrases, an optional abstract and transitory paragraphs.</p></div>
+      <div class="qa"><p class="q">Where is the abstract placed?</p><p class="a">After the introduction and before the first substantive body section.</p></div>
+      <div class="qa"><p class="q">What does the abstract preview?</p><p class="a">The major sections of the body in their planned order.</p></div>
+      <div class="qa"><p class="q">Is the abstract compulsory?</p><p class="a">No. The teacher makes it optional after practice, though beginners are asked to practise it.</p></div>
+      <div class="qa"><p class="q">What are the three moves in a transitory paragraph?</p><p class="a">Summarise the previous section, identify the need for the next section, and introduce the next section.</p></div>
+      <div class="qa"><p class="q">When is a transitory paragraph needed?</p><p class="a">When the essay shifts from one major heading or chain of thought to another.</p></div>
+      <div class="qa"><p class="q">How should two arguments under the same heading be linked?</p><p class="a">With a lighter connecting word or phrase, not a full transitory paragraph.</p></div>
+      <div class="qa"><p class="q">What are the four moves in an argument paragraph?</p><p class="a">Topic-sentence claim, explanation, evidence and concluding statement.</p></div>
+      <div class="qa"><p class="q">Why keep transition language out of the topic sentence?</p><p class="a">So the first sentence can state the paragraph's own argument directly.</p></div>
+      <div class="qa"><p class="q">Do abstracts and transition paragraphs appear in the outline?</p><p class="a">No. They are body devices; the outline focuses on substantive headings, arguments and evidence.</p></div>
+      <div class="qa"><p class="q">What is the recommended practice progression?</p><p class="a">Outline, one section, one transition, short essay, then a longer essay.</p></div>
+      <div class="qa"><p class="q">What three questions diagnose weak body writing?</p><p class="a">Are section changes bridged? Does each paragraph begin with its claim? Does each claim have evidence?</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== exam focus === -->
+<section id="t11" class="chapter card" style="--accent:#A4553A; --soft:#F7EBE5;">
+  <header>
+    <span class="eyebrow"><span class="num">X</span> Strategy</span>
+    <h2><span class="emoji">&#127919;</span> Exam focus</h2>
+  </header>
+  <div class="section-body">
+    <h3>The method on one page</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Stage</th><th>Question to ask</th><th>Output</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Narrative</strong></td><td>What complete story answers this topic?</td><td>Direction for the essay</td></tr>
+          <tr><td><strong>Sections</strong></td><td>Which headings are central, and which genuinely support them?</td><td>Balanced outline</td></tr>
+          <tr><td><strong>Arguments</strong></td><td>What specific claim belongs in each paragraph?</td><td>Phrase-level argument lines</td></tr>
+          <tr><td><strong>Evidence</strong></td><td>What proves or illustrates each claim?</td><td>Evidence under each outline point</td></tr>
+          <tr><td><strong>Introduction</strong></td><td>What thesis connects the selected arguments?</td><td>Opening narrative and thesis</td></tr>
+          <tr><td><strong>Roadmap</strong></td><td>Would a preview make the body easier to follow?</td><td>Optional abstract</td></tr>
+          <tr><td><strong>Paragraph</strong></td><td>Does it claim, explain, support and close?</td><td>Developed argument</td></tr>
+          <tr><td><strong>Transition</strong></td><td>Has the chain of thought changed?</td><td>Three-move bridge where needed</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>A quick transition template</h3>
+    <ol>
+      <li><strong>Previous section:</strong> "The preceding discussion has shown that..."</li>
+      <li><strong>Need:</strong> "A complete understanding of the issue now requires..."</li>
+      <li><strong>Next section:</strong> "The following section therefore examines..."</li>
+    </ol>
+
+    <h3>Common mistakes</h3>
+    <ul>
+      <li>Treating an essay as a list of current-affairs points.</li>
+      <li>Using every available argument instead of selecting a coherent narrative.</li>
+      <li>Writing one-word headings that cannot guide a paragraph.</li>
+      <li>Leaving evidence out of the outline and hoping to remember it while drafting.</li>
+      <li>Putting "abstract" or "transition" into the substantive outline.</li>
+      <li>Using a full transitory paragraph between two arguments under the same heading.</li>
+      <li>Opening an argument paragraph with a vague category sentence instead of its claim.</li>
+      <li>Introducing the next section's individual arguments inside the transition.</li>
+      <li>Assuming every published paragraph must follow the classroom template.</li>
+    </ul>
+
+    <div class="note exam">
+      <p><strong>Editorial: the one-line thesis.</strong> A coherent expository essay is planned twice: first through headings, arguments and evidence in the outline, then through topic sentences and deliberate bridges in the body.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="notefoot">Want the whole lecture? <a href="https://drive.google.com/file/d/1lq9uhTRU3S0fahzBPIXH3uRfLpNOlhiR/view?usp=drivesdk" target="_blank" rel="noopener">▶ Watch the full recording</a><span class="sep">·</span><a href="https://drive.google.com/file/d/1CImGtUZXwyDZeFGwT7mtOZCbQxIMUCnC/view?usp=drivesdk" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+</html>
