@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>International Policing Frameworks and Exam Application</title>
+<style>/* Lecture Notes ebook, "warm study" theme.
+   Inspired by Mehak's MarketCanvas app: soft cream ground, rounded white cards,
+   a different pastel accent per topic, serif display + friendly sans body,
+   gentle emoji + pill badges. Playful and pretty, but still a real study book.
+   Print-first (A4 PDF via headless Edge); reads well on screen too.
+
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
+   Everything themeable keys off --accent / --soft. Titles stay ink for
+   readability; accents colour eyebrows, numbers, pills, rules and callouts.
+*/
+
+:root {
+  --cream: #FCF6F0;          /* page ground (warm) */
+  --card: #FFFFFF;
+  --ink: #2C2630;            /* plum-black body/headings */
+  --ink-soft: #5A5360;
+  --slate: #8B8490;          /* captions, timestamps */
+  --hairline: #EEE6E4;
+
+  /* section default accent (overridden per section) */
+  --accent: #C0567E;
+  --soft: #FBECF1;
+
+  --shadow: 0 1px 2px rgba(60,30,45,.05), 0 10px 26px rgba(80,40,55,.07);
+  --radius: 20px;
+
+  --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: Consolas, "Cascadia Code", ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background:
+    radial-gradient(1100px 700px at 15% -5%, #FBEEF3 0%, transparent 55%),
+    radial-gradient(1000px 700px at 100% 0%, #EEF3FB 0%, transparent 50%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  font: 10.8pt/1.62 var(--sans);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+@media screen {
+  body { max-width: 51rem; margin: 0 auto; padding: 2.5rem 1.15rem 4rem; font-size: 1.0rem; }
+}
+
+/* ---------------------------------------------------------------- page --- */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm 14mm;
+  @bottom-center {
+    content: counter(page);
+    font: 8.5pt var(--sans);
+    color: #8B8490;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+/* --------------------------------------------------------------- cards --- */
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8mm 9mm 9mm;
+  margin: 0 0 6mm;
+  box-shadow: var(--shadow);
+  break-inside: auto;
+}
+@media screen { .card { margin-bottom: 1.4rem; } }
+
+/* a soft accent wash across the top of each section card (fades to white),
+   echoing the app's pastel cards without hurting readability */
+.chapter {
+  background:
+    linear-gradient(180deg, var(--soft) 0, rgba(255,255,255,0) 34mm),
+    var(--card);
+  border-top: 3px solid var(--accent);
+  break-inside: auto;
+  break-before: page;   /* each topic starts fresh: slide on top, notes below */
+}
+/* on screen (web/PWA) sections just stack; no forced page breaks */
+@media screen { .chapter { break-before: auto; } }
+
+h2, h3, .eyebrow { break-after: avoid; }
+p { orphans: 2; widows: 2; }
+
+/* keep the section header intact (eyebrow + title + time pill together) and
+   glued to its opening slide */
+.chapter > header { break-inside: avoid; break-after: avoid; }
+figure.slide { break-before: avoid; }
+
+/* --------------------------------------------------------------- cover --- */
+
+.cover {
+  page: cover;
+  break-after: page;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32mm 22mm 24mm;
+  background:
+    radial-gradient(700px 460px at 12% 8%, #FBE6EE 0%, transparent 60%),
+    radial-gradient(760px 520px at 96% 4%, #E7EEFB 0%, transparent 58%),
+    radial-gradient(620px 520px at 80% 96%, #E6F4EC 0%, transparent 60%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+@media screen {
+  .cover { min-height: 80vh; border-radius: 24px; padding: 3.2rem 2.6rem; margin-bottom: 1.4rem; }
+}
+
+.cover .avatar { font-size: 30pt; line-height: 1; margin-bottom: 7mm; }
+.cover .kicker {
+  font: 600 9pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 5mm;
+}
+.cover h1 {
+  font: 600 31pt/1.14 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 15em;
+}
+.cover .subtitle {
+  margin-top: 5mm;
+  font: 400 13.5pt/1.5 var(--sans);
+  color: var(--ink-soft);
+  max-width: 30em;
+}
+.cover .warm {
+  margin-top: 4mm;
+  font: italic 400 12pt/1.5 var(--serif);
+  color: var(--accent);
+}
+
+.cover .chips { display: flex; flex-wrap: wrap; gap: 3mm; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.4mm 4mm;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(60,30,45,.04);
+  font: 400 9pt var(--sans);
+  color: var(--slate);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chip b { font: 700 10.5pt var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ headings --- */
+
+.chapter header { margin-bottom: 5mm; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  font: 700 8.5pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--accent);
+  margin-bottom: 3mm;
+}
+.eyebrow .num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h2 {
+  font: 600 20pt/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .emoji { font-size: 17pt; }
+
+.timepill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.5mm 3.5mm;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font: 600 8pt var(--mono);
+  letter-spacing: 0.02em;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h3 {
+  font: 600 12.5pt/1.34 var(--serif);
+  color: var(--ink);
+  margin: 6mm 0 2.5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+.ts { font: 400 8.5pt var(--mono); color: var(--slate); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- body --- */
+
+.section-body > :last-child { margin-bottom: 0; }
+p { margin: 0 0 3mm; }
+.lead { font-size: 11.2pt; color: var(--ink); }
+
+ul, ol { margin: 0 0 3mm 5.5mm; }
+li { margin-bottom: 1.7mm; padding-left: 1mm; }
+li::marker { color: var(--accent); }
+
+.kt { font-weight: 700; color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
+
+code { font: 9.5pt var(--mono); background: #F3EFF4; padding: .4pt 3.5pt; border-radius: 4px; }
+
+/* ------------------------------------------------------------ callouts --- */
+
+.note {
+  --c: var(--accent);
+  --f: var(--soft);
+  background: var(--f);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  border-left: 3px solid var(--c);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.note .label {
+  display: inline-flex; align-items: center; gap: 1.6mm;
+  font: 700 8pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c);
+  margin-bottom: 1.8mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.warn { --c: #B4791F; --f: #FaF1DF; }
+.note.exam { --c: #3B8B78; --f: #E6F3EF; }
+.note.def  { --c: var(--accent); --f: var(--soft); }
+
+/* ------------------------------------------------------- summary card --- */
+
+.summary { --accent: #C0567E; --soft: #FBECF1; }
+.summary ul { list-style: none; margin: 0; }
+.summary li { position: relative; padding: 0 0 0 7mm; margin-bottom: 3.5mm; }
+.summary li::before {
+  content: "";
+  position: absolute; left: 0; top: 2.6mm;
+  width: 3.2mm; height: 3.2mm; border-radius: 50%;
+  background: var(--accent);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.summary li:last-child { margin-bottom: 0; }
+.summary li b, .summary li strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------- TOC --- */
+
+nav.toc { --accent: #8B8490; --soft: #F3EFF4; }
+nav.toc ol { list-style: none; margin: 0; }
+nav.toc li {
+  display: flex; align-items: baseline; gap: 4mm;
+  padding: 2.7mm 0;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11pt var(--sans);
+}
+nav.toc li:last-child { border-bottom: 0; }
+nav.toc .dot { width: 3.4mm; height: 3.4mm; border-radius: 50%; flex-shrink: 0;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+nav.toc .title { flex: 1; color: var(--ink); }
+nav.toc .rng { flex-shrink: 0; font: 600 8.5pt var(--mono); color: var(--slate); }
+
+/* -------------------------------------------------------------- slides --- */
+
+figure.slide { margin: 0 0 5mm; break-inside: avoid; }
+figure.slide img {
+  width: 100%; display: block;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 10px rgba(40,30,45,.10);
+}
+figure.slide figcaption {
+  font: 400 8.5pt var(--sans);
+  color: var(--slate);
+  margin-top: 2mm;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4mm;
+}
+figure.slide figcaption .ts { color: var(--accent); }
+
+/* ------------------------------------------------------------ glossary --- */
+
+dl.glossary { margin: 0; }
+dl.glossary div { padding: 3mm 0; border-bottom: 1px solid var(--hairline); break-inside: avoid; }
+dl.glossary div:last-child { border-bottom: 0; padding-bottom: 0; }
+dl.glossary dt { font: 700 10.5pt var(--sans); color: var(--accent); margin-bottom: 1.2mm; }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- flashcards --- */
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 0; }
+.qa {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  background: linear-gradient(180deg, var(--soft) 0, #fff 60%);
+  break-inside: avoid;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.qa .q { font: 700 10pt var(--sans); color: var(--ink); margin-bottom: 2mm; }
+.qa .a { color: var(--ink-soft); font-size: 10pt; }
+
+/* ------------------------------------------------------------- tables --- */
+
+.tables-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0; break-inside: avoid; }
+th {
+  font: 700 9pt var(--sans); text-align: left; color: var(--accent);
+  border-bottom: 2px solid var(--soft); padding: 2mm 3mm 2mm 0;
+}
+td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+
+/* --- mobile / on-the-go reading (screen only; never affects the print PDF).
+   Placed LAST so it wins the cascade over the wider @media screen rules above.
+   Requires <meta name="viewport" content="width=device-width, initial-scale=1">. */
+@media screen and (max-width: 640px) {
+  body { padding: 1rem 0.85rem 2.5rem; font-size: 1.02rem; }
+  .card { padding: 5mm 5mm 6mm; border-radius: 14px; margin-bottom: 0.9rem; }
+  .cover { min-height: auto; padding: 2rem 1.3rem 1.6rem; border-radius: 16px; }
+  .cover .avatar { font-size: 24pt; margin-bottom: 4mm; }
+  .cover h1 { font-size: 20pt; max-width: 100%; }
+  .cover .subtitle { font-size: 11.5pt; }
+  .cover .warm { font-size: 11pt; }
+  .cover .chips { gap: 2mm; margin-top: 5mm; }
+  h2 { font-size: 16pt; }
+  h2 .emoji { font-size: 13.5pt; }
+  h3 { font-size: 11.5pt; }
+  .cards { grid-template-columns: 1fr; }
+  nav.toc li { font-size: 10.5pt; gap: 2.5mm; padding: 2.5mm 0; }
+  nav.toc .rng { font-size: 8pt; }
+  .note { padding: 3.5mm 4mm; }
+  table { font-size: 9.5pt; }
+}
+</style>
+<meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
+align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
+border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
+<body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/file/d/1vGVhW03MfWREN8dJgqPTkT3HzigxBn7t/view?usp=drivesdk" target="_blank" rel="noopener">Download PDF ↓</a></div>
+
+<!-- ============================================================ cover === -->
+<section class="cover" style="background:radial-gradient(700px 460px at 12% 8%,#FBEBEF 0,transparent 60%),radial-gradient(760px 520px at 96% 4%,#ECEEFA 0,transparent 58%),radial-gradient(620px 520px at 80% 96%,#E9F4EC 0,transparent 60%),var(--cream)">
+  <div>
+    <div class="avatar">&#127760;</div>
+    <div class="kicker" style="color:#C6506E">CSS Criminology &middot; Section III &middot; International policing</div>
+    <h1>International Policing Frameworks and Exam Application</h1>
+    <p class="subtitle">INTERPOL, its notice system and Pakistan link; Europol and the International Police Association; UNAFEI, UNODC and UNICEF; plus a five-minute method for decoding past-paper demands and stakeholders.</p>
+    <p class="warm" style="color:#C6506E">Know the body's mandate, then make every paragraph answer the question. &#128269;</p>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>87m</b> audio class</span>
+    <span class="chip"><b>8</b> study sections</span>
+    <span class="chip"><b>6</b> bodies compared</span>
+    <span class="chip"><b>5</b> notices taught</span>
+  </div>
+</section>
+
+<!-- ============================================================== toc === -->
+<nav class="toc card">
+  <header><span class="eyebrow">Contents</span><h2><span class="emoji">&#128506;&#65039;</span> In this chapter</h2></header>
+  <ol>
+    <li><span class="dot" style="background:#C6506E"></span><a class="title" href="#summary">The five-minute version</a><span class="rng">summary</span></li>
+    <li><span class="dot" style="background:#5866C4"></span><a class="title" href="#t1">01 &middot; Map the international framework</a><span class="rng">mandate before name</span></li>
+    <li><span class="dot" style="background:#C6506E"></span><a class="title" href="#t2">02 &middot; INTERPOL: purpose, powers and cooperation</a><span class="rng">global coordination</span></li>
+    <li><span class="dot" style="background:#46955C"></span><a class="title" href="#t3">03 &middot; INTERPOL's colour-coded notices</a><span class="rng">alerts and requests</span></li>
+    <li><span class="dot" style="background:#B57A2A"></span><a class="title" href="#t4">04 &middot; Crime areas and Pakistan's connection</a><span class="rng">NCB and application</span></li>
+    <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t5">05 &middot; Europol and the IPA</a><span class="rng">agency versus association</span></li>
+    <li><span class="dot" style="background:#3A7CC0"></span><a class="title" href="#t6">06 &middot; UNAFEI and UNODC</a><span class="rng">training, crime and drugs</span></li>
+    <li><span class="dot" style="background:#8D5A9E"></span><a class="title" href="#t7">07 &middot; UNICEF and child justice</a><span class="rng">protection and diversion</span></li>
+    <li><span class="dot" style="background:#D06A42"></span><a class="title" href="#t8">08 &middot; Decode a past-paper question</a><span class="rng">demand, stakeholders, outline</span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t9">Glossary &middot; Flashcards &middot; Exam focus</a><span class="rng"></span></li>
+  </ol>
+</nav>
+
+<!-- ============================================================= tldr === -->
+<section id="summary" class="summary card" style="--accent:#C6506E; --soft:#FBEBEF; border-top-color:#C6506E">
+  <header><span class="eyebrow" style="color:#C6506E">Start here</span><h2><span class="emoji">&#11088;</span> The five-minute version</h2></header>
+  <ul>
+    <li><strong>INTERPOL enables global police cooperation.</strong> Its 196 member countries exchange criminal data and intelligence through National Central Bureaus, coordinate cross-border work and help locate fugitives. It does not operate as a supranational police force with its own general arrest power.</li>
+    <li><strong>Colour-coded notices have distinct functions.</strong> The class covers Red, Green, Yellow, Black and Orange Notices. They concern wanted persons, warnings about possible public-safety threats, missing persons, unidentified bodies and serious imminent threats.</li>
+    <li><strong>A Red Notice does not itself convict, extradite or compel an arrest.</strong> It is a request to locate and provisionally arrest a wanted person pending extradition or similar lawful action, with action governed by the receiving country's law.</li>
+    <li><strong>Pakistan's link is its National Central Bureau in Islamabad.</strong> The NCB connects national law enforcement with INTERPOL's network. Pakistan became a member in 1952, correcting the lecture's stated year of 1948.</li>
+    <li><strong>Europol and the IPA are not interchangeable.</strong> Europol is the European Union's law-enforcement cooperation agency. The International Police Association is a friendship and professional network for police personnel and does not investigate crimes.</li>
+    <li><strong>The UN-related bodies have different mandates.</strong> UNAFEI develops criminal-justice capacity and knowledge; UNODC works across drugs, crime, corruption and related conventions; UNICEF connects through child protection, trafficking, child-sensitive justice, diversion and rehabilitation.</li>
+    <li><strong>Past-paper answers begin with three filters.</strong> Identify the demand, identify the stakeholders named or implied, and build a focused outline. The teacher requires repeated five-minute outlining practice before full answer writing.</li>
+  </ul>
+</section>
+
+<!-- ======================================================== section 1 === -->
+<section id="t1" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
+  <header>
+    <span class="eyebrow"><span class="num">1</span> The comparison map</span>
+    <h2><span class="emoji">&#129517;</span> Map the international framework</h2>
+    <span class="timepill">00:00-58:34</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecture moves across organizations that all touch crime or criminal justice, but it does not treat them as doing the same job. The safest study method is to ask four questions of each body: What kind of institution is it? What geographical scope does it have? What does it actually do? How can Pakistan connect with it?</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Body</th><th>Level in the lecture</th><th>Core role taught</th><th>Operational distinction</th></tr></thead>
+        <tbody>
+          <tr><td><strong>INTERPOL</strong></td><td>Global intergovernmental organization</td><td>Police cooperation, criminal-intelligence exchange and cross-border coordination.</td><td>Supports member-country authorities; it is not a police force with universal arrest powers.</td></tr>
+          <tr><td><strong>Europol</strong></td><td>Regional, European Union</td><td>Supports work against serious organized crime, terrorism, cybercrime and trafficking.</td><td>Supports national investigations; its officers do not independently arrest citizens.</td></tr>
+          <tr><td><strong>IPA</strong></td><td>International association</td><td>Friendship, knowledge exchange, training and professional development.</td><td>It does not investigate crime.</td></tr>
+          <tr><td><strong>UNAFEI</strong></td><td>UN-affiliated regional institute</td><td>Training and research on crime prevention, criminal justice and treatment of offenders.</td><td>Capacity-building institute, not an operational police service.</td></tr>
+          <tr><td><strong>UNODC</strong></td><td>United Nations office</td><td>Drugs, crime, research, technical assistance and support for international legal frameworks.</td><td>Supports states and justice institutions rather than exercising national police powers.</td></tr>
+          <tr><td><strong>UNICEF</strong></td><td>United Nations fund</td><td>Children's rights, protection, development and child-sensitive justice.</td><td>Included for its criminological relevance, not because it is a policing body.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: these are not all United Nations specialized agencies.</strong> The lecture groups INTERPOL, Europol, the IPA, UNAFEI, UNODC and UNICEF under a broad international framework and later calls them specialized UN bodies <span class="ts">00:43:28</span>. Formally, their institutional types differ as shown above. Keep the lecture's comparative framework, but use the correct category for each body in an exam.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>High-value comparison sentence.</strong> International cooperation is delivered through several institutional forms: global police coordination, a regional EU agency, a professional association, a UN-affiliated training institute, a UN office and a child-rights fund.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 2 === -->
+<section id="t2" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+  <header>
+    <span class="eyebrow"><span class="num">2</span> The global coordination body</span>
+    <h2><span class="emoji">&#127760;</span> INTERPOL: purpose, powers and cooperation</h2>
+    <span class="timepill">00:00-08:42</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecture introduces INTERPOL through its scale and purpose: it began in 1923, is headquartered in Lyon and connects 196 member countries <span class="ts">00:00:00</span>. Its value lies in cooperation across borders, especially where one state's police cannot resolve a transnational problem alone.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: formal identity.</strong> The body is the <strong>International Criminal Police Organization - INTERPOL</strong>, an intergovernmental organization. It traces its origin to the International Criminal Police Commission founded in 1923. Its current headquarters are in Lyon, France, and its current membership is 196 countries.</p>
+    </div>
+
+    <h3>What INTERPOL is meant to achieve</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Objective from the lecture</th><th>Practical meaning</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Promote international police cooperation</strong></td><td>Enable national police bodies to work together across borders <span class="ts">00:01:06</span>.</td></tr>
+          <tr><td><strong>Combat transnational and organized crime</strong></td><td>Coordinate where offending, offenders, victims, money or evidence cross jurisdictions <span class="ts">00:02:23</span>.</td></tr>
+          <tr><td><strong>Exchange criminal intelligence</strong></td><td>Let member countries share information that can support prevention, identification and investigation <span class="ts">00:04:12</span>.</td></tr>
+          <tr><td><strong>Locate fugitives</strong></td><td>Help a requesting country trace a wanted person who has moved into another member country <span class="ts">00:05:22</span>.</td></tr>
+          <tr><td><strong>Coordinate assistance</strong></td><td>Connect the relevant national authorities so they can act under their own laws and procedures.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>The essential limit</h3>
+    <p>INTERPOL does not replace domestic police. The lecturer expressly warns that it is not a police force with ordinary arresting powers <span class="ts">00:00:34</span>. A country communicates through the network, but the competent national authority carries out any search, detention, arrest or extradition permitted by its law.</p>
+
+    <div class="note">
+      <p><strong>Do not infer the agency from the word "international".</strong> During a classroom aside, the teacher corrects an attempt to attribute a United States-led intelligence operation to INTERPOL <span class="ts">00:05:22</span>. The exam lesson is wider: identify the mandate and responsible institution before using an example.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>A precise definition.</strong> INTERPOL is a global intergovernmental police-cooperation organization that enables member-country authorities to exchange data, issue alerts and coordinate cross-border action while legal enforcement remains with national authorities.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 3 === -->
+<section id="t3" class="chapter card" style="--accent:#46955C; --soft:#E9F4EC;">
+  <header>
+    <span class="eyebrow"><span class="num">3</span> Shared alerts and requests</span>
+    <h2><span class="emoji">&#128680;</span> INTERPOL's colour-coded notices</h2>
+    <span class="timepill">08:09-18:32</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The best-known cooperation mechanism discussed is the colour-coded notice system <span class="ts">00:08:09</span>. A notice lets member-country police share an alert or request for information. The class concentrates on five colours.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Notice</th><th>Function taught and clarified</th><th>Memory cue</th></tr></thead>
+        <tbody>
+          <tr><td><strong style="color:#B43F4B">Red</strong></td><td>Seeks the location and provisional arrest of a wanted person pending extradition, surrender or similar lawful action <span class="ts">00:09:13</span>.</td><td>Wanted person</td></tr>
+          <tr><td><strong style="color:#46955C">Green</strong></td><td>Warns about a person's criminal activities where that person is considered a possible threat to public safety <span class="ts">00:12:20</span>.</td><td>Public-safety warning</td></tr>
+          <tr><td><strong style="color:#B57A2A">Yellow</strong></td><td>Helps locate a missing person, often a minor, or identify someone unable to identify themselves <span class="ts">00:12:45</span>.</td><td>Missing or unidentified living person</td></tr>
+          <tr><td><strong style="color:#333333">Black</strong></td><td>Seeks information about an unidentified body <span class="ts">00:13:24</span>.</td><td>Unidentified body</td></tr>
+          <tr><td><strong style="color:#D06A42">Orange</strong></td><td>Warns of an event, person, object or process that represents a serious and imminent threat to public safety <span class="ts">00:14:33</span>.</td><td>Imminent threat</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: a Red Notice is not an international arrest warrant.</strong> The lecture compresses the sequence into "locate, arrest and extradite" <span class="ts">00:10:36</span>. The notice is a request for cooperation. It does not compel a member country to arrest or extradite, and each country applies its own law.</p>
+    </div>
+
+    <h3>Green and Orange: the thin line</h3>
+    <p>The lecturer distinguishes these by scope <span class="ts">00:15:07</span>. Green centres on a person's criminal activities and the risk that person may pose. Orange can concern a person, object, event or process presenting a serious and imminent public-safety threat. Both communicate warnings, but Orange is not limited to an offender.</p>
+
+    <h3>Are notices public?</h3>
+    <p>The teacher warns students not to infer from rumours whether a named person was subject to a notice, describing this information as confidential <span class="ts">00:17:48</span>. That caution is sound for exam writing: do not turn an assumption into a case example.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: public access is limited, not impossible.</strong> Most INTERPOL notices are for police use only, but an extract can be made public when the requesting country seeks public assistance. A search result or media claim is still not enough to establish the full legal status or circumstances of a case.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>How to earn analysis marks.</strong> After defining a notice, connect it with the larger purpose: notices convert transnational information-sharing into a structured alert that national authorities can assess and act upon.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 4 === -->
+<section id="t4" class="chapter card" style="--accent:#B57A2A; --soft:#FBF1DE;">
+  <header>
+    <span class="eyebrow"><span class="num">4</span> Mandate in practice</span>
+    <h2><span class="emoji">&#127477;&#127472;</span> Crime areas and Pakistan's connection</h2>
+    <span class="timepill">19:00-30:16</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The class next turns from mechanisms to domains. INTERPOL cooperation is relevant when serious offending has a cross-border dimension or when authorities need information held in another jurisdiction.</p>
+
+    <h3>Areas of focus named in the lecture</h3>
+    <div class="cards">
+      <div class="qa"><p class="q">Terrorism</p><p class="a">Cross-border intelligence, suspect and network coordination.</p></div>
+      <div class="qa"><p class="q">Organized crime</p><p class="a">Criminal activity structured across people, markets or jurisdictions.</p></div>
+      <div class="qa"><p class="q">Cybercrime</p><p class="a">Offending and evidence that can move across digital and national boundaries.</p></div>
+      <div class="qa"><p class="q">Trafficking</p><p class="a">Human trafficking and drug trafficking are both named.</p></div>
+      <div class="qa"><p class="q">Money laundering</p><p class="a">Financial movement connected with criminal proceeds.</p></div>
+      <div class="qa"><p class="q">Fugitive investigations</p><p class="a">Locating wanted persons who cross borders.</p></div>
+    </div>
+    <p>These are the domains listed at <span class="ts">00:19:00</span>. The teacher also refers to a 2022 INTERPOL report categorizing regional crime concerns and tells students that detailed statistics are optional rather than essential <span class="ts">00:27:51</span>. The lesson is to use a relevant report as support, not to bury the answer under unverified numbers.</p>
+
+    <h3>Pakistan and the National Central Bureau</h3>
+    <p>Pakistan's operational connection is its <span class="kt">National Central Bureau</span>, or NCB. The lecture explains that cross-border correspondence and liaison move through the NCB <span class="ts">00:21:12</span>. In practical terms, it connects domestic law-enforcement authorities with other NCBs and the INTERPOL General Secretariat.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: Pakistan's membership year.</strong> The lecturer says Pakistan became a member in 1948 <span class="ts">00:20:36</span>. INTERPOL's official Pakistan profile gives <strong>1952</strong>, and identifies the country's NCB as Islamabad.</p>
+    </div>
+
+    <div class="note">
+      <p><strong>Use Pakistan relevance as a second layer.</strong> First explain the body's mandate and mechanism. Then show how the NCB lets Pakistan request or provide criminal data, coordinate a cross-border inquiry and connect domestic agencies with the wider network.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Evidence discipline.</strong> If using an annual report or current initiative, record its exact title, date and finding before the exam. The lecturer specifically discourages invented case details and unexplained statistics <span class="ts">00:29:19</span>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 5 === -->
+<section id="t5" class="chapter card" style="--accent:#2C8C86; --soft:#E4F1F0;">
+  <header>
+    <span class="eyebrow"><span class="num">5</span> Regional agency and professional network</span>
+    <h2><span class="emoji">&#129309;</span> Europol and the International Police Association</h2>
+    <span class="timepill">30:16-40:15</span>
+  </header>
+  <div class="section-body">
+    <h3>Europol</h3>
+    <p>The lecture presents Europol as the European Union's regional law-enforcement cooperation body, headquartered in The Hague, Netherlands <span class="ts">00:30:16</span>. It supports the EU's 27 member states on serious and organized crime, terrorism, drug and human trafficking, cybercrime and related investigations <span class="ts">00:31:34</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: date and powers.</strong> The lecture says Europol was made in 1998 and describes an on-ground police contribution <span class="ts">00:30:56</span>. Europol became fully operational on <strong>1 July 1999</strong>. It supports investigations initiated by member states, but Europol officers do not independently arrest citizens or initiate investigations.</p>
+    </div>
+
+    <p>The teacher's larger comparison remains useful: Europol is regional, while INTERPOL is global. Europol's primary mandate concerns the EU, but it also cooperates with non-EU partner states and international organizations when the problem extends beyond Europe <span class="ts">00:34:21</span>.</p>
+
+    <h3>The International Police Association</h3>
+    <p>The IPA brings serving and retired police personnel into an international professional and friendship network <span class="ts">00:34:56</span>. The lecture associates it with:</p>
+    <ul>
+      <li>training and capacity building;</li>
+      <li>seminars, conferences and professional programs;</li>
+      <li>exchange of ethical-policing ideas and best practices;</li>
+      <li>knowledge from experienced and retired officers;</li>
+      <li>research and exposure to modern policing techniques <span class="ts">00:38:12</span>.</li>
+    </ul>
+
+    <div class="note warn">
+      <p><strong>Correction: association, not investigative body.</strong> The exact name is the <strong>International Police Association</strong>, founded by Arthur Troop on <strong>1 January 1950</strong>. Its own description calls it a friendship organization and states that it does not investigate crimes. Use it for professional exchange and development, not as the agency executing an investigation.</p>
+    </div>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Test</th><th>INTERPOL</th><th>Europol</th><th>IPA</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Reach</strong></td><td>Global</td><td>EU-centred regional</td><td>International membership network</td></tr>
+          <tr><td><strong>Main product</strong></td><td>Data, alerts and police cooperation</td><td>Analytical and operational support</td><td>Friendship, learning and professional exchange</td></tr>
+          <tr><td><strong>Arrest power</strong></td><td>No general independent arrest power</td><td>No independent citizen-arrest power</td><td>No investigative or arrest role</td></tr>
+          <tr><td><strong>Exam verb</strong></td><td>Coordinates</td><td>Supports</td><td>Connects and develops</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 6 === -->
+<section id="t6" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+  <header>
+    <span class="eyebrow"><span class="num">6</span> Crime-prevention and justice capacity</span>
+    <h2><span class="emoji">&#127891;</span> UNAFEI and UNODC</h2>
+    <span class="timepill">43:28-51:52</span>
+  </header>
+  <div class="section-body">
+    <h3>UNAFEI</h3>
+    <p>The lecture introduces UNAFEI as a body concerned with crime prevention and the treatment of offenders. It links the institute with rehabilitation, reformation and capacity building for judges, prosecutors, police officers and policy makers <span class="ts">00:44:42</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: full name and institutional type.</strong> UNAFEI is the <strong>United Nations Asia and Far East Institute for the Prevention of Crime and the Treatment of Offenders</strong>. It is a UN-affiliated regional institute established in 1962 by agreement between the United Nations and the Government of Japan. It is based in Tokyo, currently in Akishima City.</p>
+    </div>
+
+    <p>Its place in a criminology answer is capacity rather than enforcement. Training, seminars and research help criminal-justice personnel improve systems for prevention, administration and offender treatment <span class="ts">00:46:27</span>.</p>
+
+    <h3>UNODC</h3>
+    <p>UNODC is the <span class="kt">United Nations Office on Drugs and Crime</span>. The teacher gives 1997 as its starting year and Vienna as its headquarters <span class="ts">00:47:49</span>. Drug trafficking receives particular emphasis, but the office is placed within a wider transnational organized-crime and criminal-justice framework.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Function emphasized</th><th>What it contributes</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Technical assistance</strong></td><td>Practical support for governments and institutions.</td></tr>
+          <tr><td><strong>Capacity building</strong></td><td>Training and support for prosecutors, judges, police and investigators <span class="ts">00:49:07</span>.</td></tr>
+          <tr><td><strong>International conventions</strong></td><td>Help with understanding and implementing drug and crime conventions <span class="ts">00:49:44</span>.</td></tr>
+          <tr><td><strong>Transnational response</strong></td><td>Cooperation against problems that one state cannot manage alone.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: UNODC's mandate is wider than drug trafficking.</strong> The lecture uses drug trafficking as its main illustration. UNODC also addresses organized crime, corruption, terrorism prevention, criminal justice, research and related international legal instruments. Describe it as a United Nations office, not a police force.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Clean comparison.</strong> UNAFEI develops criminal-justice knowledge and personnel through training and research. UNODC combines policy, data, technical assistance and convention-related work across drugs and crime.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 7 === -->
+<section id="t7" class="chapter card" style="--accent:#8D5A9E; --soft:#F3EAF6;">
+  <header>
+    <span class="eyebrow"><span class="num">7</span> The child-protection connection</span>
+    <h2><span class="emoji">&#129490;</span> UNICEF and child justice</h2>
+    <span class="timepill">51:52-59:09</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">UNICEF appears in this lecture because criminology reaches children as victims, persons at risk and children in conflict with the law. The teacher explicitly states that UNICEF is not a policing organization <span class="ts">00:52:39</span>.</p>
+
+    <h3>Why it belongs in a criminology framework</h3>
+    <ul>
+      <li>child trafficking and exploitation;</li>
+      <li>violence and physical, mental or sexual abuse;</li>
+      <li>child labour and deprivation of education or development;</li>
+      <li>juvenile delinquency and juvenile justice;</li>
+      <li>child protection and children's rights <span class="ts">00:54:18</span>.</li>
+    </ul>
+
+    <h3>Justice responses emphasized by the teacher</h3>
+    <p>The lecture favours rehabilitation and development for children rather than a simple punitive response. It revives the concept of <span class="kt">diversion</span>: where appropriate, keep children away from the mainstream formal criminal-justice process and connect them with community, development or skill-building programs <span class="ts">00:55:39</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Problem</th><th>Response emphasized</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Violence, abuse and exploitation</strong></td><td>Prevention, protection and child-sensitive support.</td></tr>
+          <tr><td><strong>Trafficking</strong></td><td>Protection of children and cooperation with justice and welfare institutions.</td></tr>
+          <tr><td><strong>Child in conflict with law</strong></td><td>Diversion where appropriate, rehabilitation and reintegration.</td></tr>
+          <tr><td><strong>Institutional weakness</strong></td><td>Training and child-friendly justice procedures.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: do not cite the report reference from this audio.</strong> Near the end of this segment, the lecturer recalls a Pakistan child-labour report or survey but gives conflicting years and uncertain authorship <span class="ts">00:58:34</span>. The transcript is not a reliable citation for that report. Verify the title, publisher, survey year and publication year before using it.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>Relevance sentence.</strong> UNICEF enters criminology through prevention of violence, exploitation and trafficking, and through rights-based, child-sensitive responses when children encounter the justice system.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 8 === -->
+<section id="t8" class="chapter card" style="--accent:#D06A42; --soft:#FBEDE6;">
+  <header>
+    <span class="eyebrow"><span class="num">8</span> From knowledge to answer</span>
+    <h2><span class="emoji">&#9997;&#65039;</span> Decode a past-paper question</h2>
+    <span class="timepill">01:00:56-01:26:08</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The final part of the class is an answer-planning exercise. The teacher's method is deliberately brief: before writing detail, identify what the question wants, who must appear in the answer and how the parts will be organized.</p>
+
+    <h3>The three filters</h3>
+    <div class="cards">
+      <div class="qa"><p class="q">1. Demand</p><p class="a">What must the answer do: explain mechanisms, analyse contributions, evaluate performance, propose a plan, or combine several tasks?</p></div>
+      <div class="qa"><p class="q">2. Stakeholders</p><p class="a">Which bodies, institutions, victims, justice actors or states are actually relevant to that demand?</p></div>
+      <div class="qa"><p class="q">3. Outline</p><p class="a">In what sequence will the answer define, explain, apply, evaluate and conclude?</p></div>
+    </div>
+
+    <div class="note">
+      <p><strong>The five-minute rule.</strong> The lecturer directs students to practise this process on past-paper questions until each demand-stakeholder-outline exercise can be completed within five minutes <span class="ts">01:20:18</span>. This is the planning stage, not the full answer.</p>
+    </div>
+
+    <h3>Example A: controlling human trafficking</h3>
+    <p>The class takes a question about how international policing and monitoring organizations control human trafficking <span class="ts">01:01:20</span>. The demand is not a generic description of trafficking. It is the <strong>mechanisms used by the relevant bodies</strong>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Planning decision</th><th>What belongs</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Demand</strong></td><td>Explain ways or mechanisms used to control human trafficking.</td></tr>
+          <tr><td><strong>Primary stakeholders</strong></td><td>Bodies with a direct cooperation, crime-control, technical-assistance or child-protection role.</td></tr>
+          <tr><td><strong>Possible mechanisms</strong></td><td>Information exchange, alerts, cross-border coordination, intelligence analysis, capacity building, child protection and support for legal frameworks.</td></tr>
+          <tr><td><strong>Pakistan layer</strong></td><td>Show which domestic institutions would cooperate and through what channel.</td></tr>
+          <tr><td><strong>Support</strong></td><td>Add a verified initiative, report, result or case only where it proves the mechanism.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: stakeholder precision matters.</strong> The classroom discussion sometimes treats every body in the lecture as interchangeable. For a trafficking question, select each stakeholder by mandate. INTERPOL and Europol support law-enforcement cooperation; UNODC supports anti-trafficking policy, technical assistance and criminal justice; UNICEF is relevant where children are affected; the IPA may contribute professional learning but is not an investigative agency.</p>
+    </div>
+
+    <h3>Example B: international contributions and a plan for Pakistan</h3>
+    <p>A later exercise identifies two separate demands: analyse what UNODC and UNICEF contribute to the criminal-justice system, then propose a strategic plan for Pakistan to use or implement relevant programs <span class="ts">01:23:59</span>.</p>
+
+    <ol>
+      <li><strong>Introduction:</strong> define the international support problem and state the two-part task.</li>
+      <li><strong>Contribution section:</strong> organize UNODC and UNICEF by mandate, mechanism and justice-system effect.</li>
+      <li><strong>Pakistan diagnosis:</strong> identify institutional-capacity or enforcement gaps relevant to the question.</li>
+      <li><strong>Strategic plan:</strong> assign actions to Pakistani institutions and match each proposed partnership to the correct international body.</li>
+      <li><strong>Conclusion:</strong> connect international support with domestic ownership, implementation and accountability.</li>
+    </ol>
+
+    <p>The teacher mentions past-paper years during the discussion, but the full wording of those questions is not preserved in this transcript <span class="ts">01:11:17</span>. Do not reconstruct missing wording. Use the method on the official paper in front of you.</p>
+
+    <div class="note exam">
+      <p><strong>The failure to avoid.</strong> If the stakeholder is wrong, the answer will describe the wrong mandate and miss the question <span class="ts">01:22:45</span>. Demand first, stakeholder second, outline third, detail last.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================= glossary === -->
+<section id="t9" class="chapter card" style="--accent:#8B8490; --soft:#F0EEF2;">
+  <header>
+    <span class="eyebrow"><span class="num">G</span> Reference</span>
+    <h2><span class="emoji">&#128214;</span> Glossary</h2>
+  </header>
+  <div class="section-body">
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Term</th><th>Meaning for this lecture</th></tr></thead>
+        <tbody>
+          <tr><td><strong>INTERPOL</strong></td><td>The International Criminal Police Organization-INTERPOL, a global police-cooperation organization.</td></tr>
+          <tr><td><strong>Transnational crime</strong></td><td>Crime whose conduct, people, proceeds, effects or evidence cross national borders.</td></tr>
+          <tr><td><strong>National Central Bureau</strong></td><td>A member country's contact point connecting national law enforcement with INTERPOL's global network.</td></tr>
+          <tr><td><strong>Notice</strong></td><td>An international request for cooperation or an alert through INTERPOL's system.</td></tr>
+          <tr><td><strong>Red Notice</strong></td><td>A request to locate and provisionally arrest a wanted person pending extradition or similar lawful action.</td></tr>
+          <tr><td><strong>Green Notice</strong></td><td>A warning about a person's criminal activities where the person may threaten public safety.</td></tr>
+          <tr><td><strong>Yellow Notice</strong></td><td>A request to help locate a missing person or identify someone unable to identify themselves.</td></tr>
+          <tr><td><strong>Black Notice</strong></td><td>A request for information about an unidentified body.</td></tr>
+          <tr><td><strong>Orange Notice</strong></td><td>A warning about a serious and imminent public-safety threat involving an event, person, object or process.</td></tr>
+          <tr><td><strong>Europol</strong></td><td>The European Union's law-enforcement cooperation agency, headquartered in The Hague.</td></tr>
+          <tr><td><strong>IPA</strong></td><td>The International Police Association, a friendship and professional network for police personnel.</td></tr>
+          <tr><td><strong>UNAFEI</strong></td><td>The United Nations Asia and Far East Institute for the Prevention of Crime and the Treatment of Offenders.</td></tr>
+          <tr><td><strong>UNODC</strong></td><td>The United Nations Office on Drugs and Crime.</td></tr>
+          <tr><td><strong>UNICEF</strong></td><td>The United Nations Children's Fund, connected here through child rights, protection and justice.</td></tr>
+          <tr><td><strong>Diversion</strong></td><td>Directing a child away from formal criminal proceedings where appropriate and toward supportive alternatives.</td></tr>
+          <tr><td><strong>Demand</strong></td><td>The intellectual task set by a question, such as explain, analyse or propose.</td></tr>
+          <tr><td><strong>Stakeholder</strong></td><td>A body, institution, group or person whose mandate or role is directly relevant to the question.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================= flashcards === -->
+<section id="t10" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+  <header>
+    <span class="eyebrow"><span class="num">F</span> Recall</span>
+    <h2><span class="emoji">&#127183;</span> Flashcards</h2>
+  </header>
+  <div class="section-body">
+    <div class="cards">
+      <div class="qa"><p class="q">What is INTERPOL's formal name?</p><p class="a">The International Criminal Police Organization-INTERPOL.</p></div>
+      <div class="qa"><p class="q">When did INTERPOL begin, and where is it headquartered?</p><p class="a">It traces its origin to 1923 and is headquartered in Lyon, France.</p></div>
+      <div class="qa"><p class="q">How many INTERPOL member countries are taught?</p><p class="a">196.</p></div>
+      <div class="qa"><p class="q">Does INTERPOL have universal arrest powers?</p><p class="a">No. National authorities act under their own laws.</p></div>
+      <div class="qa"><p class="q">What does a Red Notice seek?</p><p class="a">The location and provisional arrest of a wanted person pending extradition or similar lawful action.</p></div>
+      <div class="qa"><p class="q">What is the difference between Green and Orange?</p><p class="a">Green warns about a person's criminal activities and possible public-safety threat; Orange warns of a serious imminent threat involving a person, event, object or process.</p></div>
+      <div class="qa"><p class="q">What do Yellow and Black Notices concern?</p><p class="a">Yellow concerns missing or unidentified living persons; Black concerns unidentified bodies.</p></div>
+      <div class="qa"><p class="q">When did Pakistan join INTERPOL?</p><p class="a">1952, through an NCB now based in Islamabad.</p></div>
+      <div class="qa"><p class="q">What is Europol's role?</p><p class="a">It supports EU member states against serious international and organized crime, cybercrime and terrorism.</p></div>
+      <div class="qa"><p class="q">When did Europol become fully operational?</p><p class="a">1 July 1999.</p></div>
+      <div class="qa"><p class="q">What is the IPA?</p><p class="a">The International Police Association, a friendship and professional network that does not investigate crimes.</p></div>
+      <div class="qa"><p class="q">What does UNAFEI focus on?</p><p class="a">Training and research on crime prevention, criminal justice and treatment of offenders.</p></div>
+      <div class="qa"><p class="q">What does UNODC contribute?</p><p class="a">Policy, research, technical assistance, training and support around drugs, crime and international conventions.</p></div>
+      <div class="qa"><p class="q">Why is UNICEF relevant to criminology?</p><p class="a">Through child protection, trafficking, violence, child-sensitive justice, diversion and rehabilitation.</p></div>
+      <div class="qa"><p class="q">What are the teacher's three planning filters?</p><p class="a">Demand, stakeholders and outline.</p></div>
+      <div class="qa"><p class="q">How long should the outline drill take?</p><p class="a">Five minutes per question after repeated practice.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== exam focus === -->
+<section id="t11" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+  <header>
+    <span class="eyebrow"><span class="num">X</span> Strategy</span>
+    <h2><span class="emoji">&#127919;</span> Exam focus</h2>
+  </header>
+  <div class="section-body">
+    <h3>The mandate matrix</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>If the question asks about...</th><th>Lead with...</th><th>Add carefully...</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Global police cooperation</strong></td><td>INTERPOL, NCBs, data exchange and notices.</td><td>National-law limit and Pakistan's NCB.</td></tr>
+          <tr><td><strong>European serious crime</strong></td><td>Europol's support to EU member states.</td><td>Cooperation beyond the EU and absence of independent arrest powers.</td></tr>
+          <tr><td><strong>Police professional development</strong></td><td>IPA friendship, training and exchange.</td><td>Its non-investigative status.</td></tr>
+          <tr><td><strong>Justice training and offender treatment</strong></td><td>UNAFEI.</td><td>Prevention, rehabilitation and practitioner training.</td></tr>
+          <tr><td><strong>Drugs, organized crime or conventions</strong></td><td>UNODC.</td><td>Technical assistance, capacity building, policy and data.</td></tr>
+          <tr><td><strong>Children and justice</strong></td><td>UNICEF.</td><td>Protection, diversion, rehabilitation and child-sensitive procedure.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Reusable answer structure</h3>
+    <ol>
+      <li><strong>Decode the command.</strong> Circle the verbs and separate multiple demands.</li>
+      <li><strong>Name the stakeholders.</strong> Include only bodies whose mandates address those demands.</li>
+      <li><strong>Define the framework.</strong> Give a short institutional map before detail.</li>
+      <li><strong>Organize by mechanism.</strong> Explain cooperation, information, technical assistance, training, protection or reform as appropriate.</li>
+      <li><strong>Apply to Pakistan.</strong> Identify the domestic partner, institutional gap and route of cooperation.</li>
+      <li><strong>Use verified support.</strong> Add a current initiative, report or case with exact title and date.</li>
+      <li><strong>Conclude on implementation.</strong> International support works through capable, accountable domestic institutions.</li>
+    </ol>
+
+    <h3>Common mistakes</h3>
+    <ul>
+      <li>Calling a Red Notice an international arrest warrant.</li>
+      <li>Using 1948 as Pakistan's INTERPOL membership year instead of 1952.</li>
+      <li>Giving Europol or the IPA independent arrest and investigative powers.</li>
+      <li>Calling all six bodies UN specialized agencies.</li>
+      <li>Treating UNICEF as a police organization.</li>
+      <li>Listing every organization even when its mandate does not address the demand.</li>
+      <li>Using an unverified child-labour report title, publisher or year.</li>
+      <li>Writing facts before deciding the question's demand and stakeholders.</li>
+    </ul>
+
+    <div class="note exam">
+      <p><strong>Editorial: the thesis to carry.</strong> International crime control depends on matching the problem with the right institution and mechanism. A strong exam answer demonstrates that match, explains the legal and operational limits, and then applies the framework to Pakistan.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="notefoot">Want the whole lecture? <a href="https://drive.google.com/file/d/14C9YxK5YjPt_-RXpv02fFfQHBxt1ZZlA/view?usp=drivesdk" target="_blank" rel="noopener">▶ Watch the full recording</a><span class="sep">·</span><a href="https://drive.google.com/file/d/1vGVhW03MfWREN8dJgqPTkT3HzigxBn7t/view?usp=drivesdk" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+</html>

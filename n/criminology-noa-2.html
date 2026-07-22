@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Criminal Investigation: Purpose, Principles and the Intelligence Turn</title>
+<style>/* Lecture Notes ebook, "warm study" theme.
+   Inspired by Mehak's MarketCanvas app: soft cream ground, rounded white cards,
+   a different pastel accent per topic, serif display + friendly sans body,
+   gentle emoji + pill badges. Playful and pretty, but still a real study book.
+   Print-first (A4 PDF via headless Edge); reads well on screen too.
+
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
+   Everything themeable keys off --accent / --soft. Titles stay ink for
+   readability; accents colour eyebrows, numbers, pills, rules and callouts.
+*/
+
+:root {
+  --cream: #FCF6F0;          /* page ground (warm) */
+  --card: #FFFFFF;
+  --ink: #2C2630;            /* plum-black body/headings */
+  --ink-soft: #5A5360;
+  --slate: #8B8490;          /* captions, timestamps */
+  --hairline: #EEE6E4;
+
+  /* section default accent (overridden per section) */
+  --accent: #C0567E;
+  --soft: #FBECF1;
+
+  --shadow: 0 1px 2px rgba(60,30,45,.05), 0 10px 26px rgba(80,40,55,.07);
+  --radius: 20px;
+
+  --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: Consolas, "Cascadia Code", ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background:
+    radial-gradient(1100px 700px at 15% -5%, #FBEEF3 0%, transparent 55%),
+    radial-gradient(1000px 700px at 100% 0%, #EEF3FB 0%, transparent 50%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  font: 10.8pt/1.62 var(--sans);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+@media screen {
+  body { max-width: 51rem; margin: 0 auto; padding: 2.5rem 1.15rem 4rem; font-size: 1.0rem; }
+}
+
+/* ---------------------------------------------------------------- page --- */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm 14mm;
+  @bottom-center {
+    content: counter(page);
+    font: 8.5pt var(--sans);
+    color: #8B8490;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+/* --------------------------------------------------------------- cards --- */
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8mm 9mm 9mm;
+  margin: 0 0 6mm;
+  box-shadow: var(--shadow);
+  break-inside: auto;
+}
+@media screen { .card { margin-bottom: 1.4rem; } }
+
+/* a soft accent wash across the top of each section card (fades to white),
+   echoing the app's pastel cards without hurting readability */
+.chapter {
+  background:
+    linear-gradient(180deg, var(--soft) 0, rgba(255,255,255,0) 34mm),
+    var(--card);
+  border-top: 3px solid var(--accent);
+  break-inside: auto;
+  break-before: page;   /* each topic starts fresh: slide on top, notes below */
+}
+/* on screen (web/PWA) sections just stack; no forced page breaks */
+@media screen { .chapter { break-before: auto; } }
+
+h2, h3, .eyebrow { break-after: avoid; }
+p { orphans: 2; widows: 2; }
+
+/* keep the section header intact (eyebrow + title + time pill together) and
+   glued to its opening slide */
+.chapter > header { break-inside: avoid; break-after: avoid; }
+figure.slide { break-before: avoid; }
+
+/* --------------------------------------------------------------- cover --- */
+
+.cover {
+  page: cover;
+  break-after: page;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32mm 22mm 24mm;
+  background:
+    radial-gradient(700px 460px at 12% 8%, #FBE6EE 0%, transparent 60%),
+    radial-gradient(760px 520px at 96% 4%, #E7EEFB 0%, transparent 58%),
+    radial-gradient(620px 520px at 80% 96%, #E6F4EC 0%, transparent 60%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+@media screen {
+  .cover { min-height: 80vh; border-radius: 24px; padding: 3.2rem 2.6rem; margin-bottom: 1.4rem; }
+}
+
+.cover .avatar { font-size: 30pt; line-height: 1; margin-bottom: 7mm; }
+.cover .kicker {
+  font: 600 9pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 5mm;
+}
+.cover h1 {
+  font: 600 31pt/1.14 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 15em;
+}
+.cover .subtitle {
+  margin-top: 5mm;
+  font: 400 13.5pt/1.5 var(--sans);
+  color: var(--ink-soft);
+  max-width: 30em;
+}
+.cover .warm {
+  margin-top: 4mm;
+  font: italic 400 12pt/1.5 var(--serif);
+  color: var(--accent);
+}
+
+.cover .chips { display: flex; flex-wrap: wrap; gap: 3mm; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.4mm 4mm;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(60,30,45,.04);
+  font: 400 9pt var(--sans);
+  color: var(--slate);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chip b { font: 700 10.5pt var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ headings --- */
+
+.chapter header { margin-bottom: 5mm; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  font: 700 8.5pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--accent);
+  margin-bottom: 3mm;
+}
+.eyebrow .num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h2 {
+  font: 600 20pt/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .emoji { font-size: 17pt; }
+
+.timepill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.5mm 3.5mm;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font: 600 8pt var(--mono);
+  letter-spacing: 0.02em;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h3 {
+  font: 600 12.5pt/1.34 var(--serif);
+  color: var(--ink);
+  margin: 6mm 0 2.5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+.ts { font: 400 8.5pt var(--mono); color: var(--slate); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- body --- */
+
+.section-body > :last-child { margin-bottom: 0; }
+p { margin: 0 0 3mm; }
+.lead { font-size: 11.2pt; color: var(--ink); }
+
+ul, ol { margin: 0 0 3mm 5.5mm; }
+li { margin-bottom: 1.7mm; padding-left: 1mm; }
+li::marker { color: var(--accent); }
+
+.kt { font-weight: 700; color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
+
+code { font: 9.5pt var(--mono); background: #F3EFF4; padding: .4pt 3.5pt; border-radius: 4px; }
+
+/* ------------------------------------------------------------ callouts --- */
+
+.note {
+  --c: var(--accent);
+  --f: var(--soft);
+  background: var(--f);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  border-left: 3px solid var(--c);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.note .label {
+  display: inline-flex; align-items: center; gap: 1.6mm;
+  font: 700 8pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c);
+  margin-bottom: 1.8mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.warn { --c: #B4791F; --f: #FaF1DF; }
+.note.exam { --c: #3B8B78; --f: #E6F3EF; }
+.note.def  { --c: var(--accent); --f: var(--soft); }
+
+/* ------------------------------------------------------- summary card --- */
+
+.summary { --accent: #C0567E; --soft: #FBECF1; }
+.summary ul { list-style: none; margin: 0; }
+.summary li { position: relative; padding: 0 0 0 7mm; margin-bottom: 3.5mm; }
+.summary li::before {
+  content: "";
+  position: absolute; left: 0; top: 2.6mm;
+  width: 3.2mm; height: 3.2mm; border-radius: 50%;
+  background: var(--accent);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.summary li:last-child { margin-bottom: 0; }
+.summary li b, .summary li strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------- TOC --- */
+
+nav.toc { --accent: #8B8490; --soft: #F3EFF4; }
+nav.toc ol { list-style: none; margin: 0; }
+nav.toc li {
+  display: flex; align-items: baseline; gap: 4mm;
+  padding: 2.7mm 0;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11pt var(--sans);
+}
+nav.toc li:last-child { border-bottom: 0; }
+nav.toc .dot { width: 3.4mm; height: 3.4mm; border-radius: 50%; flex-shrink: 0;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+nav.toc .title { flex: 1; color: var(--ink); }
+nav.toc .rng { flex-shrink: 0; font: 600 8.5pt var(--mono); color: var(--slate); }
+
+/* -------------------------------------------------------------- slides --- */
+
+figure.slide { margin: 0 0 5mm; break-inside: avoid; }
+figure.slide img {
+  width: 100%; display: block;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 10px rgba(40,30,45,.10);
+}
+figure.slide figcaption {
+  font: 400 8.5pt var(--sans);
+  color: var(--slate);
+  margin-top: 2mm;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4mm;
+}
+figure.slide figcaption .ts { color: var(--accent); }
+
+/* ------------------------------------------------------------ glossary --- */
+
+dl.glossary { margin: 0; }
+dl.glossary div { padding: 3mm 0; border-bottom: 1px solid var(--hairline); break-inside: avoid; }
+dl.glossary div:last-child { border-bottom: 0; padding-bottom: 0; }
+dl.glossary dt { font: 700 10.5pt var(--sans); color: var(--accent); margin-bottom: 1.2mm; }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- flashcards --- */
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 0; }
+.qa {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  background: linear-gradient(180deg, var(--soft) 0, #fff 60%);
+  break-inside: avoid;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.qa .q { font: 700 10pt var(--sans); color: var(--ink); margin-bottom: 2mm; }
+.qa .a { color: var(--ink-soft); font-size: 10pt; }
+
+/* ------------------------------------------------------------- tables --- */
+
+.tables-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0; break-inside: avoid; }
+th {
+  font: 700 9pt var(--sans); text-align: left; color: var(--accent);
+  border-bottom: 2px solid var(--soft); padding: 2mm 3mm 2mm 0;
+}
+td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+
+/* --- mobile / on-the-go reading (screen only; never affects the print PDF).
+   Placed LAST so it wins the cascade over the wider @media screen rules above.
+   Requires <meta name="viewport" content="width=device-width, initial-scale=1">. */
+@media screen and (max-width: 640px) {
+  body { padding: 1rem 0.85rem 2.5rem; font-size: 1.02rem; }
+  .card { padding: 5mm 5mm 6mm; border-radius: 14px; margin-bottom: 0.9rem; }
+  .cover { min-height: auto; padding: 2rem 1.3rem 1.6rem; border-radius: 16px; }
+  .cover .avatar { font-size: 24pt; margin-bottom: 4mm; }
+  .cover h1 { font-size: 20pt; max-width: 100%; }
+  .cover .subtitle { font-size: 11.5pt; }
+  .cover .warm { font-size: 11pt; }
+  .cover .chips { gap: 2mm; margin-top: 5mm; }
+  h2 { font-size: 16pt; }
+  h2 .emoji { font-size: 13.5pt; }
+  h3 { font-size: 11.5pt; }
+  .cards { grid-template-columns: 1fr; }
+  nav.toc li { font-size: 10.5pt; gap: 2.5mm; padding: 2.5mm 0; }
+  nav.toc .rng { font-size: 8pt; }
+  .note { padding: 3.5mm 4mm; }
+  table { font-size: 9.5pt; }
+}
+</style>
+<meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
+align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
+border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
+<body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/file/d/1Fp8PJ3xfBkK7vOBQ37s4Q0CThX9Ughdc/view?usp=drivesdk" target="_blank" rel="noopener">Download PDF ↓</a></div>
+
+<!-- ============================================================ cover === -->
+<section class="cover" style="background:radial-gradient(700px 460px at 12% 8%,#FBEBEF 0,transparent 60%),radial-gradient(760px 520px at 96% 4%,#ECEEFA 0,transparent 58%),radial-gradient(620px 520px at 80% 96%,#E9F4EC 0,transparent 60%),var(--cream)">
+  <div>
+    <div class="avatar">&#9878;&#65039;</div>
+    <div class="kicker" style="color:#C6506E">CSS Criminology &middot; Class 5 &middot; Part 1</div>
+    <h1>Criminal Investigation: Purpose, Principles and the Intelligence Turn</h1>
+    <p class="subtitle">Why investigation matters, what it must achieve, and how preservation, neutrality, legality, chain of custody, documentation, confidentiality and scientific method protect the path from crime scene to court.</p>
+    <p class="warm" style="color:#C6506E">A case becomes credible one recorded, lawful step at a time. &#128269;</p>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>30m</b> audio class</span>
+    <span class="chip"><b>6</b> study sections</span>
+    <span class="chip"><b>7</b> core principles</span>
+    <span class="chip"><b>Part 1</b> investigation sequence</span>
+  </div>
+</section>
+
+<!-- ============================================================== toc === -->
+<nav class="toc card">
+  <header><span class="eyebrow">Contents</span><h2><span class="emoji">&#128506;&#65039;</span> In this chapter</h2></header>
+  <ol>
+    <li><span class="dot" style="background:#C6506E"></span><a class="title" href="#summary">The five-minute version</a><span class="rng">summary</span></li>
+    <li><span class="dot" style="background:#5866C4"></span><a class="title" href="#t1">01 &middot; Investigation as a multi-faceted process</a><span class="rng">the full route</span></li>
+    <li><span class="dot" style="background:#C6506E"></span><a class="title" href="#t2">02 &middot; Objectives and importance</a><span class="rng">facts, offender, fairness</span></li>
+    <li><span class="dot" style="background:#46955C"></span><a class="title" href="#t3">03 &middot; Preserve the crime scene</a><span class="rng">protect the primary source</span></li>
+    <li><span class="dot" style="background:#B57A2A"></span><a class="title" href="#t4">04 &middot; Objectivity, impartiality and legality</a><span class="rng">neutral and lawful</span></li>
+    <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t5">05 &middot; Chain of custody, documentation and continuity</a><span class="rng">the record</span></li>
+    <li><span class="dot" style="background:#3A7CC0"></span><a class="title" href="#t6">06 &middot; Scientific method and intelligence operations</a><span class="rng">from assumption to analysis</span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t7">Glossary &middot; Flashcards &middot; Exam focus</a><span class="rng"></span></li>
+  </ol>
+</nav>
+
+<!-- ============================================================= tldr === -->
+<section id="summary" class="summary card" style="--accent:#C6506E; --soft:#FBEBEF; border-top-color:#C6506E">
+  <header><span class="eyebrow" style="color:#C6506E">Start here</span><h2><span class="emoji">&#11088;</span> The five-minute version</h2></header>
+  <ul>
+    <li><strong>Criminal investigation is multi-faceted.</strong> It includes collecting information and evidence, preserving them, analysing them, and presenting the resulting case at the judicial stage.</li>
+    <li><strong>The first objective is to establish what happened.</strong> Investigators determine whether a crime occurred, reconstruct the relevant facts and help the court assess the case under law.</li>
+    <li><strong>The second objective is correct identification.</strong> The process must identify the actual offender while protecting innocent people from wrongful accusation, detention or conviction.</li>
+    <li><strong>Evidence must reach court in usable form.</strong> Collection, preservation and presentation all matter. Evidence damaged, unlawfully obtained or poorly recorded can lose value and weaken the proceedings.</li>
+    <li><strong>The principles form one connected safeguard.</strong> Preserve the scene, remain objective and impartial, comply with law, maintain chain of custody, document every step, preserve continuity and protect confidentiality.</li>
+    <li><strong>Investigation should be scientific.</strong> The lecturer rejects guesses and unsupported assumptions. Modern techniques and independent evidence should drive the process.</li>
+    <li><strong>Intelligence is analysed information.</strong> Collection alone is not enough. Information becomes useful when investigators analyse and evaluate it to prevent crime or identify a suspect.</li>
+  </ul>
+</section>
+
+<!-- ======================================================== section 1 === -->
+<section id="t1" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
+  <header>
+    <span class="eyebrow"><span class="num">1</span> The whole route</span>
+    <h2><span class="emoji">&#128260;</span> Investigation as a multi-faceted process</h2>
+    <span class="timepill">00:00-02:20</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecture begins by calling criminal investigation <span class="kt">multi-faceted</span>. The word matters because investigation is not a single act at a crime scene. It is a connected process that prepares evidence to enter the criminal justice system <span class="ts">00:00:02</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Facet</th><th>What happens</th><th>Why it matters</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Collection</strong></td><td>Investigators gather information, evidence and statements.</td><td>The case needs a factual base.</td></tr>
+          <tr><td><strong>Preservation</strong></td><td>Evidence and records are protected from loss, damage or interference.</td><td>The material must retain its value.</td></tr>
+          <tr><td><strong>Analysis</strong></td><td>The collected material is examined to understand what it indicates.</td><td>Facts and possible links become clearer.</td></tr>
+          <tr><td><strong>Presentation</strong></td><td>The case is taken to the judicial stage in a form the court can assess.</td><td>The court can apply the law and reach a decision <span class="ts">00:01:10</span>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <p><strong>The process view.</strong> A weakness at one stage affects the stages that follow. Poor collection gives analysis little to work with. Poor preservation damages otherwise valuable material. Weak presentation makes the court's task harder even when useful evidence was originally found.</p>
+    </div>
+
+    <div class="note exam">
+      <p><strong>A strong opening definition.</strong> Criminal investigation is a multi-stage process of collecting, preserving, analysing and presenting information and evidence so the justice system can determine what happened and respond under law.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 2 === -->
+<section id="t2" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+  <header>
+    <span class="eyebrow"><span class="num">2</span> What investigation must achieve</span>
+    <h2><span class="emoji">&#127919;</span> Objectives and importance</h2>
+    <span class="timepill">02:20-13:16</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecturer frames investigation as the starting work that makes the rest of the criminal justice process possible. Its purpose is wider than making an arrest. It must establish the event, identify the right person, protect participants and give the court dependable material.</p>
+
+    <h3>Objective 1: determine whether a crime occurred</h3>
+    <p>Investigators first establish the relevant facts: what happened, whether the conduct amounts to a crime and what evidence describes the event <span class="ts">00:01:45</span>. The investigation gives the court a factual basis rather than asking it to work from suspicion.</p>
+
+    <h3>Objective 2: identify the correct offender</h3>
+    <p>There may be one offender or several. The task is to find the person who actually committed the offence, not merely the easiest person to accuse <span class="ts">00:04:04</span>. The lecturer links this objective directly with the problem of innocent people being held in prison.</p>
+
+    <div class="note exam">
+      <p><strong>Correct identification has two sides.</strong> A sound investigation supports action against the actual offender and protects an innocent person from wrongful prosecution or conviction. Both results belong in an answer on the importance of investigation.</p>
+    </div>
+
+    <h3>Objective 3: obtain evidence fit for legal proceedings</h3>
+    <p>The teacher stresses that evidence must be collected in a form that can lawfully move into court <span class="ts">00:06:24</span>. How evidence is gathered matters because collection problems can later affect its value or use.</p>
+
+    <div class="note warn">
+      <p><strong>Editorial: exact legal title.</strong> The lecture refers to the law of evidence and the year 1984. The exact title is the <strong>Qanun-e-Shahadat Order, 1984</strong>. Use the full title and year in a Pakistan-focused answer.</p>
+    </div>
+
+    <h3>Objective 4: protect victims and suspects</h3>
+    <p>Victims have basic rights that investigators must protect <span class="ts">00:07:49</span>. The class then broadens the point to suspects and victims together: after identifying the relevant people, investigators must protect them and their information <span class="ts">00:08:47</span>.</p>
+
+    <h3>Objective 5: support fair court proceedings</h3>
+    <p>The court should receive evidence that allows proceedings to continue on a proper basis, not material distorted by poor handling or an investigator's assumptions <span class="ts">00:09:37</span>. If evidence is interfered with, its value can be lost <span class="ts">00:13:16</span>.</p>
+
+    <div class="note">
+      <p><strong>The lecturer's chain of importance.</strong> Investigation establishes the facts, identifies the correct offender, protects participants, preserves the evidence and helps the court deliver justice. Each objective supports the next.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 3 === -->
+<section id="t3" class="chapter card" style="--accent:#46955C; --soft:#E9F4EC;">
+  <header>
+    <span class="eyebrow"><span class="num">3</span> Principle one</span>
+    <h2><span class="emoji">&#128737;&#65039;</span> Preserve the crime scene</h2>
+    <span class="timepill">13:16-14:48</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The first principle is preservation of the crime scene. The teacher calls the scene the investigation's <strong>primary source</strong> because it is where the initial evidence and information are found <span class="ts">00:14:08</span>.</p>
+
+    <div class="note">
+      <p><strong>Preservation means protecting value.</strong> Evidence should remain in a condition that allows later examination, documentation and presentation. Interference can erase the information a trace once carried.</p>
+    </div>
+
+    <h3>What a preservation paragraph should explain</h3>
+    <ol>
+      <li>Secure the scene before uncontrolled access changes it.</li>
+      <li>Protect physical and other evidence from contamination, loss or tampering.</li>
+      <li>Record the original condition before material is moved.</li>
+      <li>Connect preservation with later analysis and court presentation.</li>
+    </ol>
+
+    <div class="note exam">
+      <p><strong>Do not stop at "secure the scene".</strong> Explain why: the scene is the primary source, preservation protects evidential value, and the later process depends on what survives the first response.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 4 === -->
+<section id="t4" class="chapter card" style="--accent:#B57A2A; --soft:#FBF1DE;">
+  <header>
+    <span class="eyebrow"><span class="num">4</span> Principles two and three</span>
+    <h2><span class="emoji">&#9878;&#65039;</span> Objectivity, impartiality and legality</h2>
+    <span class="timepill">15:20-17:39</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">An investigator must remain neutral and follow the evidence actually present. The lecturer uses <span class="kt">objectivity</span> and <span class="kt">impartiality</span> together: do not shape the case around a personal bias or a preferred suspect <span class="ts">00:15:20</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Principle</th><th>Practical meaning</th><th>Failure risk</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Objectivity</strong></td><td>Assess the evidence before drawing the conclusion.</td><td>Assumptions replace facts.</td></tr>
+          <tr><td><strong>Impartiality</strong></td><td>Remain neutral toward the people and possibilities in the case.</td><td>Bias distorts collection and interpretation.</td></tr>
+          <tr><td><strong>Legality</strong></td><td>Conduct every investigative action within the law.</td><td>The action may be challenged, and the evidence must satisfy the applicable rules of admissibility <span class="ts">00:16:28</span>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The teacher's warning is procedural and practical. An unlawful step can waste the court's time, the investigator's effort and the resources already spent on the case <span class="ts">00:17:06</span>.</p>
+
+    <div class="note exam">
+      <p><strong>Link the three principles.</strong> Objectivity asks what the evidence shows. Impartiality prevents favour or hostility from deciding the answer. Legality controls how the evidence is obtained and handled.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 5 === -->
+<section id="t5" class="chapter card" style="--accent:#2C8C86; --soft:#E4F1F0;">
+  <header>
+    <span class="eyebrow"><span class="num">5</span> The auditable record</span>
+    <h2><span class="emoji">&#128203;</span> Chain of custody, documentation and continuity</h2>
+    <span class="timepill">17:39-22:33</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Evidence cannot be collected and then left without a record. The lecture introduces <span class="kt">chain of custody</span> as the documented path showing what was collected, who received it, where it was placed and how it was kept <span class="ts">00:17:39</span>.</p>
+
+    <h3>Chain of custody in practical terms</h3>
+    <ul>
+      <li>Document the evidence when it is collected.</li>
+      <li>Record where it is stored, such as the authorised evidence facility or police <em>malkhana</em>.</li>
+      <li>Record each transfer: who gave it, who received it, where and how it was placed <span class="ts">00:18:10</span>.</li>
+      <li>Keep the record available for later investigators and court scrutiny.</li>
+    </ul>
+
+    <div class="note">
+      <p><strong>"An investigation is as good as it records."</strong> The lecturer's line captures the documentation principle <span class="ts">00:19:17</span>. Notes, photographs, videos, written statements and evidence logs preserve what the investigator did and found.</p>
+    </div>
+
+    <h3>Documentation protects continuity</h3>
+    <p>Investigations may continue for a long time, and officers may be transferred or replaced. The new investigator should continue from the recorded stopping point rather than restart the entire case <span class="ts">00:19:52</span>. Documentation therefore protects institutional memory as well as evidential integrity.</p>
+
+    <h3>Completeness and independent support</h3>
+    <p>The investigator must judge whether the collected evidence adequately describes the offence and supports the case <span class="ts">00:20:26</span>. The audio then stresses seeking independent support rather than relying on an unsupported assertion <span class="ts">00:21:11</span>.</p>
+
+    <h3>Confidentiality</h3>
+    <p>Information about evidence, suspects and victims should not be given to an unauthorised person <span class="ts">00:21:51</span>. Confidentiality protects the people involved and the integrity of the ongoing investigation.</p>
+
+    <div class="note exam">
+      <p><strong>One connected paragraph.</strong> Chain of custody records the evidence's handling. Documentation records the investigation's work. Continuity lets another officer carry it forward. Confidentiality limits access to authorised people.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 6 === -->
+<section id="t6" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+  <header>
+    <span class="eyebrow"><span class="num">6</span> From guesses to assessed information</span>
+    <h2><span class="emoji">&#129514;</span> Scientific method and intelligence operations</h2>
+    <span class="timepill">22:33-30:03</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecturer calls the scientific approach both important and debatable in practice. The instruction is direct: adopt modern investigative techniques and do not treat guesses, experience-based assumptions or hunches as proof <span class="ts">00:22:33</span>.</p>
+
+    <div class="note">
+      <p><strong>Scientific investigation.</strong> Use a method that can explain how evidence was collected, examined and connected with a conclusion. The process should withstand questioning in court rather than depend on the investigator's confidence alone.</p>
+    </div>
+
+    <p>The class also calls for research and development around investigative methods <span class="ts">00:23:45</span>. The point is to improve how evidence is found and tested so the correct person can be convicted under law and the court receives a clearer case <span class="ts">00:24:16</span>.</p>
+
+    <h3>The transition to intelligence operations</h3>
+    <p>After completing the general objectives and principles, the lecture turns to the forms or operations through which investigation gathers evidence <span class="ts">00:25:31</span>. The first is the intelligence operation.</p>
+
+    <div class="note">
+      <p><strong>Information is not yet intelligence.</strong> Collection becomes intelligence when the information is analysed and evaluated so it can support a rational decision <span class="ts">00:26:08</span>. The operational goal is to prevent a crime or identify a suspect <span class="ts">00:26:42</span>.</p>
+    </div>
+
+    <h3>First intelligence types introduced</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Type</th><th>Source in the lecture</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Human intelligence</strong></td><td>Undercover officers, informants and information from people <span class="ts">00:28:50</span>.</td></tr>
+          <tr><td><strong>Signals intelligence</strong></td><td>Telephone, mobile-phone and electronic correspondence <span class="ts">00:29:21</span>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the formal intelligence categories are broader.</strong> Human intelligence is intelligence derived from information collected and provided by human sources. Signals intelligence is derived from electronic signals and systems, including communications systems, radar and other electronic systems. The telephone, mobile-phone and electronic-correspondence examples in the lecture describe communications-derived intelligence only when those communications are lawfully collected for an intelligence purpose. Ordinary electronic correspondence is not automatically signals intelligence.</p>
+    </div>
+    <p>The recording begins a story about communications inside online games, then cuts off before the example is complete <span class="ts">00:30:03</span>. This note does not reconstruct the missing ending. The companion Class 5 note continues with open-source, financial and cyber intelligence.</p>
+
+    <div class="note exam">
+      <p><strong>The bridge to Part 2.</strong> Principles govern how investigators work. Intelligence operations explain how they turn collected information into prevention, identification and the next investigative action.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================= glossary === -->
+<section id="t7" class="chapter card" style="--accent:#8B8490; --soft:#F0EEF2;">
+  <header>
+    <span class="eyebrow"><span class="num">G</span> Reference</span>
+    <h2><span class="emoji">&#128214;</span> Glossary</h2>
+  </header>
+  <div class="section-body">
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Term</th><th>Meaning in this lecture</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Criminal investigation</strong></td><td>The connected process of collecting, preserving, analysing and presenting information and evidence.</td></tr>
+          <tr><td><strong>Multi-faceted</strong></td><td>Made of several linked stages and responsibilities rather than one act.</td></tr>
+          <tr><td><strong>Crime-scene preservation</strong></td><td>Protecting the primary source and its evidence from contamination, loss, damage or interference.</td></tr>
+          <tr><td><strong>Objectivity</strong></td><td>Letting the evidence guide the conclusion.</td></tr>
+          <tr><td><strong>Impartiality</strong></td><td>Remaining neutral toward the people and possible explanations in the case.</td></tr>
+          <tr><td><strong>Legality</strong></td><td>Conducting investigative actions within the law.</td></tr>
+          <tr><td><strong>Chain of custody</strong></td><td>The documented history of evidence collection, storage, transfer and handling.</td></tr>
+          <tr><td><strong>Malkhana</strong></td><td>An authorised police storage facility for case property and evidence.</td></tr>
+          <tr><td><strong>Documentation</strong></td><td>Notes, photographs, videos, statements and logs recording the investigation.</td></tr>
+          <tr><td><strong>Continuity</strong></td><td>The ability of another investigator to continue from the recorded point when personnel change.</td></tr>
+          <tr><td><strong>Confidentiality</strong></td><td>Restricting case information to authorised people.</td></tr>
+          <tr><td><strong>Scientific approach</strong></td><td>Using systematic, explainable methods and evidence rather than guesses or unsupported assumptions.</td></tr>
+          <tr><td><strong>Intelligence operation</strong></td><td>Collection, analysis and evaluation of information to prevent crime or identify a suspect.</td></tr>
+          <tr><td><strong>Human intelligence</strong></td><td>Intelligence derived from information collected and provided by human sources; the lecture gives undercover officers and informants as examples.</td></tr>
+          <tr><td><strong>Signals intelligence</strong></td><td>Intelligence derived from electronic signals and systems; the lecture introduces it through communications examples.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================= flashcards === -->
+<section id="t8" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+  <header>
+    <span class="eyebrow"><span class="num">F</span> Recall</span>
+    <h2><span class="emoji">&#127183;</span> Flashcards</h2>
+  </header>
+  <div class="section-body">
+    <div class="cards">
+      <div class="qa"><p class="q">Why is criminal investigation called multi-faceted?</p><p class="a">It combines collection, preservation, analysis and presentation rather than one isolated act.</p></div>
+      <div class="qa"><p class="q">What is the first factual objective?</p><p class="a">Determine whether a crime occurred and establish what happened.</p></div>
+      <div class="qa"><p class="q">What is the identification objective?</p><p class="a">Identify the actual offender while protecting innocent people from wrongful accusation or conviction.</p></div>
+      <div class="qa"><p class="q">What Pakistani evidence law is named?</p><p class="a">The Qanun-e-Shahadat Order, 1984.</p></div>
+      <div class="qa"><p class="q">Why preserve the crime scene?</p><p class="a">It is the primary source of evidence, and interference can destroy evidential value.</p></div>
+      <div class="qa"><p class="q">How do objectivity and impartiality differ?</p><p class="a">Objectivity follows the evidence; impartiality remains neutral toward people and possibilities.</p></div>
+      <div class="qa"><p class="q">What does legality require?</p><p class="a">Every investigative action must comply with law and the evidence must satisfy the applicable rules of admissibility.</p></div>
+      <div class="qa"><p class="q">What does chain of custody record?</p><p class="a">What evidence was collected, who handled it, where it was stored and how each transfer occurred.</p></div>
+      <div class="qa"><p class="q">Why is documentation essential?</p><p class="a">It preserves the work, evidence history and continuity when investigators change.</p></div>
+      <div class="qa"><p class="q">What does confidentiality protect?</p><p class="a">Evidence, suspects, victims and the case from unauthorised disclosure.</p></div>
+      <div class="qa"><p class="q">What is the scientific approach?</p><p class="a">A systematic and explainable method based on evidence instead of guesses or unsupported assumptions.</p></div>
+      <div class="qa"><p class="q">When does information become intelligence?</p><p class="a">When it is analysed and evaluated for a rational decision, crime prevention or suspect identification.</p></div>
+      <div class="qa"><p class="q">What is human intelligence?</p><p class="a">Intelligence derived from human sources, including the undercover officers and informants named in the lecture.</p></div>
+      <div class="qa"><p class="q">What is signals intelligence?</p><p class="a">Intelligence derived from electronic signals and systems. The lecture introduces it through telephone, mobile-phone and electronic-correspondence examples.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== exam focus === -->
+<section id="t9" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+  <header>
+    <span class="eyebrow"><span class="num">X</span> Strategy</span>
+    <h2><span class="emoji">&#127919;</span> Exam focus</h2>
+  </header>
+  <div class="section-body">
+    <h3>The principles at a glance</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Principle</th><th>One-line function</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Preservation</strong></td><td>Protect the primary source and evidential value.</td></tr>
+          <tr><td><strong>Objectivity</strong></td><td>Let evidence guide the conclusion.</td></tr>
+          <tr><td><strong>Impartiality</strong></td><td>Keep bias out of the case.</td></tr>
+          <tr><td><strong>Legality</strong></td><td>Keep investigative actions within law.</td></tr>
+          <tr><td><strong>Chain of custody</strong></td><td>Record evidence handling and transfer.</td></tr>
+          <tr><td><strong>Documentation and continuity</strong></td><td>Preserve the work and allow a successor to continue.</td></tr>
+          <tr><td><strong>Confidentiality</strong></td><td>Restrict case information to authorised people.</td></tr>
+          <tr><td><strong>Scientific approach</strong></td><td>Replace guesses with systematic evidence-based methods.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Suggested answer structure</h3>
+    <ol>
+      <li><strong>Define investigation</strong> as the collection, preservation, analysis and presentation of evidence.</li>
+      <li><strong>State the objectives:</strong> establish the event, identify the correct offender, protect participants, produce usable evidence and support the court.</li>
+      <li><strong>Explain the principles in sequence</strong> from scene preservation to confidentiality.</li>
+      <li><strong>Add the scientific approach</strong> as the method that keeps assumptions from becoming conclusions.</li>
+      <li><strong>Close with justice:</strong> reliable investigation helps convict the correct offender and protects the innocent.</li>
+    </ol>
+
+    <h3>Common mistakes</h3>
+    <ul>
+      <li>Reducing investigation to arresting a suspect.</li>
+      <li>Listing principles without explaining their purpose.</li>
+      <li>Treating chain of custody as storage alone rather than a documented history.</li>
+      <li>Using "Qanun-e-Shahadat" without the word "Order" and the year 1984.</li>
+      <li>Calling raw collection intelligence before analysis and evaluation.</li>
+      <li>Completing the cut-off online-game example from outside knowledge.</li>
+    </ul>
+
+    <div class="note exam">
+      <p><strong>Editorial: the thesis to carry.</strong> Criminal investigation is the disciplined bridge from an uncertain event to a court-ready case. Its principles protect the evidence, the people involved and the fairness of the final decision.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="notefoot">Want the whole lecture? <a href="https://drive.google.com/file/d/1FqcXMS_xz55aJVA-YbN06-u1fFXciPnm/view?usp=drivesdk" target="_blank" rel="noopener">▶ Watch the full recording</a><span class="sep">·</span><a href="https://drive.google.com/file/d/1Fp8PJ3xfBkK7vOBQ37s4Q0CThX9Ughdc/view?usp=drivesdk" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+</html>
