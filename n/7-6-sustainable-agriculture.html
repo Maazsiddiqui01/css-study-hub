@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sustainable Agriculture: Inputs, Soil Health and Farm Resilience</title>
+<style>/* Lecture Notes ebook, "warm study" theme.
+   Inspired by Mehak's MarketCanvas app: soft cream ground, rounded white cards,
+   a different pastel accent per topic, serif display + friendly sans body,
+   gentle emoji + pill badges. Playful and pretty, but still a real study book.
+   Print-first (A4 PDF via headless Edge); reads well on screen too.
+
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
+   Everything themeable keys off --accent / --soft. Titles stay ink for
+   readability; accents colour eyebrows, numbers, pills, rules and callouts.
+*/
+
+:root {
+  --cream: #FCF6F0;          /* page ground (warm) */
+  --card: #FFFFFF;
+  --ink: #2C2630;            /* plum-black body/headings */
+  --ink-soft: #5A5360;
+  --slate: #8B8490;          /* captions, timestamps */
+  --hairline: #EEE6E4;
+
+  /* section default accent (overridden per section) */
+  --accent: #C0567E;
+  --soft: #FBECF1;
+
+  --shadow: 0 1px 2px rgba(60,30,45,.05), 0 10px 26px rgba(80,40,55,.07);
+  --radius: 20px;
+
+  --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: Consolas, "Cascadia Code", ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background:
+    radial-gradient(1100px 700px at 15% -5%, #FBEEF3 0%, transparent 55%),
+    radial-gradient(1000px 700px at 100% 0%, #EEF3FB 0%, transparent 50%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  font: 10.8pt/1.62 var(--sans);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+@media screen {
+  body { max-width: 51rem; margin: 0 auto; padding: 2.5rem 1.15rem 4rem; font-size: 1.0rem; }
+}
+
+/* ---------------------------------------------------------------- page --- */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm 14mm;
+  @bottom-center {
+    content: counter(page);
+    font: 8.5pt var(--sans);
+    color: #8B8490;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+/* --------------------------------------------------------------- cards --- */
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8mm 9mm 9mm;
+  margin: 0 0 6mm;
+  box-shadow: var(--shadow);
+  break-inside: auto;
+}
+@media screen { .card { margin-bottom: 1.4rem; } }
+
+/* a soft accent wash across the top of each section card (fades to white),
+   echoing the app's pastel cards without hurting readability */
+.chapter {
+  background:
+    linear-gradient(180deg, var(--soft) 0, rgba(255,255,255,0) 34mm),
+    var(--card);
+  border-top: 3px solid var(--accent);
+  break-inside: auto;
+  break-before: page;   /* each topic starts fresh: slide on top, notes below */
+}
+/* on screen (web/PWA) sections just stack; no forced page breaks */
+@media screen { .chapter { break-before: auto; } }
+
+h2, h3, .eyebrow { break-after: avoid; }
+p { orphans: 2; widows: 2; }
+
+/* keep the section header intact (eyebrow + title + time pill together) and
+   glued to its opening slide */
+.chapter > header { break-inside: avoid; break-after: avoid; }
+figure.slide { break-before: avoid; }
+
+/* --------------------------------------------------------------- cover --- */
+
+.cover {
+  page: cover;
+  break-after: page;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32mm 22mm 24mm;
+  background:
+    radial-gradient(700px 460px at 12% 8%, #FBE6EE 0%, transparent 60%),
+    radial-gradient(760px 520px at 96% 4%, #E7EEFB 0%, transparent 58%),
+    radial-gradient(620px 520px at 80% 96%, #E6F4EC 0%, transparent 60%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+@media screen {
+  .cover { min-height: 80vh; border-radius: 24px; padding: 3.2rem 2.6rem; margin-bottom: 1.4rem; }
+}
+
+.cover .avatar { font-size: 30pt; line-height: 1; margin-bottom: 7mm; }
+.cover .kicker {
+  font: 600 9pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 5mm;
+}
+.cover h1 {
+  font: 600 31pt/1.14 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 15em;
+}
+.cover .subtitle {
+  margin-top: 5mm;
+  font: 400 13.5pt/1.5 var(--sans);
+  color: var(--ink-soft);
+  max-width: 30em;
+}
+.cover .warm {
+  margin-top: 4mm;
+  font: italic 400 12pt/1.5 var(--serif);
+  color: var(--accent);
+}
+
+.cover .chips { display: flex; flex-wrap: wrap; gap: 3mm; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.4mm 4mm;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(60,30,45,.04);
+  font: 400 9pt var(--sans);
+  color: var(--slate);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chip b { font: 700 10.5pt var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ headings --- */
+
+.chapter header { margin-bottom: 5mm; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  font: 700 8.5pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--accent);
+  margin-bottom: 3mm;
+}
+.eyebrow .num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h2 {
+  font: 600 20pt/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .emoji { font-size: 17pt; }
+
+.timepill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.5mm 3.5mm;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font: 600 8pt var(--mono);
+  letter-spacing: 0.02em;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h3 {
+  font: 600 12.5pt/1.34 var(--serif);
+  color: var(--ink);
+  margin: 6mm 0 2.5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+.ts { font: 400 8.5pt var(--mono); color: var(--slate); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- body --- */
+
+.section-body > :last-child { margin-bottom: 0; }
+p { margin: 0 0 3mm; }
+.lead { font-size: 11.2pt; color: var(--ink); }
+
+ul, ol { margin: 0 0 3mm 5.5mm; }
+li { margin-bottom: 1.7mm; padding-left: 1mm; }
+li::marker { color: var(--accent); }
+
+.kt { font-weight: 700; color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
+
+code { font: 9.5pt var(--mono); background: #F3EFF4; padding: .4pt 3.5pt; border-radius: 4px; }
+
+/* ------------------------------------------------------------ callouts --- */
+
+.note {
+  --c: var(--accent);
+  --f: var(--soft);
+  background: var(--f);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  border-left: 3px solid var(--c);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.note .label {
+  display: inline-flex; align-items: center; gap: 1.6mm;
+  font: 700 8pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c);
+  margin-bottom: 1.8mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.warn { --c: #B4791F; --f: #FaF1DF; }
+.note.exam { --c: #3B8B78; --f: #E6F3EF; }
+.note.def  { --c: var(--accent); --f: var(--soft); }
+
+/* ------------------------------------------------------- summary card --- */
+
+.summary { --accent: #C0567E; --soft: #FBECF1; }
+.summary ul { list-style: none; margin: 0; }
+.summary li { position: relative; padding: 0 0 0 7mm; margin-bottom: 3.5mm; }
+.summary li::before {
+  content: "";
+  position: absolute; left: 0; top: 2.6mm;
+  width: 3.2mm; height: 3.2mm; border-radius: 50%;
+  background: var(--accent);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.summary li:last-child { margin-bottom: 0; }
+.summary li b, .summary li strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------- TOC --- */
+
+nav.toc { --accent: #8B8490; --soft: #F3EFF4; }
+nav.toc ol { list-style: none; margin: 0; }
+nav.toc li {
+  display: flex; align-items: baseline; gap: 4mm;
+  padding: 2.7mm 0;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11pt var(--sans);
+}
+nav.toc li:last-child { border-bottom: 0; }
+nav.toc .dot { width: 3.4mm; height: 3.4mm; border-radius: 50%; flex-shrink: 0;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+nav.toc .title { flex: 1; color: var(--ink); }
+nav.toc .rng { flex-shrink: 0; font: 600 8.5pt var(--mono); color: var(--slate); }
+
+/* -------------------------------------------------------------- slides --- */
+
+figure.slide { margin: 0 0 5mm; break-inside: avoid; }
+figure.slide img {
+  width: 100%; display: block;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 10px rgba(40,30,45,.10);
+}
+figure.slide figcaption {
+  font: 400 8.5pt var(--sans);
+  color: var(--slate);
+  margin-top: 2mm;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4mm;
+}
+figure.slide figcaption .ts { color: var(--accent); }
+
+/* ------------------------------------------------------------ glossary --- */
+
+dl.glossary { margin: 0; }
+dl.glossary div { padding: 3mm 0; border-bottom: 1px solid var(--hairline); break-inside: avoid; }
+dl.glossary div:last-child { border-bottom: 0; padding-bottom: 0; }
+dl.glossary dt { font: 700 10.5pt var(--sans); color: var(--accent); margin-bottom: 1.2mm; }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- flashcards --- */
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 0; }
+.qa {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  background: linear-gradient(180deg, var(--soft) 0, #fff 60%);
+  break-inside: avoid;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.qa .q { font: 700 10pt var(--sans); color: var(--ink); margin-bottom: 2mm; }
+.qa .a { color: var(--ink-soft); font-size: 10pt; }
+
+/* ------------------------------------------------------------- tables --- */
+
+.tables-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0; break-inside: avoid; }
+th {
+  font: 700 9pt var(--sans); text-align: left; color: var(--accent);
+  border-bottom: 2px solid var(--soft); padding: 2mm 3mm 2mm 0;
+}
+td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+
+/* --- mobile / on-the-go reading (screen only; never affects the print PDF).
+   Placed LAST so it wins the cascade over the wider @media screen rules above.
+   Requires <meta name="viewport" content="width=device-width, initial-scale=1">. */
+@media screen and (max-width: 640px) {
+  body { padding: 1rem 0.85rem 2.5rem; font-size: 1.02rem; }
+  .card { padding: 5mm 5mm 6mm; border-radius: 14px; margin-bottom: 0.9rem; }
+  .cover { min-height: auto; padding: 2rem 1.3rem 1.6rem; border-radius: 16px; }
+  .cover .avatar { font-size: 24pt; margin-bottom: 4mm; }
+  .cover h1 { font-size: 20pt; max-width: 100%; }
+  .cover .subtitle { font-size: 11.5pt; }
+  .cover .warm { font-size: 11pt; }
+  .cover .chips { gap: 2mm; margin-top: 5mm; }
+  h2 { font-size: 16pt; }
+  h2 .emoji { font-size: 13.5pt; }
+  h3 { font-size: 11.5pt; }
+  .cards { grid-template-columns: 1fr; }
+  nav.toc li { font-size: 10.5pt; gap: 2.5mm; padding: 2.5mm 0; }
+  nav.toc .rng { font-size: 8pt; }
+  .note { padding: 3.5mm 4mm; }
+  table { font-size: 9.5pt; }
+}
+</style>
+<meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
+align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
+border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
+<body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/file/d/1od4QsM_F3782otGvahn0s6RiUQpqK8F1/view?usp=drivesdk" target="_blank" rel="noopener">Download PDF ↓</a></div>
+
+<!-- ============================================================ cover === -->
+<section class="cover" style="background:radial-gradient(700px 460px at 12% 8%,#E4F3EB 0,transparent 60%),radial-gradient(760px 520px at 96% 4%,#E7F1FB 0,transparent 58%),radial-gradient(620px 520px at 80% 96%,#FAF0E2 0,transparent 60%),var(--cream)">
+  <div>
+    <div class="avatar">&#127806;</div>
+    <div class="kicker" style="color:#2E9E6A">CSS Environmental Science &middot; Modules 7.6 and 7.8</div>
+    <h1>Sustainable Agriculture: Inputs, Soil Health and Farm Resilience</h1>
+    <p class="subtitle">A resource-to-livelihood guide to sustainable farming: the FAO framing, fertiliser and pesticide risks, organic methods, biofertilisers, food security and the conditions behind durable farm benefits.</p>
+    <p class="warm" style="color:#2C8A5E">Protect the resource base, match each input to a real need, and test every claimed benefit through a causal chain. &#127793;</p>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>14m</b> combined</span>
+    <span class="chip"><b>2</b> modules</span>
+    <span class="chip"><b>7</b> core topics</span>
+    <span class="chip"><b>9</b> correction boxes</span>
+  </div>
+</section>
+
+<!-- ============================================================== toc === -->
+<nav class="toc card">
+  <header><span class="eyebrow">Contents</span><h2><span class="emoji">&#128506;&#65039;</span> In this chapter</h2></header>
+  <ol>
+    <li><span class="dot" style="background:#2E9E6A"></span><a class="title" href="#summary">The five-minute version</a><span class="rng">summary</span></li>
+    <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t1">01 &middot; Define the sustainability test</a><span class="rng">FAO frame</span></li>
+    <li><span class="dot" style="background:#3A7CC0"></span><a class="title" href="#t2">02 &middot; Diagnose fertiliser misuse</a><span class="rng">soil and water</span></li>
+    <li><span class="dot" style="background:#C0762C"></span><a class="title" href="#t3">03 &middot; Diagnose pesticide misuse</a><span class="rng">risk and resistance</span></li>
+    <li><span class="dot" style="background:#46955C"></span><a class="title" href="#t4">04 &middot; Rebuild the farming system</a><span class="rng">organic methods</span></li>
+    <li><span class="dot" style="background:#A4553A"></span><a class="title" href="#t5">05 &middot; Use biofertilisers precisely</a><span class="rng">microbial functions</span></li>
+    <li><span class="dot" style="background:#7A5AA8"></span><a class="title" href="#t6">06 &middot; Trace the benefit chain</a><span class="rng">outcomes</span></li>
+    <li><span class="dot" style="background:#B44A8C"></span><a class="title" href="#t7">07 &middot; Connect land, food and livelihoods</a><span class="rng">policy lens</span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t8">Glossary &middot; Flashcards &middot; Exam focus</a><span class="rng"></span></li>
+  </ol>
+</nav>
+
+<!-- ============================================================= tldr === -->
+<section id="summary" class="summary card" style="--accent:#2E9E6A; --soft:#E4F3EB; border-top-color:#2E9E6A">
+  <header><span class="eyebrow" style="color:#2E9E6A">Start here</span><h2><span class="emoji">&#11088;</span> The five-minute version</h2></header>
+  <ul>
+    <li><strong>Sustainable agriculture is a system test.</strong> It must conserve land, water and genetic resources while remaining environmentally sound, technically appropriate, economically viable and socially acceptable.</li>
+    <li><strong>Input problems depend on pathways.</strong> Nutrients can move through runoff and leaching; pesticides can harm non-target organisms, create exposure risks and select for resistant pests. Waterlogging, salinity and infectious water-borne disease need separate causal explanations.</li>
+    <li><strong>Methods work as a package.</strong> Rotation, manure, compost, biological inputs and careful pest management can protect the resource base, but benefits for yield, food security and livelihoods depend on correct design, local fit and long-term management.</li>
+  </ul>
+</section>
+
+<!-- ======================================================== section 1 === -->
+<section id="t1" class="chapter card" style="--accent:#2C8C86; --soft:#E4F1F0;">
+  <header>
+    <span class="eyebrow"><span class="num">1</span> System definition</span>
+    <h2><span class="emoji">&#127807;</span> Define the sustainability test</h2>
+    <span class="timepill">7.6 &middot; 00:00:00-01:48</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecture begins with crop production, then places it inside a sustainability frame <span class="ts">7.6 &middot; 00:00:00</span>. The cited FAO formula asks whether farming conserves land, water, plant and animal genetic resources without degrading the environment, while remaining socially and economically acceptable <span class="ts">7.6 &middot; 00:00:30</span>.</p>
+
+    <div class="grid-2">
+      <div>
+        <h3>Resource base</h3>
+        <ul>
+          <li><strong>Land and soil:</strong> retain productive capacity and biological function.</li>
+          <li><strong>Water:</strong> protect quantity and quality across the farm and downstream.</li>
+          <li><strong>Genetic resources:</strong> conserve useful plant and animal diversity.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Viability test</h3>
+        <ul>
+          <li><strong>Environmental:</strong> avoid persistent degradation.</li>
+          <li><strong>Technical:</strong> make the practice workable in the production system.</li>
+          <li><strong>Economic and social:</strong> keep farming viable and acceptable to people.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the FAO formula includes technical appropriateness.</strong> The slide and lecture omit this element while presenting the rest of the FAO 1989 sustainable agriculture and rural development formulation <span class="ts">7.6 &middot; 00:00:30</span>. A complete answer should include environmental soundness, technical appropriateness, economic viability and social acceptability.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: reversible degradation can still be serious.</strong> The lecturer treats reversible damage as not worrisome <span class="ts">7.6 &middot; 00:01:02</span>. Recovery may be slow, costly or incomplete, so reversibility does not remove the need to prevent, minimise and monitor harm.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 2 === -->
+<section id="t2" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+  <header>
+    <span class="eyebrow"><span class="num">2</span> Nutrient pathway</span>
+    <h2><span class="emoji">&#128167;</span> Diagnose fertiliser misuse</h2>
+    <span class="timepill">7.6 &middot; 00:02:08-03:16</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecture links excessive fertiliser use with loss of soil organic matter, eutrophication, declining fertility and drinking-water problems <span class="ts">7.6 &middot; 00:02:29</span>. The exam-safe version keeps each effect attached to a mechanism.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Pressure named in class</th><th>Mechanism to write</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td>Excess nitrogen or phosphorus</td><td>Runoff, erosion or leaching moves nutrients away from the root zone.</td><td>Wasted input and downstream pollution.</td></tr>
+          <tr><td>Nutrient-rich surface runoff</td><td>Algal growth rises and decomposition consumes oxygen.</td><td>Eutrophication and aquatic stress.</td></tr>
+          <tr><td>Nitrate leaching</td><td>Mobile nitrate reaches groundwater used for drinking.</td><td>A chemical water-quality risk.</td></tr>
+          <tr><td>Poor input and residue management</td><td>Soil carbon, structure and biological activity are not maintained.</td><td>Reduced soil function over time.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: fertiliser does not form a surface sheet that itself makes soil infertile.</strong> The lecture uses that explanation <span class="ts">7.6 &middot; 00:02:57</span>. Excess nutrients cause harm through runoff, leaching, chemical imbalance and management interactions. Ponded water is a drainage or irrigation problem; waterlogging and salinity require their own hydrological chain.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: fertiliser pollution is not the same as infectious water-borne disease.</strong> The slide groups drinking-water problems and water-borne disease with fertiliser effects <span class="ts">7.6 &middot; 00:02:29</span>. Nitrate contamination is a chemical exposure concern, while infectious water-borne disease requires a pathogen pathway. Mineral fertiliser also does not automatically remove soil organic matter; the outcome depends on the whole soil and residue system.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 3 === -->
+<section id="t3" class="chapter card" style="--accent:#C0762C; --soft:#FAF0E2;">
+  <header>
+    <span class="eyebrow"><span class="num">3</span> Pest-control pathway</span>
+    <h2><span class="emoji">&#128027;</span> Diagnose pesticide misuse</h2>
+    <span class="timepill">7.6 &middot; 00:03:27-04:39</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The class identifies three useful risk channels: non-target effects, human exposure and the declining effectiveness of a repeatedly used pesticide <span class="ts">7.6 &middot; 00:03:27</span>. These channels should be analysed separately.</p>
+
+    <div class="grid-3">
+      <div class="mini"><h3>Non-target effects</h3><p>A treatment can affect organisms it was not intended to kill, including beneficial species.</p></div>
+      <div class="mini"><h3>Exposure</h3><p>Health effects depend on the active ingredient, toxicity, dose, route and duration of exposure.</p></div>
+      <div class="mini"><h3>Resistance</h3><p>Repeated selection allows less-sensitive pests to survive and reproduce, reducing field performance.</p></div>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: pesticides do not universally cause cancer.</strong> The slide presents cancer as the chronic outcome and the lecture links twentieth-century cancer patterns to industrial agricultural inputs <span class="ts">7.6 &middot; 00:03:54</span>. Some pesticide active ingredients may be carcinogenic, while others have different hazards. Risk must be assessed product by product and exposure by exposure.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: pests develop resistance, not immunity.</strong> The slide's wording refers to reduced sensitivity after repeated pesticide selection <span class="ts">7.6 &middot; 00:03:27</span>. The technical term is pesticide resistance. Rotation of modes of action and integrated pest management help slow it.</p>
+    </div>
+
+    <div class="note"><p><strong>Editorial decision rule:</strong> identify the pest, set an action threshold, monitor, prevent where possible, then select the least hazardous effective control. This turns the lecture's warning into an exam-ready integrated pest-management chain.</p></div>
+  </div>
+</section>
+
+<!-- ======================================================== section 4 === -->
+<section id="t4" class="chapter card" style="--accent:#46955C; --soft:#E9F4EC;">
+  <header>
+    <span class="eyebrow"><span class="num">4</span> Farming-system response</span>
+    <h2><span class="emoji">&#9851;&#65039;</span> Rebuild the farming system</h2>
+    <span class="timepill">7.6 &middot; 00:04:39-05:38</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">After diagnosing input misuse, the lecturer moves to organic farming and lists crop rotation, animal manure, composting and biofertilisers <span class="ts">7.6 &middot; 00:05:10</span>. The common logic is to manage soil fertility and pests through the system rather than through routine high input use.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Method from class</th><th>Immediate function</th><th>Longer-term link</th></tr></thead>
+        <tbody>
+          <tr><td>Crop rotation</td><td>Changes crop demand and interrupts some pest cycles.</td><td>Diversifies biological and nutrient pressures.</td></tr>
+          <tr><td>Animal manure</td><td>Returns organic material and nutrients.</td><td>Can support soil structure when safely handled and correctly dosed.</td></tr>
+          <tr><td>Composting</td><td>Stabilises decomposable organic material before field use.</td><td>Supports nutrient recycling and soil organic matter management.</td></tr>
+          <tr><td>Biofertiliser</td><td>Introduces selected microorganisms that fix nitrogen or mobilise nutrients.</td><td>May complement a crop- and soil-specific nutrient plan.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: organic farming is not defined everywhere by zero synthetic inputs.</strong> The lecture says it avoids synthetic fertilisers and pesticides completely <span class="ts">7.6 &middot; 00:05:38</span>. Under the USDA organic framework, synthetic substances are generally prohibited unless specifically allowed on the National List, and some natural substances are prohibited. The governing standard controls the exact rule.</p>
+    </div>
+
+    <div class="note"><p><strong>Editorial management check:</strong> for every input, specify material, source, rate, timing, placement, crop need, soil condition and monitoring. A natural label does not by itself establish safety or effectiveness.</p></div>
+  </div>
+</section>
+
+<!-- ======================================================== section 5 === -->
+<section id="t5" class="chapter card" style="--accent:#A4553A; --soft:#F7EBE5;">
+  <header>
+    <span class="eyebrow"><span class="num">5</span> Biological nutrient tools</span>
+    <h2><span class="emoji">&#129516;</span> Use biofertilisers precisely</h2>
+    <span class="timepill">7.6 &middot; 00:05:38-07:26</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecture describes biofertilisers as biological tools for nitrogen and phosphorus management and names bacteria, fungi and blue-green algae <span class="ts">7.6 &middot; 00:06:08</span>. Their value lies in microbial activity, not in a large store of nutrients inside the product.</p>
+
+    <div class="grid-2">
+      <div>
+        <h3>Nitrogen functions</h3>
+        <ul>
+          <li><strong>Rhizobium:</strong> symbiotic nitrogen fixation with suitable legumes.</li>
+          <li><strong>Azotobacter and Azospirillum:</strong> free-living or associative nitrogen-fixing groups used with selected non-legume crops.</li>
+          <li><strong>Blue-green algae:</strong> cyanobacterial inoculants associated especially with flooded rice systems.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Phosphorus functions</h3>
+        <ul>
+          <li>Phosphate-solubilising bacteria and fungi can make some fixed soil phosphorus more available.</li>
+          <li>Mycorrhizal fungi can extend the effective nutrient-exploring zone of roots.</li>
+          <li>Performance depends on organism, crop, soil, climate, handling and competing inputs.</li>
+        </ul>
+      </div>
+    </div>
+
+    <p>The lecturer correctly warns that every fertiliser does not suit every crop <span class="ts">7.6 &middot; 00:06:27</span>. The crop list on the slide places <em>Azotobacter</em> with wheat, maize, mustard, cotton, potato and vegetables, then treats this matching exercise as the important takeaway <span class="ts">7.6 &middot; 00:06:53</span>.</p>
+
+    <div class="note"><p><strong>Editorial boundary:</strong> a biofertiliser is a microbial inoculant, not a universal replacement for all mineral nutrients. Its strain, viability, carrier, storage, application method and compatibility with the crop and soil determine whether the expected function occurs.</p></div>
+  </div>
+</section>
+
+<!-- ======================================================== section 6 === -->
+<section id="t6" class="chapter card" style="--accent:#7A5AA8; --soft:#F0EBF8;">
+  <header>
+    <span class="eyebrow"><span class="num">6</span> Outcomes and evidence</span>
+    <h2><span class="emoji">&#128200;</span> Trace the benefit chain</h2>
+    <span class="timepill">7.8 &middot; 00:00:00-04:49</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The benefits lecture is presented as the conclusion of the earlier problem-and-method analysis <span class="ts">7.8 &middot; 00:00:00</span>. Its list includes preservation, human health, productivity, natural-resource sustenance, vibrant communities, safe products, farmer livelihoods and quality of life.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Practice</th><th>Intermediate change</th><th>Benefit claimed in class</th><th>Evidence to watch</th></tr></thead>
+        <tbody>
+          <tr><td>Match nutrients to crop and soil need</td><td>Lower avoidable loss and better uptake</td><td>Productivity and resource sustenance</td><td>Yield, nutrient-use efficiency, water quality</td></tr>
+          <tr><td>Rotate crops and recycle organic material</td><td>More diverse soil and pest processes</td><td>Preservation and long-term production</td><td>Soil carbon, structure, pest pressure, yield stability</td></tr>
+          <tr><td>Use pesticides judiciously</td><td>Lower unnecessary exposure and selection pressure</td><td>Health, product safety and durable control</td><td>Residues, exposure incidents, non-target effects, resistance</td></tr>
+          <tr><td>Protect the farm resource base</td><td>More stable production capacity</td><td>Livelihood and community benefits</td><td>Net income, risk, labour, food access, resilience</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The lecturer connects productivity with better methods <span class="ts">7.8 &middot; 00:01:59</span>, natural-resource sustenance with reduced soil damage <span class="ts">7.8 &middot; 00:02:28</span>, and safer products with food security and farmer welfare <span class="ts">7.8 &middot; 00:03:07</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: the listed benefits are possible outcomes, not automatic guarantees.</strong> The lecture predicts fewer cancer patients from using pesticides at an "optimal" level and assumes higher nutrient value <span class="ts">7.8 &middot; 00:01:28</span>. Health and nutrition outcomes require product-specific exposure and food-composition evidence. Productivity and income also depend on crop, soil, climate, labour, markets and transition costs.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 7 === -->
+<section id="t7" class="chapter card" style="--accent:#B44A8C; --soft:#F8EAF3;">
+  <header>
+    <span class="eyebrow"><span class="num">7</span> Policy and livelihood lens</span>
+    <h2><span class="emoji">&#127968;</span> Connect land, food and livelihoods</h2>
+    <span class="timepill">7.8 &middot; 00:00:27-05:18</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The lecturer broadens the farm discussion to land conversion, food security and long-term policy. Urban growth is described as consuming agricultural land in Pakistan, with responsibility placed on planners and policymakers <span class="ts">7.8 &middot; 00:00:59</span>.</p>
+
+    <div class="grid-2">
+      <div>
+        <h3>Farm scale</h3>
+        <ul>
+          <li>Protect soil and water so production capacity persists.</li>
+          <li>Choose practices with a longer horizon than one harvest.</li>
+          <li>Track net livelihood effects, including costs, risk and labour.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Policy scale</h3>
+        <ul>
+          <li>Manage conversion of productive agricultural land.</li>
+          <li>Connect production with food availability, access and stability.</li>
+          <li>Support extension, markets and transition capacity for farmers.</li>
+        </ul>
+      </div>
+    </div>
+
+    <p>The lecture links natural-resource protection with food security and vibrant communities <span class="ts">7.8 &middot; 00:02:28</span>, then stresses farmer livelihood and quality of life <span class="ts">7.8 &middot; 00:03:26</span>. Its central behavioural point is the need to resist short-term gain that creates long-term loss <span class="ts">7.8 &middot; 00:03:51</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: land does not have a fixed "life" that expires after one crop.</strong> The lecturer uses that metaphor for repeated cultivation <span class="ts">7.8 &middot; 00:03:26</span>. Continuous monocropping can simplify rotations, intensify certain pest and nutrient pressures and reduce resilience, but outcomes depend on the crop, soil and management system. Rotation is a management tool, not a clock reset.</p>
+    </div>
+
+    <div class="note"><p><strong>Editorial exam bridge:</strong> write sustainable agriculture as a chain: resource conservation + technically fitted practices + viable farms + safer environmental pathways = a more resilient food and livelihood system. Test each arrow with a measurable indicator.</p></div>
+  </div>
+</section>
+
+<!-- ========================================================= glossary === -->
+<section id="t8" class="chapter card" style="--accent:#8B8490; --soft:#F0EEF2;">
+  <header>
+    <span class="eyebrow">Reference</span>
+    <h2><span class="emoji">&#128214;</span> Glossary</h2>
+  </header>
+  <div class="section-body">
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Term</th><th>Meaning in these modules</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Sustainable agriculture</strong></td><td>Farming that conserves the resource base while meeting environmental, technical, economic and social tests.</td></tr>
+          <tr><td><strong>Soil organic matter</strong></td><td>Carbon-rich living and decomposed material that supports soil structure, nutrient cycling and water relations.</td></tr>
+          <tr><td><strong>Eutrophication</strong></td><td>Nutrient enrichment of water that can stimulate algal growth and oxygen depletion.</td></tr>
+          <tr><td><strong>Leaching</strong></td><td>Downward movement of dissolved substances through soil with percolating water.</td></tr>
+          <tr><td><strong>Non-target organism</strong></td><td>Species exposed to a pesticide even though it is not the intended pest.</td></tr>
+          <tr><td><strong>Pesticide resistance</strong></td><td>Heritable reduction in a pest population's sensitivity that lowers field performance.</td></tr>
+          <tr><td><strong>Integrated pest management</strong></td><td>Monitoring-led use of preventive, biological, cultural, physical and chemical controls.</td></tr>
+          <tr><td><strong>Organic farming</strong></td><td>A standards-based production system that restricts inputs and emphasises ecological management.</td></tr>
+          <tr><td><strong>Crop rotation</strong></td><td>Planned sequence of different crops on the same land across seasons.</td></tr>
+          <tr><td><strong>Compost</strong></td><td>Biologically stabilised organic material used as a soil amendment.</td></tr>
+          <tr><td><strong>Biofertiliser</strong></td><td>Living or dormant microorganisms applied to fix nitrogen or mobilise soil nutrients.</td></tr>
+          <tr><td><strong>Food security</strong></td><td>Reliable physical and economic access to sufficient, safe and nutritious food.</td></tr>
+          <tr><td><strong>Farm resilience</strong></td><td>Capacity of a farm system to withstand, adapt to and recover from stresses without losing core function.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== flashcards === -->
+<section id="t9" class="chapter card" style="--accent:#2E9E6A; --soft:#E4F3EB;">
+  <header>
+    <span class="eyebrow">Active recall</span>
+    <h2><span class="emoji">&#127183;</span> Flashcards</h2>
+  </header>
+  <div class="section-body">
+    <div class="cards">
+      <div class="qa"><p class="q">What four tests complete the FAO frame?</p><p class="a">Environmentally non-degrading, technically appropriate, economically viable and socially acceptable.</p></div>
+      <div class="qa"><p class="q">Which resource groups must be conserved?</p><p class="a">Land, water, and plant and animal genetic resources.</p></div>
+      <div class="qa"><p class="q">Does reversibility make degradation harmless?</p><p class="a">No. Recovery may be slow, costly or incomplete.</p></div>
+      <div class="qa"><p class="q">How can fertiliser contribute to eutrophication?</p><p class="a">Nitrogen or phosphorus moves by runoff or erosion into water, stimulating algal growth and oxygen depletion.</p></div>
+      <div class="qa"><p class="q">Is waterlogging a fertiliser sheet?</p><p class="a">No. It is a hydrological drainage or irrigation problem.</p></div>
+      <div class="qa"><p class="q">What drinking-water pathway is linked to fertiliser?</p><p class="a">Nitrate can leach into groundwater; this is a chemical contamination pathway.</p></div>
+      <div class="qa"><p class="q">Name three pesticide risk channels.</p><p class="a">Non-target effects, human exposure and pest resistance.</p></div>
+      <div class="qa"><p class="q">Do all pesticides cause cancer?</p><p class="a">No. Hazard and risk depend on the active ingredient, toxicity, dose, route and duration.</p></div>
+      <div class="qa"><p class="q">What is pesticide resistance?</p><p class="a">A heritable reduction in sensitivity that reduces pesticide performance.</p></div>
+      <div class="qa"><p class="q">What slows pesticide resistance?</p><p class="a">Integrated pest management, monitoring and rotation of modes of action.</p></div>
+      <div class="qa"><p class="q">Which methods does the lecture list?</p><p class="a">Crop rotation, animal manure, composting and biofertilisers within organic farming.</p></div>
+      <div class="qa"><p class="q">Does organic always mean zero synthetic substances?</p><p class="a">No. The applicable standard defines prohibited and specifically permitted materials.</p></div>
+      <div class="qa"><p class="q">What is a biofertiliser?</p><p class="a">A microbial inoculant that fixes nitrogen or solubilises or mobilises nutrients.</p></div>
+      <div class="qa"><p class="q">Name nitrogen-fixing biofertiliser groups.</p><p class="a">Rhizobium, Azotobacter, Azospirillum and blue-green algae are examples from the lesson.</p></div>
+      <div class="qa"><p class="q">What do phosphorus biofertilisers do?</p><p class="a">Selected bacteria or fungi solubilise or mobilise phosphorus already present in the soil.</p></div>
+      <div class="qa"><p class="q">Why is crop matching essential?</p><p class="a">Microorganism-crop relationships and field conditions determine performance.</p></div>
+      <div class="qa"><p class="q">Are biofertilisers universal nutrient replacements?</p><p class="a">No. They complement a crop- and soil-specific nutrient plan.</p></div>
+      <div class="qa"><p class="q">What benefits does the lecture claim?</p><p class="a">Preservation, health, productivity, resource sustenance, safe products, livelihoods, vibrant communities and quality of life.</p></div>
+      <div class="qa"><p class="q">Why are those benefits conditional?</p><p class="a">They depend on implementation, local ecology, markets, labour, costs and monitoring.</p></div>
+      <div class="qa"><p class="q">What is the policy-scale issue?</p><p class="a">Protect productive land and connect farm management with food security and durable livelihoods.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================================================== exam focus === -->
+<section id="t10" class="chapter card" style="--accent:#2E9E6A; --soft:#E4F3EB;">
+  <header>
+    <span class="eyebrow">Revision sheet</span>
+    <h2><span class="emoji">&#127919;</span> Exam focus</h2>
+  </header>
+  <div class="section-body">
+    <h3>Answer architecture</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Move</th><th>What to write</th><th>Exam verb</th></tr></thead>
+        <tbody>
+          <tr><td>Define</td><td>Resource conservation plus environmental, technical, economic and social viability</td><td>Frame</td></tr>
+          <tr><td>Diagnose nutrients</td><td>Runoff, leaching, eutrophication and soil-management pathways</td><td>Explain</td></tr>
+          <tr><td>Diagnose pesticides</td><td>Non-target effects, exposure and resistance</td><td>Differentiate</td></tr>
+          <tr><td>Present methods</td><td>Rotation, manure, compost, biofertilisers and integrated pest management</td><td>Apply</td></tr>
+          <tr><td>Trace benefits</td><td>Practice to mechanism to resource, yield, health and livelihood outcome</td><td>Evaluate</td></tr>
+          <tr><td>Add safeguards</td><td>Local fit, standards, monitoring, transition costs and policy support</td><td>Qualify</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Corrections to remember</h3>
+    <ul>
+      <li>Complete the FAO formula with technical appropriateness, and do not dismiss reversible damage.</li>
+      <li>Separate nutrient runoff and nitrate leaching from waterlogging, salinity and infectious disease.</li>
+      <li>Use product- and exposure-specific pesticide risk; call reduced sensitivity resistance, not immunity.</li>
+      <li>Treat organic inputs according to the governing standard and biofertilisers according to crop and soil fit.</li>
+      <li>Present productivity, health and livelihood benefits as conditional outcomes supported by indicators.</li>
+      <li>Describe continuous monocropping as a resilience problem, not literal expiry of the land.</li>
+    </ul>
+  </div>
+</section>
+
+<footer class="notefoot">Source recordings: <a href="https://drive.google.com/file/d/130_e5X9h6MzMVrH9R8k0pDPbQ_m4x0eT/view?usp=drivesdk" target="_blank" rel="noopener">▶ 7.6 Sustainable agriculture</a><span class="sep">·</span><a href="https://drive.google.com/file/d/1jsM5KolBuWQxptLyPJtE3uGQWq9GtU5P/view?usp=drivesdk" target="_blank" rel="noopener">▶ 7.8 Benefits of sustainable agriculture</a><span class="sep">·</span><a href="https://drive.google.com/file/d/1od4QsM_F3782otGvahn0s6RiUQpqK8F1/view?usp=drivesdk" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+</html>
