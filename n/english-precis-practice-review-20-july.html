@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Précis Practice Clinic: From Rough Draft to Controlled Summary</title>
+<style>/* Lecture Notes ebook, "warm study" theme.
+   Inspired by Mehak's MarketCanvas app: soft cream ground, rounded white cards,
+   a different pastel accent per topic, serif display + friendly sans body,
+   gentle emoji + pill badges. Playful and pretty, but still a real study book.
+   Print-first (A4 PDF via headless Edge); reads well on screen too.
+
+   Each section sets its own accent inline via a section.chapter.card opening
+   tag that sets style="--accent:#C6506E; --soft:#FBEBEF" (kept as prose here,
+   not a live tag, so build_site's anchor pass never mistakes it for a chapter).
+   Everything themeable keys off --accent / --soft. Titles stay ink for
+   readability; accents colour eyebrows, numbers, pills, rules and callouts.
+*/
+
+:root {
+  --cream: #FCF6F0;          /* page ground (warm) */
+  --card: #FFFFFF;
+  --ink: #2C2630;            /* plum-black body/headings */
+  --ink-soft: #5A5360;
+  --slate: #8B8490;          /* captions, timestamps */
+  --hairline: #EEE6E4;
+
+  /* section default accent (overridden per section) */
+  --accent: #C0567E;
+  --soft: #FBECF1;
+
+  --shadow: 0 1px 2px rgba(60,30,45,.05), 0 10px 26px rgba(80,40,55,.07);
+  --radius: 20px;
+
+  --sans: "Segoe UI", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --mono: Consolas, "Cascadia Code", ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  background:
+    radial-gradient(1100px 700px at 15% -5%, #FBEEF3 0%, transparent 55%),
+    radial-gradient(1000px 700px at 100% 0%, #EEF3FB 0%, transparent 50%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+body {
+  font: 10.8pt/1.62 var(--sans);
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+
+@media screen {
+  body { max-width: 51rem; margin: 0 auto; padding: 2.5rem 1.15rem 4rem; font-size: 1.0rem; }
+}
+
+/* ---------------------------------------------------------------- page --- */
+
+@page {
+  size: A4;
+  margin: 15mm 14mm 17mm 14mm;
+  @bottom-center {
+    content: counter(page);
+    font: 8.5pt var(--sans);
+    color: #8B8490;
+  }
+}
+@page cover { margin: 0; @bottom-center { content: none; } }
+
+/* --------------------------------------------------------------- cards --- */
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 8mm 9mm 9mm;
+  margin: 0 0 6mm;
+  box-shadow: var(--shadow);
+  break-inside: auto;
+}
+@media screen { .card { margin-bottom: 1.4rem; } }
+
+/* a soft accent wash across the top of each section card (fades to white),
+   echoing the app's pastel cards without hurting readability */
+.chapter {
+  background:
+    linear-gradient(180deg, var(--soft) 0, rgba(255,255,255,0) 34mm),
+    var(--card);
+  border-top: 3px solid var(--accent);
+  break-inside: auto;
+  break-before: page;   /* each topic starts fresh: slide on top, notes below */
+}
+/* on screen (web/PWA) sections just stack; no forced page breaks */
+@media screen { .chapter { break-before: auto; } }
+
+h2, h3, .eyebrow { break-after: avoid; }
+p { orphans: 2; widows: 2; }
+
+/* keep the section header intact (eyebrow + title + time pill together) and
+   glued to its opening slide */
+.chapter > header { break-inside: avoid; break-after: avoid; }
+figure.slide { break-before: avoid; }
+
+/* --------------------------------------------------------------- cover --- */
+
+.cover {
+  page: cover;
+  break-after: page;
+  min-height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 32mm 22mm 24mm;
+  background:
+    radial-gradient(700px 460px at 12% 8%, #FBE6EE 0%, transparent 60%),
+    radial-gradient(760px 520px at 96% 4%, #E7EEFB 0%, transparent 58%),
+    radial-gradient(620px 520px at 80% 96%, #E6F4EC 0%, transparent 60%),
+    var(--cream);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+@media screen {
+  .cover { min-height: 80vh; border-radius: 24px; padding: 3.2rem 2.6rem; margin-bottom: 1.4rem; }
+}
+
+.cover .avatar { font-size: 30pt; line-height: 1; margin-bottom: 7mm; }
+.cover .kicker {
+  font: 600 9pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  margin-bottom: 5mm;
+}
+.cover h1 {
+  font: 600 31pt/1.14 var(--serif);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 15em;
+}
+.cover .subtitle {
+  margin-top: 5mm;
+  font: 400 13.5pt/1.5 var(--sans);
+  color: var(--ink-soft);
+  max-width: 30em;
+}
+.cover .warm {
+  margin-top: 4mm;
+  font: italic 400 12pt/1.5 var(--serif);
+  color: var(--accent);
+}
+
+.cover .chips { display: flex; flex-wrap: wrap; gap: 3mm; }
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 2.4mm 4mm;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 1px 2px rgba(60,30,45,.04);
+  font: 400 9pt var(--sans);
+  color: var(--slate);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.chip b { font: 700 10.5pt var(--sans); color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------ headings --- */
+
+.chapter header { margin-bottom: 5mm; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+  font: 700 8.5pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: var(--accent);
+  margin-bottom: 3mm;
+}
+.eyebrow .num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 6.5mm; height: 6.5mm;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 8pt;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h2 {
+  font: 600 20pt/1.18 var(--serif);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-wrap: balance;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+h2 .emoji { font-size: 17pt; }
+
+.timepill {
+  display: inline-block;
+  margin-top: 3mm;
+  padding: 1.5mm 3.5mm;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font: 600 8pt var(--mono);
+  letter-spacing: 0.02em;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+h3 {
+  font: 600 12.5pt/1.34 var(--serif);
+  color: var(--ink);
+  margin: 6mm 0 2.5mm;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
+}
+.ts { font: 400 8.5pt var(--mono); color: var(--slate); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- body --- */
+
+.section-body > :last-child { margin-bottom: 0; }
+p { margin: 0 0 3mm; }
+.lead { font-size: 11.2pt; color: var(--ink); }
+
+ul, ol { margin: 0 0 3mm 5.5mm; }
+li { margin-bottom: 1.7mm; padding-left: 1mm; }
+li::marker { color: var(--accent); }
+
+.kt { font-weight: 700; color: var(--accent); }
+a { color: var(--accent); text-decoration: none; }
+
+code { font: 9.5pt var(--mono); background: #F3EFF4; padding: .4pt 3.5pt; border-radius: 4px; }
+
+/* ------------------------------------------------------------ callouts --- */
+
+.note {
+  --c: var(--accent);
+  --f: var(--soft);
+  background: var(--f);
+  border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  border-left: 3px solid var(--c);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  break-inside: avoid;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.note .label {
+  display: inline-flex; align-items: center; gap: 1.6mm;
+  font: 700 8pt var(--sans);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--c);
+  margin-bottom: 1.8mm;
+}
+.note p:last-child { margin-bottom: 0; }
+.note.warn { --c: #B4791F; --f: #FaF1DF; }
+.note.exam { --c: #3B8B78; --f: #E6F3EF; }
+.note.def  { --c: var(--accent); --f: var(--soft); }
+
+/* ------------------------------------------------------- summary card --- */
+
+.summary { --accent: #C0567E; --soft: #FBECF1; }
+.summary ul { list-style: none; margin: 0; }
+.summary li { position: relative; padding: 0 0 0 7mm; margin-bottom: 3.5mm; }
+.summary li::before {
+  content: "";
+  position: absolute; left: 0; top: 2.6mm;
+  width: 3.2mm; height: 3.2mm; border-radius: 50%;
+  background: var(--accent);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.summary li:last-child { margin-bottom: 0; }
+.summary li b, .summary li strong { color: var(--ink); }
+
+/* ----------------------------------------------------------------- TOC --- */
+
+nav.toc { --accent: #8B8490; --soft: #F3EFF4; }
+nav.toc ol { list-style: none; margin: 0; }
+nav.toc li {
+  display: flex; align-items: baseline; gap: 4mm;
+  padding: 2.7mm 0;
+  border-bottom: 1px solid var(--hairline);
+  font: 400 11pt var(--sans);
+}
+nav.toc li:last-child { border-bottom: 0; }
+nav.toc .dot { width: 3.4mm; height: 3.4mm; border-radius: 50%; flex-shrink: 0;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+nav.toc .title { flex: 1; color: var(--ink); }
+nav.toc .rng { flex-shrink: 0; font: 600 8.5pt var(--mono); color: var(--slate); }
+
+/* -------------------------------------------------------------- slides --- */
+
+figure.slide { margin: 0 0 5mm; break-inside: avoid; }
+figure.slide img {
+  width: 100%; display: block;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 2px 10px rgba(40,30,45,.10);
+}
+figure.slide figcaption {
+  font: 400 8.5pt var(--sans);
+  color: var(--slate);
+  margin-top: 2mm;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 4mm;
+}
+figure.slide figcaption .ts { color: var(--accent); }
+
+/* ------------------------------------------------------------ glossary --- */
+
+dl.glossary { margin: 0; }
+dl.glossary div { padding: 3mm 0; border-bottom: 1px solid var(--hairline); break-inside: avoid; }
+dl.glossary div:last-child { border-bottom: 0; padding-bottom: 0; }
+dl.glossary dt { font: 700 10.5pt var(--sans); color: var(--accent); margin-bottom: 1.2mm; }
+dl.glossary dd { margin: 0; color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- flashcards --- */
+
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin: 0; }
+.qa {
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 4mm 5mm;
+  background: linear-gradient(180deg, var(--soft) 0, #fff 60%);
+  break-inside: avoid;
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.qa .q { font: 700 10pt var(--sans); color: var(--ink); margin-bottom: 2mm; }
+.qa .a { color: var(--ink-soft); font-size: 10pt; }
+
+/* ------------------------------------------------------------- tables --- */
+
+.tables-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 3mm 0; break-inside: avoid; }
+th {
+  font: 700 9pt var(--sans); text-align: left; color: var(--accent);
+  border-bottom: 2px solid var(--soft); padding: 2mm 3mm 2mm 0;
+}
+td { padding: 2mm 3mm; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+
+/* --- mobile / on-the-go reading (screen only; never affects the print PDF).
+   Placed LAST so it wins the cascade over the wider @media screen rules above.
+   Requires <meta name="viewport" content="width=device-width, initial-scale=1">. */
+@media screen and (max-width: 640px) {
+  body { padding: 1rem 0.85rem 2.5rem; font-size: 1.02rem; }
+  .card { padding: 5mm 5mm 6mm; border-radius: 14px; margin-bottom: 0.9rem; }
+  .cover { min-height: auto; padding: 2rem 1.3rem 1.6rem; border-radius: 16px; }
+  .cover .avatar { font-size: 24pt; margin-bottom: 4mm; }
+  .cover h1 { font-size: 20pt; max-width: 100%; }
+  .cover .subtitle { font-size: 11.5pt; }
+  .cover .warm { font-size: 11pt; }
+  .cover .chips { gap: 2mm; margin-top: 5mm; }
+  h2 { font-size: 16pt; }
+  h2 .emoji { font-size: 13.5pt; }
+  h3 { font-size: 11.5pt; }
+  .cards { grid-template-columns: 1fr; }
+  nav.toc li { font-size: 10.5pt; gap: 2.5mm; padding: 2.5mm 0; }
+  nav.toc .rng { font-size: 8pt; }
+  .note { padding: 3.5mm 4mm; }
+  table { font-size: 9.5pt; }
+}
+</style>
+<meta name="theme-color" content="#C6506E"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../icons/icon-192.png"><meta name="robots" content="noindex"><style>.notebar{position:sticky;top:0;z-index:9;display:flex;justify-content:space-between;
+align-items:center;gap:1rem;background:rgba(252,246,240,.92);backdrop-filter:blur(8px);
+border-bottom:1px solid #EEE6E4;padding:10px max(1rem,calc((100% - 52rem)/2));font:600 14px system-ui}
+.notebar a{color:#C6506E;text-decoration:none}
+.notefoot{max-width:52rem;margin:1rem auto 0;padding:1.4rem 1rem 2.4rem;text-align:center;
+color:#8B8490;font:15px system-ui}
+.notefoot a{color:#C6506E;text-decoration:none;font-weight:600;white-space:nowrap}
+.notefoot .sep{margin:0 .5rem;color:#D9CFD2}</style></head>
+<body><div class="notebar"><a href="../index.html">← Study Hub</a><a href="https://drive.google.com/file/d/1HJ6Aag7xTc0aEarNRffDPkHMMEp4K5UX/view?usp=drivesdk" target="_blank" rel="noopener">Download PDF ↓</a></div>
+
+<!-- ============================================================ cover === -->
+<section class="cover" style="background:radial-gradient(700px 460px at 12% 8%,#EFEAF7 0,transparent 60%),radial-gradient(760px 520px at 96% 4%,#EAF1FB 0,transparent 58%),radial-gradient(620px 520px at 80% 96%,#FAF0E2 0,transparent 60%),var(--cream)">
+  <div>
+    <div class="avatar">✍️</div>
+    <div class="kicker" style="color:#7E5AA6">CSS English Précis &amp; Composition · live practice review</div>
+    <h1>Précis Practice Clinic: From Rough Draft to Controlled Summary</h1>
+    <p class="subtitle">A line-by-line workshop on extracting the passage's idea, writing a complete title, compressing without distortion, and revising language for clarity.</p>
+    <p class="warm" style="color:#6E4A96">A strong précis is built through visible revision: find the idea, control the sentence, remove the distraction, then read the whole piece again. ✍️</p>
+  </div>
+  <div class="chips">
+    <span class="chip"><b>1</b> practice passage</span>
+    <span class="chip"><b>10+</b> drafts reviewed</span>
+    <span class="chip"><b>8</b> revision lenses</span>
+    <span class="chip"><b>62 min</b> workshop</span>
+  </div>
+</section>
+
+<!-- ============================================================== toc === -->
+<nav class="toc card">
+  <header><span class="eyebrow">Contents</span><h2><span class="emoji">🗺️</span> In this note</h2></header>
+  <ol>
+    <li><span class="dot" style="background:#7E5AA6"></span><a class="title" href="#summary">The five-minute version</a><span class="rng">summary</span></li>
+    <li><span class="dot" style="background:#5866C4"></span><a class="title" href="#t1">01 · How the live review works</a><span class="rng">practice · feedback · revision</span></li>
+    <li><span class="dot" style="background:#2C8C86"></span><a class="title" href="#t2">02 · Map the passage before compressing it</a><span class="rng">central idea · support</span></li>
+    <li><span class="dot" style="background:#B57A2A"></span><a class="title" href="#t3">03 · Write a title that can stand alone</a><span class="rng">scope · direction · completeness</span></li>
+    <li><span class="dot" style="background:#C6506E"></span><a class="title" href="#t4">04 · Select and compress without losing the argument</a><span class="rng">relevance · proportion</span></li>
+    <li><span class="dot" style="background:#46955C"></span><a class="title" href="#t5">05 · Control the sentence</a><span class="rng">length · flow · structure</span></li>
+    <li><span class="dot" style="background:#3A7CC0"></span><a class="title" href="#t6">06 · Repair grammar, punctuation and word choice</a><span class="rng">accuracy · economy</span></li>
+    <li><span class="dot" style="background:#B44A8C"></span><a class="title" href="#t7">07 · Keep the voice formal and idea-centred</a><span class="rng">pronouns · abbreviations</span></li>
+    <li><span class="dot" style="background:#1F7A8C"></span><a class="title" href="#t8">08 · Finish with coherence and a real conclusion</a><span class="rng">revision loop</span></li>
+    <li><span class="dot" style="background:#8B8490"></span><a class="title" href="#t9">Glossary · Flashcards · Exam focus</a><span class="rng">recall · application</span></li>
+  </ol>
+</nav>
+
+<!-- ============================================================= tldr === -->
+<section id="summary" class="summary card" style="--accent:#7E5AA6; --soft:#EFEAF7; border-top-color:#7E5AA6">
+  <header><span class="eyebrow" style="color:#7E5AA6">Start here</span><h2><span class="emoji">⭐</span> The five-minute version</h2></header>
+  <ul>
+    <li><strong>Read for the controlling idea before polishing language.</strong> Every draft in the workshop is judged first on whether it has understood the passage about organizational citizenship and workplace performance.</li>
+    <li><strong>Make the title directional.</strong> A topic label such as <em>Organizational Citizenship Behavior</em> is incomplete. Add the relationship or effect the paragraph develops, such as its role in performance or its positive organizational effects.</li>
+    <li><strong>Keep the source argument intact.</strong> The practice passage contrasts formal duties, knowledge and skill with voluntary conduct shaped by motivation, attitude, personality and workplace relationships. Examples support that contrast; they do not replace it.</li>
+    <li><strong>Prefer short, complete sentences.</strong> Many drafts know the right points but bury them inside long structures. Split at a completed thought, check the new subject and verb, then reconnect only where the logic is clear.</li>
+    <li><strong>Choose precise words.</strong> The teacher repeatedly removes inflated or unsuitable vocabulary, repairs agreement and asks students to use ordinary words accurately.</li>
+    <li><strong>Keep the prose idea-centred.</strong> In this course method, first- and second-person pronouns are removed from the précis so attention stays on the passage rather than the writer or reader.</li>
+    <li><strong>Conclude the argument.</strong> The final sentence should complete the passage's movement, not stop after another detail. For this exercise, the conclusion returns to organizational performance, culture or management.</li>
+    <li><strong>Practise in public, revise in private.</strong> The workshop treats correction as a learning tool. A draft becomes useful when its weaknesses are identified and repaired, not when it is hidden.</li>
+  </ul>
+</section>
+
+<!-- ======================================================== section 1 === -->
+<section id="t1" class="chapter card" style="--accent:#5866C4; --soft:#ECEEFA;">
+  <header>
+    <span class="eyebrow"><span class="num">1</span> Workshop method</span>
+    <h2><span class="emoji">🧪</span> How the live review works</h2>
+    <span class="timepill">00:01:26 to 00:12:46</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">This class is a clinic rather than a new theory lecture. Students write against a short deadline, expose the rough draft to scrutiny, and learn by hearing the same revision principles applied to many different attempts.</p>
+
+    <p>The recording opens after the group has already spent about ten minutes on the task. The teacher allows more time when several students report that they are still working <span class="ts">00:01:26</span> <span class="ts">00:02:55</span>. That flexibility matters: the timed attempt creates pressure, but the immediate objective is to produce something that can be evaluated.</p>
+
+    <p>The teacher then proposes an interactive review. Students share their paragraphs, the class discusses them, and the teacher marks language and structure in real time <span class="ts">00:03:52</span>. The process is technically awkward in places, and the teacher later calls it a first session that will improve with practice <span class="ts">00:27:12</span>. The instructional design is still clear:</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Stage</th><th>What the student does</th><th>What the review tests</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Timed attempt</strong></td><td>Read, select and draft within a short practice window.</td><td>Can the student locate the idea without endless preparation?</td></tr>
+          <tr><td><strong>Visible submission</strong></td><td>Share the written paragraph in a readable form.</td><td>Can the work be assessed as actual prose rather than an intention?</td></tr>
+          <tr><td><strong>Line review</strong></td><td>Listen while title, sentences, punctuation and diction are tested.</td><td>Where does meaning weaken, and what exact edit repairs it?</td></tr>
+          <tr><td><strong>Transfer</strong></td><td>Apply the repeated feedback to the next draft.</td><td>Does the student develop an independent revision habit?</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The teacher explicitly rejects ranking students by fixed ability. Different writers begin from different levels, and the purpose of collective evaluation is to see what can be improved <span class="ts">00:10:31</span>. Later, he describes criticism as input for learning and improvement, because the student will eventually write alone in the examination <span class="ts">00:36:19</span>.</p>
+
+    <div class="note">
+      <p><strong>The working attitude.</strong> A rough draft is evidence, not a verdict. Share it, identify the error, repair it and write again. The teacher repeatedly thanks students who expose their work despite discomfort and connects that courage with improvement <span class="ts">00:42:37</span> <span class="ts">00:48:35</span>.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Privacy boundary.</strong> The recording contains participant names, meeting controls, personal file windows and photographed student handwriting. Those frames are deliberately excluded. This note preserves only the teaching that can be reconstructed from the transcript and anonymised review.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 2 === -->
+<section id="t2" class="chapter card" style="--accent:#2C8C86; --soft:#E4F1F0;">
+  <header>
+    <span class="eyebrow"><span class="num">2</span> Passage map</span>
+    <h2><span class="emoji">🧭</span> Map the passage before compressing it</h2>
+    <span class="timepill">00:12:46 to 00:35:54</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Most weak sentences in the workshop begin with a content problem: the writer has copied a phrase, drifted into a side point or lost the relationship the passage is trying to explain. The cure is to map the argument before compressing it.</p>
+
+    <p>The practice passage concerns <span class="kt">organizational citizenship behavior</span>. Across the repeated readings, the teacher reconstructs its contrast with conventional job performance. Formal performance concerns assigned duties and job-description requirements; citizenship behavior concerns voluntary conduct that helps colleagues and the organization <span class="ts">00:21:23</span> <span class="ts">00:34:38</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Passage element</th><th>Recovered point</th><th>Examples heard in review</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Starting contrast</strong></td><td>Assigned job performance is distinguished from helpful conduct beyond formal duties.</td><td>Work listed in a job description versus voluntary assistance <span class="ts">00:35:16</span>.</td></tr>
+          <tr><td><strong>Basis of formal performance</strong></td><td>Knowledge, education, ability and skill are associated with completing assigned work.</td><td>The teacher repeatedly contrasts these with non-technical qualities <span class="ts">00:25:47</span> <span class="ts">00:55:02</span>.</td></tr>
+          <tr><td><strong>Basis of citizenship behavior</strong></td><td>Motivation, attitude, personality, trust, respect and a sense of obligation shape voluntary conduct.</td><td>The list is refined in several student drafts <span class="ts">00:25:47</span> <span class="ts">00:35:54</span>.</td></tr>
+          <tr><td><strong>Concrete conduct</strong></td><td>Helping a colleague, guiding a new employee, supporting extra activities and offering useful suggestions.</td><td>These examples recur in the teacher's corrections <span class="ts">00:33:42</span> <span class="ts">00:41:26</span> <span class="ts">00:50:41</span>.</td></tr>
+          <tr><td><strong>Claimed effect</strong></td><td>Cooperation, relationships, efficiency, culture and management may improve.</td><td>The teacher redirects one draft from “problems” toward the passage's positive effect <span class="ts">00:23:15</span>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>A précis writer does not need every repeated example. The writer needs the <strong>relationship</strong>: voluntary supportive behavior extends the way employee contribution is understood, and that extension has implications for organizational performance and management. Once that sentence is clear, details can be ranked by whether they support it.</p>
+
+    <h3>A four-line extraction before drafting</h3>
+    <ol>
+      <li><strong>Topic:</strong> organizational citizenship behavior.</li>
+      <li><strong>Contrast:</strong> voluntary supportive conduct versus assigned job duties.</li>
+      <li><strong>Mechanism:</strong> attitude, motivation and personality encourage conduct such as helping and advising.</li>
+      <li><strong>Result:</strong> better cooperation, relationships, culture or organizational functioning.</li>
+    </ol>
+
+    <div class="note warn">
+      <p><strong>Source-content boundary.</strong> This map reports the argument of the classroom passage as reconstructed from the teacher's repeated feedback. It is not an independent research claim about every organization or employee. In a précis, fidelity to the source argument comes before adding outside theory.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Correction: the concept is not newly coined today.</strong> The class repeatedly calls organizational citizenship behavior a new or emerging concept <span class="ts">00:20:54</span> <span class="ts">00:29:21</span>. Bateman and Organ were already studying employee “citizenship” in a 1983 <em>Academy of Management Journal</em> article, and a major 2000 review described a large, conceptually contested literature. Research also questions whether every citizenship behavior remains outside the employee's understood role. Keep “new” only as wording from the exercise passage, not as a current historical claim.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 3 === -->
+<section id="t3" class="chapter card" style="--accent:#B57A2A; --soft:#FBF1DE;">
+  <header>
+    <span class="eyebrow"><span class="num">3</span> Direction</span>
+    <h2><span class="emoji">🏷️</span> Write a title that can stand alone</h2>
+    <span class="timepill">00:14:26 to 00:58:56</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The teacher's first recurring title test is simple: can the title communicate a complete direction without the paragraph underneath it?</p>
+
+    <p>An early draft receives the instruction to make its title more meaningful, self-explanatory and able to stand alone <span class="ts">00:14:26</span>. A later title consisting only of <em>Organizational Citizenship Behavior</em> is treated as incomplete because it names the subject but not what the passage says about that subject <span class="ts">00:31:22</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Title type</th><th>Diagnosis</th><th>Stronger direction from the workshop</th></tr></thead>
+        <tbody>
+          <tr><td><em>Organizational Citizenship Behavior</em></td><td>Names the topic, but leaves the relationship unstated.</td><td><em>Role of Organizational Citizenship in Performance</em> <span class="ts">00:46:51</span></td></tr>
+          <tr><td><em>Organizational Altruism</em></td><td>Introduces a related label but does not show its purpose.</td><td>Add the effect, such as better job or organizational performance <span class="ts">00:28:21</span>.</td></tr>
+          <tr><td><em>Interpersonal Organization Skills</em></td><td>Directional and relevant, though it shifts terminology.</td><td>The teacher accepts it as a possible reading of the passage <span class="ts">00:37:44</span>.</td></tr>
+          <tr><td><em>Organizational Citizenship and Its Positive Impacts</em></td><td>Names both the concept and the passage's movement.</td><td>The teacher prefers this fuller form to the shorter topic label <span class="ts">00:49:44</span>.</td></tr>
+          <tr><td><em>Emerging Concept of Organizational Citizenship Behavior</em></td><td>Meaningful and directional.</td><td>Praised because it tells the reader what angle will follow <span class="ts">00:54:31</span>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The class also demonstrates that several titles may be valid. Different writers notice different legitimate relationships, so titles need not be identical. They do need to be relevant and complete <span class="ts">00:37:44</span>. The teacher suggests that five, six or seven words can work and explicitly says there is no fixed written rule in that classroom discussion; the deciding issue is whether the meaning feels complete <span class="ts">00:36:48</span>.</p>
+
+    <h3>The two-part title test</h3>
+    <ul>
+      <li><strong>Noun test:</strong> does the title name the central subject?</li>
+      <li><strong>Direction test:</strong> does it name the change, role, cause, effect or contrast developed in the passage?</li>
+    </ul>
+
+    <div class="note exam">
+      <p><strong>Fast title formula.</strong> Write <em>central concept + relationship</em>. For this passage: <em>Organizational Citizenship + Performance</em>, <em>Organizational Citizenship + Positive Effects</em>, or <em>Voluntary Conduct + Organizational Culture</em>. Then choose the version that covers the whole paragraph with the least wording.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Assessment boundary.</strong> The teacher sometimes scores the practice body out of ten and the title out of five <span class="ts">00:24:10</span> <span class="ts">00:26:38</span>. Treat that as the workshop's feedback scale. It is not presented in this recording as a universal or current FPSC marking scheme.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 4 === -->
+<section id="t4" class="chapter card" style="--accent:#C6506E; --soft:#FBEBEF;">
+  <header>
+    <span class="eyebrow"><span class="num">4</span> Compression</span>
+    <h2><span class="emoji">✂️</span> Select and compress without losing the argument</h2>
+    <span class="timepill">00:20:54 to 00:40:00</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Compression is successful when fewer words carry the same argument. A shorter paragraph that drops the controlling relationship is incomplete; a longer paragraph that repeats examples has not yet been compressed.</p>
+
+    <p>The teacher praises students who can extract the idea and rewrite it in their own words <span class="ts">00:26:38</span>. He also distinguishes extraction from expansion: one draft has found good points but has not yet reduced the source to the expected proportion <span class="ts">00:37:13</span>. That produces two separate checks:</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Check</th><th>Question</th><th>Typical failure</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Idea fidelity</strong></td><td>Does the draft preserve the source's central contrast and result?</td><td>Introducing a new claim, such as saying the concept creates management problems when the source develops benefits <span class="ts">00:23:15</span>.</td></tr>
+          <tr><td><strong>Selection</strong></td><td>Has the writer kept the essential categories and removed repeated illustrations?</td><td>Listing every kind of helpful conduct.</td></tr>
+          <tr><td><strong>Proportion</strong></td><td>Is the draft genuinely compressed?</td><td>Paraphrasing each source sentence at almost the same length.</td></tr>
+          <tr><td><strong>Own wording</strong></td><td>Has the writer rebuilt the language?</td><td>Carrying over a distinctive phrase without need.</td></tr>
+          <tr><td><strong>Closure</strong></td><td>Does the last sentence complete the argument?</td><td>Ending on an example or an unfinished consequence.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>When one attempt contains 87 words, the teacher tells the student not to obsess over the number during this short exercise. Quality matters, and a difference of roughly ten to fifteen words around the practice target is not treated as the central problem <span class="ts">00:30:13</span>. The broader lesson is sensible: first make the paragraph faithful and coherent, then tighten it to the required limit.</p>
+
+    <h3>Editorial synthesis of the exercise passage</h3>
+    <div class="note">
+      <p><strong>Possible title: Organizational Citizenship and Performance</strong></p>
+      <p><em>Organizational citizenship behavior refers to voluntary workplace conduct beyond assigned duties. It includes assisting colleagues, guiding new employees and offering useful suggestions. Formal job performance draws heavily on knowledge and skills, while citizenship behavior reflects motivation, attitude, personality and a sense of obligation. Such conduct can improve cooperation, workplace relationships and organizational effectiveness. Management therefore gains from considering supportive behavior alongside assigned work.</em></p>
+      <p>This paragraph is an editorial reconstruction from the repeated classroom corrections, not a verbatim model dictated by the teacher.</p>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Word-limit boundary.</strong> The transcript describes a timed classroom drill and mentions one-third while discussing a student's attempt <span class="ts">00:30:13</span>. It does not establish a standing official tolerance for an examination. Always follow the word count printed in the actual question.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 5 === -->
+<section id="t5" class="chapter card" style="--accent:#46955C; --soft:#E9F4EC;">
+  <header>
+    <span class="eyebrow"><span class="num">5</span> Sentence control</span>
+    <h2><span class="emoji">🧱</span> Control the sentence</h2>
+    <span class="timepill">00:15:57 to 00:47:42</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">Several students understand the source but lose clarity in the sentence. The teacher's most repeated remedy is to shorten the structure and let each completed thought carry one clear subject-verb relationship.</p>
+
+    <p>The first direct instruction is to make sentences short so the idea can be expressed better <span class="ts">00:15:57</span>. The same correction returns when a draft chains definitions, causes and examples into one long sentence <span class="ts">00:29:21</span>. Another draft is stopped three times so one sentence can be divided into two or three completed units <span class="ts">00:32:46</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Overloaded move</th><th>Repair</th><th>Why it works</th></tr></thead>
+        <tbody>
+          <tr><td>Definition + contrast + example + effect in one sentence</td><td>Give the definition one sentence, the contrast a second, and the effect a third.</td><td>Each claim can be checked independently.</td></tr>
+          <tr><td>A new subject appears after a comma</td><td>Use a full stop if the first thought is complete.</td><td>The reader sees where one proposition ends.</td></tr>
+          <tr><td>Several abstract nouns hide the action</td><td>Restore a direct subject and verb.</td><td>The sentence says who or what does what.</td></tr>
+          <tr><td>A connector appears without a clear logical relation</td><td>Name the relation first: contrast, addition, cause or result.</td><td>The connector then performs a real job.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The teacher repeatedly values simple language with clean structure. One draft is praised for an accurate sentence about the changing evaluation of job performance, but its later sentence is called too long and is split <span class="ts">00:33:16</span> <span class="ts">00:34:11</span>. Another writer has strong vocabulary, yet the instruction remains the same: shorten the sentences and improve word choice so the reader can follow the mature content <span class="ts">00:45:13</span> <span class="ts">00:45:43</span>.</p>
+
+    <h3>The full-stop test</h3>
+    <ol>
+      <li>Underline the subject and verb in the sentence.</li>
+      <li>Circle every point where a new subject begins.</li>
+      <li>Ask whether the thought before that point is already complete.</li>
+      <li>If yes, test a full stop. Begin the next sentence directly.</li>
+      <li>Read both sentences aloud and restore a connector only if the relation needs one.</li>
+    </ol>
+
+    <div class="note exam">
+      <p><strong>Précis advantage.</strong> Short sentences make revision faster. You can test fidelity, grammar and word count one unit at a time. Complexity should come from the relationship between ideas, not from forcing every relationship into one grammatical structure.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 6 === -->
+<section id="t6" class="chapter card" style="--accent:#3A7CC0; --soft:#E7F1FB;">
+  <header>
+    <span class="eyebrow"><span class="num">6</span> Accuracy</span>
+    <h2><span class="emoji">🔧</span> Repair grammar, punctuation and word choice</h2>
+    <span class="timepill">00:21:51 to 01:00:43</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">The workshop treats language accuracy as part of meaning. A misplaced word, broken agreement or uncontrolled comma can change the relationship between the source's points.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Revision lens</th><th>Classroom example</th><th>Usable rule</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Agreement</strong></td><td>The teacher repairs singular and plural forms around <em>behavior/behaviors</em> and <em>implies/imply</em> <span class="ts">00:12:46</span> <span class="ts">00:33:16</span>.</td><td>After every cut, recheck whether the subject still matches the verb.</td></tr>
+          <tr><td><strong>Collocation</strong></td><td><em>Contributes towards</em> is replaced with <em>contributes to</em> in the sentence under review <span class="ts">00:22:18</span>.</td><td>Prefer the shortest natural combination that preserves the intended relation.</td></tr>
+          <tr><td><strong>Possessive reference</strong></td><td>The teacher removes an unclear <em>one's</em> and rewrites the noun phrase directly <span class="ts">00:22:46</span>.</td><td>Use a pronoun only when its referent is unmistakable.</td></tr>
+          <tr><td><strong>Diction</strong></td><td><em>Majorly focuses</em> is redirected toward <em>significantly focuses</em> <span class="ts">00:38:49</span>.</td><td>Choose the ordinary word that expresses the exact degree or relation.</td></tr>
+          <tr><td><strong>Comma control</strong></td><td>The teacher asks writers to work on punctuation and later discusses commas with words, phrases and clauses <span class="ts">00:21:51</span> <span class="ts">00:58:56</span>.</td><td>Use punctuation to show grammatical structure, not to mark every pause in speech.</td></tr>
+          <tr><td><strong>Completion</strong></td><td>An opening phrase is rejected because it gives no complete sense <span class="ts">01:00:20</span>.</td><td>Every sentence needs a complete proposition, not a heading fragment disguised as prose.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The teacher's governing principle is accuracy as communication: a writer must be accurate in language to communicate clearly <span class="ts">00:30:48</span>. Sophisticated vocabulary earns praise only when it works. Words such as <em>reciprocate</em> and <em>pursuits</em> attract attention, but the surrounding sentence is still tested for meaning and fit <span class="ts">00:47:42</span>.</p>
+
+    <div class="note warn">
+      <p><strong>Correction: “contribute towards” is not universally ungrammatical.</strong> The teacher prefers <em>contribute to</em> in the sentence being edited <span class="ts">00:22:18</span>. That is a concise and natural choice here. Standard English also permits <em>contribute toward/towards</em> in appropriate contexts, so the workshop correction should be treated as a context and economy choice rather than an absolute ban.</p>
+    </div>
+
+    <h3>A six-pass language scan</h3>
+    <ol>
+      <li><strong>Subjects and verbs:</strong> agreement and completeness.</li>
+      <li><strong>Pronouns:</strong> clear reference and consistent person.</li>
+      <li><strong>Connectors:</strong> a real logical relation.</li>
+      <li><strong>Punctuation:</strong> sentence boundaries before internal commas.</li>
+      <li><strong>Word choice:</strong> precise, ordinary and economical.</li>
+      <li><strong>Sound:</strong> read aloud once to catch repetition and broken rhythm.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ======================================================== section 7 === -->
+<section id="t7" class="chapter card" style="--accent:#B44A8C; --soft:#F6E8F2;">
+  <header>
+    <span class="eyebrow"><span class="num">7</span> Academic voice</span>
+    <h2><span class="emoji">🎙️</span> Keep the voice formal and idea-centred</h2>
+    <span class="timepill">00:13:57 to 00:53:54</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">A précis should keep the passage in the foreground. The workshop removes unexplained abbreviations and personal pronouns when they distract from that purpose.</p>
+
+    <h3>Abbreviations</h3>
+    <p>When a draft uses <em>JD</em> for job description, the teacher questions whether an abbreviation should appear that way <span class="ts">00:13:57</span>. Later, a student shortens organizational citizenship behavior to <em>OCB</em>, and the teacher asks for the full expression rather than an arbitrary shortening <span class="ts">00:26:13</span>.</p>
+
+    <p>For a short précis, the economy gained from an abbreviation may be smaller than the clarity lost. Write the full term unless the abbreviation is established, necessary and used enough to justify defining it.</p>
+
+    <h3>First and second person</h3>
+    <p>The teacher repeatedly crosses out <em>we</em>, <em>our</em>, <em>us</em> and <em>your</em>. In one draft, <em>we feel an obligation</em> is recast impersonally so the sentence remains about the idea <span class="ts">00:31:49</span>. Another draft loses several personal references in rapid succession because they pull the paragraph away from the source <span class="ts">00:41:26</span>. The instruction is repeated near the end: avoid first and second person and stay on the idea <span class="ts">00:53:02</span> <span class="ts">00:53:54</span>.</p>
+
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Personal form</th><th>Idea-centred revision</th></tr></thead>
+        <tbody>
+          <tr><td><em>We feel an obligation to help.</em></td><td><em>A sense of obligation encourages helpful conduct.</em></td></tr>
+          <tr><td><em>It improves our workplace.</em></td><td><em>Such conduct can improve workplace cooperation.</em></td></tr>
+          <tr><td><em>You can guide new workers.</em></td><td><em>Employees may guide new colleagues.</em></td></tr>
+          <tr><td><em>In this way, we develop trust.</em></td><td><em>This cooperation can develop trust.</em></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <p><strong>Course-rule boundary.</strong> First- and second-person pronouns are valid English and appear in many legitimate forms of writing. The transcript teaches their removal as a précis and formal-answer technique, not as a universal grammar rule.</p>
+    </div>
+
+    <div class="note">
+      <p><strong>Identity still matters.</strong> The teacher also tells a strong writer to maintain individuality in writing <span class="ts">00:48:35</span>. Formal voice does not require mechanical sameness. Writers can differ in title, ordering and diction while preserving the same source meaning.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== section 8 === -->
+<section id="t8" class="chapter card" style="--accent:#1F7A8C; --soft:#E4F2F4;">
+  <header>
+    <span class="eyebrow"><span class="num">8</span> Completion</span>
+    <h2><span class="emoji">✅</span> Finish with coherence and a real conclusion</h2>
+    <span class="timepill">00:36:19 to 01:01:47</span>
+  </header>
+  <div class="section-body">
+    <p class="lead">A précis can contain correct sentences and still feel unfinished. The final revision asks whether the paragraph moves as one argument and lands on the source's result.</p>
+
+    <p>At <span class="ts">00:51:40</span>, the teacher identifies a draft that has relevant material but no conclusion. The remedy is not a decorative last line. It is a sentence that completes the argument already developed. A later student is praised for closing the paragraph even though the structure still needs shortening <span class="ts">00:55:02</span>. Another receives the same praise for concluding the ideas clearly <span class="ts">00:59:48</span>.</p>
+
+    <h3>For this passage, the logic should move in this order</h3>
+    <div class="process">
+      <div class="step"><strong>1 · Define</strong><span>Voluntary supportive conduct beyond assigned duties.</span></div>
+      <div class="arrow">→</div>
+      <div class="step"><strong>2 · Contrast</strong><span>Formal skills and duties versus attitude-driven cooperation.</span></div>
+      <div class="arrow">→</div>
+      <div class="step"><strong>3 · Illustrate</strong><span>Help, guidance and useful suggestions.</span></div>
+      <div class="arrow">→</div>
+      <div class="step"><strong>4 · Conclude</strong><span>Implications for performance, relationships, culture or management.</span></div>
+    </div>
+
+    <p>The teacher also insists that revision remains active. Writing is described as an activity that improves through more writing <span class="ts">00:53:54</span>. Near the end, the metaphor is to keep “writing mode” switched on because the competitive examination itself is written <span class="ts">00:56:07</span>. The practical meaning is repetition with feedback: each attempt should target the previous attempt's clearest weakness.</p>
+
+    <h3>The repeatable revision loop</h3>
+    <ol>
+      <li><strong>Cover the source.</strong> State the core argument from memory in one sentence.</li>
+      <li><strong>Compare.</strong> Reopen the source and restore any essential relationship that was lost.</li>
+      <li><strong>Title.</strong> Make sure it names the subject and direction.</li>
+      <li><strong>Paragraph.</strong> Order definition, contrast, support and result.</li>
+      <li><strong>Sentences.</strong> Split overloaded structures and repair agreement.</li>
+      <li><strong>Voice.</strong> Remove distracting pronouns and unexplained short forms.</li>
+      <li><strong>Compression.</strong> Cut repeated examples and inflated phrases.</li>
+      <li><strong>Conclusion.</strong> Complete the source's movement in the last sentence.</li>
+    </ol>
+
+    <div class="note exam">
+      <p><strong>One-error practice.</strong> After each draft, name the single highest-value repair: wrong central idea, incomplete title, missing conclusion, sentence overload, pronoun drift, weak punctuation or inaccurate diction. Write the next draft with that error under deliberate control. This converts feedback into a measurable habit.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================== glossary === -->
+<section id="t9" class="chapter card" style="--accent:#8B8490; --soft:#F1EFF2;">
+  <header>
+    <span class="eyebrow">Reference</span>
+    <h2><span class="emoji">📚</span> Glossary</h2>
+    <span class="timepill">core terms</span>
+  </header>
+  <div class="section-body">
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Term</th><th>Meaning in this workshop</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Précis</strong></td><td>A compressed restatement that preserves the source's essential argument in controlled language.</td></tr>
+          <tr><td><strong>Central idea</strong></td><td>The main relationship or claim that governs selection.</td></tr>
+          <tr><td><strong>Passage map</strong></td><td>A brief outline of topic, contrast, mechanism and result before drafting.</td></tr>
+          <tr><td><strong>Fidelity</strong></td><td>Keeping the source's meaning without adding, reversing or exaggerating it.</td></tr>
+          <tr><td><strong>Compression</strong></td><td>Reducing wording while retaining essential meaning.</td></tr>
+          <tr><td><strong>Proportion</strong></td><td>The relationship between source length and précis length.</td></tr>
+          <tr><td><strong>Directional title</strong></td><td>A title that names both the subject and what the passage says about it.</td></tr>
+          <tr><td><strong>Job description</strong></td><td>The formal duties assigned to a role, used as one side of the practice passage's contrast.</td></tr>
+          <tr><td><strong>Organizational citizenship behavior</strong></td><td>In the exercise passage, voluntary helpful conduct beyond assigned duties.</td></tr>
+          <tr><td><strong>Collocation</strong></td><td>A combination of words that conventionally sounds natural together.</td></tr>
+          <tr><td><strong>Agreement</strong></td><td>Grammatical matching, especially between subject and verb.</td></tr>
+          <tr><td><strong>Referent</strong></td><td>The noun or idea to which a pronoun refers.</td></tr>
+          <tr><td><strong>Diction</strong></td><td>The writer's choice of words.</td></tr>
+          <tr><td><strong>Coherence</strong></td><td>The logical connection and orderly movement of the paragraph.</td></tr>
+          <tr><td><strong>Connector</strong></td><td>A word or phrase that signals addition, contrast, cause or result.</td></tr>
+          <tr><td><strong>Conclusion</strong></td><td>The final sentence that completes the source's line of thought.</td></tr>
+          <tr><td><strong>Academic voice</strong></td><td>Formal, idea-centred prose appropriate to the course exercise.</td></tr>
+          <tr><td><strong>Revision loop</strong></td><td>A repeatable sequence for checking idea, structure, language and length.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== flashcards === -->
+<section id="t10" class="chapter card" style="--accent:#7E5AA6; --soft:#EFEAF7;">
+  <header>
+    <span class="eyebrow">Active recall</span>
+    <h2><span class="emoji">🧠</span> Flashcards</h2>
+    <span class="timepill">24 cards</span>
+  </header>
+  <div class="section-body">
+    <div class="cards">
+      <div class="flash"><div class="q">What is the first content check on a précis draft?</div><div class="a">Whether it has identified and preserved the passage's central idea.</div></div>
+      <div class="flash"><div class="q">What four lines form the passage map?</div><div class="a">Topic, contrast, mechanism and result.</div></div>
+      <div class="flash"><div class="q">What is the practice passage's central contrast?</div><div class="a">Assigned job duties and skill-based performance versus voluntary supportive conduct.</div></div>
+      <div class="flash"><div class="q">Which qualities does the passage associate with citizenship behavior?</div><div class="a">Motivation, attitude, personality, relationships and a sense of obligation.</div></div>
+      <div class="flash"><div class="q">Give two examples of conduct used in the passage.</div><div class="a">Helping a colleague and guiding a new employee. Useful suggestions are another example.</div></div>
+      <div class="flash"><div class="q">Why is “Organizational Citizenship Behavior” an incomplete title here?</div><div class="a">It names the topic but does not state the role, effect or relationship developed by the passage.</div></div>
+      <div class="flash"><div class="q">What is the fast title formula?</div><div class="a">Central concept plus relationship.</div></div>
+      <div class="flash"><div class="q">Can more than one title be valid?</div><div class="a">Yes. Titles may differ if each remains relevant, complete and faithful to the passage.</div></div>
+      <div class="flash"><div class="q">What does compression preserve?</div><div class="a">The essential argument and its logical movement.</div></div>
+      <div class="flash"><div class="q">What should be cut before an essential category?</div><div class="a">Repeated examples, inflated phrasing and side detail.</div></div>
+      <div class="flash"><div class="q">What is the teacher's most repeated sentence-level repair?</div><div class="a">Split long structures into short, complete sentences.</div></div>
+      <div class="flash"><div class="q">What does the full-stop test locate?</div><div class="a">A completed thought before a new subject begins.</div></div>
+      <div class="flash"><div class="q">Why recheck agreement after cutting a sentence?</div><div class="a">Editing may change the subject or number while leaving the old verb form behind.</div></div>
+      <div class="flash"><div class="q">What should a connector express?</div><div class="a">A real logical relation such as contrast, addition, cause or result.</div></div>
+      <div class="flash"><div class="q">Is “contribute towards” always wrong?</div><div class="a">No. The class prefers “contribute to” in one sentence, but toward/towards can be standard in suitable contexts.</div></div>
+      <div class="flash"><div class="q">What is the safest rule for abbreviations in a short précis?</div><div class="a">Use the full term unless the abbreviation is established and genuinely useful.</div></div>
+      <div class="flash"><div class="q">Why does this course remove “we”, “our” and “you”?</div><div class="a">To keep the paragraph focused on the source idea rather than writer or reader.</div></div>
+      <div class="flash"><div class="q">Is pronoun removal a universal rule of English?</div><div class="a">No. It is a course technique for précis and formal answer writing.</div></div>
+      <div class="flash"><div class="q">What makes a conclusion functional?</div><div class="a">It completes the argument's movement instead of adding another loose detail.</div></div>
+      <div class="flash"><div class="q">Where should this exercise's conclusion return?</div><div class="a">To organizational performance, cooperation, culture or management.</div></div>
+      <div class="flash"><div class="q">What is fidelity failure by reversal?</div><div class="a">Writing an effect opposite to the source, such as changing a claimed benefit into a claimed problem.</div></div>
+      <div class="flash"><div class="q">Why read the draft aloud?</div><div class="a">To catch repetition, broken rhythm and sentence boundaries that are hard to see silently.</div></div>
+      <div class="flash"><div class="q">What should follow feedback?</div><div class="a">A new attempt that deliberately controls the highest-value error identified in the previous draft.</div></div>
+      <div class="flash"><div class="q">What is the workshop's core attitude toward a rough draft?</div><div class="a">It is evidence that can be evaluated and improved, not a final judgment on ability.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== exam focus === -->
+<section id="t11" class="chapter card" style="--accent:#7E5AA6; --soft:#EFEAF7;">
+  <header>
+    <span class="eyebrow">Exam focus</span>
+    <h2><span class="emoji">🎯</span> Turn the workshop into a marking routine</h2>
+    <span class="timepill">application</span>
+  </header>
+  <div class="section-body">
+    <h3>Before drafting</h3>
+    <ul>
+      <li>Write the central idea in one sentence.</li>
+      <li>List the source's main contrast and final result.</li>
+      <li>Rank examples. Keep only one if the category is already clear.</li>
+      <li>Draft a title using <em>concept + relationship</em>.</li>
+    </ul>
+
+    <h3>While drafting</h3>
+    <ul>
+      <li>Open with the concept and direction, not a vague claim about the topic being important.</li>
+      <li>Move through definition, contrast, one compact illustration and result.</li>
+      <li>Stop a sentence when its thought is complete.</li>
+      <li>Use ordinary vocabulary accurately. Do not add a difficult word merely to sound formal.</li>
+      <li>Keep the source in the foreground and avoid personal commentary.</li>
+    </ul>
+
+    <h3>Final marking grid</h3>
+    <div class="tables-wrap">
+      <table>
+        <thead><tr><th>Lens</th><th>Pass question</th><th>Immediate repair</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Idea</strong></td><td>Can the central argument be stated from this draft alone?</td><td>Restore the missing contrast or result.</td></tr>
+          <tr><td><strong>Title</strong></td><td>Does it name both subject and direction?</td><td>Add the role, effect, cause or contrast.</td></tr>
+          <tr><td><strong>Fidelity</strong></td><td>Has any claim been added, reversed or exaggerated?</td><td>Return to the source map.</td></tr>
+          <tr><td><strong>Compression</strong></td><td>Are examples or phrases repeated?</td><td>Keep the category and cut the duplicate.</td></tr>
+          <tr><td><strong>Structure</strong></td><td>Does each sentence carry one manageable unit?</td><td>Use the full-stop test.</td></tr>
+          <tr><td><strong>Accuracy</strong></td><td>Do agreement, reference, punctuation and diction hold?</td><td>Run the six-pass language scan.</td></tr>
+          <tr><td><strong>Voice</strong></td><td>Is the prose formal and idea-centred?</td><td>Replace distracting pronouns and unexplained short forms.</td></tr>
+          <tr><td><strong>Conclusion</strong></td><td>Does the last line complete the argument?</td><td>Return to the source's final implication.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Common mistakes exposed by the class</h3>
+    <ul>
+      <li>A topic-only title with no direction.</li>
+      <li>A long sentence that contains several different propositions.</li>
+      <li>A new claim that reverses the passage's stated effect.</li>
+      <li>Unexplained abbreviations such as JD or OCB in a very short answer.</li>
+      <li>Personal pronouns that shift attention away from the source.</li>
+      <li>Strong vocabulary placed in a sentence it does not fit.</li>
+      <li>A paragraph that stops after a detail and never concludes.</li>
+      <li>Word-count anxiety before fidelity and structure are under control.</li>
+    </ul>
+
+  </div>
+</section>
+
+<footer class="notefoot">Source recordings: <a href="https://drive.google.com/file/d/17solW45UU1583ig4IILqdg_dtZ5RIJzs/view?usp=drivesdk" target="_blank" rel="noopener">▶ Practice Review (480p web copy)</a><span class="sep">·</span><a href="https://drive.google.com/file/d/1HJ6Aag7xTc0aEarNRffDPkHMMEp4K5UX/view?usp=drivesdk" target="_blank" rel="noopener">Download the PDF</a></footer><script>if('serviceWorker' in navigator)navigator.serviceWorker.register('../sw.js')</script></body>
+</html>
